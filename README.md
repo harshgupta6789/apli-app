@@ -1,5 +1,5 @@
 # Terms and Conditions
-Forking or Sharing companies source code anywhere outside for personal/commercial is strictly prohibited and you will be charged for cases in Maharashtra jurisdiction court.
+Forking or Sharing companies source code anywhere outside for personal/commercial use is strictly prohibited and you will be charged for cases in Maharashtra jurisdiction court.
 
 
 # Apli.ai 
