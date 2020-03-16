@@ -1,3 +1,7 @@
+#Terms and Conditions
+Forking or Sharing companies source code anywhere outside for personal/commercial is strictly prohibited and you will be charged for cases in Maharashtra jurisdiction court.
+
+
 # Apli.ai 
 Apli.ai was started at Global Entrepreneurship Bootcamp at Jakarta, Indonesia.
 We're a team of designers, engineers and computer scientists from IIT Bombay, NIT Agratala, IIIT Bhubhaneshwar and Mumbai University working towards helping students to improve upon their personality with AI.
