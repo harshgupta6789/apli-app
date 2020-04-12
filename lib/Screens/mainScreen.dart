@@ -11,11 +11,23 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin{
   int _currentTab = 1;
+  TabController _tabController;
+  AnimationController _animationController;
+  Animation<Offset> _animation;
 
  @override
   void initState() {
+    _tabController = TabController(vsync: this, length: _listTabs.length);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+    _animation = Tween<Offset>(begin: Offset(0.0, 0.0), end: Offset(0.0, -1.0))
+        .animate(CurvedAnimation(
+            curve: Curves.easeOut, parent: _animationController));
+    _animationController.reverse();
     super.initState();
    
   }
@@ -31,9 +43,10 @@ class _MainScreenState extends State<MainScreen> {
     return BottomNavigationBar(
         currentIndex: _currentTab,
         onTap: (index) {
-            setState(() {
+           setState(() {
               _currentTab = index;
-              
+              _tabController.animateTo(_currentTab);
+              _animationController.reverse();
             });
         },
         type: BottomNavigationBarType.fixed,
@@ -97,12 +110,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         bottomNavigationBar: _bottomNavigationBar(),
-        body:Column(children: <Widget>[],)
-      ),
-    );
+        body: TabBarView(children: _listTabs , controller: _tabController, physics: NeverScrollableScrollPhysics(),)
+      );
   }
 }
 
