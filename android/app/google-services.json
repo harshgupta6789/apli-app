@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "404000257525",
+    "firebase_url": "https://apli-d62c9.firebaseio.com",
+    "project_id": "apli-d62c9",
+    "storage_bucket": "apli-d62c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404000257525:android:df2dfff292316578435cbc",
+        "android_client_info": {
+          "package_name": "com.example.apli"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404000257525-j1slirqrfhu45icrc0e9d3mjlc26p20n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAI4PT12tMP60UQLQF8_A2w3g3yEEUjgbA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404000257525-j1slirqrfhu45icrc0e9d3mjlc26p20n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
