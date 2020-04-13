@@ -29,7 +29,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
             actions: <Widget>[
               IconButton(icon: Icon(EvaIcons.funnelOutline , color: Colors.white,), onPressed: null),
               IconButton(icon: Icon(EvaIcons.searchOutline, color: Colors.white,), onPressed: null),
-              IconButton(icon: Icon(EvaIcons.menu2Outline, color: Colors.white,), onPressed: null),
+              IconButton(icon: Icon(EvaIcons.moreVerticalOutline, color: Colors.white,), onPressed: null),
             ],
             title: Text(
               jobsAvailable,

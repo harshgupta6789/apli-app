@@ -11,15 +11,18 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin{
+class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   int _currentTab = 1;
   TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
 
- @override
+  @override
   void initState() {
     _tabController = TabController(vsync: this, length: _listTabs.length);
+    setState(() {
+      _tabController.animateTo(_currentTab);
+    });
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -29,25 +32,19 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin{
             curve: Curves.easeOut, parent: _animationController));
     _animationController.reverse();
     super.initState();
-   
   }
 
-  final List<Widget> _listTabs = [
-   Courses(),
-   Jobs(),
-   Updates(),
-   Profile()
-  ];
+  final List<Widget> _listTabs = [Courses(), Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
         currentIndex: _currentTab,
         onTap: (index) {
-           setState(() {
-              _currentTab = index;
-              _tabController.animateTo(_currentTab);
-              _animationController.reverse();
-            });
+          setState(() {
+            _currentTab = index;
+            _tabController.animateTo(_currentTab);
+            _animationController.reverse();
+          });
         },
         type: BottomNavigationBarType.fixed,
         iconSize: 25.0,
@@ -102,7 +99,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin{
                 color: Colors.grey,
               ),
               title: Text(
-                updates,
+                profile,
                 style: TextStyle(color: basicColor),
               )),
         ]);
@@ -112,8 +109,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: _bottomNavigationBar(),
-        body: TabBarView(children: _listTabs , controller: _tabController, physics: NeverScrollableScrollPhysics(),)
-      );
+        body: TabBarView(
+          children: _listTabs,
+          controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
+        ));
   }
 }
-

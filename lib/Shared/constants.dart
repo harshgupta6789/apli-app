@@ -19,3 +19,9 @@ const String jobsAvailable = "Jobs Available";
 const String applied = "Applied";
 const String allJobs = "All Jobs";
 const String incomplete = "Incomplete";
+const String overview = "Overview";
+const String content = "Content";
+const String certificate = "Certificate";
+const String enroll = "Enroll";
+const String completion ="On completion of the course, you will recieve a certificate.";
+
