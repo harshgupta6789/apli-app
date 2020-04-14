@@ -29,6 +29,12 @@ dependencies:
   firebase_auth: ^0.15.5+3
   video_player: ^0.10.8+1
   url_launcher: ^5.4.2
+  flutter_spinkit:
+  provider:
+  connectivity:
+  country_pickers:
+  string_validator:
+
 
 dev_dependencies:
   flutter_test:

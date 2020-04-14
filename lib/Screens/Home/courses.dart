@@ -1,4 +1,4 @@
-import 'package:apli/Screens/courseVideo.dart';
+import 'package:apli/Screens/Home/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';

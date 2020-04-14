@@ -1,7 +1,7 @@
-import 'package:apli/Screens/courses.dart';
-import 'package:apli/Screens/jobs.dart';
-import 'package:apli/Screens/profile.dart';
-import 'package:apli/Screens/updates.dart';
+import 'package:apli/Screens/Home/courses.dart';
+import 'package:apli/Screens/Home/jobs.dart';
+import 'package:apli/Screens/Home/profile.dart';
+import 'package:apli/Screens/Home/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
