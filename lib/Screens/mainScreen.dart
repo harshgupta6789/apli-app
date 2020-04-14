@@ -20,9 +20,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: _listTabs.length);
-    setState(() {
+   
       _tabController.animateTo(_currentTab);
-    });
+    
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),

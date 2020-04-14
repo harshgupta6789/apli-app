@@ -1,4 +1,5 @@
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/customDrawer.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,10 @@ class _UpdatesState extends State<Updates> {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+   key: _scaffoldKey,
+      endDrawer: customDrawer(context),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -32,7 +36,9 @@ class _UpdatesState extends State<Updates> {
                     EvaIcons.moreVerticalOutline,
                     color: Colors.white,
                   ),
-                  onPressed: null),
+                  onPressed: (){
+                    _scaffoldKey.currentState.openEndDrawer();
+                  }),
             ],
             title: Text(
               updates,

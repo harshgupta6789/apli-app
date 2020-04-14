@@ -1,4 +1,5 @@
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -19,17 +20,34 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: customDrawer(context),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-              child: AppBar(
-          
+        child: AppBar(
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              IconButton(icon: Icon(EvaIcons.funnelOutline , color: Colors.white,), onPressed: null),
-              IconButton(icon: Icon(EvaIcons.searchOutline, color: Colors.white,), onPressed: null),
-              IconButton(icon: Icon(EvaIcons.moreVerticalOutline, color: Colors.white,), onPressed: null),
+              IconButton(
+                  icon: Icon(
+                    EvaIcons.funnelOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: null),
+              IconButton(
+                  icon: Icon(
+                    EvaIcons.searchOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: null),
+              IconButton(
+                  icon: Icon(
+                    EvaIcons.moreVerticalOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
             ],
             title: Text(
               jobsAvailable,
@@ -52,13 +70,14 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                     )
                   ],
                   controller: _tabController,
-                ))), preferredSize: Size.fromHeight(120),
+                ))),
+        preferredSize: Size.fromHeight(120),
       ),
       body: TabBarView(
         children: [
-         Center(child: Image.asset("Assets/Images/job.png")),
-         Center(child: Image.asset("Assets/Images/job.png")),
-         Center(child: Image.asset("Assets/Images/job.png")),
+          Center(child: Image.asset("Assets/Images/job.png")),
+          Center(child: Image.asset("Assets/Images/job.png")),
+          Center(child: Image.asset("Assets/Images/job.png")),
         ],
         controller: _tabController,
       ),

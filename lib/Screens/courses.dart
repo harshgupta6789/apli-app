@@ -1,5 +1,6 @@
 import 'package:apli/Screens/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/customDrawer.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -144,7 +145,10 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+        key: _scaffoldKey,
+        endDrawer: customDrawer(context),
         backgroundColor: Colors.white,
         appBar: PreferredSize(
           child: AppBar(
@@ -168,7 +172,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                     EvaIcons.moreVerticalOutline,
                     color: Colors.white,
                   ),
-                  onPressed: null),
+                  onPressed: () {
+                    _scaffoldKey.currentState.openEndDrawer();
+                  }),
             ],
             title: Text(
               courses,
