@@ -60,7 +60,11 @@ class _RegisterState extends State<Register> {
 
 
     return loading ? Loading() : WillPopScope(
-      onWillPop: () => FirebaseAuth.instance.signOut(),
+      onWillPop: () {
+        FirebaseAuth.instance.signOut();
+        Navigator.pop(context);
+        return ;
+      },
       child: Scaffold(
         body: StreamBuilder(
           stream: Firestore.instance.collection('batches').snapshots(),
