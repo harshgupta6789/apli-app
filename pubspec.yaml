@@ -34,6 +34,9 @@ dependencies:
   connectivity:
   country_pickers:
   string_validator:
+  pin_code_fields:
+  searchable_dropdown:
+  search_widget:
 
 
 dev_dependencies:

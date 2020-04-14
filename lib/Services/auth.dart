@@ -61,6 +61,7 @@ class AuthService {
       return null;
     }
   }
+
   // Logout
   Future signOut() async {
     try {

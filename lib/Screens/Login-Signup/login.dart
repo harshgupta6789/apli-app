@@ -1,10 +1,10 @@
+import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import '../../Services/auth.dart';
-import 'register.dart';
 
 double height, width;
 
@@ -143,7 +143,7 @@ class _LoginState extends State<Login> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Register()
+                                  builder: (context) => VerifyPhoneNo()
                               ),
                             );
                           },

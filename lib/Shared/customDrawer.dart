@@ -1,10 +1,13 @@
-import 'package:apli/Screens/Login-Signup/login.dart';
+
+import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Widget customDrawer(BuildContext context) {
+  final AuthService _auth = AuthService();
+
   return Container(
     width: MediaQuery.of(context).size.width * 0.8,
     height: MediaQuery.of(context).size.height * 0.75,
@@ -112,8 +115,13 @@ Widget customDrawer(BuildContext context) {
             title: Text("Log Out"),
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-            onTap: () => Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (BuildContext context) => Login()))),
+            onTap: () async {
+              dynamic result = await _auth.signOut();
+              if (result == null) {
+
+              }
+            }
+        ),
         Divider(
           thickness: 1,
         ),

@@ -28,7 +28,7 @@ class Wrapper extends StatelessWidget {
     if(user == null) {
       return Register();
     } else {
-      return MainScreen();
+      return Register();
     }
   }
 }
