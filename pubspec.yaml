@@ -37,6 +37,7 @@ dependencies:
   pin_code_fields:
   searchable_dropdown:
   search_widget:
+  screen: ^0.0.5
 
 
 dev_dependencies:
