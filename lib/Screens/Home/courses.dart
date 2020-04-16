@@ -1,10 +1,16 @@
 import 'package:apli/Screens/Home/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
+import 'package:apli/Shared/loading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class Courses extends StatefulWidget {
+  final String documentId;
+
+  const Courses({Key key, @required this.documentId}) : super(key: key);
+
   @override
   _CoursesState createState() => _CoursesState();
 }
@@ -14,90 +20,106 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: _listTabs.length);
+    print(widget.documentId);
     super.initState();
   }
 
   Widget _overView() {
-    return Padding(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type speciLorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,.",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.start,
-          ),
-          Padding(
-              padding: EdgeInsets.only(top: 20.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: basicColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: MaterialButton(
-                    child: Text(
-                      enroll,
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () => null),
-              )),
-        ],
-      ),
-      padding: const EdgeInsets.all(20.0),
-    );
+    return StreamBuilder(
+        stream: Firestore.instance
+            .collection('edu_courses')
+            .document(widget.documentId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    snapshot.data['overview'] ??
+                        "Error While Fetching The Data",
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.start,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 20.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: basicColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: MaterialButton(
+                            child: Text(
+                              enroll,
+                              style: TextStyle(
+                                  fontSize: 18.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            onPressed: () => null),
+                      )),
+                ],
+              ),
+              padding: const EdgeInsets.all(20.0),
+            );
+          } else {
+            return Loading();
+          }
+        });
   }
 
   Widget _content() {
-    return ListView(
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(left: 10.0, top: 10),
-          child: Text(
-            "Introduction",
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: ListTile(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => VideoApp()));
-            },
-            title: Text(
-              "Why Startup?",
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text("Video | 2m"),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: ListTile(
-            title: Text(
-              "What do you need for startup?",
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text("Video | 2m"),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: ListTile(
-            title: Text(
-              "Naming your startup?",
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-            ),
-            subtitle: Text("Video | 2m"),
-          ),
-        ),
-        Divider(
-          thickness: 2,
-        )
-      ],
+    return StreamBuilder(
+      stream: Firestore.instance
+          .collection('edu_courses')
+          .document(widget.documentId)
+          .collection("videos").orderBy("timestamp")
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return ListView.separated(
+              separatorBuilder: (BuildContext context, int index) => Divider(
+                    thickness: 1.2,
+                  ),
+              itemCount: snapshot.data.documents.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Padding(
+                    //   padding: EdgeInsets.only(left: 20.0, top: 10),
+                    //   child: Text(
+                    //     "Introduction",
+                    //     style: TextStyle(
+                    //         fontSize: 18.0, fontWeight: FontWeight.w600),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 20.0),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (BuildContext context) => VideoApp(
+                                videoUrl:  snapshot.data.documents[index].data['link'],
+                                title: snapshot.data.documents[index].data['title']
+                              )));
+                        },
+                        title: Text(
+                          snapshot.data.documents[index].data['title'] ?? "Play Me",
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w600),
+                        ),
+                        subtitle: Text("Video | 2m"),
+                      ),
+                    )
+                  ],
+                );
+              });
+        } else {
+          return Loading();
+        }
+      },
     );
   }
 

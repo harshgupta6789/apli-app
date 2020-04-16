@@ -1,11 +1,16 @@
 import 'package:flutter/services.dart';
-import 'package:screen/screen.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(VideoApp());
+void main() => runApp(VideoApp(videoUrl: null,));
 
 class VideoApp extends StatefulWidget {
+
+ final String videoUrl;
+ final String title;
+
+  const VideoApp({Key key, @required this.videoUrl , this.title}) : super(key: key);
+
   @override
   _VideoAppState createState() => _VideoAppState();
 }
@@ -26,7 +31,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-    _videoPlayerController = VideoPlayerController.network("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4");
+    _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
       _videoPlayerFuture = _videoPlayerController.initialize().then((_) => {
             _videoPlayerController
               ..play()
@@ -76,7 +81,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                       child: Align(
                         alignment: Alignment.topCenter,
                         child: Text(
-                           "Now Playing",
+                           widget.title??"Now Playing",
                           style: TextStyle(color: Colors.white, fontSize: 18),
                         ),
                       ),

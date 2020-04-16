@@ -1,3 +1,4 @@
+import 'package:apli/Screens/Home/courseHome.dart';
 import 'package:apli/Screens/Home/courses.dart';
 import 'package:apli/Screens/Home/jobs.dart';
 import 'package:apli/Screens/Home/profile.dart';
@@ -34,7 +35,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [Courses(), Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [CourseMain(), Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
