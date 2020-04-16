@@ -14,8 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:search_widget/search_widget.dart';
 import 'package:string_validator/string_validator.dart';
-
-import '../HomeLoginWrapper.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -52,12 +51,10 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       await _auth.verifyPhoneNumber(
           phoneNumber: this.phoneNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
-            //Starts the phone number verification process for the given phone number.
-            //Either sends an SMS with a 6 digit code to the phone number specified, or sign's the user in and [verificationCompleted] is called.
             this.verificationId = verId;
             print(verificationId);
           },
-          codeSent: smsOTPSent, // WHEN CODE SENT THEN WE OPEN DIALOG TO ENTER OTP.
+          codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
           verificationCompleted: (AuthCredential phoneAuthCredential) {
             print(phoneAuthCredential);
@@ -81,9 +78,24 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             content: Container(
               height: 85,
               child: Column(children: [
-                TextField(
+                PinCodeTextField(
+                  length: 6,
+                  activeFillColor: basicColor,
+                  activeColor: basicColor,
+                  inactiveFillColor: Colors.black,
+                  selectedColor: basicColor,
+                  inactiveColor: Colors.black,
+                  obsecureText: false,
+                  animationType: AnimationType.fade,
+                  shape: PinCodeFieldShape.box,
+                  animationDuration: Duration(milliseconds: 300),
+                  borderRadius: BorderRadius.circular(5),
+                  fieldHeight: 50,
+                  fieldWidth: 40,
                   onChanged: (value) {
-                    this.smsOTP = value;
+                    setState(() {
+                      this.smsOTP = value;
+                    });
                   },
                 ),
                 (errorMessage != ''
@@ -97,7 +109,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             contentPadding: EdgeInsets.all(10),
             actions: <Widget>[
               FlatButton(
-                child: Text('Done'),
+                child: Text('Verify'),
                 onPressed: () {
                   setState(() {
                     loading = true;
@@ -251,19 +263,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                               setState(() {
                                 loading = true;
                               });
-//                              dynamic result = await _auth.signInWithEmailAndPassword(email, password);
-//                              if (result == null) {
-//                                setState(() {
-//                                  error = 'Invalid email or password';
-//                                  loading = false;
-//                                });
-//                              }
-//                              if (result == -1) {
-//                                setState(() {
-//                                  error = 'Account not Verified, Check your email';
-//                                  loading = false;
-//                                });
-//                              }
                               var net = await Connectivity().checkConnectivity();
                               if(net == ConnectivityResult.none) {
                                 setState(() {
@@ -363,7 +362,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  String name = '', email = '', phone = '', dateOfBirth = '', password = '', error = '';
+  String fname = '',lname = '', email = '', phone = '', dateOfBirth = '', password = '', error = '';
+  String fieldOfStudy = '', state = '', city = '';
   String collegeText = '', courseText = '', branchText = '', batchText;
   Timestamp timestamp;
 
@@ -385,15 +385,17 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  Map<String, List<String>> course = {};
-  Map<String, List<String>> branch = {};
-  Map<String, List<String>> batch = {};
+  Map<String, List<String>> course = {'' : ['']};
+  Map<String, List<String>> branch = {'' : ['']};
+  Map<String, List<String>> batch = {'' : ['']};
 
   bool collegeSet = false;
   bool courseSet = false;
   bool branchSet = false;
   bool batchSet = false;
   bool allSet = false;
+
+  bool collegeNotFound = false;
 
   @override
   Widget build(BuildContext context) {
@@ -413,30 +415,41 @@ class _RegisterState extends State<Register> {
           builder: (context, snapshot){
             if(snapshot.hasData) {
               snapshot.data.documents.forEach((f) {
-                if(!course.containsKey(f.data['college'])) {
-                  if(f.data['college'] != null) course[f.data['college']] = [f.data['course']];
-                  if(f.data['course'] != null) branch[f.data['course']] = [f.data['branch']];
-                  if(f.data['branch'] != null) batch[f.data['branch']] = [f.data['batch_name']];
-                }
-                List<String> temp1 = course[f.data['college']];
-                if(!temp1.contains(f.data['course'])) {
-                  temp1.add(f.data['course']);
-                  course[f.data['college']] = temp1;
-                }
-                List<String> temp2 = branch[f.data['course']];
-                if(temp2 != null)
-                  if(!temp2.contains(f.data['branch'])) {
-                    temp2.add(f.data['branch']);
-                    branch[f.data['course']] = temp2;
-                  }
-                List<String> temp3 = batch[f.data['branch']];
-                if(temp3 != null)
-                  if(!temp3.contains(f.data['batch_name'])) {
-                    temp3.add(f.data['batch_name']);
-                    batch[f.data['branch']] = temp3;
-                  }
-              });
+                String collegeTemp = f.data['college'];
+                String courseTemp = f.data['course'];
+                String branchTemp = f.data['branch'];
+                String batchTemp = f.data['batch_name'];
 
+                if(collegeTemp != null) {
+                  if(!course.containsKey(collegeTemp)) {
+                    course[collegeTemp] = [];
+                  }
+                  if(courseTemp != null) {
+                    var temp1 = course[collegeTemp];
+                    if(!temp1.contains(courseTemp)) {
+                      temp1.add(courseTemp);
+                      course[collegeTemp] = temp1;
+                      branch[courseTemp] = [];
+                    }
+                    if(branchTemp != null) {
+                      var temp2 = branch[courseTemp];
+                      if(!temp2.contains(branchTemp)) {
+                        temp2.add(branchTemp);
+                        branch[courseTemp] = temp2;
+                        batch[branchTemp] = [];
+                      }
+                      if(batchTemp != null) {
+                        var temp3 = batch[branchTemp];
+                        if(!temp3.contains(batchTemp)) {
+                          temp3.add(batchTemp);
+                          batch[branchTemp] = temp3;
+                        }
+                      }
+                    }
+                  }
+                }
+              });
+              course.remove('');
               return SingleChildScrollView(
                 child: Form(
                   key: _formKey,
@@ -453,11 +466,11 @@ class _RegisterState extends State<Register> {
                             obscureText: false,
                             decoration: loginFormField.copyWith(labelText: 'First Name', icon: Icon(Icons.person, color: basicColor,)),
                             onChanged: (text) {
-                              setState(() => name = text);
+                              setState(() => fname = text);
                             },
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'name cannot be empty';
+                                return 'first name cannot be empty';
                               }
                               return null;
                             },
@@ -470,11 +483,11 @@ class _RegisterState extends State<Register> {
                             obscureText: false,
                             decoration: loginFormField.copyWith(labelText: 'Last Name', icon: Icon(Icons.person_add, color: basicColor,)),
                             onChanged: (text) {
-                              setState(() => name = text);
+                              setState(() => lname = text);
                             },
                             validator: (value) {
                               if (value.isEmpty) {
-                                return 'name cannot be empty';
+                                return 'last name cannot be empty';
                               }
                               return null;
                             },
@@ -533,6 +546,11 @@ class _RegisterState extends State<Register> {
                               top: height * 0.02, left: width * 0.1, right: width * 0.1),
                           child: TextFormField(
                             enabled: false,
+                            onChanged: (text){
+                              setState(() {
+                                collegeText = text;
+                              });
+                            },
                             style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                             decoration: loginFormField.copyWith(labelText: collegeText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
                           ),
@@ -557,281 +575,370 @@ class _RegisterState extends State<Register> {
                           setState(() {
                             collegeText = item;
                             collegeSet = true;
+                            collegeNotFound = false;
+                            allSet = false;
                           });
                         },
                         // widget customization
-                        noItemsFoundWidget: NoItemsFound(),
+                        noItemsFoundWidget: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                              Icons.folder_open,
+                              size: 24,
+                              color: Colors.grey[900].withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 10),
+                            FlatButton(
+                              onPressed: () {
+                                setState(() {
+                                  collegeNotFound = true;
+                                  allSet = true;
+                                });
+                              },
+                              child: Text(
+                                "College not found?",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: basicColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
                           return Padding(
                             padding: EdgeInsets.only(
                                 top: height * 0.02, left: width * 0.1, right: width * 0.1),
                             child: TextFormField(
                               controller: controller,
-                              focusNode: focusNode,
                               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                               decoration: loginFormField.copyWith(labelText: 'College Name', icon: Icon(Icons.school, color: basicColor,)),
                             ),
                           );
                         },
                       ),
-                      IgnorePointer(
-                        ignoring: !collegeSet,
-                        child: AnimatedOpacity(
-                          opacity: collegeSet ? 1 : 0,
-                          duration: Duration(milliseconds: 500),
-                          child: Container(
-                            child: courseSet ? InkWell(
-                              onTap: (){
-                                setState(() {
-                                  courseText = null;
-                                  courseSet = false;
-                                  branchText = null;
-                                  branchSet = false;
-                                  batchText = null;
-                                  batchSet = false;
-                                  allSet = false;
-                                });
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: height * 0.02, left: width * 0.1, right: width * 0.1),
-                                child: TextFormField(
-                                  enabled: false,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                  decoration: loginFormField.copyWith(labelText: courseText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
-                                ),
-                              ),
-                            ) :
-                            SearchWidget<String>(
-                              dataList: branch.keys.toList(),
-                              hideSearchBoxWhenItemSelected: false,
-                              listContainerHeight: MediaQuery.of(context).size.height / 4,
-                              queryBuilder: (String query, List<String> list) {
-                                return list.where((String item) {
-                                  return item.toLowerCase().contains(query.toLowerCase());
-                                }).toList();
-                              },
-                              popupListItemBuilder: (String item) {
-                                return PopupListItemWidget(item);
-                              },
-                              selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
-                                return Container();
-                              },
-                              onItemSelected: (item){
-                                setState(() {
-                                  courseText = item;
-                                  courseSet = true;
-                                });
-                              },
-                              // widget customization
-                              noItemsFoundWidget: NoItemsFound(),
-                              textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
-                                return Padding(
+                      Visibility(
+                        visible: collegeSet,
+                        child: IgnorePointer(
+                          ignoring: !collegeSet,
+                          child: AnimatedOpacity(
+                            opacity: collegeSet ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Container(
+                              child: courseSet ? InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    courseText = null;
+                                    courseSet = false;
+                                    branchText = null;
+                                    branchSet = false;
+                                    batchText = null;
+                                    batchSet = false;
+                                    allSet = false;
+                                  });
+                                },
+                                child: Padding(
                                   padding: EdgeInsets.only(
                                       top: height * 0.02, left: width * 0.1, right: width * 0.1),
                                   child: TextFormField(
-                                    controller: controller,
-                                    focusNode: focusNode,
+                                    enabled: false,
                                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: 'Course', icon: Icon(Icons.school, color: basicColor,)),
+                                    decoration: loginFormField.copyWith(labelText: courseText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      IgnorePointer(
-                        ignoring: !courseSet,
-                        child: AnimatedOpacity(
-                          opacity: courseSet ? 1 : 0,
-                          duration: Duration(milliseconds: 500),
-                          child: Container(
-                            child: branchSet ? InkWell(
-                              onTap: (){
-                                setState(() {
-                                  branchText = null;
-                                  branchSet = false;
-                                  batchText = null;
-                                  batchSet = false;
-                                  allSet = false;
-                                });
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: height * 0.02, left: width * 0.1, right: width * 0.1),
-                                child: TextFormField(
-                                  enabled: false,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                  decoration: loginFormField.copyWith(labelText: branchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
                                 ),
-                              ),
-                            ) :
-                            SearchWidget<String>(
-                              dataList: batch.keys.toList(),
-                              hideSearchBoxWhenItemSelected: false,
-                              listContainerHeight: MediaQuery.of(context).size.height / 4,
-                              queryBuilder: (String query, List<String> list) {
-                                return list.where((String item) {
-                                  return item.toLowerCase().contains(query.toLowerCase());
-                                }).toList();
-                              },
-                              popupListItemBuilder: (String item) {
-                                return PopupListItemWidget(item);
-                              },
-                              selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
-                                return Container();
-                              },
-                              onItemSelected: (item){
-                                setState(() {
-                                  branchText = item;
-                                  branchSet = true;
-                                });
-                              },
-                              // widget customization
-                              noItemsFoundWidget: NoItemsFound(),
-                              textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02, left: width * 0.1, right: width * 0.1),
-                                  child: TextFormField(
-                                    controller: controller,
-                                    focusNode: focusNode,
-                                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: 'Branch', icon: Icon(Icons.school, color: basicColor,)),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      IgnorePointer(
-                        ignoring: !branchSet,
-                        child: AnimatedOpacity(
-                          opacity: branchSet ? 1 : 0,
-                          duration: Duration(milliseconds: 500),
-                          child: Container(
-                            child: batchSet ? InkWell(
-                              onTap: (){
-                                setState(() {
-                                  batchText = null;
-                                  batchSet = false;
-                                  allSet = false;
-                                });
-                              },
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: height * 0.02, left: width * 0.1, right: width * 0.1),
-                                child: TextFormField(
-                                  enabled: false,
-                                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                  decoration: loginFormField.copyWith(labelText: batchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
-                                ),
-                              ),
-                            ) :
-                            SearchWidget<String>(
-                              dataList: branch.keys.toList(),
-                              hideSearchBoxWhenItemSelected: false,
-                              listContainerHeight: MediaQuery.of(context).size.height / 4,
-                              queryBuilder: (String query, List<String> list) {
-                                return list.where((String item) {
-                                  return item.toLowerCase().contains(query.toLowerCase());
-                                }).toList();
-                              },
-                              popupListItemBuilder: (String item) {
-                                return PopupListItemWidget(item);
-                              },
-                              selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
-                                return Container();
-                              },
-                              onItemSelected: (item){
-                                setState(() {
-                                  batchText = item;
-                                  batchSet = true;
-                                  allSet = true;
-                                });
-                              },
-                              // widget customization
-                              noItemsFoundWidget: NoItemsFound(),
-                              textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02, left: width * 0.1, right: width * 0.1),
-                                  child: TextFormField(
-                                    controller: controller,
-                                    focusNode: focusNode,
-                                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: 'Batch', icon: Icon(Icons.school, color: basicColor,)),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                      IgnorePointer(
-                        ignoring: !allSet,
-                        child: AnimatedOpacity(
-                          opacity: allSet ? 1 : 0,
-                          duration: Duration(milliseconds: 500),
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  top: height * 0.05, left: width * 0.1, right: width * 0.1),
-                              child: Container(
-                                height: height * 0.08,
-                                width: width * 0.8,
-                                decoration: BoxDecoration(
-                                  color: basicColor,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: MaterialButton(
-                                    child: Text(
-                                      'Register',
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.w600),
+                              ) :
+                              SearchWidget<String>(
+                                dataList: course[collegeText],
+                                hideSearchBoxWhenItemSelected: false,
+                                listContainerHeight: MediaQuery.of(context).size.height / 4,
+                                queryBuilder: (String query, List<String> list) {
+                                  return list.where((String item) {
+                                    return item.toLowerCase().contains(query.toLowerCase());
+                                  }).toList();
+                                },
+                                popupListItemBuilder: (String item) {
+                                  return PopupListItemWidget(item);
+                                },
+                                selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
+                                  return Container();
+                                },
+                                onItemSelected: (item){
+                                  setState(() {
+                                    courseText = item;
+                                    courseSet = true;
+                                  });
+                                },
+                                // widget customization
+                                noItemsFoundWidget: NoItemsFound(),
+                                textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                      decoration: loginFormField.copyWith(labelText: 'Course', icon: Icon(Icons.school, color: basicColor,)),
                                     ),
-                                    onPressed: () async {
-                                      if (_formKey.currentState.validate()) {
-
-                                        final AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
-                                        final FirebaseUser user = result.user;
-                                        user.updateEmail(email);
-                                        user.updatePassword(password);
-                                        Future.wait([
-                                          DatabaseService(uid: user.uid).updateUserInfo(
-                                              name, password, Timestamp.now(), 'Candidate'
-                                          ),
-                                        ]);
-
-                                        print('sdbsdcbsbcm');
-                                        Navigator.pop(context);
-                                        register = false;
-                                       // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
-                                        var net = await Connectivity().checkConnectivity();
-                                        if(net == ConnectivityResult.none) {
-                                          setState(() {
-                                            error = 'No Internet Connection';
-                                          });
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: courseSet,
+                        child: IgnorePointer(
+                          ignoring: !courseSet,
+                          child: AnimatedOpacity(
+                            opacity: courseSet ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Container(
+                              child: branchSet ? InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    branchText = null;
+                                    branchSet = false;
+                                    batchText = null;
+                                    batchSet = false;
+                                    allSet = false;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                  child: TextFormField(
+                                    enabled: false,
+                                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                    decoration: loginFormField.copyWith(labelText: branchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
+                                  ),
+                                ),
+                              ) :
+                              SearchWidget<String>(
+                                dataList: branch[courseText],
+                                hideSearchBoxWhenItemSelected: false,
+                                listContainerHeight: MediaQuery.of(context).size.height / 4,
+                                queryBuilder: (String query, List<String> list) {
+                                  return list.where((String item) {
+                                    return item.toLowerCase().contains(query.toLowerCase());
+                                  }).toList();
+                                },
+                                popupListItemBuilder: (String item) {
+                                  return PopupListItemWidget(item);
+                                },
+                                selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
+                                  return Container();
+                                },
+                                onItemSelected: (item){
+                                  setState(() {
+                                    branchText = item;
+                                    branchSet = true;
+                                  });
+                                },
+                                // widget customization
+                                noItemsFoundWidget: NoItemsFound(),
+                                textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                      decoration: loginFormField.copyWith(labelText: 'Branch', icon: Icon(Icons.school, color: basicColor,)),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: branchSet,
+                        child: IgnorePointer(
+                          ignoring: !branchSet,
+                          child: AnimatedOpacity(
+                            opacity: branchSet ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Container(
+                              child: batchSet ? InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    batchText = null;
+                                    batchSet = false;
+                                    allSet = false;
+                                  });
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                  child: TextFormField(
+                                    enabled: false,
+                                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                    decoration: loginFormField.copyWith(labelText: batchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
+                                  ),
+                                ),
+                              ) :
+                              SearchWidget<String>(
+                                dataList: batch[branchText],
+                                hideSearchBoxWhenItemSelected: false,
+                                listContainerHeight: MediaQuery.of(context).size.height / 4,
+                                queryBuilder: (String query, List<String> list) {
+                                  return list.where((String item) {
+                                    return item.toLowerCase().contains(query.toLowerCase());
+                                  }).toList();
+                                },
+                                popupListItemBuilder: (String item) {
+                                  return PopupListItemWidget(item);
+                                },
+                                selectedItemBuilder: (String selectedItem, VoidCallback deleteSelectedItem) {
+                                  return Container();
+                                },
+                                onItemSelected: (item){
+                                  setState(() {
+                                    batchText = item;
+                                    batchSet = true;
+                                    allSet = true;
+                                  });
+                                },
+                                // widget customization
+                                noItemsFoundWidget: NoItemsFound(),
+                                textFieldBuilder: (TextEditingController controller, FocusNode focusNode) {
+                                  return Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      controller: controller,
+                                      focusNode: focusNode,
+                                      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                                      decoration: loginFormField.copyWith(labelText: 'Batch', icon: Icon(Icons.school, color: basicColor,)),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: collegeNotFound,
+                        child: IgnorePointer(
+                          ignoring: !collegeNotFound,
+                          child: AnimatedOpacity(
+                            opacity: collegeNotFound ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      obscureText: false,
+                                      decoration: loginFormField.copyWith(labelText: 'Field of Study', icon: Icon(Icons.book, color: basicColor,)),
+                                      onChanged: (text) {
+                                        setState(() => fieldOfStudy = text);
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'field of study cannot be empty';
                                         }
-//                            if (result == -1) {
-//                              setState(() {
-//                                loading = false;
-//                                Navigator.pushReplacement(
-//                                  context,
-//                                  MaterialPageRoute(
-//                                      settings: RouteSettings(name: "Register"),
-//                                      builder: (context) => Resend(name, email, password)
-//                                  ),
-//                                );
-//                              });
-//                            }
-                                      }
+                                        return null;
+                                      },
+                                    )
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      obscureText: false,
+                                      decoration: loginFormField.copyWith(labelText: 'State', icon: Icon(Icons.location_on, color: basicColor,)),
+                                      onChanged: (text) {
+                                        setState(() => state = text);
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'state cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                ),
+                                Padding(
+                                    padding: EdgeInsets.only(
+                                        top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                                    child: TextFormField(
+                                      obscureText: false,
+                                      decoration: loginFormField.copyWith(labelText: 'City', icon: Icon(Icons.location_city, color: basicColor)),
+                                      onChanged: (text) {
+                                        setState(() => city = text);
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'city cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                    )
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Visibility(
+                        visible: allSet,
+                        child: IgnorePointer(
+                          ignoring: !allSet,
+                          child: AnimatedOpacity(
+                            opacity: allSet ? 1 : 0,
+                            duration: Duration(milliseconds: 500),
+                            child: Padding(
+                                padding: EdgeInsets.only(
+                                    top: height * 0.05, left: width * 0.1, right: width * 0.1),
+                                child: Container(
+                                  height: height * 0.08,
+                                  width: width * 0.8,
+                                  decoration: BoxDecoration(
+                                    color: basicColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: MaterialButton(
+                                      child: Text(
+                                        'Register',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      onPressed: () async {
+                                        if (_formKey.currentState.validate()) {
 
-                                    }),
-                              )),
+                                          final AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
+                                          final FirebaseUser user = result.user;
+                                          user.updateEmail(email);
+                                          user.updatePassword(password);
+                                          Future.wait([
+                                            DatabaseService(uid: user.uid, email: email).updateUserInfo(
+                                                fname + '' + lname, password, Timestamp.now(), 'Candidate'
+                                            ),
+                                          ]);
+                                          Navigator.pop(context);
+                                          register = false;
+                                         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
+                                          var net = await Connectivity().checkConnectivity();
+                                          if(net == ConnectivityResult.none) {
+                                            setState(() {
+                                              error = 'No Internet Connection';
+                                            });
+                                          }
+                                        }
+
+                                      }),
+                                )),
+                          ),
                         ),
                       ),
                       Padding(
@@ -871,7 +978,7 @@ class NoItemsFound extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         Text(
-          "No Items Found",
+          "Please choose from the list",
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey[900].withOpacity(0.7),

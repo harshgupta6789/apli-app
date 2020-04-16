@@ -25,4 +25,5 @@ const String certificate = "Certificate";
 const String enroll = "Enroll";
 const String completion ="On completion of the course, you will recieve a certificate.";
 const String copyright = "Apli | Copyrighted @2020";
-
+const String rememberMe = "Remember Me";
+const String forgot = "Forgot Password?";

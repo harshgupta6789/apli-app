@@ -6,6 +6,7 @@ class User {
 class UserInfo {
 
   final String uid;
+  final String email;
   final String name;
   final String password;
   final String timestamp;
@@ -13,6 +14,7 @@ class UserInfo {
 
   UserInfo({
     this.uid,
+    this.email,
     this.name,
     this.password,
     this.timestamp,

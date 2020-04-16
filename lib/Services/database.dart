@@ -1,20 +1,18 @@
 import 'package:apli/Models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../Shared/constants.dart';
-import '../Shared/constants.dart';
-
 class DatabaseService {
   final String uid;
+  final String email;
 
-  DatabaseService({ this.uid });
+  DatabaseService({ this.uid, this.email });
 
-  final CollectionReference userInfoCollection = Firestore.instance.collection('users');
+  final CollectionReference usersCollection = Firestore.instance.collection('users');
 
   Future updateUserInfo(
       String name, String password, Timestamp timestamp, String user_type
       ) async {
-    return await userInfoCollection.document(uid).setData({
+    return await usersCollection.document(email).setData({
       'name' : name,
       'password' : password,
       'timestamp' : timestamp,
@@ -22,10 +20,11 @@ class DatabaseService {
     });
   }
 
-  UserInfo _userInfoFromSnapshot(DocumentSnapshot snapshot) {
+  UserInfo _usersFromSnapshot(DocumentSnapshot snapshot) {
     return UserInfo(
 
       uid: uid,
+      email: snapshot.documentID,
       name: snapshot.data['name'],
       password: snapshot.data['password'],
       timestamp: snapshot.data['timestamp'],
@@ -35,7 +34,7 @@ class DatabaseService {
   }
 
   Stream<UserInfo> get userInfo {
-    return userInfoCollection.document(uid).snapshots().map(_userInfoFromSnapshot);
+    return usersCollection.document(email).snapshots().map(_usersFromSnapshot);
   }
 
 }

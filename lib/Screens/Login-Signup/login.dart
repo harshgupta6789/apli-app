@@ -14,12 +14,12 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
   String email = '', password = '', error = '';
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool isRememberChecked = false;
 
   bool validatePassword(String value) {
     Pattern pattern =
@@ -41,7 +41,9 @@ class _LoginState extends State<Login> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    return loading ? Loading() : Scaffold(
+    return loading
+        ? Loading()
+        : Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         child: Form(
@@ -49,15 +51,20 @@ class _LoginState extends State<Login> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: height * 0.3, right: width * 0.5),
+                padding: EdgeInsets.only(
+                    top: height * 0.3, right: width * 0.5),
                 child: Image.asset("Assets/Images/logo.png"),
               ),
               Padding(
                   padding: EdgeInsets.only(
-                      top: height * 0.05, left: width * 0.1, right: width * 0.1),
+                      top: height * 0.05,
+                      left: width * 0.1,
+                      right: width * 0.1),
                   child: TextFormField(
                     obscureText: false,
-                    decoration: loginFormField.copyWith(labelText: 'Email Address', icon: Icon(Icons.email, color: basicColor)),
+                    decoration: loginFormField.copyWith(
+                        labelText: 'Email Address',
+                        icon: Icon(Icons.email, color: basicColor)),
                     onChanged: (text) {
                       setState(() => email = text);
                     },
@@ -67,14 +74,18 @@ class _LoginState extends State<Login> {
                       }
                       return null;
                     },
-                  )
-              ),
+                  )),
               Padding(
                   padding: EdgeInsets.only(
-                      top: height * 0.02, left: width * 0.1, right: width * 0.1),
+                      top: height * 0.02,
+                      left: width * 0.1,
+                      right: width * 0.1),
                   child: TextFormField(
                     obscureText: true,
-                    decoration: loginFormField.copyWith(labelText: 'Password', icon: Icon(Icons.lock_outline, color: basicColor)),
+                    decoration: loginFormField.copyWith(
+                        labelText: 'Password',
+                        icon:
+                        Icon(Icons.lock_outline, color: basicColor)),
                     onChanged: (text) {
                       setState(() => password = text);
                     },
@@ -86,8 +97,42 @@ class _LoginState extends State<Login> {
                     },
                   )),
               Padding(
+                padding: EdgeInsets.only(
+                  top: height * 0.02,
+                  left: width * 0.1,
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Checkbox(value: isRememberChecked, onChanged: (bool temp) {
+                      setState(() {
+                        isRememberChecked = temp;
+                      });
+                    }),
+                    Text(rememberMe),
+                    Padding(
+                      padding: EdgeInsets.only(left:width*0.2),
+                      child: Container(
+                        width: width * 0.3,
+                        height: height * 0.1,
+                        child: FlatButton(
+                            splashColor: Colors.white,
+                            child: Text(
+                              forgot,
+                              style: TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            onPressed: () async {}),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
                   padding: EdgeInsets.only(
-                      top: height * 0.05, left: width * 0.1, right: width * 0.1),
+                      top: height * 0.01,
+                      left: width * 0.1,
+                      right: width * 0.1),
                   child: Container(
                     height: height * 0.08,
                     width: width * 0.8,
@@ -108,7 +153,9 @@ class _LoginState extends State<Login> {
                             setState(() {
                               loading = true;
                             });
-                            dynamic result = await _auth.signInWithEmailAndPassword(email, password);
+                            dynamic result =
+                            await _auth.signInWithEmailAndPassword(
+                                email, password);
                             if (result == null) {
                               setState(() {
                                 error = 'Invalid email or password';
@@ -117,41 +164,51 @@ class _LoginState extends State<Login> {
                             }
                             if (result == -1) {
                               setState(() {
-                                error = 'Account not Verified, Check your email';
+                                error =
+                                'Account not Verified, Check your email';
                                 loading = false;
                               });
                             }
-                            var net = await Connectivity().checkConnectivity();
-                            if(net == ConnectivityResult.none) {
+                            var net =
+                            await Connectivity().checkConnectivity();
+                            if (net == ConnectivityResult.none) {
                               setState(() {
                                 error = 'No Internet Connection';
                               });
                             }
                           }
-
                         }),
                   )),
               Padding(
                   padding: EdgeInsets.only(
-                      top: height * 0.05, left: width * 0.1, right: width * 0.1),
+                      top: height * 0.05,
+                      left: width * 0.1,
+                      right: width * 0.1),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(signup),
                       FlatButton(
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => VerifyPhoneNo()
-                              ),
+                                  builder: (context) => VerifyPhoneNo()),
                             );
                           },
-                          child: Text("Signup here" , style: TextStyle(color:basicColor),))
+                          child: Text(
+                            "Signup here",
+                            style: TextStyle(color: basicColor),
+                          ))
                     ],
                   )),
-              SizedBox(height: 10,),
-              Text(error, style: TextStyle(color: Colors.red),)
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                error,
+                style: TextStyle(color: Colors.red),
+              )
             ],
           ),
         ),
