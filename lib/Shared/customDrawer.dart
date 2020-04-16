@@ -1,4 +1,3 @@
-
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -42,8 +41,8 @@ Widget customDrawer(BuildContext context) {
                         child: Text("Total Applied Jobs : 15"),
                       ),
                       InkWell(
-                                              child: Padding(
-                          padding: const EdgeInsets.only(left:8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
                           child: Text("Edit Account Info"),
                         ),
                       ),
@@ -117,11 +116,8 @@ Widget customDrawer(BuildContext context) {
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
             onTap: () async {
               dynamic result = await _auth.signOut();
-              if (result == null) {
-
-              }
-            }
-        ),
+              if (result == null) {}
+            }),
         Divider(
           thickness: 1,
         ),

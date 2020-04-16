@@ -27,3 +27,4 @@ const String completion ="On completion of the course, you will recieve a certif
 const String copyright = "Apli | Copyrighted @2020";
 const String rememberMe = "Remember Me";
 const String forgot = "Forgot Password?";
+
