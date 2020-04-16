@@ -403,6 +403,7 @@ class _RegisterState extends State<Register> {
     height = MediaQuery.of(context).size.height;
 
 
+
     return loading ? Loading() : WillPopScope(
       onWillPop: () {
         FirebaseAuth.instance.signOut();
