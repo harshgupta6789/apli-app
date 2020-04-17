@@ -126,25 +126,25 @@ class _LoginState extends State<Login> {
                                   ),
                                   onPressed: () async {
                                     if( email != '' && email != null) {
-                                      // setState(() {
-                                      //   loading = true;
-                                      // });
-                                      // var result = await _auth.passwordReset(email);
-                                      // setState(() {
-                                      //   loading = false;
-                                      // });
-                                      // if(result != 1)
-                                      //   setState(() {
-                                      //     error = 'Account does not exist';
-                                      //     setState(() {
-                                      //       email = '';
-                                      //     });
-                                      //   });
-                                      // else  {
-                                      //   Toast.show(
-                                      //       'Check your email to password reset',
-                                      //       context);
-                                      // }
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var result = await _auth.passwordReset(email);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      if(result != 1)
+                                        setState(() {
+                                          error = 'Account does not exist';
+                                          setState(() {
+                                            email = '';
+                                          });
+                                        });
+                                      else  {
+                                        Toast.show(
+                                            'Check your email to password reset',
+                                            context);
+                                      }
                                     } else setState(() {
                                       error = 'Incorrect email provided';
                                     });
