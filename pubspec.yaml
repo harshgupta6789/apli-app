@@ -39,6 +39,8 @@ dependencies:
   search_widget:
   screen: ^0.0.5
   firebase_messaging: ^6.0.13
+  splashscreen:
+  toast:
 
 
 dev_dependencies:

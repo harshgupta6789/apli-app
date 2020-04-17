@@ -3,7 +3,9 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 import '../../Services/auth.dart';
 
 double height, width;
@@ -122,7 +124,22 @@ class _LoginState extends State<Login> {
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  onPressed: () async {}),
+                                  onPressed: () async {
+                                    if( email != '' || email != null) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      await _auth.passwordReset(email);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      Toast.show(
+                                          'Check your email to password reset',
+                                          context);
+                                    } else setState(() {
+                                      error = 'Incorrect email provided';
+                                    });
+                                  }),
                             ),
                           ),
                         ],

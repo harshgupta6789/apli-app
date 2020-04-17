@@ -1,6 +1,7 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 
 void main() async {
@@ -26,7 +27,25 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: AppBarTheme(color: basicColor),
             accentColor: basicColor,
             fontFamily: 'Sans'),
-        home: HomeLoginWrapper()
+        home: MySplash()
+    );
+  }
+}
+
+class MySplash extends StatefulWidget {
+  @override
+  MySplashState createState() => new MySplashState();
+}
+
+class MySplashState extends State<MySplash> {
+  @override
+  Widget build(BuildContext context) {
+    return SplashScreen(
+      seconds: 1,
+      navigateAfterSeconds: HomeLoginWrapper(),
+      image: Image.asset('Assets/Images/logo.png'),
+      photoSize: 100.0,
+      loaderColor: basicColor,
     );
   }
 }
