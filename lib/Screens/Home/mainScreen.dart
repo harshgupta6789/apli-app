@@ -1,14 +1,13 @@
 import 'dart:io';
-
-import 'package:apli/Screens/Home/courseHome.dart';
-import 'package:apli/Screens/Home/courses.dart';
-import 'package:apli/Screens/Home/jobs.dart';
-import 'package:apli/Screens/Home/profile.dart';
-import 'package:apli/Screens/Home/updates.dart';
+import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
+import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'Courses/courseHome.dart';
+import 'Jobs/jobs.dart';
+import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -59,12 +58,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       },
       onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
-        Navigator.push(
-       context,
-       MaterialPageRoute(
-        builder: (context) => Updates()
-       )
-      );
           _currentTab = 2;
         _tabController.animateTo(2);
         
@@ -103,7 +96,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [CourseMain(), Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [CourseMain() , MockJobs() ,Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -129,6 +122,19 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 courses,
+                style: TextStyle(color: basicColor),
+              )),
+          BottomNavigationBarItem(
+              activeIcon: Icon(
+                EvaIcons.headphonesOutline,
+                color: basicColor,
+              ),
+              icon: Icon(
+                EvaIcons.headphonesOutline,
+                color: Colors.grey,
+              ),
+              title: Text(
+                mockJobs,
                 style: TextStyle(color: basicColor),
               )),
           BottomNavigationBarItem(

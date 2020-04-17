@@ -23,7 +23,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
   double height, width;
   String total;
   String current;
-   Duration di, dt;
+  Duration di, dt;
 
   @override
   void initState() {
@@ -75,17 +75,27 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                       },
                     ),
                   ),
-                  if (_controls)
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: Text(
-                           widget.title??"Now Playing",
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
+                  _controls ? Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        widget.title??"Now Playing",
+                        style: TextStyle(color: Colors.white, fontSize: 18),
                       ),
                     ),
+                  ) : Container(),
+//                  if (_controls)
+//                    Padding(
+//                      padding: const EdgeInsets.all(20.0),
+//                      child: Align(
+//                        alignment: Alignment.topCenter,
+//                        child: Text(
+//                           widget.title??"Now Playing",
+//                          style: TextStyle(color: Colors.white, fontSize: 18),
+//                        ),
+//                      ),
+//                    ),
                   Align(
                     alignment: Alignment.center,
                     child: _controls
