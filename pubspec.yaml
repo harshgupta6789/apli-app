@@ -38,6 +38,7 @@ dependencies:
   searchable_dropdown:
   search_widget:
   screen: ^0.0.5
+  firebase_messaging: ^6.0.13
 
 
 dev_dependencies:
