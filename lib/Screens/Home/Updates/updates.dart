@@ -18,12 +18,11 @@ class _UpdatesState extends State<Updates> {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   Stream notifications;
   FirebaseUser user;
-  List filters = ["candidateThirteen@gmail.com"];
-  List filtersFromFirebase = [];
-  bool isNotification = true;
+  List filters = ['candidateThirteen@gmail.com'];
+  List<List<String>> myNotifications = [];
 
   userInit() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user = await FirebaseAuth.instance.currentUser();
     filters.add(user.email);
   }
 
@@ -41,18 +40,21 @@ class _UpdatesState extends State<Updates> {
     });
   }
 
-  bool isMyNotification(AsyncSnapshot x) {
-    x.data.documents.forEach((f) {
-      if (f.data['receivers'] != null) {
-        // print(List.from(f.data['receivers']));
-        filtersFromFirebase.add(List.from(f.data['receivers']));
-      }
-    });
-
-    print(filtersFromFirebase);
-
-    return isNotification;
-  }
+//  bool isMyNotification(AsyncSnapshot x) {
+//    x.data.documents.forEach((f) {
+//      List receivers = f.data['receivers'];
+//      if (receivers != null) {
+//        List diff = receivers.where((element) => !filters.contains(element));
+//        if(diff.length > 0)
+//
+//        // print(List.from(f.data['receivers']));
+//      }
+//    });
+//
+//    print(filtersFromFirebase);
+//
+//    return isNotification;
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +93,21 @@ class _UpdatesState extends State<Updates> {
             stream: notifications,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (!isMyNotification(snapshot)) {
+                snapshot.data.documents.forEach((f) {
+                  bool isMyNotification = false;
+                  List receivers = f.data['receivers'];
+                  if (receivers != null) {
+                    for(int i = 0; i < filters.length; i++){
+                      if(receivers.contains(filters[i]))
+                        isMyNotification = true;
+                        break;
+                    }
+                    if(isMyNotification) {
+                      myNotifications.add([f.data['message'], f.documentID, f.data['timestamp']]);
+                    }
+                  }
+                });
+                if (myNotifications.length == 0) {
                   return Center(
                     child: Text('no new updates yet'),
                   );
@@ -99,7 +115,7 @@ class _UpdatesState extends State<Updates> {
                   return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.builder(
-                          itemCount: snapshot.data.documents.length,
+                          itemCount: myNotifications.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               height: 180.0,
@@ -112,12 +128,9 @@ class _UpdatesState extends State<Updates> {
                                         CrossAxisAlignment.start,
                                     children: <Widget>[
                                       ListTile(
-                                        title: Text(snapshot
-                                                .data
-                                                .documents[index]
-                                                .data['message'] ??
+                                        title: Text(myNotifications[index][0] ??
                                             "No Message Exception"),
-                                        trailing: Text("1 mo"),
+                                        trailing: Text(myNotifications[index][2] ?? 'No Time Exception'),
                                       ),
                                       Padding(
                                           padding: EdgeInsets.only(
