@@ -324,7 +324,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           Expanded(
             child: TextFormField(
               decoration: InputDecoration(
-                  border: UnderlineInputBorder(),
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
                   labelText: 'Mobile No'
               ),
               onChanged: (text) {

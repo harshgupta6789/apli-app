@@ -81,8 +81,11 @@ class _UpdatesState extends State<Updates> {
         body: StreamBuilder(
             stream: notifications,
             builder: (context, snapshot) {
-              if (snapshot.hasData && isMyNotification(snapshot)) {
-                return Padding(
+              if (snapshot.hasData) {
+                if(!isMyNotification(snapshot)) return Center(
+                  child: Text('no new updates yet'),
+                );
+                 else return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(children: <Widget>[
                     // Row(
