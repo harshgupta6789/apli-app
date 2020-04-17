@@ -38,6 +38,8 @@ dependencies:
   searchable_dropdown:
   search_widget:
   screen: ^0.0.5
+  splashscreen:
+  toast:
 
 
 dev_dependencies:
