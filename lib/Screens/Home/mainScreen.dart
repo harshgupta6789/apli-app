@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Animation<Offset> _animation;
 
   static Future<dynamic> myBackgroundMessageHandler(
-      Map<String, dynamic> message) {
+      Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
       // Handle data message
       final dynamic data = message['data'];
@@ -32,10 +32,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       // Handle notification message
       final dynamic notification = message['notification'];
     }
-
   }
 
-  
   // Or do other work.
 
   void firebaseCloudMessagingListeners() {
@@ -48,25 +46,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        setState(() {
-                    _currentTab = 2;
-        _tabController.animateTo(2);
-        });
-
-        
-        
+        print("onMessage: $message");
       },
       onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
-          _currentTab = 2;
-        _tabController.animateTo(2);
-        
+        print("onResume : $message");
       },
       onLaunch: (Map<String, dynamic> message) async {
-       
-          _currentTab = 2;
-        _tabController.animateTo(2);
-      
+        print("onLaunch: $message");
       },
     );
   }
@@ -96,7 +83,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [CourseMain() , MockJobs() ,Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [
+    CourseMain(),
+    MockJobs(),
+    Jobs(),
+    Updates(),
+    Profile()
+  ];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
