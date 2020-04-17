@@ -1,5 +1,6 @@
-import 'package:apli/Screens/Home/courses.dart';
+import 'package:apli/Screens/Home/Courses/courses.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -11,9 +12,13 @@ class CourseMain extends StatefulWidget {
 }
 
 class _CourseMainState extends State<CourseMain> {
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: customDrawer(context),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         child: AppBar(
@@ -25,7 +30,7 @@ class _CourseMainState extends State<CourseMain> {
                   EvaIcons.moreVerticalOutline,
                   color: Colors.white,
                 ),
-                onPressed: null),
+                onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
           ],
           title: Text(
             courses,

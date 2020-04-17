@@ -1,11 +1,11 @@
-import 'package:apli/Screens/Home/courseHome.dart';
-import 'package:apli/Screens/Home/courses.dart';
-import 'package:apli/Screens/Home/jobs.dart';
-import 'package:apli/Screens/Home/profile.dart';
-import 'package:apli/Screens/Home/updates.dart';
+import 'package:apli/Screens/Home/courses/courseHome.dart';
+import 'package:apli/Screens/Home/Jobs/jobs.dart';
+import 'package:apli/Screens/Home/Profile/profile.dart';
+import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'MockJobs/mockJobs.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  int _currentTab = 1;
+  int _currentTab = 2;
   TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
@@ -35,7 +35,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [CourseMain(), Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [CourseMain(), MockJobs(), Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -61,6 +61,19 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 courses,
+                style: TextStyle(color: basicColor),
+              )),
+          BottomNavigationBarItem(
+              activeIcon: Icon(
+                EvaIcons.menuOutline,
+                color: basicColor,
+              ),
+              icon: Icon(
+                EvaIcons.menuOutline,
+                color: Colors.grey,
+              ),
+              title: Text(
+                mockJobs,
                 style: TextStyle(color: basicColor),
               )),
           BottomNavigationBarItem(

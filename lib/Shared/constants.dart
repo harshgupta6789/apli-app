@@ -12,6 +12,7 @@ const String email = "Email ID";
 const String password = "password";
 const String signup = "Don’t have an account?";
 const String jobs = "Jobs";
+const String mockJobs = "Mock Jobs";
 const String courses = "Courses";
 const String profile = "Profile";
 const String updates = "Updates";
