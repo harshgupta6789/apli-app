@@ -137,6 +137,9 @@ class _LoginState extends State<Login> {
                                       if(result != 1)
                                         setState(() {
                                           error = 'Account does not exist';
+                                          setState(() {
+                                            email = '';
+                                          });
                                         });
                                       else  {
                                         Toast.show(
