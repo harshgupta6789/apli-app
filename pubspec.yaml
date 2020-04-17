@@ -39,6 +39,7 @@ dependencies:
   search_widget:
   screen: ^0.0.5
   firebase_messaging: ^6.0.13
+  awesome_dialog: ^0.1.3
   splashscreen:
   toast:
 

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -16,7 +17,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  int _currentTab = 1;
+  int _currentTab = 2;
   TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
@@ -34,6 +35,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     }
   }
 
+  void showAlertDialog(String title, String msg, DialogType dialogType,
+      BuildContext context, VoidCallback onOkPress) {
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.TOPSLIDE,
+      dialogType: dialogType,
+      tittle: title??"Welcome Back",
+      desc: msg??"This is Body",
+      btnOkIcon: Icons.check_circle,
+      btnOkColor: Colors.green.shade900,
+      btnOkOnPress: onOkPress,
+    ).show();
+  }
+
   // Or do other work.
 
   void firebaseCloudMessagingListeners() {
@@ -47,13 +62,47 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        showAlertDialog(message['notification']['title'],
+            message['notification']['body'], DialogType.INFO, context, () {
+          if (message['data']['type'] != null) {
+            switch (message['data']['type']) {
+              case 'Job':
+                {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Updates()),
+                  );
+                }
+                break;
+              case 'Alert':
+                {
+                  Navigator.of(context).pop();
+                }
+                break;
+              default:
+                {
+                  Navigator.of(context).pop();
+                }
+                break;
+            }
+          }
+        });
       },
       onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
         print("onResume : $message");
+        setState(() {
+          _currentTab = 3;
+           _tabController.animateTo(3);
+        });
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
+        setState(() {
+          _currentTab = 3;
+           _tabController.animateTo(3);
+        });
       },
     );
   }
