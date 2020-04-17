@@ -6,7 +6,6 @@ import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class Updates extends StatefulWidget {
@@ -15,7 +14,7 @@ class Updates extends StatefulWidget {
 }
 
 class _UpdatesState extends State<Updates> {
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  
   Stream notifications;
   FirebaseUser user;
   List filters = ["candidateThirteen@gmail.com"];
@@ -29,17 +28,13 @@ class _UpdatesState extends State<Updates> {
 
   @override
   void initState() {
-    firebaseCloudMessaging_Listeners();
+   
     super.initState();
     userInit();
     notifications = Firestore.instance.collection("notifications").snapshots();
   }
 
-  void firebaseCloudMessaging_Listeners() {
-    _firebaseMessaging.getToken().then((token) {
-      print("THIS : " + token);
-    });
-  }
+  
 
   bool isMyNotification(AsyncSnapshot x) {
     x.data.documents.forEach((f) {
