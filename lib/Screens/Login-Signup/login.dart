@@ -129,7 +129,7 @@ class _LoginState extends State<Login> {
                                       setState(() {
                                         loading = true;
                                       });
-                                      await _auth.passwordReset(email);
+                                      // await _auth.passwordReset(email);
                                       setState(() {
                                         loading = false;
                                       });
