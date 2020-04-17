@@ -99,6 +99,7 @@ class _UpdatesState extends State<Updates> {
                   return Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.builder(
+                          itemCount: snapshot.data.documents.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Container(
                               height: 180.0,
@@ -143,7 +144,7 @@ class _UpdatesState extends State<Updates> {
                               ),
                             );
                           },
-                          itemCount: snapshot.data.documents.length)
+                          )
 
                       // Row(
                       //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,

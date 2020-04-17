@@ -13,8 +13,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:search_widget/search_widget.dart';
-import 'package:string_validator/string_validator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -36,6 +36,13 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   String smsOTP;
   String verificationId;
   String errorMessage = '';
+
+  bool isNumeric(String s) {
+    if(s == null) {
+      return false;
+    }
+    return double.parse(s, (e) => null) != null;
+  }
 
   Future<void> verifyPhone() async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
@@ -71,7 +78,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return new AlertDialog(
-            title: Text('Enter SMS Code'),
+            title: Text('Enter OTP'),
             content: Container(
               height: 85,
               child: Column(children: [
@@ -106,13 +113,15 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             contentPadding: EdgeInsets.all(10),
             actions: <Widget>[
               FlatButton(
-                child: Text('Verify'),
+                child: Text('Next'),
                 onPressed: () {
                   setState(() {
                     loading = true;
                   });
                   _auth.currentUser().then((user) {
-                    signIn();
+
+                      signIn();
+
                   });
                 },
               )
@@ -127,6 +136,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         verificationId: verificationId,
         smsCode: smsOTP,
       );
+      print(credential);
       globalCredential = credential;
 //      final AuthResult result = await _auth.signInWithCredential(credential);
 //      final FirebaseUser user = result.user;
@@ -254,6 +264,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
 
                           }),
                     )),
+                SizedBox(height: 10,),
+                Text(error, style: TextStyle(color: Colors.red),),
                 SizedBox(height: 100,),
                 Center(
                   child: Text('Or Sign Up With'),
@@ -898,17 +910,48 @@ class _RegisterState extends State<Register> {
                                       onPressed: () async {
                                         if (_formKey.currentState.validate()) {
 
-                                          final AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
-                                          final FirebaseUser user = result.user;
-                                          user.updateEmail(email);
-                                          user.updatePassword(password);
-                                          Future.wait([
-                                            DatabaseService(uid: user.uid, email: email).updateUserInfo(
-                                                fname + '' + lname, password, Timestamp.now(), 'Candidate'
-                                            ),
-                                          ]);
-                                          Navigator.pop(context);
-                                          register = false;
+//                                          final AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
+//                                          final FirebaseUser user = result.user;
+//                                          if(user == null) setState(() {
+//                                            error = 'email already taken';
+//                                          });
+//                                          else {
+                                          try {
+                                            AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+                                            FirebaseUser user = result.user;
+                                              try {
+                                                await user.linkWithCredential(globalCredential);
+                                                try {
+                                                  await user.sendEmailVerification();
+                                                } catch (e) {
+                                                  print("An error occured while trying to send email verification");
+                                                  print(e.message);
+                                                }
+                                                await _auth.signOut();
+                                                Future.wait([
+                                                  DatabaseService(
+                                                      uid: user.uid, email: email)
+                                                      .updateUserInfo(
+                                                      fname + '' + lname, password,
+                                                      Timestamp.now(), 'Candidate'
+                                                  ),
+                                                ]);
+                                                Toast.show('Check Your Email and Sign in again', context, duration: 5);
+                                                Navigator.pop(context);
+                                                register = false;
+                                              } catch (e) {
+                                                user.delete();
+                                                FirebaseAuth.instance.signOut();
+                                                Toast.show('Either OTP was Wrong or Account already Exists', context, duration: 5);
+                                                Navigator.pop(context);
+                                              }
+                                          } catch (e) {
+                                            // TODO
+                                            setState(() {
+                                              error = "invalid email";
+                                            });
+                                          }
+//                                          }
                                          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
                                           var net = await Connectivity().checkConnectivity();
                                           if(net == ConnectivityResult.none) {

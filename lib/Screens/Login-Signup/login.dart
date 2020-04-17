@@ -122,20 +122,27 @@ class _LoginState extends State<Login> {
                                     forgot,
                                     style: TextStyle(
                                         fontSize: 12.0,
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w600,
+                                    color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if( email != '' || email != null) {
+                                    if( email != '' && email != null) {
                                       setState(() {
                                         loading = true;
                                       });
-                                      // await _auth.passwordReset(email);
+                                      var result = await _auth.passwordReset(email);
                                       setState(() {
                                         loading = false;
                                       });
-                                      Toast.show(
-                                          'Check your email to password reset',
-                                          context);
+                                      if(result != 1)
+                                        setState(() {
+                                          error = 'Account does not exist';
+                                        });
+                                      else  {
+                                        Toast.show(
+                                            'Check your email to password reset',
+                                            context);
+                                      }
                                     } else setState(() {
                                       error = 'Incorrect email provided';
                                     });
