@@ -15,6 +15,7 @@ class _ProfileState extends State<Profile> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+        key: _scaffoldKey,
        backgroundColor: Colors.white,
         endDrawer: customDrawer(context),
         appBar: PreferredSize(

@@ -18,6 +18,7 @@ class _CourseMainState extends State<CourseMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       endDrawer: customDrawer(context),
       backgroundColor: Colors.white,
       appBar: PreferredSize(

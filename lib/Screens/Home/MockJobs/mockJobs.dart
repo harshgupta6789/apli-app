@@ -15,6 +15,7 @@ class _MockJobsState extends State<MockJobs> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         endDrawer: customDrawer(context),
         appBar: PreferredSize(
