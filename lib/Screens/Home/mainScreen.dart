@@ -1,11 +1,13 @@
-import 'package:apli/Screens/Home/courses/courseHome.dart';
-import 'package:apli/Screens/Home/Jobs/jobs.dart';
-import 'package:apli/Screens/Home/Profile/profile.dart';
+import 'dart:io';
+import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'MockJobs/mockJobs.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'Courses/courseHome.dart';
+import 'Jobs/jobs.dart';
+import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -13,17 +15,76 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  int _currentTab = 2;
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  int _currentTab = 1;
   TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
 
+  static Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+    }
+
+  }
+
+  
+  // Or do other work.
+
+  void firebaseCloudMessagingListeners() {
+    if (Platform.isIOS) {
+      iOSPermission();
+    }
+    _firebaseMessaging.getToken().then((token) {
+      print(token);
+    });
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        setState(() {
+                    _currentTab = 2;
+        _tabController.animateTo(2);
+        });
+
+        
+        
+      },
+      onBackgroundMessage: myBackgroundMessageHandler,
+      onResume: (Map<String, dynamic> message) async {
+          _currentTab = 2;
+        _tabController.animateTo(2);
+        
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+       
+          _currentTab = 2;
+        _tabController.animateTo(2);
+      
+      },
+    );
+  }
+
+  void iOSPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
+
   @override
   void initState() {
+    firebaseCloudMessagingListeners();
     _tabController = TabController(vsync: this, length: _listTabs.length);
-   
-      _tabController.animateTo(_currentTab);
-    
+    _tabController.animateTo(_currentTab);
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 200),
@@ -35,7 +96,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [CourseMain(), MockJobs(), Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [CourseMain() , MockJobs() ,Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -65,11 +126,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
-                EvaIcons.menuOutline,
+                EvaIcons.headphonesOutline,
                 color: basicColor,
               ),
               icon: Icon(
-                EvaIcons.menuOutline,
+                EvaIcons.headphonesOutline,
                 color: Colors.grey,
               ),
               title: Text(
