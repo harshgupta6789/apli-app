@@ -22,8 +22,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   AnimationController _animationController;
   Animation<Offset> _animation;
 
-  static Future<dynamic> myBackgroundMessageHandler(
-      Map<String, dynamic> message) async {
+  static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
       // Handle data message
       final dynamic data = message['data'];

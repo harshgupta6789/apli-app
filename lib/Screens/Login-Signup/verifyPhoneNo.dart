@@ -1,4 +1,5 @@
 
+import 'package:apli/Screens/Login-Signup/review.dart';
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Services/database.dart';
 import 'package:apli/Shared/constants.dart';
@@ -192,14 +193,13 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         child: ClipRRect(
           borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
           child: Container(
-            color: Colors.black87,
+            color: basicColor,
             child: Padding(
               padding: const EdgeInsets.only(left: 80, top: 10, bottom: 5),
               child: Row(
                 children: <Widget>[
-                  Text('Already have an account? ', style: TextStyle(color: Colors.white),),
                   FlatButton(
-                    child: Text('Sign In', style: TextStyle(color: Colors.blue),),
+                    child: Text('Already have an account?  Sign In', style: TextStyle(color: Colors.white),),
                     onPressed: (){Navigator.pop(context);},
                   )
                 ],
@@ -494,7 +494,10 @@ class _RegisterState extends State<Register> {
                             obscureText: false,
                             decoration: loginFormField.copyWith(labelText: 'Email ID', icon: Icon(Icons.email, color: basicColor)),
                             onChanged: (text) {
-                              setState(() => email = text);
+                              setState(() {
+                                error = '';
+                                email = text;
+                              });
                             },
                             validator: (value) {
                               if (value.isEmpty) {
@@ -521,7 +524,7 @@ class _RegisterState extends State<Register> {
                             },
                           )
                       ),
-                      collegeSet ? InkWell(
+                      collegeSet || collegeText != null ? InkWell(
                         onTap: (){
                           setState(() {
                             collegeText = null;
@@ -572,6 +575,11 @@ class _RegisterState extends State<Register> {
                             collegeNotFound = false;
                             allSet = false;
                           });
+                          if(course[item].length == 0)
+                            setState(() {
+                              allSet = true;
+                              collegeSet = false;
+                            });
                         },
                         // widget customization
                         noItemsFoundWidget: Row(
@@ -620,7 +628,7 @@ class _RegisterState extends State<Register> {
                             opacity: collegeSet ? 1 : 0,
                             duration: Duration(milliseconds: 500),
                             child: Container(
-                              child: courseSet ? InkWell(
+                              child: courseSet || courseText != null ? InkWell(
                                 onTap: (){
                                   setState(() {
                                     courseText = null;
@@ -638,7 +646,7 @@ class _RegisterState extends State<Register> {
                                   child: TextFormField(
                                     enabled: false,
                                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: courseText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
+                                    decoration: loginFormField.copyWith(labelText: courseText, icon: Icon(Icons.collections_bookmark, color: basicColor), suffixIcon: Icon(Icons.delete)),
                                   ),
                                 ),
                               ) :
@@ -662,6 +670,11 @@ class _RegisterState extends State<Register> {
                                     courseText = item;
                                     courseSet = true;
                                   });
+                                  if(branch[item].length == 0)
+                                    setState(() {
+                                      allSet = true;
+                                      courseSet = false;
+                                    });
                                 },
                                 // widget customization
                                 noItemsFoundWidget: NoItemsFound(),
@@ -673,7 +686,7 @@ class _RegisterState extends State<Register> {
                                       controller: controller,
                                       focusNode: focusNode,
                                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                      decoration: loginFormField.copyWith(labelText: 'Course', icon: Icon(Icons.school, color: basicColor,)),
+                                      decoration: loginFormField.copyWith(labelText: 'Course', icon: Icon(Icons.collections_bookmark, color: basicColor,)),
                                     ),
                                   );
                                 },
@@ -690,7 +703,7 @@ class _RegisterState extends State<Register> {
                             opacity: courseSet ? 1 : 0,
                             duration: Duration(milliseconds: 500),
                             child: Container(
-                              child: branchSet ? InkWell(
+                              child: branchSet || branchText != null ? InkWell(
                                 onTap: (){
                                   setState(() {
                                     branchText = null;
@@ -706,7 +719,7 @@ class _RegisterState extends State<Register> {
                                   child: TextFormField(
                                     enabled: false,
                                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: branchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
+                                    decoration: loginFormField.copyWith(labelText: branchText, icon: Icon(Icons.library_books, color: basicColor), suffixIcon: Icon(Icons.delete)),
                                   ),
                                 ),
                               ) :
@@ -730,6 +743,11 @@ class _RegisterState extends State<Register> {
                                     branchText = item;
                                     branchSet = true;
                                   });
+                                  if(batch[item].length == 0)
+                                    setState(() {
+                                      allSet = true;
+                                      branchSet = false;
+                                    });
                                 },
                                 // widget customization
                                 noItemsFoundWidget: NoItemsFound(),
@@ -741,7 +759,7 @@ class _RegisterState extends State<Register> {
                                       controller: controller,
                                       focusNode: focusNode,
                                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                      decoration: loginFormField.copyWith(labelText: 'Branch', icon: Icon(Icons.school, color: basicColor,)),
+                                      decoration: loginFormField.copyWith(labelText: 'Branch', icon: Icon(Icons.library_books, color: basicColor,)),
                                     ),
                                   );
                                 },
@@ -758,7 +776,7 @@ class _RegisterState extends State<Register> {
                             opacity: branchSet ? 1 : 0,
                             duration: Duration(milliseconds: 500),
                             child: Container(
-                              child: batchSet ? InkWell(
+                              child: batchSet || batchText != null ? InkWell(
                                 onTap: (){
                                   setState(() {
                                     batchText = null;
@@ -772,7 +790,7 @@ class _RegisterState extends State<Register> {
                                   child: TextFormField(
                                     enabled: false,
                                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                    decoration: loginFormField.copyWith(labelText: batchText, icon: Icon(Icons.school, color: basicColor), suffixIcon: Icon(Icons.delete)),
+                                    decoration: loginFormField.copyWith(labelText: batchText, icon: Icon(Icons.book, color: basicColor), suffixIcon: Icon(Icons.delete)),
                                   ),
                                 ),
                               ) :
@@ -808,7 +826,7 @@ class _RegisterState extends State<Register> {
                                       controller: controller,
                                       focusNode: focusNode,
                                       style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-                                      decoration: loginFormField.copyWith(labelText: 'Batch', icon: Icon(Icons.school, color: basicColor,)),
+                                      decoration: loginFormField.copyWith(labelText: 'Batch', icon: Icon(Icons.book, color: basicColor,)),
                                     ),
                                   );
                                 },
@@ -883,11 +901,11 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                       Visibility(
-                        visible: allSet,
+                        visible: allSet || collegeNotFound,
                         child: IgnorePointer(
-                          ignoring: !allSet,
+                          ignoring: !allSet || !collegeNotFound,
                           child: AnimatedOpacity(
-                            opacity: allSet ? 1 : 0,
+                            opacity: allSet || collegeNotFound ? 1 : 0,
                             duration: Duration(milliseconds: 500),
                             child: Padding(
                                 padding: EdgeInsets.only(
@@ -909,55 +927,61 @@ class _RegisterState extends State<Register> {
                                       ),
                                       onPressed: () async {
                                         if (_formKey.currentState.validate()) {
-
-//                                          final AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
+                                          if(!collegeNotFound) {
+//                                           inal AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
 //                                          final FirebaseUser user = result.user;
 //                                          if(user == null) setState(() {
 //                                            error = 'email already taken';
 //                                          });
 //                                          else {
-                                          try {
-                                            AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-                                            FirebaseUser user = result.user;
-                                              try {
-                                                await user.linkWithCredential(globalCredential);
+                                            try {
+                                              AuthResult result = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+                                              FirebaseUser user = result.user;
                                                 try {
-                                                  await user.sendEmailVerification();
+                                                  await user.linkWithCredential(globalCredential);
+                                                  try {
+                                                    await user.sendEmailVerification();
+                                                  } catch (e) {
+                                                    print("An error occured while trying to send email verification");
+                                                    print(e.message);
+                                                  }
+                                                  await _auth.signOut();
+                                                  Future.wait([
+                                                    DatabaseService(
+                                                        uid: user.uid, email: email)
+                                                        .updateUserInfo(
+                                                        fname + '' + lname, password,
+                                                        Timestamp.now(), 'Candidate'
+                                                    ),
+                                                  ]);
+                                                  Toast.show('Check Your Email and Sign in again', context, duration: 5);
+                                                  Navigator.pop(context);
+                                                  register = false;
                                                 } catch (e) {
-                                                  print("An error occured while trying to send email verification");
-                                                  print(e.message);
+                                                  user.delete();
+                                                  FirebaseAuth.instance.signOut();
+                                                  Toast.show('Either OTP was Wrong or Account already Exists', context, duration: 5);
+                                                  Navigator.pop(context);
                                                 }
-                                                await _auth.signOut();
-                                                Future.wait([
-                                                  DatabaseService(
-                                                      uid: user.uid, email: email)
-                                                      .updateUserInfo(
-                                                      fname + '' + lname, password,
-                                                      Timestamp.now(), 'Candidate'
-                                                  ),
-                                                ]);
-                                                Toast.show('Check Your Email and Sign in again', context, duration: 5);
-                                                Navigator.pop(context);
-                                                register = false;
-                                              } catch (e) {
-                                                user.delete();
-                                                FirebaseAuth.instance.signOut();
-                                                Toast.show('Either OTP was Wrong or Account already Exists', context, duration: 5);
-                                                Navigator.pop(context);
-                                              }
-                                          } catch (e) {
-                                            // TODO
-                                            setState(() {
-                                              error = "invalid email";
-                                            });
+                                            } catch (e) {
+                                              // TODO
+                                              setState(() {
+                                                error = "invalid email";
+                                              });
+                                            }
+                                            //                                          }
+                                                                                     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
+                                            var net = await Connectivity().checkConnectivity();
+                                            if(net == ConnectivityResult.none) {
+                                              setState(() {
+                                                error = 'No Internet Connection';
+                                              });
+                                            }
                                           }
-//                                          }
-                                         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
-                                          var net = await Connectivity().checkConnectivity();
-                                          if(net == ConnectivityResult.none) {
-                                            setState(() {
-                                              error = 'No Internet Connection';
-                                            });
+                                          else if(collegeNotFound) {
+                                            //add to excel sheet
+                                            Toast.show('Your data is submitted for review, we will reach you shortly', context, duration: 10);
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Review()));
                                           }
                                         }
 
@@ -975,8 +999,9 @@ class _RegisterState extends State<Register> {
                               Text('Welcome Aboard!!'),
                             ],
                           )),
+                      SizedBox(height: 20,),
+                      Text(error, style: TextStyle(color: Colors.red),),
                       SizedBox(height: 10,),
-                      Text(error, style: TextStyle(color: Colors.red),)
                     ],
                   ),
                 ),

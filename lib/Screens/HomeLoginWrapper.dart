@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../Services/auth.dart';
 import 'Home/mainScreen.dart';
 import 'Login-Signup/login.dart';
-import 'Login-Signup/register.dart';
 
 class HomeLoginWrapper extends StatelessWidget {
   @override
