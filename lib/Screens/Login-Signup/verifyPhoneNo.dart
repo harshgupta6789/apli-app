@@ -56,10 +56,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           },
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
-            print(phoneAuthCredential);
-            print('verification complete');
-          },
+          verificationCompleted: null,
           verificationFailed: (AuthException exceptio) {
             print('${exceptio.message} verification failed');
           });
@@ -115,24 +112,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                     loading = true;
                   });
                   _auth.currentUser().then((user) {
-                    if (user != null) {
-                      print('user not null');
-                      setState(() {
-                        loading = false;
-                      });
-                      setState(() {
-                        loading = false;
-                        register = true;
-                      });
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register()));
-
-                      setState(() {
-                        register = true;
-                      });
-
-                    } else {
-                      signIn();
-                    }
+                    signIn();
                   });
                 },
               )

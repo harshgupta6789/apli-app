@@ -34,13 +34,8 @@ class _UpdatesState extends State<Updates> {
 
   bool isMyNotification(AsyncSnapshot x) {
     x.data.documents.forEach((f) {
-      for (int j = 0; j < f['receivers']; j++) {
-        if (filters.contains(f['receivers'][j])) {
-          return true;
-        }else{
-          return false;
-        }
-      }
+      print(f);
+      return false;
     });
     return false;
   }
