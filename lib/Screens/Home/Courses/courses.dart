@@ -172,8 +172,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        key: _scaffoldKey,
-        endDrawer: customDrawer(context),
         backgroundColor: Colors.white,
         appBar: PreferredSize(
           child: AppBar(
@@ -197,9 +195,8 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                     EvaIcons.moreVerticalOutline,
                     color: Colors.white,
                   ),
-                  onPressed: () {
-                    _scaffoldKey.currentState.openEndDrawer();
-                  }),
+                onPressed: null,
+                  ),
             ],
             title: Text(
               courses,
