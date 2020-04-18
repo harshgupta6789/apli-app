@@ -21,7 +21,7 @@ class Review extends StatelessWidget {
               child: Center(
                   child: Text(
                 isSuccessful
-                    ? 'We have send you a verification email\n Please check your email and login with again'
+                    ? 'We have send you a verification email\n            Please check your email\n                     and login again'
                     : 'Your data is submitted for review!!\n       We will reach you shortly',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
