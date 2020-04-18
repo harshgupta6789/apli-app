@@ -92,7 +92,7 @@ class _LoginState extends State<Login> {
                           },
                           validator: (value) {
                             if (!validatePassword(value)) {
-                              return 'password must contain 8 characters with atleast one lowercase, one uppercase, one digit, and one special character';
+                              return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
                             }
                             return null;
                           },
@@ -139,9 +139,10 @@ class _LoginState extends State<Login> {
                                       if (result != 1)
                                         setState(() {
                                           error = 'Account does not exist';
-                                          setState(() {
-                                            email = '';
-                                          });
+                                          Toast.show(error, context,
+                                              duration: 5,
+                                              backgroundColor: Colors.red);
+                                          email = '';
                                         });
                                       else {
                                         Toast.show(
@@ -151,6 +152,9 @@ class _LoginState extends State<Login> {
                                     } else
                                       setState(() {
                                         error = 'Incorrect email provided';
+                                        Toast.show(error, context,
+                                            duration: 5,
+                                            backgroundColor: Colors.red);
                                       });
                                   }),
                             ),
@@ -190,12 +194,19 @@ class _LoginState extends State<Login> {
                                     setState(() {
                                       error = 'Invalid email or password';
                                       loading = false;
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
                                     });
                                   }
                                   if (result == -1) {
                                     setState(() {
                                       error =
                                           'Account not Verified, Check your email';
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+
                                       loading = false;
                                     });
                                   }
@@ -204,6 +215,9 @@ class _LoginState extends State<Login> {
                                   if (net == ConnectivityResult.none) {
                                     setState(() {
                                       error = 'No Internet Connection';
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
                                     });
                                   }
                                 }
@@ -235,10 +249,10 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      error,
-                      style: TextStyle(color: Colors.red),
-                    )
+                    // Text(
+                    //   error,
+                    //   style: TextStyle(color: Colors.red),
+                    // )
                   ],
                 ),
               ),

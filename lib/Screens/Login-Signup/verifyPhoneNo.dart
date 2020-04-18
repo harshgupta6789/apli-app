@@ -344,9 +344,11 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           ),
           Expanded(
             child: TextFormField(
+              keyboardType: TextInputType.numberWithOptions(),
               decoration: InputDecoration(
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
+                  
                   labelText: 'Mobile No'),
               onChanged: (text) {
                 setState(() => phoneNo = countryCode + text);
