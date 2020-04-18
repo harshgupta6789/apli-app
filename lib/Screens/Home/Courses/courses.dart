@@ -1,6 +1,5 @@
 import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
-import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -191,12 +190,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ),
                   onPressed: null),
               IconButton(
-                  icon: Icon(
-                    EvaIcons.moreVerticalOutline,
-                    color: Colors.white,
-                  ),
+                icon: Icon(
+                  EvaIcons.moreVerticalOutline,
+                  color: Colors.white,
+                ),
                 onPressed: null,
-                  ),
+              ),
             ],
             title: Text(
               courses,

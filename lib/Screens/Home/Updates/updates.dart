@@ -16,36 +16,46 @@ class Updates extends StatefulWidget {
 class _UpdatesState extends State<Updates> {
   Stream notifications;
   FirebaseUser user;
-  List filters = ['candidateThirteen@gmail.com'];
+  String batchID;
+  String course;
+  
+  List filters = [];
   List<List<String>> myNotifications = [];
+  int currentTime = Timestamp.now().microsecondsSinceEpoch;
 
   userInit() async {
     user = await FirebaseAuth.instance.currentUser();
+
+    Firestore.instance.collection('candidates').document(user.email)
+        .get().then((snapshot) =>
+    batchID = snapshot.data['batch_id']
+    );
+
+    print(batchID);
+    Firestore.instance.collection('batches').document(batchID).
+    get().then((snapshot) =>
+    course = snapshot.data['course']
+    );
+
     filters.add(user.email);
+    filters.add(course);
   }
 
   @override
   void initState() {
     super.initState();
     userInit();
-    notifications = Firestore.instance.collection("notifications").snapshots();
+    notifications = Firestore.instance.collection("notifications").orderBy('time', descending: true).snapshots();
   }
 
-//  bool isMyNotification(AsyncSnapshot x) {
-//    x.data.documents.forEach((f) {
-//      List receivers = f.data['receivers'];
-//      if (receivers != null) {
-//        List diff = receivers.where((element) => !filters.contains(element));
-//        if(diff.length > 0)
-//
-//        // print(List.from(f.data['receivers']));
-//      }
-//    });
-//
-//    print(filtersFromFirebase);
-//
-//    return isNotification;
-//  }
+  String difference(Timestamp time) {
+    int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch;
+    Duration dt = DateTime.now().difference(DateTime.fromMicrosecondsSinceEpoch(timeInMicroSecondsSimceEpoch));
+    if(dt.inDays > 0) return dt.inDays.toString() + ' days ago';
+    else if(dt.inHours > 0) return dt.inHours.toString() + ' hrs ago';
+    else if(dt.inMinutes > 0) return dt.inMinutes.toString() + ' min ago';
+    else return 'Just now';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,24 +94,39 @@ class _UpdatesState extends State<Updates> {
             stream: notifications,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
+                print(filters);
                 snapshot.data.documents.forEach((f) {
                   bool isMyNotification = false;
+
+                  String tempMessage = f.data['message'];
+                  Timestamp tempTime = f.data['time'];
+
                   List receivers = f.data['receivers'];
                   if (receivers != null) {
                     for (int i = 0; i < filters.length; i++) {
-                      if (receivers.contains(filters[i]))
+                      if (receivers.contains(filters[i])) {
                         isMyNotification = true;
+                      }
                       break;
                     }
                     if (isMyNotification) {
-                      myNotifications.add([
-                        f.data['message'],
-                        f.documentID,
-                        f.data['timestamp']
-                      ]);
+                      if(tempTime != null) {
+                        myNotifications.add([
+                          tempMessage,
+                          difference(tempTime),
+                          f.documentID,
+                        ]);
+                      } else {
+                        myNotifications.add([
+                          tempMessage,
+                          null,
+                          f.documentID,
+                        ]);
+                      }
                     }
                   }
                 });
+                print(myNotifications);
                 if (myNotifications.length == 0) {
                   return Center(
                     child: Text('no new updates yet'),
@@ -125,7 +150,7 @@ class _UpdatesState extends State<Updates> {
                                       title: Text(myNotifications[index][0] ??
                                           "No Message Exception"),
                                       trailing: Text(myNotifications[index]
-                                              [2] ??
+                                              [1] ??
                                           'No Time Exception'),
                                     ),
                                     Padding(

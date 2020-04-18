@@ -8,7 +8,12 @@ class MailerService {
   String state;
   String city;
 
-  MailerService({String username, String password, String college, String state, String city}){
+  MailerService(
+      {String username,
+      String password,
+      String college,
+      String state,
+      String city}) {
     this.username = username;
     this.password = password;
     this.college = college;
@@ -36,9 +41,9 @@ class MailerService {
         }
       }
     }
+
     sendMail();
   }
-
 }
 
 //main() async {

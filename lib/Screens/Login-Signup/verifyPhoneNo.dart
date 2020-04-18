@@ -349,7 +349,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
               decoration: InputDecoration(
                   border: InputBorder.none,
                   focusedBorder: InputBorder.none,
-                  
                   labelText: 'Mobile No'),
               onChanged: (text) {
                 phoneNo = countryCode + text;
@@ -1278,6 +1277,8 @@ class _RegisterState extends State<Register> {
                                                                   ' ' +
                                                                   lname,
                                                               'ph_no': phoneNo,
+                                                              'batch_id' : batchID[
+                                                                batchText],
                                                             }),
                                                             Firestore.instance
                                                                 .collection(
