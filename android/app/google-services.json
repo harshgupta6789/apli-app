@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "282801027115",
-    "firebase_url": "https://aplidotai-intern.firebaseio.com",
-    "project_id": "aplidotai-intern",
-    "storage_bucket": "aplidotai-intern.appspot.com"
+    "project_number": "491401404214",
+    "firebase_url": "https://aplidotai.firebaseio.com",
+    "project_id": "aplidotai",
+    "storage_bucket": "aplidotai.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:282801027115:android:6e90b8b91f5a86d89c526e",
+        "mobilesdk_app_id": "1:491401404214:android:9e8b47e693bd25b96b9d97",
         "android_client_info": {
           "package_name": "com.example.apliauth"
         }
       },
       "oauth_client": [
         {
-          "client_id": "282801027115-6b956g72aph7ip7tmkcrg672omv83ege.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.apliauth",
-            "certificate_hash": "3b1a8db9daae62d0a99dc5711d1a66e049f16974"
-          }
-        },
-        {
-          "client_id": "282801027115-ns4rmsboqu4nqteuv76dsgn18pbd8ieu.apps.googleusercontent.com",
+          "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCR-xUCbNJPA1_Ohn-xBfVYyobfc0efN3c"
+          "current_key": "AIzaSyD0Y5HaDQLt0DvhBc5FxEzO9c0Ofm3m-58"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "282801027115-ns4rmsboqu4nqteuv76dsgn18pbd8ieu.apps.googleusercontent.com",
+              "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
