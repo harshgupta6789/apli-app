@@ -31,7 +31,6 @@ class _UpdatesState extends State<Updates> {
     batchID = snapshot.data['batch_id']
     );
 
-    print(batchID);
     Firestore.instance.collection('batches').document(batchID).
     get().then((snapshot) =>
     course = snapshot.data['course']
