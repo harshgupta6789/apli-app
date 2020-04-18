@@ -12,7 +12,6 @@ class CourseMain extends StatefulWidget {
 }
 
 class _CourseMainState extends State<CourseMain> {
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -64,7 +63,11 @@ class _CourseMainState extends State<CourseMain> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Courses(documentId: snapshot.data.documents[index].documentID,)),
+                          MaterialPageRoute(
+                              builder: (context) => Courses(
+                                    documentId: snapshot
+                                        .data.documents[index].documentID,
+                                  )),
                         );
                       },
                       trailing: IconButton(

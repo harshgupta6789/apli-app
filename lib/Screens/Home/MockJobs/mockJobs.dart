@@ -11,7 +11,6 @@ class MockJobs extends StatefulWidget {
 class _MockJobsState extends State<MockJobs> {
   @override
   Widget build(BuildContext context) {
-
     final _scaffoldKey = GlobalKey<ScaffoldState>();
 
     return Scaffold(
@@ -23,7 +22,6 @@ class _MockJobsState extends State<MockJobs> {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-
               IconButton(
                   icon: Icon(
                     EvaIcons.moreVerticalOutline,
@@ -39,13 +37,12 @@ class _MockJobsState extends State<MockJobs> {
           preferredSize: Size.fromHeight(70),
         ),
         body: SingleChildScrollView(
-          child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top:300.0),
-                  child: Center(child: Image.asset("Assets/Images/job.png")),
-                ),
-              ]),
+          child: Column(children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: 300.0),
+              child: Center(child: Image.asset("Assets/Images/job.png")),
+            ),
+          ]),
         ));
   }
 }

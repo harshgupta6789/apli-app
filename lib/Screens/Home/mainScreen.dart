@@ -22,7 +22,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   AnimationController _animationController;
   Animation<Offset> _animation;
 
-  static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  static Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
       // Handle data message
       final dynamic data = message['data'];
@@ -40,8 +41,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       context: context,
       animType: AnimType.TOPSLIDE,
       dialogType: dialogType,
-      tittle: title??"Welcome Back",
-      desc: msg??"This is Body",
+      tittle: title ?? "Welcome Back",
+      desc: msg ?? "This is Body",
       btnOkIcon: Icons.check_circle,
       btnOkColor: Colors.green.shade900,
       btnOkOnPress: onOkPress,
@@ -93,14 +94,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         print("onResume : $message");
         setState(() {
           _currentTab = 3;
-           _tabController.animateTo(3);
+          _tabController.animateTo(3);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         setState(() {
           _currentTab = 3;
-           _tabController.animateTo(3);
+          _tabController.animateTo(3);
         });
       },
     );

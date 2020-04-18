@@ -1,10 +1,9 @@
 class User {
   final String uid;
-  User({ this.uid });
+  User({this.uid});
 }
 
 class UserInfo {
-
   final String uid;
   final String email;
   final String name;
@@ -20,6 +19,4 @@ class UserInfo {
     this.timestamp,
     this.user_type,
   });
-
 }
-

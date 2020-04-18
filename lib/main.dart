@@ -3,7 +3,6 @@ import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:splashscreen/splashscreen.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
@@ -16,7 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,8 +25,7 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: AppBarTheme(color: basicColor),
             accentColor: basicColor,
             fontFamily: 'Sans'),
-        home: MySplash()
-    );
+        home: MySplash());
   }
 }
 
