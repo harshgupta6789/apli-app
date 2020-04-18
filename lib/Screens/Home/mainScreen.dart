@@ -22,7 +22,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   AnimationController _animationController;
   Animation<Offset> _animation;
 
-  static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  static Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
     if (message.containsKey('data')) {
       // Handle data message
       final dynamic data = message['data'];
@@ -40,9 +41,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       context: context,
       animType: AnimType.TOPSLIDE,
       dialogType: dialogType,
-      tittle: title??"Welcome Back",
-      desc: msg??"This is Body",
+      tittle: title ?? "Welcome Back",
+      desc: msg ?? "This is Body",
       btnOkIcon: Icons.check_circle,
+      btnCancelText: "Cancel",
+      btnCancelOnPress: () {
+        Navigator.of(context).pop();
+      },
+      btnOkText: "Take Me!",
       btnOkColor: Colors.green.shade900,
       btnOkOnPress: onOkPress,
     ).show();
@@ -68,10 +74,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               case 'Job':
                 {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Updates()),
-                  );
+                  setState(() {
+                    _currentTab = 3;
+                    _tabController.animateTo(3);
+                  });
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => Updates()),
+                  // );
                 }
                 break;
               case 'Alert':
@@ -93,14 +103,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         print("onResume : $message");
         setState(() {
           _currentTab = 3;
-           _tabController.animateTo(3);
+          _tabController.animateTo(3);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         setState(() {
           _currentTab = 3;
-           _tabController.animateTo(3);
+          _tabController.animateTo(3);
         });
       },
     );
