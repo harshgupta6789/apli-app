@@ -99,19 +99,21 @@ class _LoginState extends State<Login> {
                         )),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: height * 0.02,
-                          left: width * 0.1,
-                          ),
+                        top: height * 0.02,
+                        left: width * 0.1,
+                      ),
                       child: Row(
                         children: <Widget>[
-                          Checkbox(value: isRememberChecked, onChanged: (bool temp) {
-                            setState(() {
-                              isRememberChecked = temp;
-                            });
-                          }),
+                          Checkbox(
+                              value: isRememberChecked,
+                              onChanged: (bool temp) {
+                                setState(() {
+                                  isRememberChecked = temp;
+                                });
+                              }),
                           Text(rememberMe),
                           Padding(
-                            padding: EdgeInsets.only(left:width*0.2),
+                            padding: EdgeInsets.only(left: width * 0.2),
                             child: Container(
                               width: width * 0.3,
                               height: height * 0.1,
@@ -122,32 +124,34 @@ class _LoginState extends State<Login> {
                                     style: TextStyle(
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.w600,
-                                    color: basicColor),
+                                        color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if( email != '' && email != null) {
+                                    if (email != '' && email != null) {
                                       setState(() {
                                         loading = true;
                                       });
-                                      var result = await _auth.passwordReset(email);
+                                      var result =
+                                          await _auth.passwordReset(email);
                                       setState(() {
                                         loading = false;
                                       });
-                                      if(result != 1)
+                                      if (result != 1)
                                         setState(() {
                                           error = 'Account does not exist';
                                           setState(() {
                                             email = '';
                                           });
                                         });
-                                      else  {
+                                      else {
                                         Toast.show(
                                             'Check your email to password reset',
                                             context);
                                       }
-                                    } else setState(() {
-                                      error = 'Incorrect email provided';
-                                    });
+                                    } else
+                                      setState(() {
+                                        error = 'Incorrect email provided';
+                                      });
                                   }),
                             ),
                           ),

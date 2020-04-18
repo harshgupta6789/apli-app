@@ -2,20 +2,23 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(VideoApp(videoUrl: null,));
+void main() => runApp(VideoApp(
+      videoUrl: null,
+    ));
 
 class VideoApp extends StatefulWidget {
+  final String videoUrl;
+  final String title;
 
- final String videoUrl;
- final String title;
-
-  const VideoApp({Key key, @required this.videoUrl , this.title}) : super(key: key);
+  const VideoApp({Key key, @required this.videoUrl, this.title})
+      : super(key: key);
 
   @override
   _VideoAppState createState() => _VideoAppState();
 }
 
-class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin{
+class _VideoAppState extends State<VideoApp>
+    with SingleTickerProviderStateMixin {
   VideoPlayerController _videoPlayerController;
   Future<void> _videoPlayerFuture;
   bool _controls = true;
@@ -32,22 +35,21 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
-      _videoPlayerFuture = _videoPlayerController.initialize().then((_) => {
-            _videoPlayerController
-              ..play()
-              ..setVolume(1.0),
-            _animationController.forward()
-          });
-
-       _videoPlayerController.addListener(() {
-       
-      dt = _videoPlayerController.value.duration;
-        di = _videoPlayerController.value.position;
-        setState(() {
-          total = '${dt.inMinutes}:${dt.inSeconds.remainder(60)}';
-          current = '${di.inMinutes}:${di.inSeconds.remainder(60)}';
+    _videoPlayerFuture = _videoPlayerController.initialize().then((_) => {
+          _videoPlayerController
+            ..play()
+            ..setVolume(1.0),
+          _animationController.forward()
         });
+
+    _videoPlayerController.addListener(() {
+      dt = _videoPlayerController.value.duration;
+      di = _videoPlayerController.value.position;
+      setState(() {
+        total = '${dt.inMinutes}:${dt.inSeconds.remainder(60)}';
+        current = '${di.inMinutes}:${di.inSeconds.remainder(60)}';
       });
+    });
   }
 
   @override
@@ -59,7 +61,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (_videoPlayerController.value.initialized &&
               snapshot.connectionState == ConnectionState.done) {
-                return Scaffold(
+            return Scaffold(
                 backgroundColor: Colors.black,
                 body: Stack(children: <Widget>[
                   Align(
@@ -75,16 +77,19 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                       },
                     ),
                   ),
-                  _controls ? Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        widget.title??"Now Playing",
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ) : Container(),
+                  _controls
+                      ? Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: Text(
+                              widget.title ?? "Now Playing",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        )
+                      : Container(),
 //                  if (_controls)
 //                    Padding(
 //                      padding: const EdgeInsets.all(20.0),
@@ -100,11 +105,11 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                     alignment: Alignment.center,
                     child: _controls
                         ? FloatingActionButton(
-                           elevation: 0,
-                              disabledElevation: 0.0,
-                              focusElevation: 0.0,
-                              highlightElevation: 0.0,
-                              hoverElevation: 0.0,
+                            elevation: 0,
+                            disabledElevation: 0.0,
+                            focusElevation: 0.0,
+                            highlightElevation: 0.0,
+                            hoverElevation: 0.0,
                             heroTag: 'nonononon',
                             backgroundColor: Colors.transparent,
                             onPressed: () {
@@ -132,7 +137,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                         ? Padding(
                             padding: const EdgeInsets.only(right: 50.0),
                             child: FloatingActionButton(
-                               elevation: 0,
+                              elevation: 0,
                               disabledElevation: 0.0,
                               focusElevation: 0.0,
                               highlightElevation: 0.0,
@@ -145,7 +150,10 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                                     _videoPlayerController.value.position +
                                         Duration(seconds: 10));
                               },
-                              child: Icon(Icons.forward_10 , size: 40,),
+                              child: Icon(
+                                Icons.forward_10,
+                                size: 40,
+                              ),
                             ),
                           )
                         : null,
@@ -156,7 +164,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                         ? Padding(
                             padding: const EdgeInsets.only(left: 50.0),
                             child: FloatingActionButton(
-                               elevation: 0,
+                              elevation: 0,
                               disabledElevation: 0.0,
                               focusElevation: 0.0,
                               highlightElevation: 0.0,
@@ -168,7 +176,7 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                                     _videoPlayerController.value.position -
                                         Duration(seconds: 10));
                               },
-                              child: Icon(Icons.replay_10 , size: 40),
+                              child: Icon(Icons.replay_10, size: 40),
                             ),
                           )
                         : null,
@@ -177,7 +185,8 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                     alignment: Alignment.topLeft,
                     child: _controls
                         ? Padding(
-                            padding: const EdgeInsets.only(left: 10.0 , top: 5.0),
+                            padding:
+                                const EdgeInsets.only(left: 10.0, top: 5.0),
                             child: FloatingActionButton(
                               elevation: 0,
                               disabledElevation: 0.0,
@@ -187,8 +196,8 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                               splashColor: Colors.transparent,
                               heroTag: 'none',
                               backgroundColor: Colors.transparent,
-                              onPressed: ()  {
-                               Navigator.pop(context);
+                              onPressed: () {
+                                Navigator.pop(context);
                               },
                               child: Icon(
                                 Icons.arrow_back,
@@ -198,54 +207,57 @@ class _VideoAppState extends State<VideoApp> with SingleTickerProviderStateMixin
                           )
                         : null,
                   ),
-                 
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 35.0),
-                      child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Text(current.toString() , style: TextStyle(color:Colors.white),),
+
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 35.0),
+                    child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                child: Text(
+                                  current.toString(),
+                                  style: TextStyle(color: Colors.white),
                                 ),
                               ),
-                              Padding(
-                                padding:  EdgeInsets.only(left:50.0),
-                                child: Container(
-                                  width: width * 0.8,
-                                  child: VideoProgressIndicator(
-                                    _videoPlayerController,
-                                    allowScrubbing: true,
-                                    colors: VideoProgressColors(
-                                        backgroundColor:
-                                            Colors.black.withOpacity(0.5),
-                                        playedColor:
-                                            Theme.of(context).primaryColor),
-                                  ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 50.0),
+                              child: Container(
+                                width: width * 0.8,
+                                child: VideoProgressIndicator(
+                                  _videoPlayerController,
+                                  allowScrubbing: true,
+                                  colors: VideoProgressColors(
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.5),
+                                      playedColor:
+                                          Theme.of(context).primaryColor),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  child: Text(total.toString() , style: TextStyle(color:Colors.white)),
-                                ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                child: Text(total.toString(),
+                                    style: TextStyle(color: Colors.white)),
                               ),
-                            ],
-                          )),
-                    ),
-                  ]));
-              }
-              else {
-              return Container(
-                color: Colors.black,
-                width: double.infinity,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
+                            ),
+                          ],
+                        )),
+                  ),
+                ]));
+          } else {
+            return Container(
+              color: Colors.black,
+              width: double.infinity,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
         });
   }
 

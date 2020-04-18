@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 Color basicColor = Color(0xff1643CD);
 
-
-
 // ---------------Strings--------------------
 const String login = "Log In";
 const String email = "Email ID";
@@ -24,8 +22,11 @@ const String overview = "Overview";
 const String content = "Content";
 const String certificate = "Certificate";
 const String enroll = "Enroll";
-const String completion ="On completion of the course, you will recieve a certificate.";
+const String completion =
+    "On completion of the course, you will recieve a certificate.";
 const String copyright = "Apli | Copyrighted @2020";
 const String rememberMe = "Remember Me";
 const String forgot = "Forgot Password?";
 
+const String apliEmailID = 'apli.ai@gmail.com';
+const String apliPassword = 'abcd1234';

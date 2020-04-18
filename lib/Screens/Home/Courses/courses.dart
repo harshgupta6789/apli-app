@@ -74,7 +74,8 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
       stream: Firestore.instance
           .collection('edu_courses')
           .document(widget.documentId)
-          .collection("videos").orderBy("timestamp")
+          .collection("videos")
+          .orderBy("timestamp")
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
@@ -101,12 +102,14 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => VideoApp(
-                                videoUrl:  snapshot.data.documents[index].data['link'],
-                                title: snapshot.data.documents[index].data['title']
-                              )));
+                                  videoUrl: snapshot
+                                      .data.documents[index].data['link'],
+                                  title: snapshot
+                                      .data.documents[index].data['title'])));
                         },
                         title: Text(
-                          snapshot.data.documents[index].data['title'] ?? "Play Me",
+                          snapshot.data.documents[index].data['title'] ??
+                              "Play Me",
                           style: TextStyle(
                               fontSize: 18.0, fontWeight: FontWeight.w600),
                         ),
