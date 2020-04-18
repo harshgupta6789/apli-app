@@ -25,6 +25,7 @@ class VerifyPhoneNo extends StatefulWidget {
 double height, width;
 AuthCredential globalCredential;
 bool register = false;
+String phoneNo;
 
 class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   String countryCode = '+91';
@@ -32,7 +33,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   String error = '';
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
-  String phoneNo;
+
   String smsOTP;
   String verificationId;
   String errorMessage = '';
@@ -56,7 +57,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
     };
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: this.phoneNo, // PHONE NUMBER TO SEND OTP
+          phoneNumber: phoneNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             this.verificationId = verId;
             print(verificationId);
@@ -351,6 +352,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                   
                   labelText: 'Mobile No'),
               onChanged: (text) {
+                phoneNo = countryCode + text;
                 setState(() => phoneNo = countryCode + text);
               },
               validator: (value) {
@@ -386,7 +388,6 @@ class _RegisterState extends State<Register> {
   String fname = '',
       lname = '',
       email = '',
-      phone = '',
       dateOfBirth = '',
       password = '',
       error = '';
@@ -422,6 +423,7 @@ class _RegisterState extends State<Register> {
   Map<String, List<String>> batch = {
     '': ['']
   };
+  Map<String, String> batchID = {'': ''};
 
   bool collegeSet = false;
   bool courseSet = false;
@@ -454,6 +456,9 @@ class _RegisterState extends State<Register> {
                       String courseTemp = f.data['course'];
                       String branchTemp = f.data['branch'];
                       String batchTemp = f.data['batch_name'];
+                      String batchIDTemp = f.data['batch_id'];
+
+                      batchID[batchTemp] = batchIDTemp;
 
                       if (collegeTemp != null) {
                         if (!course.containsKey(collegeTemp)) {
@@ -1179,161 +1184,178 @@ class _RegisterState extends State<Register> {
                                   ),
                                   Visibility(
                                     visible: allSet || collegeNotFound,
-                                    child: IgnorePointer(
-                                      ignoring: !allSet || !collegeNotFound,
-                                      child: AnimatedOpacity(
-                                        opacity:
-                                            allSet || collegeNotFound ? 1 : 0,
-                                        duration: Duration(milliseconds: 500),
-                                        child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.05,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: Container(
-                                              height: height * 0.08,
-                                              width: width * 0.8,
-                                              decoration: BoxDecoration(
-                                                color: basicColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: MaterialButton(
-                                                  child: Text(
-                                                    'Register',
-                                                    style: TextStyle(
-                                                        fontSize: 18.0,
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ),
-                                                  onPressed: () async {
-                                                    if (_formKey.currentState
-                                                        .validate()) {
-                                                      if (!collegeNotFound) {
+                                    child: AnimatedOpacity(
+                                      opacity:
+                                          allSet || collegeNotFound ? 1 : 0,
+                                      duration: Duration(milliseconds: 500),
+                                      child: Padding(
+                                          padding: EdgeInsets.only(
+                                              top: height * 0.05,
+                                              left: width * 0.1,
+                                              right: width * 0.1),
+                                          child: Container(
+                                            height: height * 0.08,
+                                            width: width * 0.8,
+                                            decoration: BoxDecoration(
+                                              color: basicColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: MaterialButton(
+                                                child: Text(
+                                                  'Register',
+                                                  style: TextStyle(
+                                                      fontSize: 18.0,
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w600),
+                                                ),
+                                                onPressed: () async {
+                                                  print('nmvhmvj');
+                                                  if (_formKey.currentState
+                                                      .validate()) {
+                                                    if (!collegeNotFound) {
+                                                      print('college');
 //                                           inal AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
 //                                          final FirebaseUser user = result.user;
 //                                          if(user == null) setState(() {
 //                                            error = 'email already taken';
 //                                          });
 //                                          else {
-                                                        setState(() {
-                                                          loading2 = true;
-                                                        });
+
+                                                      try {
+                                                        AuthResult result =
+                                                            await FirebaseAuth
+                                                                .instance
+                                                                .createUserWithEmailAndPassword(
+                                                                    email:
+                                                                        email,
+                                                                    password:
+                                                                        password);
+                                                        FirebaseUser user =
+                                                            result.user;
                                                         try {
-                                                          AuthResult result =
-                                                              await FirebaseAuth
-                                                                  .instance
-                                                                  .createUserWithEmailAndPassword(
-                                                                      email:
-                                                                          email,
-                                                                      password:
-                                                                          password);
-                                                          FirebaseUser user =
-                                                              result.user;
+                                                          await user
+                                                              .linkWithCredential(
+                                                                  globalCredential);
                                                           try {
                                                             await user
-                                                                .linkWithCredential(
-                                                                    globalCredential);
-                                                            try {
-                                                              await user
-                                                                  .sendEmailVerification();
-                                                            } catch (e) {
-                                                              print(
-                                                                  "An error occured while trying to send email verification");
-                                                              print(e.message);
-                                                            }
-                                                            await _auth
-                                                                .signOut();
-                                                            Future.wait([
-                                                              DatabaseService(
-                                                                      uid: user
-                                                                          .uid,
-                                                                      email:
-                                                                          email)
-                                                                  .updateUserInfo(
-                                                                      fname +
-                                                                          '' +
-                                                                          lname,
-                                                                      password,
-                                                                      Timestamp
-                                                                          .now(),
-                                                                      'Candidate'),
-                                                            ]);
-                                                            Toast.show(
-                                                                'Check Your Email and Sign in again',
-                                                                context,
-                                                                duration: 5);
-                                                            Navigator.pop(
-                                                                context);
-                                                            register = false;
+                                                                .sendEmailVerification();
                                                           } catch (e) {
-                                                            user.delete();
-                                                            FirebaseAuth
-                                                                .instance
-                                                                .signOut();
-                                                            Toast.show(
-                                                                'Either OTP was Wrong or Account already Exists',
-                                                                context,
-                                                                duration: 5);
-                                                            Navigator.pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        Review(
-                                                                            true)));
+                                                            print(
+                                                                "An error occured while trying to send email verification");
+                                                            print(e.message);
                                                           }
+                                                          await _auth.signOut();
+                                                          Future.wait([
+                                                            Firestore.instance
+                                                                .collection(
+                                                                    'users')
+                                                                .document(email)
+                                                                .setData({
+                                                              'name': fname +
+                                                                  '' +
+                                                                  lname,
+                                                              'password':
+                                                                  password,
+                                                              'timestamp':
+                                                                  Timestamp
+                                                                      .now(),
+                                                              'user_type':
+                                                                  'Candidate'
+                                                            }),
+                                                            Firestore.instance
+                                                                .collection(
+                                                                    'candidates')
+                                                                .document(email)
+                                                                .setData({
+                                                              'First_name':
+                                                                  fname,
+                                                              'Last_name':
+                                                                  lname,
+                                                              'email': email,
+                                                              'name': fname +
+                                                                  ' ' +
+                                                                  lname,
+                                                              'ph_no': phoneNo,
+                                                            }),
+                                                            Firestore.instance
+                                                                .collection(
+                                                                    'rel_batch_candidates')
+                                                                .document(batchID[
+                                                                    batchText])
+                                                                .setData({
+                                                              'batch_id':
+                                                                  batchID[
+                                                                      batchText],
+                                                              'candidate_id':
+                                                                  email
+                                                            }),
+                                                          ]);
+                                                          Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      Review(
+                                                                          true)));
+                                                          register = false;
                                                         } catch (e) {
-                                                          // TODO
-                                                          setState(() {
-                                                            error =
-                                                                "invalid email";
-                                                          });
+                                                          user.delete();
+                                                          FirebaseAuth.instance
+                                                              .signOut();
+                                                          Toast.show(
+                                                              'Either OTP was Wrong or Account already Exists',
+                                                              context,
+                                                              duration: 5);
+                                                          Navigator.pushReplacement(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      Review(
+                                                                          true)));
                                                         }
-
+                                                      } catch (e) {
+                                                        // TODO
                                                         setState(() {
-                                                          loading2 = false;
+                                                          error =
+                                                              "invalid email";
                                                         });
-                                                        //                                          }
-                                                        // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
-                                                        var net =
-                                                            await Connectivity()
-                                                                .checkConnectivity();
-                                                        if (net ==
-                                                            ConnectivityResult
-                                                                .none) {
-                                                          setState(() {
-                                                            error =
-                                                                'No Internet Connection';
-                                                          });
-                                                        }
-                                                      } else if (collegeNotFound) {
-                                                        //add to excel sheet
-                                                        MailerService(
-                                                            username:
-                                                                apliEmailID,
-                                                            password:
-                                                                apliPassword,
-                                                            college:
-                                                                collegeText,
-                                                            state: state,
-                                                            city: city);
-                                                        Toast.show(
-                                                            'Your data is submitted for review, we will reach you shortly',
-                                                            context,
-                                                            duration: 10);
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Review(
-                                                                            false)));
                                                       }
+
+                                                      //                                          }
+                                                      // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeLoginWrapper()));
+                                                      var net =
+                                                          await Connectivity()
+                                                              .checkConnectivity();
+                                                      if (net ==
+                                                          ConnectivityResult
+                                                              .none) {
+                                                        setState(() {
+                                                          error =
+                                                              'No Internet Connection';
+                                                        });
+                                                      }
+                                                    } else if (collegeNotFound) {
+                                                      print('notcollege');
+                                                      //add to excel sheet
+                                                      MailerService(
+                                                          username: apliEmailID,
+                                                          password:
+                                                              apliPassword,
+                                                          college: collegeText,
+                                                          state: state,
+                                                          city: city);
+
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  Review(
+                                                                      false)));
                                                     }
-                                                  }),
-                                            )),
-                                      ),
+                                                  }
+                                                }),
+                                          )),
                                     ),
                                   ),
                                   Padding(
