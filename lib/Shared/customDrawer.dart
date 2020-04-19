@@ -8,9 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget customDrawer(BuildContext context) {
+Widget customDrawer(BuildContext context, User user) {
   final AuthService _auth = AuthService();
-  final user = Provider.of<User>(context);
   String name, profilePic, jobs;
 
   CandidateInfo _candidateInfoFromSnapshot(DocumentSnapshot snapshot) {
@@ -40,7 +39,7 @@ Widget customDrawer(BuildContext context) {
                 if (snapshot.hasData) {
                   name = snapshot.data.name;
                   profilePic = snapshot.data.profilePic;
-                  print(name);
+                  print(profilePic);
                   return Row(
                     children: <Widget>[
                       Padding(
