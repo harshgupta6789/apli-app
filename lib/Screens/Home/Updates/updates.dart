@@ -1,4 +1,3 @@
-
 import 'package:apli/Models/user.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
@@ -14,7 +13,6 @@ class Updates extends StatefulWidget {
 }
 
 class _UpdatesState extends State<Updates> {
-
   List filters = [];
   List<List<String>> myNotifications = [];
   int currentTime = Timestamp.now().microsecondsSinceEpoch;
@@ -30,7 +28,7 @@ class _UpdatesState extends State<Updates> {
         .get()
         .then((snapshot) => batchID = snapshot.data['batch_id']);
 
-    if(batchID != null) {
+    if (batchID != null) {
       await Firestore.instance
           .collection('batches')
           .document(batchID)
@@ -92,9 +90,10 @@ class _UpdatesState extends State<Updates> {
         ),
         body: FutureBuilder(
           future: userInit(user.email),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<String>> snapshot) {
-            if (snapshot.hasData) {
+          builder:
+              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+            if (snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
               if (snapshot.data.length == 0)
                 return Center(
                   child: Text('No New Updates'),
@@ -102,86 +101,102 @@ class _UpdatesState extends State<Updates> {
               else {
                 filters = snapshot.data;
                 return StreamBuilder(
-                  stream: Firestore.instance.collection("notifications").orderBy('time', descending: true).snapshots(),
-                  builder: (context, snapshot1){
-                    if(snapshot1.hasData){
-                      snapshot1.data.documents.forEach((f) {
-                        bool isMyNotification = false;
+                    stream: Firestore.instance
+                        .collection("notifications")
+                        .orderBy('time', descending: true)
+                        .snapshots(),
+                    builder: (context, snapshot1) {
+                      if (snapshot1.hasData) {
+                        snapshot1.data.documents.forEach((f) {
+                          bool isMyNotification = false;
 
-                        String tempMessage = f.data['message'];
-                        Timestamp tempTime = f.data['time'];
-                        List receivers = f.data['receivers'];
-                        if (receivers != null) {
-                          for (int i = 0; i < receivers.length; i++) {
-                            if (filters.contains(receivers[i])) {
-                              isMyNotification = true;
-                              break;
+                          String tempMessage = f.data['message'];
+                          Timestamp tempTime = f.data['time'];
+                          List receivers = f.data['receivers'];
+                          if (receivers != null) {
+                            for (int i = 0; i < receivers.length; i++) {
+                              if (filters.contains(receivers[i])) {
+                                isMyNotification = true;
+                                break;
+                              }
+                            }
+                            if (isMyNotification) {
+                              if (tempTime != null) {
+                                myNotifications.add([
+                                  tempMessage,
+                                  difference(tempTime),
+                                  f.documentID,
+                                ]);
+                              } else {
+                                myNotifications.add([
+                                  tempMessage,
+                                  null,
+                                  f.documentID,
+                                ]);
+                              }
                             }
                           }
-                          if (isMyNotification) {
-                            if(tempTime != null) {
-                              myNotifications.add([
-                                tempMessage,
-                                difference(tempTime),
-                                f.documentID,
-                              ]);
-                            } else {
-                              myNotifications.add([
-                                tempMessage,
-                                null,
-                                f.documentID,
-                              ]);
-                            }
-                          }
-                        }
-                      });
-                      if(myNotifications.length == 0) return Center(child: Text('No New Updates'),); else return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
-                            itemCount: myNotifications.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                height: 180.0,
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        ListTile(
-                                          title: Text(myNotifications[index][0] ??
-                                              "No Message Exception"),
-                                          trailing: Text(myNotifications[index][1] ??
-                                              'No Time Exception'),
-                                        ),
-                                        Padding(
-                                            padding: EdgeInsets.only(
-                                                top: 20.0, left: 10.0),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(color: basicColor),
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                              ),
-                                              child: MaterialButton(
-                                                  child: Text(
-                                                    "View Application",
-                                                    style: TextStyle(
-                                                        fontSize: 18.0,
-                                                        color: basicColor,
-                                                        fontWeight: FontWeight.w600),
+                        });
+                        if (myNotifications.length == 0)
+                          return Center(
+                            child: Text('No New Updates'),
+                          );
+                        else
+                          return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListView.builder(
+                                itemCount: myNotifications.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    height: 180.0,
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                      ),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            ListTile(
+                                              title: Text(myNotifications[index]
+                                                      [0] ??
+                                                  "No Message Exception"),
+                                              trailing: Text(
+                                                  myNotifications[index][1] ??
+                                                      'No Time Exception'),
+                                            ),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 20.0, left: 10.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: basicColor),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
-                                                  onPressed: () => null),
-                                            )),
-                                      ]),
-                                ),
-                              );
-                            },
-                          ));
-                    } else return Loading();
-                  }
-                );
+                                                  child: MaterialButton(
+                                                      child: Text(
+                                                        "View Application",
+                                                        style: TextStyle(
+                                                            fontSize: 18.0,
+                                                            color: basicColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                      ),
+                                                      onPressed: () => null),
+                                                )),
+                                          ]),
+                                    ),
+                                  );
+                                },
+                              ));
+                      } else
+                        return Loading();
+                    });
               }
             } else if (snapshot.hasError) {
               return Center(

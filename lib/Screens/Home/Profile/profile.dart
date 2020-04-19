@@ -48,7 +48,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         .collection('candidates')
         .document(user.email)
         .updateData({'video_resume': 'deleted'});
-    
   }
 
   usergetVideoUrl() async {
@@ -58,14 +57,15 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         .document(user.email)
         .get()
         .then((DocumentSnapshot ds) {
-          print(ds.data['video_resume']);
-          if(ds.data['video_resume']!=null && ds.data['video_resume']!='deleted'){
-            fetchUrl = ds.data['video_resume'];
-           setState(() {
-              x = currentState.success;
-              print(x);
-           });
-          }
+      print(ds.data['video_resume']);
+      if (ds.data['video_resume'] != null &&
+          ds.data['video_resume'] != 'deleted') {
+        fetchUrl = ds.data['video_resume'];
+        setState(() {
+          x = currentState.success;
+          print(x);
+        });
+      }
       // if (fetchUrl!=null) {
       //   setState(() {
       //     x = currentState.success;

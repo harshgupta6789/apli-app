@@ -11,7 +11,8 @@ class Courses extends StatefulWidget {
   final String documentId;
   final User user;
 
-  const Courses({Key key, @required this.documentId, @required this.user}) : super(key: key);
+  const Courses({Key key, @required this.documentId, @required this.user})
+      : super(key: key);
 
   @override
   _CoursesState createState() => _CoursesState();
@@ -195,12 +196,11 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ),
                   onPressed: null),
               IconButton(
-                icon: Icon(
-                  EvaIcons.moreVerticalOutline,
-                  color: Colors.white,
-                ),
-                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()
-              ),
+                  icon: Icon(
+                    EvaIcons.moreVerticalOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
             ],
             title: Text(
               courses,

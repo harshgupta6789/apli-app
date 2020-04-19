@@ -13,7 +13,6 @@ class Camera extends StatefulWidget {
 class _CameraState extends State<Camera> {
   CameraController controller;
 
-  
   @override
   void initState() {
     controller =

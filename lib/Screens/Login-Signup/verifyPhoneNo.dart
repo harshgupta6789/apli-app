@@ -1277,8 +1277,9 @@ class _RegisterState extends State<Register> {
                                                                   ' ' +
                                                                   lname,
                                                               'ph_no': phoneNo,
-                                                              'batch_id' : batchID[
-                                                                batchText],
+                                                              'batch_id':
+                                                                  batchID[
+                                                                      batchText],
                                                             }),
                                                             Firestore.instance
                                                                 .collection(
