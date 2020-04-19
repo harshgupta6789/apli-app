@@ -98,7 +98,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           }
         });
       },
-      onBackgroundMessage: myBackgroundMessageHandler,
+      // onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
         print("onResume : $message");
         setState(() {

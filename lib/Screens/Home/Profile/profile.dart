@@ -42,17 +42,39 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         .updateData({'video_resume': url});
   }
 
+  deleteVideoUrl() async {
+    user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('candidates')
+        .document(user.email)
+        .updateData({'video_resume': 'deleted'});
+    
+  }
+
   usergetVideoUrl() async {
     user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('candidates')
         .document(user.email)
         .get()
-        .then((snapshot) => fetchUrl = snapshot.data['video_resume']);
-    print(fetchUrl);
+        .then((DocumentSnapshot ds) {
+          print(ds.data['video_resume']);
+          if(ds.data['video_resume']!=null && ds.data['video_resume']!='deleted'){
+            fetchUrl = ds.data['video_resume'];
+           setState(() {
+              x = currentState.success;
+              print(x);
+           });
+          }
+      // if (fetchUrl!=null) {
+      //   setState(() {
+      //     x = currentState.success;
+      //     print(fetchUrl);
+      //     print(x);
+      //   });
+      // }
+    });
   }
-
- 
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -94,59 +116,118 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   Widget uploadVideo() {
     switch (x) {
       case currentState.none:
-        if (fetchUrl == null) {
-          return Padding(
-            padding: EdgeInsets.only(top: 40.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Padding(
+          padding: EdgeInsets.only(top: 40.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: basicColor),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: MaterialButton(
+                    child: Text(
+                      "Upload From Gallery",
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: basicColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () {
+                      filePicker(context);
+                      setState(() {
+                        x = currentState.uploading;
+                      });
+                    }),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: basicColor),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: MaterialButton(
+                    child: Text(
+                      "Record Now",
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: basicColor,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () => null),
+              ),
+            ],
+          ),
+        );
+        break;
+      case currentState.uploading:
+        return Align(child: Text("Uploading Your Resume!"));
+        break;
+      case currentState.success:
+        return Padding(
+          padding: EdgeInsets.only(top: 40.0),
+          child: Align(
+            child: Column(
               children: <Widget>[
+                Icon(
+                  Icons.done_outline,
+                  size: 50.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text("Your Resume Has Been Uploaded Succesfully!"),
+                ),
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: basicColor),
+                    border: Border.all(color: Colors.red),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: MaterialButton(
                       child: Text(
-                        "Upload From Gallery",
+                        "Delete & Re-Upload",
                         style: TextStyle(
                             fontSize: 18.0,
-                            color: basicColor,
+                            color: Colors.red,
                             fontWeight: FontWeight.w600),
                       ),
                       onPressed: () {
-                        filePicker(context);
-                        setState(() {
-                          x = currentState.uploading;
-                        });
+                        AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.ERROR,
+                          tittle: "Are You Sure?",
+                          desc: "Yes!",
+                          btnCancelText: "Cancel",
+                          btnCancelOnPress: () {
+                            Navigator.of(context).pop();
+                          },
+                          btnOkOnPress: () {
+                            usergetVideoUrl();
+                            var ref = FirebaseStorage.instance
+                                .getReferenceFromUrl(fetchUrl);
+
+                            if (ref != null) {
+                              ref.then((reference) {
+                                reference.delete().then((x) {
+                                  setState(() {
+                                    x = currentState.none;
+                                    fetchUrl = null;
+                                  });
+                                  print("deleted");
+
+                                  deleteVideoUrl();
+                                });
+                              });
+                            }
+                          },
+                          btnOkText: "Delete",
+                        ).show();
                       }),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: basicColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: MaterialButton(
-                      child: Text(
-                        "Record Now",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: basicColor,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () => null),
                 ),
               ],
             ),
-          );
-        }
-        return Icon(Icons.done_outline);
-
-        break;
-      case currentState.uploading:
-        return Text("Uploading Your Resume!");
-        break;
-      case currentState.success:
-        return Icon(Icons.done_outline);
+            alignment: Alignment.center,
+          ),
+        );
       default:
         return null;
     }
@@ -155,7 +236,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
-    
     usergetVideoUrl();
     super.initState();
   }
