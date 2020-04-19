@@ -1,9 +1,11 @@
 import 'package:apli/Screens/Home/Profile/editResume.dart';
+import 'package:apli/Models/user.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -22,11 +24,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
+    final user = Provider.of<User>(context);
 
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        endDrawer: customDrawer(context),
+        endDrawer: customDrawer(context, user),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

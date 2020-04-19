@@ -1,5 +1,7 @@
+import 'package:apli/Models/user.dart';
 import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -7,8 +9,9 @@ import 'package:flutter/material.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
+  final User user;
 
-  const Courses({Key key, @required this.documentId}) : super(key: key);
+  const Courses({Key key, @required this.documentId, @required this.user}) : super(key: key);
 
   @override
   _CoursesState createState() => _CoursesState();
@@ -172,6 +175,8 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         backgroundColor: Colors.white,
+        key: _scaffoldKey,
+        endDrawer: customDrawer(context, widget.user),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -194,7 +199,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   EvaIcons.moreVerticalOutline,
                   color: Colors.white,
                 ),
-                onPressed: null,
+                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()
               ),
             ],
             title: Text(
