@@ -108,30 +108,28 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   Future filePicker(BuildContext context) async {
     try {
       file = await FilePicker.getFile(type: FileType.video);
-      if(file==null){
-
-      }
-      fileName = p.basename(file.path);
-      setState(() {
+      if (file != null) {
         fileName = p.basename(file.path);
-      });
-      print(fileName);
-      _uploadFile(file, fileName);
-      setState(() {
-        x =currentState.uploading;
-      });
+        setState(() {
+          fileName = p.basename(file.path);
+        });
+        print(fileName);
+        _uploadFile(file, fileName);
+        setState(() {
+          x = currentState.uploading;
+        });
+      }
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
   }
 
-   void _recordVideo() async {
+  void _recordVideo() async {
     ImagePicker.pickVideo(source: ImageSource.camera)
         .then((File recordedVideo) {
       if (recordedVideo != null && recordedVideo.path != null) {
-      
-        GallerySaver.saveVideo(recordedVideo.path).then((onValue){
-          if(onValue==true){
+        GallerySaver.saveVideo(recordedVideo.path).then((onValue) {
+          if (onValue == true) {
             filePicker(context);
           }
         });
@@ -146,7 +144,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         fileName = p.basename(video.path);
       });
       print(fileName);
-     _uploadFile(file, video.path);
+      _uploadFile(file, video.path);
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
@@ -175,9 +173,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     ),
                     onPressed: () {
                       filePicker(context);
-                      setState(() {
-                        x = currentState.uploading;
-                      });
                     }),
               ),
               Container(
