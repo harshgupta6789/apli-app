@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gallery_saver/gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Screens/Home/Profile/editResume.dart';
 import 'package:apli/Models/user.dart';
@@ -65,6 +67,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           x = currentState.success;
           print(x);
         });
+      } else {
+        setState(() {
+          x = currentState.none;
+        });
       }
       // if (fetchUrl!=null) {
       //   setState(() {
@@ -102,12 +108,42 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   Future filePicker(BuildContext context) async {
     try {
       file = await FilePicker.getFile(type: FileType.video);
+      if(file==null){
+
+      }
       fileName = p.basename(file.path);
       setState(() {
         fileName = p.basename(file.path);
       });
       print(fileName);
       _uploadFile(file, fileName);
+    } catch (e) {
+      AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
+    }
+  }
+
+   void _recordVideo() async {
+    ImagePicker.pickVideo(source: ImageSource.camera)
+        .then((File recordedVideo) {
+      if (recordedVideo != null && recordedVideo.path != null) {
+      
+        GallerySaver.saveVideo(recordedVideo.path).then((onValue){
+          if(onValue==true){
+            filePicker(context);
+          }
+        });
+      }
+    });
+  }
+
+  Future videoPicker(BuildContext context, File video) async {
+    try {
+      fileName = p.basename(video.path);
+      setState(() {
+        fileName = p.basename(video.path);
+      });
+      print(fileName);
+     _uploadFile(file, video.path);
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
@@ -154,14 +190,19 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           color: basicColor,
                           fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () => null),
+                    onPressed: () async {
+                      _recordVideo();
+                    }),
               ),
             ],
           ),
         );
         break;
       case currentState.uploading:
-        return Align(child: Text("Uploading Your Resume!"));
+        return Padding(
+          padding: EdgeInsets.only(top: 40),
+          child: Align(child: Text("Uploading Your Resume!")),
+        );
         break;
       case currentState.success:
         return Padding(
@@ -200,12 +241,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           btnCancelOnPress: () {
                             Navigator.of(context).pop();
                           },
-                          btnOkOnPress: () {
-                            usergetVideoUrl();
-                            var ref = FirebaseStorage.instance
-                                .getReferenceFromUrl(fetchUrl);
+                          btnOkOnPress: () async {
+                            await usergetVideoUrl();
+                            if (fetchUrl != null) {
+                              var ref = FirebaseStorage.instance
+                                  .getReferenceFromUrl(fetchUrl);
+                              print(fetchUrl);
 
-                            if (ref != null) {
                               ref.then((reference) {
                                 reference.delete().then((x) {
                                   setState(() {
@@ -213,8 +255,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     fetchUrl = null;
                                   });
                                   print("deleted");
-
                                   deleteVideoUrl();
+                                  usergetVideoUrl();
                                 });
                               });
                             }
@@ -229,7 +271,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           ),
         );
       default:
-        return null;
+        return Text("");
     }
   }
 
