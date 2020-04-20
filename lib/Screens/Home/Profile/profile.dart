@@ -117,6 +117,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       });
       print(fileName);
       _uploadFile(file, fileName);
+      setState(() {
+        x =currentState.uploading;
+      });
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
@@ -248,7 +251,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   .getReferenceFromUrl(fetchUrl);
                               print(fetchUrl);
 
-                              ref.then((reference) {
+                              await ref.then((reference) {
                                 reference.delete().then((x) {
                                   setState(() {
                                     x = currentState.none;

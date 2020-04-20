@@ -186,43 +186,43 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  print(Password.hash('Priyam112@', new PBKDF2()));
-                                  // setState(() {
-                                  //   loading = true;
-                                  // });
-                                  // dynamic result =
-                                  //     await _auth.signInWithEmailAndPassword(
-                                  //         email, password);
-                                  // if (result == null) {
-                                  //   setState(() {
-                                  //     error = 'Invalid email or password';
-                                  //     loading = false;
-                                  //     Toast.show(error, context,
-                                  //         duration: 5,
-                                  //         backgroundColor: Colors.red);
-                                  //   });
-                                  // }
-                                  // if (result == -1) {
-                                  //   setState(() {
-                                  //     error =
-                                  //         'Account not Verified, Check your email';
-                                  //     Toast.show(error, context,
-                                  //         duration: 5,
-                                  //         backgroundColor: Colors.red);
+                                  
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  dynamic result =
+                                      await _auth.signInWithEmailAndPassword(
+                                          email, password);
+                                  if (result == null) {
+                                    setState(() {
+                                      error = 'Invalid email or password';
+                                      loading = false;
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+                                    });
+                                  }
+                                  if (result == -1) {
+                                    setState(() {
+                                      error =
+                                          'Account not Verified, Check your email';
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
 
-                                  //     loading = false;
-                                  //   });
-                                  // }
-                                  // var net =
-                                  //     await Connectivity().checkConnectivity();
-                                  // if (net == ConnectivityResult.none) {
-                                  //   setState(() {
-                                  //     error = 'No Internet Connection';
-                                  //     Toast.show(error, context,
-                                  //         duration: 5,
-                                  //         backgroundColor: Colors.red);
-                                  //   });
-                                  // }
+                                      loading = false;
+                                    });
+                                  }
+                                  var net =
+                                      await Connectivity().checkConnectivity();
+                                  if (net == ConnectivityResult.none) {
+                                    setState(() {
+                                      error = 'No Internet Connection';
+                                      Toast.show(error, context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+                                    });
+                                  }
                                 }
                               }),
                         )),
