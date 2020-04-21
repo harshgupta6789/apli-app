@@ -1,5 +1,3 @@
-import 'package:apli/Encryption/algorithms/pbkdf2.dart';
-import 'package:apli/Encryption/password.dart';
 import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -186,12 +184,15 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  
-                                  setState(() {
+                                   setState(() {
                                     loading = true;
                                   });
+                                
+                                  // setState(() {
+                                  //   loading = true;
+                                  // });
                                   dynamic result =
-                                      await _auth.signInWithEmailAndPassword(
+                                      await _auth.signInWithoutAuth(
                                           email, password);
                                   if (result == null) {
                                     setState(() {

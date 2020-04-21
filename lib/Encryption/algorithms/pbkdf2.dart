@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:pointycastle/api.dart' show KeyParameter;
-import 'package:pointycastle/digests/sha512.dart';
+import 'package:pointycastle/digests/sha256.dart';
 import 'package:pointycastle/key_derivators/api.dart' show Pbkdf2Parameters;
 import 'package:pointycastle/key_derivators/pbkdf2.dart';
 import 'package:pointycastle/macs/hmac.dart';
@@ -12,7 +12,7 @@ import '../helpers.dart';
 
 /// Wraps the PBKDF2 key derivator.
 class PBKDF2 extends Algorithm {
-  static String id = 'pkbdf';
+  static String id = 'pkbdf2';
 
   final int blockLength;
   final int iterationCount;
@@ -32,7 +32,7 @@ class PBKDF2 extends Algorithm {
         salt == null ? rnd.nextBytes(32) : createUint8ListFromHexString(salt);
 
     _derivator =
-        new PBKDF2KeyDerivator(new HMac(new SHA512Digest(), blockLength))
+        new PBKDF2KeyDerivator(new HMac(new SHA256Digest(), blockLength))
           ..init(new Pbkdf2Parameters(_salt, iterationCount, desiredKeyLength));
   }
 

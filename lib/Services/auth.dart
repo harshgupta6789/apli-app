@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:apli/Models/user.dart';
 import 'package:apli/Services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,6 +36,40 @@ class AuthService {
       print(e.toString());
       return null;
     }
+  }
+
+  Future signInWithoutAuth(String email, String password) async {
+    var isCorrectPwd;
+    try {
+      String url = 'http://127.0.0.1:5000/api?pwd=$password&encpwd=';
+      if (Firestore.instance.collection('users').document(email) == null) {
+        return null;
+      }
+      Firestore.instance
+          .collection('users')
+          .document(email)
+          .get()
+          .then((DocumentSnapshot ds) {
+        if (ds.data['password'] != null) {
+          url = url + ds.data['password'];
+          print(url);
+         isCorrectPwd = getData(url);
+          if(isCorrectPwd==true){
+            return User(uid:"123456" , email: email);
+          }
+        }return null;
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future getData(String apiUrl) async {
+    http.Response response = await http.get(apiUrl);
+    print(response.body);
+    var decodedData = jsonDecode(response.body);
+    return decodedData['isPasswordVerified'];
   }
 
   //register with email and password
