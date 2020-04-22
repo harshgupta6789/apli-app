@@ -4,21 +4,12 @@ import 'package:mailer/smtp_server.dart';
 class MailerService {
   String username;
   String password;
-  String college;
-  String state;
-  String city;
+  Map<String, String> data;
 
-  MailerService(
-      {String username,
-      String password,
-      String college,
-      String state,
-      String city}) {
+  MailerService({String username, String password, Map<String, String> data}) {
     this.username = username;
     this.password = password;
-    this.college = college;
-    this.state = state;
-    this.city = city;
+    this.data = data;
 
     final smtpServer = gmail(username, password);
     final message = Message()
@@ -26,9 +17,13 @@ class MailerService {
       ..recipients.add(username)
       //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
       //..bccRecipients.add(Address('bccAddress@example.com'))
-      ..subject = 'New College Register ${DateTime.now()}'
-      ..text = 'College : $college\nState : $state\nCity : $city'
-      ..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
+      ..subject = data.containsKey('college')
+          ? 'New College Register ${DateTime.now().toString()}'
+          : data.containsKey('email') ? 'Pasword Forgot Mail' : ''
+      ..text = data.containsKey('college')
+          ? 'College : ${data['college']}\nState : ${data['state']}\nCity : ${data['city']}'
+          : data.containsKey('email') ? 'OTP : ${data['OTP']}' : '';
+    //..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
 
     sendMail() async {
       try {

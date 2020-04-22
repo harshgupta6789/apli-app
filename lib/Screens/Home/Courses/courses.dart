@@ -9,9 +9,9 @@ import 'package:flutter/material.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
-  final User user;
+  final String email;
 
-  const Courses({Key key, @required this.documentId, @required this.user}) : super(key: key);
+  const Courses({Key key, @required this.documentId, @required this.email}) : super(key: key);
 
   @override
   _CoursesState createState() => _CoursesState();
@@ -176,7 +176,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     return Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, widget.user),
+        endDrawer: customDrawer(context, widget.email),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

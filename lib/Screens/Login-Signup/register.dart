@@ -890,12 +890,15 @@ class _RegisterState extends State<Register> {
                                                   loading = true;
                                                 });
                                                 //add to excel sheet
+                                                Map<String, String> data = {
+                                                  'college' : collegeText,
+                                                  'state' : state,
+                                                  'city' : city
+                                                };
                                                 MailerService(
                                                     username: apliEmailID,
                                                     password: apliPassword,
-                                                    college: collegeText,
-                                                    state: state,
-                                                    city: city);
+                                                    data: data);
                                                 setState(() {
                                                   loading = false;
                                                 });

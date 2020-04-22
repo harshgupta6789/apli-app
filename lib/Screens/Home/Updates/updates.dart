@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Updates extends StatefulWidget {
   @override
@@ -38,7 +39,7 @@ class _UpdatesState extends State<Updates> {
           .then((snapshot) => course = snapshot.data['course']);
       tempFilters.add(course);
     }
-
+    print(tempFilters);
     return tempFilters;
   }
 
@@ -56,13 +57,27 @@ class _UpdatesState extends State<Updates> {
       return 'Just now';
   }
 
+  String email;
+  getPrefs(){
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        email = prefs.getString('email');
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPrefs();
+  }
+
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    final user = Provider.of<User>(context);
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, user),
+        endDrawer: customDrawer(context, email),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -91,7 +106,7 @@ class _UpdatesState extends State<Updates> {
           preferredSize: Size.fromHeight(70),
         ),
         body: FutureBuilder(
-          future: userInit(user.email),
+          future: userInit(email),
           builder: (BuildContext context,
               AsyncSnapshot<List<String>> snapshot) {
             if (snapshot.hasData && snapshot.connectionState == ConnectionState.done) {

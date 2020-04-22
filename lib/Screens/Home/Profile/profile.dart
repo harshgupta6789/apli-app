@@ -283,12 +283,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    final user = Provider.of<User>(context);
+    //final user = Provider.of<User>(context);
 
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        endDrawer: customDrawer(context, user),
+        endDrawer: customDrawer(context, 'user'),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

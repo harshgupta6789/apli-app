@@ -25,7 +25,11 @@ class _MyAppState extends State<MyApp> {
             appBarTheme: AppBarTheme(color: basicColor),
             accentColor: basicColor,
             fontFamily: 'Sans'),
-        home: MySplash());
+        home: MySplash(),
+//        routes: <String, WidgetBuilder> {
+//          '/Wrapper': (BuildContext context) => Wrapper(),
+//        },
+    );
   }
 }
 
@@ -39,7 +43,7 @@ class MySplashState extends State<MySplash> {
   Widget build(BuildContext context) {
     return SplashScreen(
       seconds: 1,
-      navigateAfterSeconds: HomeLoginWrapper(),
+      navigateAfterSeconds: Wrapper(),
       image: Image.asset('Assets/Images/logo.png'),
       photoSize: 100.0,
       loaderColor: basicColor,

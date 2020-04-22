@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:apli/Models/user.dart';
 import 'package:apli/Services/database.dart';
+import 'package:apli/Services/mailer.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
@@ -15,14 +17,25 @@ class AuthService {
   }
 
   //sign in with email and password
-  Future passwordReset(String email) async {
+  Future passwordResetMail(String email) async {
+    Map<String, String> data = {
+      'email' : email,
+      'OTP' : '123456',
+      'time' : DateTime.now().toString()
+    };
     try {
-      await _auth.sendPasswordResetEmail(email: email);
-      return 1;
-    } catch (e) {
-      print(e.toString());
-      return -1;
+      MailerService(username: apliEmailID, password: apliPassword, data: data);
     }
+    catch(e) {
+      print(e.toString());
+    }
+//    try {
+//      await _auth.sendPasswordResetEmail(email: email);
+//      return 1;
+//    } catch (e) {
+//      print(e.toString());
+//      return -1;
+//    }
   }
 
   Future registerOldWithEmailAndPassword(

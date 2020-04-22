@@ -1,10 +1,11 @@
+import 'package:apli/Screens/Home/mainScreen.dart';
 import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 import '../../Services/auth.dart';
 
@@ -21,7 +22,7 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  bool isRememberChecked = false;
+  bool rememberMe = false;
 
   bool validatePassword(String value) {
     Pattern pattern =
@@ -106,13 +107,13 @@ class _LoginState extends State<Login> {
                       child: Row(
                         children: <Widget>[
                           Checkbox(
-                              value: isRememberChecked,
+                              value: rememberMe,
                               onChanged: (bool temp) {
                                 setState(() {
-                                  isRememberChecked = temp;
+                                  rememberMe = !rememberMe;
                                 });
                               }),
-                          Text(rememberMe),
+                          Text(rememberMeText),
                           Padding(
                             padding: EdgeInsets.only(left: width * 0.2),
                             child: Container(
@@ -127,34 +128,39 @@ class _LoginState extends State<Login> {
                                         fontWeight: FontWeight.w600,
                                         color: basicColor),
                                   ),
-                                  onPressed: () async {
-                                    if (email != '' && email != null) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      var result =
-                                          await _auth.passwordReset(email);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      if (result != 1) {
-                                        Toast.show(
-                                            'Account does not exist', context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
-                                        setState(() {
-                                          email = '';
-                                        });
-                                      } else {
-                                        Toast.show(
-                                            'Check your email to password reset',
-                                            context);
-                                      }
-                                    } else
-                                      Toast.show(
-                                          'Incorrect email provided', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => VerifyPhoneNo(
+                                                'forgotPassword')));
+//                                    if (email != '' && email != null) {
+//                                      setState(() {
+//                                        loading = true;
+//                                      });
+//                                      var result =
+//                                          await _auth.passwordResetMail(email);
+//                                      setState(() {
+//                                        loading = false;
+//                                      });
+//                                      if (result != 1) {
+//                                        Toast.show(
+//                                            'Account does not exist', context,
+//                                            duration: 5,
+//                                            backgroundColor: Colors.red);
+//                                        setState(() {
+//                                          email = '';
+//                                        });
+//                                      } else {
+//                                        Toast.show(
+//                                            'Check your email to password reset',
+//                                            context);
+//                                      }
+//                                    } else
+//                                      Toast.show(
+//                                          'Incorrect email provided', context,
+//                                          duration: 5,
+//                                          backgroundColor: Colors.red);
                                   }),
                             ),
                           ),
@@ -186,48 +192,46 @@ class _LoginState extends State<Login> {
                                   setState(() {
                                     loading = true;
                                   });
-//                                  dynamic result1 =
-//                                      await _auth.signInWithEmailAndPassword(
-//                                          email, password);
-//                                  if (result1 != null)
-//                                    setState(() {
-//                                      loading = false;
-//                                    });
-//                                  else {
-                                    dynamic result = await _auth
-                                        .signInWithoutAuth(email, password);
-                                    if (result == null) {
-                                      Toast.show(
-                                          'Account does not exists', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else if (result == -1) {
-                                      Toast.show(
-                                          'Invalid username and password',
-                                          context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else if (result == -2) {
-                                      Toast.show(
-                                          'Cannot connect server', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else if (result == 1) {
-                                      Toast.show('Login Successfull', context);
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    }
-//                                  }
+                                  dynamic result = await _auth
+                                      .signInWithoutAuth(email, password);
+                                  if (result == null) {
+                                    Toast.show(
+                                        'Account does not exists', context,
+                                        duration: 5,
+                                        backgroundColor: Colors.red);
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } else if (result == -1) {
+                                    Toast.show('Invalid username and password',
+                                        context,
+                                        duration: 5,
+                                        backgroundColor: Colors.red);
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } else if (result == -2) {
+                                    Toast.show('Cannot connect server', context,
+                                        duration: 5,
+                                        backgroundColor: Colors.red);
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } else if (result == 1) {
+                                    Toast.show('Login Successfull', context);
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString('email', email);
+                                    prefs.setBool('rememberMe', rememberMe);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                MainScreen()));
+                                  }
                                   var net =
                                       await Connectivity().checkConnectivity();
                                   if (net == ConnectivityResult.none) {
@@ -256,7 +260,8 @@ class _LoginState extends State<Login> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VerifyPhoneNo()),
+                                        builder: (context) =>
+                                            VerifyPhoneNo('login')),
                                   );
                                 },
                                 child: Text(

@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
+  String nextPage;
+  VerifyPhoneNo(String nextPAge) {this.nextPage = nextPAge;}
   @override
   _VerifyPhoneNoState createState() => _VerifyPhoneNoState();
 }
@@ -150,7 +152,10 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         loading = false;
       });
       Navigator.of(context).pop();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+      if(widget.nextPage == 'Register')
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+      else if(widget.nextPage == 'ForgotPassword')
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
     } catch (e) {
       setState(() {
         loading = false;
