@@ -69,32 +69,30 @@ class AuthService {
   Future signInWithoutAuth(String email, String password) async {
 
     try {
-      String url = "https://staging.apli.ai/accounts/passHash";
+      String url = "https://staging.apli.ai/accounts/checkLogin";
       DocumentReference userIsThere = Firestore.instance.collection('users').document(email);
       int result;
-      if (userIsThere == null) {
-        return null;
-      }
       await userIsThere.get().then((snapshot) async {
-        if(snapshot.data == null) {
-          result = null;;
+        if(!snapshot.exists) {
+          result = null;
         } else {
           if(snapshot.data['user_type'] != 'Candidate') {
             result = null;
           } else {
             http.Response response = await http.post(
               url,
-              body: jsonEncode(<String, String>{
-                "secret": "j&R\$estgIKur657%3st4",
-                "useremail" : email,
-                "password": password
-              }),);
-            print(response.statusCode);
+              body: json.decode('{'
+                  '"secret" : "j&R\$estgIKur657%3st4", '
+                  '"useremail" : "$email", '
+                  '"password": "$password"'
+                  '}'),);
             if(response.statusCode == 200) {
               var decodedData = jsonDecode(response.body);
+              print(decodedData['secret']);
               if(decodedData["secret"] == "j&R\$estgIKur657%3st4") {
                 bool temp = decodedData["result"];
-                if(temp == true || temp == false) {
+                if(temp == true) {
+                  print("successfull");
                   result = 1;
                 }
               } else result =  -1;
@@ -118,6 +116,6 @@ class AuthService {
   }
 
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid, email: user.email) : null;
+    return user != null ? User(uid: user.uid) : null;
   }
 }

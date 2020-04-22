@@ -222,9 +222,7 @@ class _LoginState extends State<Login> {
                                         loading = false;
                                       });
                                     } else if (result == 1) {
-                                      FirebaseUser user = await _auth
-                                          .registerOldWithEmailAndPassword(
-                                              email, password);
+                                      Toast.show('Login Successfull', context);
                                       setState(() {
                                         loading = false;
                                       });
