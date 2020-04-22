@@ -84,7 +84,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
-    storageReference = FirebaseStorage.instance.ref().child("videos/$filename");
+    storageReference = FirebaseStorage.instance.ref().child("resumeVideos/$filename");
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
