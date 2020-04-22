@@ -8,52 +8,47 @@ class EditResume extends StatefulWidget {
 }
 
 class _EditResumeState extends State<EditResume> {
-  Widget resumeTile(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
-      child: Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.withOpacity(0.4))),
-          child: ListTile(
-            title: Text(
-              text,
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            trailing: IconButton(
-                icon: Icon(EvaIcons.arrowIosForwardOutline), onPressed: null),
-          )),
-    );
+
+  Widget resumeTile(String text){
+   return Padding(
+                 padding: const EdgeInsets.only(top:20.0),
+                 child: Container(
+              decoration: BoxDecoration(
+                  border:Border.all(color:Colors.grey.withOpacity(0.4))
+              ),
+              child: ListTile(title:Text(text , style: TextStyle(fontWeight:FontWeight.w600),) , trailing: IconButton(icon: Icon(EvaIcons.arrowIosForwardOutline), onPressed: null),)),
+               );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        child: AppBar(
-          backgroundColor: basicColor,
-          automaticallyImplyLeading: true,
-          title: Text(
-            editResume,
-            style: TextStyle(color: Colors.white, fontSize: 24),
+          child: AppBar(
+            backgroundColor: basicColor,
+            automaticallyImplyLeading: true,
+            title: Text(
+              editResume,
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
           ),
+          preferredSize: Size.fromHeight(70),
         ),
-        preferredSize: Size.fromHeight(70),
-      ),
       body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.only(top: 80.0, left: 20.0, right: 20.0),
-        child: Column(
-          children: <Widget>[
-            resumeTile(intro),
-            resumeTile(about),
-            resumeTile(experience),
-            resumeTile(education),
-            resumeTile(licenses),
-            resumeTile(skills),
+        child:Padding(
+          padding:  EdgeInsets.only(top:80.0 , left: 20.0 , right: 20.0),
+          child: Column(children: <Widget>[
+           resumeTile(intro),
+           resumeTile(about),
+           resumeTile(experience),
+           resumeTile(education),
+           resumeTile(licenses),
+           resumeTile(skills),
           ],
           crossAxisAlignment: CrossAxisAlignment.start,
-        ),
-      )),
+          ),
+        )
+      ),
     );
   }
 }

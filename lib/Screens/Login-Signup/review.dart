@@ -17,16 +17,17 @@ class Review extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.only(top: 200.0),
+              padding: EdgeInsets.fromLTRB(40, 200.0, 40, 0),
               child: Center(
                   child: Text(
                 isSuccessful
-                    ? 'We have send you a verification email\n            Please check your email\n                     and login again'
-                    : 'Your data is submitted for review!!\n       We will reach you shortly',
+                    ? 'We have send you a verification email Please check your email and login again.'
+                    : 'Your data is submitted for review!! We will reach you shortly.',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: basicColor),
+                    textAlign: TextAlign.center,
               )),
             ),
             Padding(

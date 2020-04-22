@@ -3,6 +3,7 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import '../../Services/auth.dart';
@@ -136,26 +137,24 @@ class _LoginState extends State<Login> {
                                       setState(() {
                                         loading = false;
                                       });
-                                      if (result != 1)
+                                      if (result != 1) {
+                                        Toast.show(
+                                            'Account does not exist', context,
+                                            duration: 5,
+                                            backgroundColor: Colors.red);
                                         setState(() {
-                                          error = 'Account does not exist';
-                                          Toast.show(error, context,
-                                              duration: 5,
-                                              backgroundColor: Colors.red);
                                           email = '';
                                         });
-                                      else {
+                                      } else {
                                         Toast.show(
                                             'Check your email to password reset',
                                             context);
                                       }
                                     } else
-                                      setState(() {
-                                        error = 'Incorrect email provided';
-                                        Toast.show(error, context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
-                                      });
+                                      Toast.show(
+                                          'Incorrect email provided', context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
                                   }),
                             ),
                           ),
@@ -184,44 +183,62 @@ class _LoginState extends State<Login> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                   setState(() {
+                                  setState(() {
                                     loading = true;
                                   });
-                                
-                                  // setState(() {
-                                  //   loading = true;
-                                  // });
-                                  dynamic result =
-                                      await _auth.signInWithoutAuth(
-                                          email, password);
-                                  if (result == null) {
-                                    setState(() {
-                                      error = 'Invalid email or password';
-                                      loading = false;
-                                      Toast.show(error, context,
+//                                  dynamic result1 =
+//                                      await _auth.signInWithEmailAndPassword(
+//                                          email, password);
+//                                  if (result1 != null)
+//                                    setState(() {
+//                                      loading = false;
+//                                    });
+//                                  else {
+                                    dynamic result = await _auth
+                                        .signInWithoutAuth(email, password);
+                                    if (result == null) {
+                                      Toast.show(
+                                          'Account does not exists', context,
                                           duration: 5,
                                           backgroundColor: Colors.red);
-                                    });
-                                  }
-                                  if (result == -1) {
-                                    setState(() {
-                                      error =
-                                          'Account not Verified, Check your email';
-                                      Toast.show(error, context,
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                    } else if (result == -1) {
+                                      Toast.show(
+                                          'Invalid username and password',
+                                          context,
                                           duration: 5,
                                           backgroundColor: Colors.red);
-
-                                      loading = false;
-                                    });
-                                  }
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                    } else if (result == -2) {
+                                      Toast.show(
+                                          'Cannot connect server', context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                    } else if (result == 1) {
+                                      FirebaseUser user = await _auth
+                                          .registerOldWithEmailAndPassword(
+                                              email, password);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                    }
+//                                  }
                                   var net =
                                       await Connectivity().checkConnectivity();
                                   if (net == ConnectivityResult.none) {
+                                    Toast.show(
+                                        'No Internet Connection', context,
+                                        duration: 5,
+                                        backgroundColor: Colors.red);
                                     setState(() {
-                                      error = 'No Internet Connection';
-                                      Toast.show(error, context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
+                                      loading = false;
                                     });
                                   }
                                 }
@@ -253,10 +270,6 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       height: 10,
                     ),
-                    // Text(
-                    //   error,
-                    //   style: TextStyle(color: Colors.red),
-                    // )
                   ],
                 ),
               ),

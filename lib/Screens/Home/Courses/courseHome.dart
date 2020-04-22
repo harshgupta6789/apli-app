@@ -14,6 +14,7 @@ class CourseMain extends StatefulWidget {
 }
 
 class _CourseMainState extends State<CourseMain> {
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -70,7 +71,7 @@ class _CourseMainState extends State<CourseMain> {
                               builder: (context) => Courses(
                                     documentId: snapshot
                                         .data.documents[index].documentID,
-                                    user: user,
+                                user: user,
                                   )),
                         );
                       },

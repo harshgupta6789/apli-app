@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apli/Screens/Login-Signup/review.dart';
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Services/database.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:search_widget/search_widget.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:toast/toast.dart';
+import 'package:http/http.dart' as http;
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -437,15 +440,14 @@ class _RegisterState extends State<Register> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    return loading
-        ? Loading()
-        : WillPopScope(
+    return WillPopScope(
             onWillPop: () {
               FirebaseAuth.instance.signOut();
               Navigator.pop(context);
               return;
             },
-            child: Scaffold(
+            child: loading
+    ? Loading() : Scaffold(
               body: StreamBuilder(
                 stream: Firestore.instance.collection('batches').snapshots(),
                 builder: (context, snapshot) {
@@ -1210,59 +1212,37 @@ class _RegisterState extends State<Register> {
                                                           FontWeight.w600),
                                                 ),
                                                 onPressed: () async {
-                                                  print('nmvhmvj');
                                                   if (_formKey.currentState
                                                       .validate()) {
                                                     if (!collegeNotFound) {
-                                                      print('college');
-//                                           inal AuthResult result = await FirebaseAuth.instance.signInWithCredential(globalCredential);
-//                                          final FirebaseUser user = result.user;
-//                                          if(user == null) setState(() {
-//                                            error = 'email already taken';
-//                                          });
-//                                          else {
-
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
                                                       try {
-                                                        AuthResult result =
-                                                            await FirebaseAuth
-                                                                .instance
-                                                                .createUserWithEmailAndPassword(
-                                                                    email:
-                                                                        email,
-                                                                    password:
-                                                                        password);
-                                                        FirebaseUser user =
-                                                            result.user;
+//                                                        AuthResult result =
+//                                                            await FirebaseAuth
+//                                                                .instance
+//                                                                .createUserWithEmailAndPassword(
+//                                                                    email:
+//                                                                        email,
+//                                                                    password:
+//                                                                        password);
+//                                                        FirebaseUser user =
+//                                                            result.user;
                                                         try {
-                                                          await user
-                                                              .linkWithCredential(
-                                                                  globalCredential);
-                                                          try {
-                                                            await user
-                                                                .sendEmailVerification();
-                                                          } catch (e) {
-                                                            print(
-                                                                "An error occured while trying to send email verification");
-                                                            print(e.message);
-                                                          }
-                                                          await _auth.signOut();
+//                                                          await user
+//                                                              .linkWithCredential(
+//                                                                  globalCredential);
+//                                                          try {
+//                                                            await user
+//                                                                .sendEmailVerification();
+//                                                          } catch (e) {
+//                                                            print(
+//                                                                "An error occured while trying to send email verification");
+//                                                            print(e.message);
+//                                                          }
+                                                          //await _auth.signOut();
                                                           Future.wait([
-                                                            Firestore.instance
-                                                                .collection(
-                                                                    'users')
-                                                                .document(email)
-                                                                .setData({
-                                                              'name': fname +
-                                                                  '' +
-                                                                  lname,
-                                                              'password':
-                                                                  password,
-                                                              'timestamp':
-                                                                  Timestamp
-                                                                      .now(),
-                                                              'user_type':
-                                                                  'Candidate'
-                                                            }),
                                                             Firestore.instance
                                                                 .collection(
                                                                     'candidates')
@@ -1293,7 +1273,46 @@ class _RegisterState extends State<Register> {
                                                               'candidate_id':
                                                                   email
                                                             }),
+                                                            http.post(
+                                                                "https://staging.apli.ai/accounts/passHash",
+                                                                body:
+                                                                    jsonEncode(<
+                                                                        String,
+                                                                        String>{
+                                                                  "secret":
+                                                                      "h&%RD89itr#\$dTHioG\$s",
+                                                                  "useremail":
+                                                                      email,
+                                                                  "password":
+                                                                      password
+                                                                })).then((response) async {
+                                                              if(response.statusCode == 200) {
+                                                                var decodedData = jsonDecode(response.body);
+                                                                if(decodedData["secret"] == "h&%RD89itr#\$dTHioG\$s") {
+                                                                  String hash = decodedData["hash"];
+                                                                  await Firestore.instance
+                                                                      .collection(
+                                                                      'users')
+                                                                      .document(email)
+                                                                      .setData({
+                                                                    'name': fname +
+                                                                        '' +
+                                                                        lname,
+                                                                    'password':
+                                                                    hash,
+                                                                    'timestamp':
+                                                                    Timestamp
+                                                                        .now(),
+                                                                    'user_type':
+                                                                    'Candidate'
+                                                                  });
+                                                                } else Toast.show('Could not connect to server', context);
+                                                              } else Toast.show('Could not connect to server', context);
+                                                            })
                                                           ]);
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
                                                           Navigator.pushReplacement(
                                                               context,
                                                               MaterialPageRoute(
@@ -1302,21 +1321,25 @@ class _RegisterState extends State<Register> {
                                                                           true)));
                                                           register = false;
                                                         } catch (e) {
-                                                          user.delete();
-                                                          FirebaseAuth.instance
-                                                              .signOut();
+                                                          setState(() {
+                                                            loading = false;
+                                                          });
+                                                          print(e.toString());
+//                                                          user.delete();
+//                                                          FirebaseAuth.instance
+//                                                              .signOut();
                                                           Toast.show(
                                                               'Either OTP was Wrong or Account already Exists',
                                                               context,
                                                               duration: 5);
-                                                          Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (context) =>
-                                                                      Review(
-                                                                          true)));
+//                                                          Navigator.pop(
+//                                                              context);
                                                         }
                                                       } catch (e) {
+                                                        setState(() {
+                                                          loading = false;
+                                                        });
+                                                        print(e);
                                                         // TODO
                                                         setState(() {
                                                           error =
@@ -1332,9 +1355,9 @@ class _RegisterState extends State<Register> {
                                                       if (net ==
                                                           ConnectivityResult
                                                               .none) {
+                                                        Toast.show('No internet connection', context);
                                                         setState(() {
-                                                          error =
-                                                              'No Internet Connection';
+                                                          loading = false;
                                                         });
                                                       }
                                                     } else if (collegeNotFound) {
