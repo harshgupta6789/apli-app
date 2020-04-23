@@ -10,7 +10,10 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:search_widget/search_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
+
+import '../HomeLoginWrapper.dart';
 
 class Register extends StatefulWidget {
   String phoneNo;
@@ -782,7 +785,11 @@ class _RegisterState extends State<Register> {
                                                   } else {
                                                     try {
                                                       Future.wait([
-                                                        Firestore.instance
+                                                        SharedPreferences.getInstance().then((prefs) {
+                                                          prefs.setString('email', email);
+                                                          prefs.setBool('rememberMe', true);
+                                                        })
+                                                        ,Firestore.instance
                                                             .collection(
                                                                 'candidates')
                                                             .document(email)
@@ -849,6 +856,9 @@ class _RegisterState extends State<Register> {
                                                                 'user_type':
                                                                     'Candidate'
                                                               });
+                                                              await Future.delayed(Duration(milliseconds: 100));
+                                                              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                                                                  Wrapper()), (Route<dynamic> route) => false);
                                                             } else
                                                               Toast.show(
                                                                   'Could not connect to server',
