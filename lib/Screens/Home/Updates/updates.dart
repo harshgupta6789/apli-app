@@ -223,9 +223,9 @@ class _UpdatesState extends State<Updates> {
                                 itemCount: myNotifications.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Padding(
-                                    padding: const EdgeInsets.all(4.0),
+                                    padding: const EdgeInsets.all(10.0),
                                     child: Container(
-                                      height: height * 0.21,
+                                      height: 180,
                                       child: Card(
                                         elevation: 0.2,
                                         shape: RoundedRectangleBorder(
