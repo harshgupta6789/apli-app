@@ -55,11 +55,13 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           phoneNumber: phoneNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             this.verificationId = verId;
-            print(verificationId);
           },
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
+          verificationCompleted: (AuthCredential phoneAuthCredential) async {
+            try{
+              await FirebaseAuth.instance.signOut();
+            } catch(e){}
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
           },
           verificationFailed: (AuthException exceptio) {
@@ -116,11 +118,14 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                   setState(() {
                     loading = true;
                   });
-                  _auth.currentUser().then((user) {
+                  _auth.currentUser().then((user) async {
                     if (user != null) {
                       setState(() {
                         loading = false;
                       });
+                      try{
+                        await FirebaseAuth.instance.signOut();
+                      } catch(e){}
                       Navigator.of(context).pop();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
                     } else {
@@ -144,6 +149,9 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       final FirebaseUser user = result.user;
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
+      try{
+        await FirebaseAuth.instance.signOut();
+      } catch(e){}
       setState(() {
         loading = false;
       });

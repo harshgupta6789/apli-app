@@ -42,7 +42,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           },
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
-          verificationCompleted: (AuthCredential phoneAuthCredential) {
+          verificationCompleted: (AuthCredential phoneAuthCredential) async {
+            try{
+              await FirebaseAuth.instance.signOut();
+            } catch(e){}
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email)));
           },
           verificationFailed: (AuthException exceptio) {
@@ -99,11 +102,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   setState(() {
                     loading2 = true;
                   });
-                  _auth.currentUser().then((user) {
+                  _auth.currentUser().then((user) async {
                     if (user != null) {
                       setState(() {
                         loading2 = false;
                       });
+                      try{
+                        await FirebaseAuth.instance.signOut();
+                      } catch(e){}
                       Navigator.of(context).pop();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email)));
                     } else {
@@ -130,6 +136,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       final FirebaseUser user = result.user;
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
+      try{
+        await FirebaseAuth.instance.signOut();
+      } catch(e){}
       setState(() {
         loading2 = false;
       });
@@ -184,6 +193,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     });
     return ph_no;
   }
+
   bool send = false;
   @override
   Widget build(BuildContext context) {
