@@ -50,7 +50,9 @@ class _UpdatesState extends State<Updates> {
     int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch;
     Duration dt = DateTime.now().difference(
         DateTime.fromMicrosecondsSinceEpoch(timeInMicroSecondsSimceEpoch));
-    if (dt.inDays > 0)
+    if(dt.inDays>30)
+    return (dt.inDays~/30).toStringAsFixed(0) + ' mo';
+    else if (dt.inDays > 0)
       return dt.inDays.toString() + ' days';
     else if (dt.inHours > 0)
       return dt.inHours.toString() + ' hrs';
@@ -225,7 +227,7 @@ class _UpdatesState extends State<Updates> {
                                   return Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Container(
-                                      height: 180,
+                                     
                                       child: Card(
                                         elevation: 0.2,
                                         shape: RoundedRectangleBorder(
@@ -233,64 +235,67 @@ class _UpdatesState extends State<Updates> {
                                                 BorderRadius.circular(12.0),
                                             side:
                                                 BorderSide(color: Colors.grey)),
-                                        child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                    left: width * 0.01,
-                                                    top: 5.0),
-                                                child: ListTile(
-                                                  title: AutoSizeText(
-                                                    myNotifications[index][0] ??
-                                                        "No Messsage Specified",
-                                                    maxLines: 2,
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  subtitle: AutoSizeText(
-                                                    myNotifications[index][1] ??
-                                                        "No Messsage Specified",
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                  trailing: Text(
-                                                      myNotifications[index]
-                                                              [2] ??
-                                                          'No Time Exception'),
-                                                ),
-                                              ),
-                                              Padding(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom:15.0),
+                                          child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Padding(
                                                   padding: EdgeInsets.only(
-                                                      top: height * 0.03,
-                                                      left: width * 0.03),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: basicColor),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                                      left: width * 0.01,
+                                                      top: 5.0),
+                                                  child: ListTile(
+                                                    title: AutoSizeText(
+                                                      myNotifications[index][0] ??
+                                                          "No Messsage Specified",
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
                                                     ),
-                                                    child: MaterialButton(
-                                                        child: Text(
-                                                          "View Application",
-                                                          style: TextStyle(
-                                                              fontSize: 18.0,
-                                                              color: basicColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                        ),
-                                                        onPressed: () => null),
-                                                  )),
-                                            ]),
+                                                    subtitle: AutoSizeText(
+                                                      myNotifications[index][1] ??
+                                                          "No Messsage Specified",
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    trailing: Text(
+                                                        myNotifications[index]
+                                                                [2] ??
+                                                            'No Time Exception'),
+                                                  ),
+                                                ),
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: height * 0.03,
+                                                        left: width * 0.03),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: basicColor),
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+                                                      ),
+                                                      child: MaterialButton(
+                                                          child: Text(
+                                                            "View Application",
+                                                            style: TextStyle(
+                                                                fontSize: 18.0,
+                                                                color: basicColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600),
+                                                          ),
+                                                          onPressed: () => null),
+                                                    )),
+                                              ]),
+                                        ),
                                       ),
                                     ),
                                   );
