@@ -19,258 +19,6 @@ class Updates extends StatefulWidget {
 class _UpdatesState extends State<Updates> {
   double height, width;
 
-  Widget notificationCard(String type, int index) {
-    switch (type) {
-      case "message_from_tpo":
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: height * 0.1,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: BorderSide(color: Colors.grey)),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ListTile(
-                      title: Text(myNotifications[index].toString()),
-                      trailing: Text(
-                          myNotifications[index][1] ?? 'No Time Exception'),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 20.0, left: 10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MaterialButton(
-                              child: Text(
-                                "View Application",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () => null),
-                        )),
-                  ]),
-            ),
-          ),
-        );
-        break;
-      case "apli_job":
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Container(
-            height: height * 0.2,
-            child: Card(
-              elevation: 0.2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(color: Colors.grey)),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.01),
-                      child: ListTile(
-                        title: AutoSizeText(
-                            myNotifications[index][0] ?? "No Messsage Specified" , maxLines: 2, overflow: TextOverflow.ellipsis,),
-                            subtitle: AutoSizeText(
-                            myNotifications[index][3] ?? "No Messsage Specified" , maxLines: 3, overflow: TextOverflow.ellipsis,),
-                        trailing: Text(
-                            myNotifications[index][1] ?? 'No Time Exception'),
-                      ),
-                    ),
-                    Padding(
-                        padding:
-                            EdgeInsets.only(top: height * 0.05, left: width*0.03),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MaterialButton(
-                              child: Text(
-                                "View Application",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () => null),
-                        )),
-                  ]),
-            ),
-          ),
-        );
-        break;
-      case "message_from_tpo":
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            height: 180.0,
-            child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  side: BorderSide(color: Colors.grey)),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    ListTile(
-                      title: Text(myNotifications[index][1]),
-                      trailing: Text(
-                          myNotifications[index][1] ?? 'No Time Exception'),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 20.0, left: 10.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MaterialButton(
-                              child: Text(
-                                "View Application",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () => null),
-                        )),
-                  ]),
-            ),
-          ),
-        );
-        break;
-      case "message_from_company":
-        return Container(
-          height: 180.0,
-          child: Card(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-                side: BorderSide(color: Colors.grey)),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ListTile(
-                    title: Text(myNotifications[index].toString()),
-                    trailing:
-                        Text(myNotifications[index][1] ?? 'No Time Exception'),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 20.0, left: 10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: basicColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: MaterialButton(
-                            child: Text(
-                              "View Application",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: basicColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            onPressed: () => null),
-                      )),
-                ]),
-          ),
-        );
-        break;
-      case "cand_status_change":
-        return Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Container(
-            height: height * 0.2,
-            child: Card(
-              elevation: 0.2,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
-                  side: BorderSide(color: Colors.grey)),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: width*0.01),
-                      child: ListTile(
-                        title: AutoSizeText(
-                            myNotifications[index][0] ?? "No Messsage Specified" , maxLines: 2, overflow: TextOverflow.ellipsis,),
-                            subtitle: AutoSizeText(
-                            myNotifications[index][3] ?? "No Messsage Specified" , maxLines: 3, overflow: TextOverflow.ellipsis,),
-                        trailing: Text(
-                            myNotifications[index][1] ?? 'No Time Exception'),
-                      ),
-                    ),
-                    Padding(
-                        padding:
-                            EdgeInsets.only(top: height * 0.05, left: width*0.03),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: MaterialButton(
-                              child: Text(
-                                "View Application",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () => null),
-                        )),
-                  ]),
-            ),
-          ),
-        );
-        break;
-      case "cand_applied":
-        return Container(
-          height: 180.0,
-          child: Card(
-            elevation: 0.2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ListTile(
-                    title: Text(myNotifications[index].toString()),
-                    trailing:
-                        Text(myNotifications[index][1] ?? 'No Time Exception'),
-                  ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 20.0, left: 10.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: basicColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: MaterialButton(
-                            child: Text(
-                              "View Application",
-                              style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: basicColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            onPressed: () => null),
-                      )),
-                ]),
-          ),
-        );
-        break;
-      default:
-        return Text("");
-    }
-  }
-
   List filters = [];
   List<List<String>> myNotifications = [];
   int currentTime = Timestamp.now().microsecondsSinceEpoch;
@@ -383,10 +131,56 @@ class _UpdatesState extends State<Updates> {
                       if (snapshot1.hasData) {
                         snapshot1.data.documents.forEach((f) {
                           bool isMyNotification = false;
-
-                          String tempMessage = f.data['message'];
+                          String title;
+                          String message, status;
                           String notiType = f.data['type'];
-                          String job = f.data['job'];
+
+                          String messageToShow(
+                              String status, String name, String role) {
+                            if (status == 'HIRED' || status == 'OFFERED') {
+                              return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
+                            } else if (status == 'INTERVIEW') {
+                              return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
+                            } else if (status == 'REJECTED') {
+                              return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
+                            } else {
+                              return '';
+                            }
+                          }
+
+                          switch (notiType) {
+                            case 'message_from_tpo':
+                              title = f.data['tpo_name'];
+                              message = f.data['message'];
+                              break;
+                            case 'added_to_placement':
+                              title = f.data['campus'];
+                              message = f.data['placement'];
+                              break;
+                            case 'cand_status_change':
+                              title = f.data['name'];
+                              status = f.data['status'];
+                              message = messageToShow(status,
+                                  f.data['name'] ?? '', f.data['job'] ?? '');
+                              break;
+                            case 'cand_status_change_from_campus':
+                              title = f.data['campus_id'];
+                              status = f.data['status'];
+                              message = messageToShow(status,
+                                  f.data['name'] ?? '', f.data['job'] ?? '');
+                              break;
+                            case 'message_from_company':
+                              title = f.data['name'];
+                              message = f.data['message'];
+                              break;
+                            case 'apli_job':
+                              title = f.data['name'];
+                              message = f.data['message'];
+                              break;
+                            default:
+                              message = null;
+                          }
+
                           Timestamp tempTime = f.data['time'];
                           List receivers = f.data['receivers'];
                           if (receivers != null) {
@@ -399,16 +193,18 @@ class _UpdatesState extends State<Updates> {
                             if (isMyNotification) {
                               if (tempTime != null) {
                                 myNotifications.add([
-                                  tempMessage,
+                                  title,
+                                  message,
                                   difference(tempTime),
                                   notiType,
-                                  job,
                                   f.documentID,
                                 ]);
                               } else {
                                 myNotifications.add([
-                                  tempMessage,
+                                  title,
+                                  message,
                                   null,
+                                  notiType,
                                   f.documentID,
                                 ]);
                               }
@@ -423,10 +219,81 @@ class _UpdatesState extends State<Updates> {
                           return Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListView.builder(
+                                
                                 itemCount: myNotifications.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return notificationCard(
-                                      myNotifications[index][2], index);
+                                  return Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Container(
+                                      height: height * 0.21,
+                                      child: Card(
+                                        elevation: 0.2,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            side:
+                                                BorderSide(color: Colors.grey)),
+                                        child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: width * 0.01,
+                                                    top: 5.0),
+                                                child: ListTile(
+                                                  title: AutoSizeText(
+                                                    myNotifications[index][0] ??
+                                                        "No Messsage Specified",
+                                                    maxLines: 2,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.w500),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  subtitle: AutoSizeText(
+                                                    myNotifications[index][1] ??
+                                                        "No Messsage Specified",
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  trailing: Text(
+                                                      myNotifications[index]
+                                                              [2] ??
+                                                          'No Time Exception'),
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: height * 0.03,
+                                                      left: width * 0.03),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: basicColor),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                    child: MaterialButton(
+                                                        child: Text(
+                                                          "View Application",
+                                                          style: TextStyle(
+                                                              fontSize: 18.0,
+                                                              color: basicColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),
+                                                        ),
+                                                        onPressed: () => null),
+                                                  )),
+                                            ]),
+                                      ),
+                                    ),
+                                  );
                                 },
                               ));
                       } else
