@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:apli/Models/user.dart';
-import 'package:apli/Services/database.dart';
 import 'package:apli/Services/mailer.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

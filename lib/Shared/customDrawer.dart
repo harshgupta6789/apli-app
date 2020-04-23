@@ -28,7 +28,7 @@ Widget customDrawer(BuildContext context, String email) {
         .then((snapshot) {
           print(snapshot.data['name']);
           userData.add(snapshot.data['name']);
-          userData.add(snapshot.data['ph_no']);
+          userData.add(snapshot.data['ph_no'].toString());
           userData.add((snapshot.data['profile_picture']));
         });
 

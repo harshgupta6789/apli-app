@@ -1,4 +1,5 @@
 import 'package:apli/Screens/Home/mainScreen.dart';
+import 'package:apli/Screens/Login-Signup/forgotPassword.dart';
 import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -22,7 +23,7 @@ class _LoginState extends State<Login> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  bool rememberMe = false;
+  bool rememberMe = true;
 
   bool validatePassword(String value) {
     Pattern pattern =
@@ -128,12 +129,28 @@ class _LoginState extends State<Login> {
                                         fontWeight: FontWeight.w600,
                                         color: basicColor),
                                   ),
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => VerifyPhoneNo(
-                                                'forgotPassword')));
+                                  onPressed: () async {
+                                    var net =
+                                        await Connectivity().checkConnectivity();
+                                    if (net == ConnectivityResult.none) {
+                                      Toast.show(
+                                          'No Internet Connection', context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                    } else {
+                                      if((email != '' && email != null)){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => ForgotPassword(email: email,)));
+                                      } else Toast.show(
+                                          'Incorrect email provided', context,
+                                          duration: 5,
+                                          backgroundColor: Colors.red);
+                                    }
 //                                    if (email != '' && email != null) {
 //                                      setState(() {
 //                                        loading = true;
@@ -196,7 +213,7 @@ class _LoginState extends State<Login> {
                                       .signInWithoutAuth(email, password);
                                   if (result == null) {
                                     Toast.show(
-                                        'Account does not exists', context,
+                                        'Invalid username and password', context,
                                         duration: 5,
                                         backgroundColor: Colors.red);
                                     setState(() {
@@ -261,7 +278,7 @@ class _LoginState extends State<Login> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            VerifyPhoneNo('login')),
+                                            VerifyPhoneNo()),
                                   );
                                 },
                                 child: Text(

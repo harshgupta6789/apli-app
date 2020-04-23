@@ -10,10 +10,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
-  String nextPage;
-  VerifyPhoneNo(String nextPAge) {this.nextPage = nextPAge;}
   @override
   _VerifyPhoneNoState createState() => _VerifyPhoneNoState();
 }
@@ -152,10 +151,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         loading = false;
       });
       Navigator.of(context).pop();
-      if(widget.nextPage == 'Register')
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
-      else if(widget.nextPage == 'ForgotPassword')
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
     } catch (e) {
       setState(() {
         loading = false;
@@ -308,9 +304,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                     var net = await Connectivity()
                                         .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
-                                      setState(() {
-                                        error = 'No Internet Connection';
-                                      });
+                                      Toast.show('No Internet', context);
                                     }
                                     verifyPhone();
                                   }
