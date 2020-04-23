@@ -215,7 +215,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 );
               else if(ph_no == 'noPhoneNo')
                 return Center(
-                  child: Text('No Number Given'),
+                  child: Column(
+                    children: <Widget>[
+                      Text('No Number Given'),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
+                        child: FlatButton(
+                            child: Text('Contact Us', style: TextStyle(color: basicColor),),
+                            onPressed: () async {
+                              const url =
+                                  'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                              if (await canLaunch(url)) {
+                                await launch(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            }
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               else {
                 return Column(

@@ -14,10 +14,9 @@ class Updates extends StatefulWidget {
   _UpdatesState createState() => _UpdatesState();
 }
 
-// enum NotificationType { message_from_tpo , apli_job ,cand_applied , added_to_placement , message_from_company , cand_status_change }
-
 class _UpdatesState extends State<Updates> {
   double height, width;
+  int count = 15;
 
   List filters = [];
   List<List<String>> myNotifications = [];
@@ -210,85 +209,98 @@ class _UpdatesState extends State<Updates> {
                         else
                           return Padding(
                               padding: const EdgeInsets.all(4.0),
-                              child: ListView.builder(
-                                itemCount: myNotifications.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
-                                      child: Card(
-                                        elevation: 0.2,
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            side:
-                                                BorderSide(color: Colors.grey)),
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom:15.0),
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: width * 0.01,
-                                                      top: 5.0),
-                                                  child: ListTile(
-                                                    title: AutoSizeText(
-                                                      myNotifications[index][0] ??
-                                                          "No Messsage Specified",
-                                                      maxLines: 2,
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    subtitle: AutoSizeText(
-                                                      myNotifications[index][1] ??
-                                                          "No Messsage Specified",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    trailing: Text(
-                                                        myNotifications[index]
-                                                                [2] ??
-                                                            'No Time Exception'),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: height * 0.03,
-                                                        left: width * 0.03),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: basicColor),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
+                              child: Column(
+                                children: <Widget>[
+                                  ListView.builder(
+                                    itemCount: (myNotifications.length < count) ? myNotifications.length : count,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                          child: Card(
+                                            elevation: 0.2,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12.0),
+                                                side:
+                                                    BorderSide(color: Colors.grey)),
+                                            child: Padding(
+                                              padding: EdgeInsets.only(bottom:15.0),
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: width * 0.01,
+                                                          top: 5.0),
+                                                      child: ListTile(
+                                                        title: AutoSizeText(
+                                                          myNotifications[index][0] ??
+                                                              "No Messsage Specified",
+                                                          maxLines: 2,
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight.w500),
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                        ),
+                                                        subtitle: AutoSizeText(
+                                                          myNotifications[index][1] ??
+                                                              "No Messsage Specified",
+                                                          maxLines: 2,
+                                                          overflow:
+                                                              TextOverflow.ellipsis,
+                                                        ),
+                                                        trailing: Text(
+                                                            myNotifications[index]
+                                                                    [2] ??
+                                                                'No Time Exception'),
                                                       ),
-                                                      child: MaterialButton(
-                                                          child: Text(
-                                                            "View Application",
-                                                            style: TextStyle(
-                                                                fontSize: 18.0,
-                                                                color: basicColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w600),
+                                                    ),
+                                                    Padding(
+                                                        padding: EdgeInsets.only(
+                                                            top: height * 0.03,
+                                                            left: width * 0.03),
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                            border: Border.all(
+                                                                color: basicColor),
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    10),
                                                           ),
-                                                          onPressed: () => null),
-                                                    )),
-                                              ]),
+                                                          child: MaterialButton(
+                                                              child: Text(
+                                                                "View Application",
+                                                                style: TextStyle(
+                                                                    fontSize: 18.0,
+                                                                    color: basicColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                              ),
+                                                              onPressed: () => null),
+                                                        )),
+                                                  ]),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ));
+                                      );
+                                    },
+                                  ),
+                                  Visibility(
+                                    visible: myNotifications.length > count,
+                                    child: FlatButton(child: Text('LoadMore'),onPressed: (){
+                                      setState(() {
+                                        count = count + 10;
+                                      });
+                                    },),
+                                  )
+                                ],
+                              )
+                          );
                       } else
                         return Loading();
                     });
