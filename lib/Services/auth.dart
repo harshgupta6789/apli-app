@@ -86,10 +86,10 @@ class AuthService {
       int result;
       await userIsThere.get().then((snapshot) async {
         if(!snapshot.exists) {
-          result = null;
+          result = -10;
         } else {
           if(snapshot.data['user_type'] != 'Candidate') {
-            result = null;
+            result = -10;
           } else {
             http.Response response = await http.post(
               url,

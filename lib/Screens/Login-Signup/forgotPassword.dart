@@ -21,28 +21,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   bool loading = false, loading2 = false;
 
-  Future<String> userDetails() async {
-    String ph_no;
-    DocumentReference doc = Firestore.instance.collection('candidates').document(widget.email);
-    await doc.get().then((snapshot) {
-      if(!snapshot.exists) {
-        ph_no = null;
-      } else {
-        ph_no = snapshot.data['ph_no'].toString();
-        if(ph_no == null) {
-          ph_no =  'noPhoneNo';
-        } else {
-          if(ph_no.length == 10) {
-            ph_no =  '+91' + ph_no;
-          } else {
-            ph_no =  ph_no;
-          }
-        }
-      }
-    });
-    return ph_no;
-  }
-
   String smsOTP;
   String verificationId;
   String errorMessage = '';
@@ -54,16 +32,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         loading2 = false;
       });
       this.verificationId = verId;
-      smsOTPDialog(context).then((value) {
-        print('1');
-      });
+      smsOTPDialog(context).then((value) {});
     };
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNo, // PHONE NUMBER TO SEND OTP
           codeAutoRetrievalTimeout: (String verId) {
             this.verificationId = verId;
-            print(verificationId);
           },
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
@@ -71,7 +46,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email)));
           },
           verificationFailed: (AuthException exceptio) {
-            print('${exceptio.message} verification failed');
+
           });
     } catch (e) {
       handleError(e);
@@ -169,7 +144,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   handleError(PlatformException error) {
-    print(error);
     switch (error.code) {
       case 'ERROR_INVALID_VERIFICATION_CODE':
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -178,7 +152,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         });
         Navigator.of(context).pop();
         smsOTPDialog(context).then((value) {
-          print('sign in');
         });
         break;
       default:
@@ -190,6 +163,28 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     }
   }
 
+  Future<String> userDetails() async {
+    String ph_no;
+    DocumentReference doc = Firestore.instance.collection('candidates').document(widget.email);
+    await doc.get().then((snapshot) {
+      if(!snapshot.exists) {
+        ph_no = 'NoAccount';
+      } else {
+        ph_no = snapshot.data['ph_no'].toString();
+        if(ph_no == null) {
+          ph_no =  'noPhoneNo';
+        } else {
+          if(ph_no.length == 10) {
+            ph_no =  '+91' + ph_no;
+          } else {
+            ph_no =  ph_no;
+          }
+        }
+      }
+    });
+    return ph_no;
+  }
+  bool send = false;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -204,10 +199,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             print(snapshot.data);
             if(snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
               String ph_no = snapshot.data;
-              if(ph_no == null)
-                return Center(child: Text('Account does not exist'),);
-              else if(ph_no == 'NoNumber')
-                return Center(child: Text('No Number Given'),);
+              if(ph_no == 'NoAccount')
+                return Center(
+                  child: Text('Account does not exist'),
+                );
+              else if(ph_no == 'noPhoneNo')
+                return Center(
+                  child: Text('No Number Given'),
+                );
               else {
                 return Column(
                     children: <Widget>[
@@ -217,34 +216,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         child: Image.asset("Assets/Images/logo.png"),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: height * 0.02,
-                          left: width * 0.1,
-                        ),
-                        child: Text('OTP will been sent to' + ph_no),
+                        padding: EdgeInsets.fromLTRB(50, 50, 50, 20),
+                        child: Text('OTP will been sent to' + ph_no, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: height * 0.02,
-                          left: width * 0.1,
-                        ),
+                        padding: EdgeInsets.fromLTRB(50, 0, 50, 50),
                         child: FlatButton(
-                            child: Text('Send OTP?'),
+                            child: Text(send ? 'Resend OTP' : 'Send OTP', style: TextStyle(color: basicColor),),
                             onPressed: () async {
                               setState(() {
                                 loading2 = true;
+                                send = true;
                               });
                               verifyPhone(ph_no);
                             }
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: height * 0.02,
-                          left: width * 0.1,
-                        ),
+                        padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
                         child: FlatButton(
-                            child: Text('Or Contact Us'),
+                            child: Text('Not your number ? Contact Us', style: TextStyle(color: basicColor),),
                             onPressed: () async {
                               const url =
                                   'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
@@ -260,7 +251,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 );
               }
             } else if(snapshot.hasError) {
-              print(snapshot.error);
               return Padding(padding: EdgeInsets.fromLTRB(100, 400, 100, 0),child: Text('Error occured while fetching data', textAlign: TextAlign.center,),);
             } else {
               return Container(

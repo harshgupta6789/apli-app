@@ -2,6 +2,7 @@ import 'package:apli/Models/user.dart';
 import 'package:apli/Screens/HomeLoginWrapper.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +68,10 @@ Widget customDrawer(BuildContext context, String email) {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            AutoSizeText(
                               snapshot.data[1] != null ? snapshot.data[1] : 'No Name',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 22, fontWeight: FontWeight.w600),
                             ),

@@ -193,41 +193,29 @@ class _UpdatesState extends State<Updates> {
                               }
                             }
                             if (isMyNotification) {
-                              if (tempTime != null) {
-                                myNotifications.add([
-                                  title,
-                                  message,
-                                  difference(tempTime),
-                                  notiType,
-                                  f.documentID,
-                                ]);
-                              } else {
-                                myNotifications.add([
-                                  title,
-                                  message,
-                                  null,
-                                  notiType,
-                                  f.documentID,
-                                ]);
-                              }
+                              myNotifications.add([
+                                title,
+                                message,
+                                tempTime == null ? null : difference(tempTime),
+                                notiType,
+                                f.documentID,
+                              ]);
                             }
                           }
                         });
                         if (myNotifications.length == 0)
                           return Center(
-                            child: Text('No New Updates'),
+                            child: Text('No New Updates', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
                           );
                         else
                           return Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: ListView.builder(
-                                
                                 itemCount: myNotifications.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return Padding(
-                                    padding: const EdgeInsets.all(10.0),
+                                    padding: const EdgeInsets.all(4.0),
                                     child: Container(
-                                     
                                       child: Card(
                                         elevation: 0.2,
                                         shape: RoundedRectangleBorder(

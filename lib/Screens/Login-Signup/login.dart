@@ -4,6 +4,7 @@ import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,6 +41,15 @@ class _LoginState extends State<Login> {
     }
   }
 
+  bool validateEmail(String value) {
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+
+    RegExp regExp = new RegExp(p);
+
+    return regExp.hasMatch(value);
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -73,7 +83,7 @@ class _LoginState extends State<Login> {
                             setState(() => email = text);
                           },
                           validator: (value) {
-                            if (value.isEmpty) {
+                            if (!validateEmail(value)) {
                               return 'please enter valid email';
                             }
                             return null;
@@ -130,54 +140,30 @@ class _LoginState extends State<Login> {
                                         color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    var net =
-                                        await Connectivity().checkConnectivity();
-                                    if (net == ConnectivityResult.none) {
-                                      Toast.show(
-                                          'No Internet Connection', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
+                                    if (validateEmail((email))) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var net = await Connectivity()
+                                          .checkConnectivity();
+                                      if (net == ConnectivityResult.none) {
+                                        Toast.show('Not Internet', context,backgroundColor: Colors.red);
+                                      } else {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ForgotPassword(
+                                                      email: email,
+                                                    )));
+                                      }
                                       setState(() {
                                         loading = false;
                                       });
                                     } else {
-                                      if((email != '' && email != null)){
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => ForgotPassword(email: email,)));
-                                      } else Toast.show(
-                                          'Incorrect email provided', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
+                                      Toast.show(
+                                          'Invalid Email Provided', context,backgroundColor: Colors.red);
                                     }
-//                                    if (email != '' && email != null) {
-//                                      setState(() {
-//                                        loading = true;
-//                                      });
-//                                      var result =
-//                                          await _auth.passwordResetMail(email);
-//                                      setState(() {
-//                                        loading = false;
-//                                      });
-//                                      if (result != 1) {
-//                                        Toast.show(
-//                                            'Account does not exist', context,
-//                                            duration: 5,
-//                                            backgroundColor: Colors.red);
-//                                        setState(() {
-//                                          email = '';
-//                                        });
-//                                      } else {
-//                                        Toast.show(
-//                                            'Check your email to password reset',
-//                                            context);
-//                                      }
-//                                    } else
-//                                      Toast.show(
-//                                          'Incorrect email provided', context,
-//                                          duration: 5,
-//                                          backgroundColor: Colors.red);
                                   }),
                             ),
                           ),
@@ -211,9 +197,9 @@ class _LoginState extends State<Login> {
                                   });
                                   dynamic result = await _auth
                                       .signInWithoutAuth(email, password);
-                                  if (result == null) {
+                                  if (result == -10) {
                                     Toast.show(
-                                        'Invalid username and password', context,
+                                        'Account does not exists', context,
                                         duration: 5,
                                         backgroundColor: Colors.red);
                                     setState(() {
@@ -277,8 +263,7 @@ class _LoginState extends State<Login> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            VerifyPhoneNo()),
+                                        builder: (context) => VerifyPhoneNo()),
                                   );
                                 },
                                 child: Text(

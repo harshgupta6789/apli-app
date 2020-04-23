@@ -127,9 +127,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                       signIn();
                     }
                   });
-//                  _auth.currentUser().then((user) {
-//                    signIn();
-//                  });
                 },
               )
             ],
@@ -159,33 +156,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       handleError(e);
     }
   }
-
-//  signIn() async {
-//    try {
-//      final AuthCredential credential = PhoneAuthProvider.getCredential(
-//        verificationId: verificationId,
-//        smsCode: smsOTP,
-//      );
-//      print(credential);
-//      globalCredential = credential;
-////      final AuthResult result = await _auth.signInWithCredential(credential);
-////      final FirebaseUser user = result.user;
-////      user.updateEmail('mnm@gmail.com');
-////      assert(user.uid == user.uid);
-//      print('sign in');
-//      setState(() {
-//        loading = false;
-//      });
-//      Navigator.of(context).pop();
-//      Navigator.pushReplacement(
-//          context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
-//    } catch (e) {
-//      setState(() {
-//        loading = false;
-//      });
-//      handleError(e);
-//    }
-//  }
 
   handleError(PlatformException error) {
     print(error);
