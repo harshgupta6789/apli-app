@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Screens/Home/Profile/editResume.dart';
-import 'package:apli/Models/user.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
@@ -15,7 +16,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -27,6 +27,7 @@ enum currentState { none, uploading, success, failure }
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   TabController _tabController;
   String fileType = 'video';
+  List<CameraDescription> cameras;
   File file;
   String fileName = '';
   String operationText = '';
@@ -35,6 +36,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   String result = '';
   String fetchUrl;
   currentState x = currentState.none;
+
+  camInit() async{
+     cameras = await availableCameras();
+  }
 
   userAddVideoUrl(String url) async {
     user = await FirebaseAuth.instance.currentUser();
@@ -84,7 +89,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
-    storageReference = FirebaseStorage.instance.ref().child("resumeVideos/$filename");
+    storageReference =
+        FirebaseStorage.instance.ref().child("resumeVideos/$filename");
     final StorageUploadTask uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
@@ -158,39 +164,48 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: basicColor),
-                  borderRadius: BorderRadius.circular(10),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: basicColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: MaterialButton(
+                      child: Text(
+                        "Upload From Gallery",
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            color: basicColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () {
+                        filePicker(context);
+                      }),
                 ),
-                child: MaterialButton(
-                    child: Text(
-                      "Upload From Gallery",
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          color: basicColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () {
-                      filePicker(context);
-                    }),
               ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: basicColor),
-                  borderRadius: BorderRadius.circular(10),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: basicColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: MaterialButton(
+                      child: Text(
+                        "Record Now",
+                        style: TextStyle(
+                            fontSize: 18.0,
+                            color: basicColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () async {
+                        Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Camera(cameras: cameras)),
+                                );
+                        // _recordVideo();
+                      }),
                 ),
-                child: MaterialButton(
-                    child: Text(
-                      "Record Now",
-                      style: TextStyle(
-                          fontSize: 18.0,
-                          color: basicColor,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    onPressed: () async {
-                      _recordVideo();
-                    }),
               ),
             ],
           ),
@@ -277,6 +292,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
     usergetVideoUrl();
+    camInit();
     super.initState();
   }
 
@@ -339,9 +355,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 30.0),
-                      child: Image.asset("Assets/Images/job.png"),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 30.0),
+                        child: Image.asset("Assets/Images/job.png"),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
