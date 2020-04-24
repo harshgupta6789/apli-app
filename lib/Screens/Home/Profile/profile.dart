@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
 import 'package:apli/Screens/Home/Profile/psychometry.dart';
+import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -59,7 +60,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   }
 
   usergetVideoUrl() async {
-    Firestore.instance
+    await Firestore.instance
         .collection('candidates')
         .document(email)
         .get()
@@ -315,12 +316,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           ),
         );
       default:
-        return Text("");
+        return Loading();
     }
   }
 
-  getPrefs() {
-    SharedPreferences.getInstance().then((prefs) {
+  getPrefs() async {
+    await SharedPreferences.getInstance().then((prefs) {
       setState(() {
         email = prefs.getString('email');
       });
