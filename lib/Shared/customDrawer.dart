@@ -27,7 +27,6 @@ Widget customDrawer(BuildContext context, String email) {
         .document(email)
         .get()
         .then((snapshot) {
-          print(snapshot.data['name']);
           userData.add(snapshot.data['name']);
           userData.add(snapshot.data['ph_no'].toString());
           userData.add((snapshot.data['profile_picture']));
@@ -68,12 +67,14 @@ Widget customDrawer(BuildContext context, String email) {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            AutoSizeText(
-                              snapshot.data[1] != null ? snapshot.data[1] : 'No Name',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 22, fontWeight: FontWeight.w600),
+                            SizedBox(
+                              width: 130,
+                              child: AutoSizeText(
+                                snapshot.data[1] != null ? snapshot.data[1].split(' ')[0][0].toUpperCase() + snapshot.data[1].split(' ')[0].substring(1) : 'No Name',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 22, fontWeight: FontWeight.w600),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
