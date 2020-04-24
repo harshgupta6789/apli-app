@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
-import 'package:apli/Screens/Home/Profile/psychometryTest.dart';
+import 'package:apli/Screens/Home/Profile/psychometry.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
@@ -332,14 +331,17 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 TabBar(
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,
+                  indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(width: 5.0, color: basicColor),
+                  ),
                   tabs: [
-                    new Tab(
+                    Tab(
                       text: resume,
                     ),
-                    new Tab(
+                    Tab(
                       text: videoIntro,
                     ),
-                    new Tab(text: psychTest)
+                    Tab(text: psychTest)
                   ],
                   controller: _tabController,
                 )),
@@ -461,7 +463,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-          PsychometryTest(),
+          Psychometry(),
         ], controller: _tabController));
   }
 }

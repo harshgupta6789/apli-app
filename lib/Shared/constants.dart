@@ -32,6 +32,7 @@ const String editResume = "Edit Resume";
 const String videoIntro = "Video Intro";
 const String resumeSlogan = "Keep your resume upto date with latest \n skills for all jobs that you apply for";
 const String videoIntroSlogan = "Give a short introduction of yourself  for\n your recruiters to see";
+const String psychometryTestSlogan = "This is a psychometry test to help the\nrecruiters understand your personality";
 const String apliEmailID = 'apli.ai@gmail.com';
 const String apliPassword = 'abcd1234';
 const String intro = 'Intro';
