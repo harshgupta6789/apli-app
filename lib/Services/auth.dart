@@ -83,7 +83,7 @@ class AuthService {
   //register with email and password
   Future signInWithoutAuth(String email, String password) async {
     try {
-      String url = "https://dev.apli.ai/accounts/checkLogin";
+      String url = "https://staging.apli.ai/accounts/checkLogin";
       DocumentReference userIsThere =
           Firestore.instance.collection('users').document(email);
       int result;

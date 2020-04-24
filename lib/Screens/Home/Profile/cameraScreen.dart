@@ -14,9 +14,11 @@ class Camera extends StatefulWidget {
 
 class _CameraState extends State<Camera> {
   CameraController controller;
-
+  double height, width;
+  bool isRecordingStopped = false;
+  String path;
   Timer _timer;
-  int _start = 0;
+  int seconds = 0, minute = 0;
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
@@ -24,14 +26,18 @@ class _CameraState extends State<Camera> {
       oneSec,
       (Timer timer) => setState(
         () {
-          _start = _start + 1;
+          seconds = seconds + 1;
+          if (seconds == 60) {
+            minute = minute + 1;
+            seconds = 0;
+          }
         },
       ),
     );
   }
 
   void stopTimer() {
-    _start = 0;
+    seconds = 0;
     _timer?.cancel();
   }
 
@@ -64,6 +70,61 @@ class _CameraState extends State<Camera> {
 
   String _timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
+  Widget _options() {
+    if (isRecordingStopped)
+      return Container(
+        color: Colors.transparent,
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
+            Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MaterialButton(
+                  color: Colors.grey,
+                  child: Text(
+                    "Upload",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+                  ),
+                  onPressed: () {
+                    print(path);
+                    if (path != null) {
+                      Navigator.pop(context, path);
+                    }
+                    else{
+                      Navigator.pop(context);
+                    }
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MaterialButton(
+                  color: Colors.grey,
+                  child: Text(
+                    "Re-Take",
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+                  ),
+                  onPressed: () {
+                    final dir = Directory('storage/emulated/0/apli/');
+                    try {
+                      dir.deleteSync(recursive: true);
+                      setState(() {
+                        isRecordingStopped = false;
+                      });
+                    } on Exception catch (e) {
+                      setState(() {
+                        isRecordingStopped = false;
+                      });
+                    }
+                  }),
+            ),
+          ])
+        ]),
+      );
+    return Container();
+  }
+
   Widget _buildBottomNavigationBar() {
     return Container(
       color: Colors.black,
@@ -86,7 +147,10 @@ class _CameraState extends State<Camera> {
               }
             },
           ),
-          Text(_start.toString()??"" , style: TextStyle(color:Colors.white),),
+          Text(
+            minute.toString() + " : " + seconds.toString() ?? "",
+            style: TextStyle(color: Colors.white),
+          ),
           IconButton(
             icon: Icon(
               Icons.crop_rotate,
@@ -96,7 +160,6 @@ class _CameraState extends State<Camera> {
               _onCameraSwitch();
             },
           ),
-
         ],
       ),
     );
@@ -127,6 +190,7 @@ class _CameraState extends State<Camera> {
       print(e);
       return null;
     }
+    path = filePath;
     return filePath;
   }
 
@@ -137,6 +201,7 @@ class _CameraState extends State<Camera> {
     stopTimer();
     setState(() {
       _isRecording = false;
+      isRecordingStopped = true;
     });
 
     try {
@@ -177,6 +242,9 @@ class _CameraState extends State<Camera> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
     if (!controller.value.isInitialized) {
       return Container();
     }
@@ -185,7 +253,7 @@ class _CameraState extends State<Camera> {
       extendBody: true,
       bottomNavigationBar: _buildBottomNavigationBar(),
       body: Stack(
-        children: <Widget>[_buildCameraPreview()],
+        children: <Widget>[_buildCameraPreview(), _options()],
       ),
     );
   }
