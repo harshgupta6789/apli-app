@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       iOSPermission();
     }
     _firebaseMessaging.getToken().then((token) {
-      print(token);
+      //print(token);
     });
 
     _firebaseMessaging.configure(
