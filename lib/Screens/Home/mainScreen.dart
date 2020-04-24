@@ -173,7 +173,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 courses,
-                style: TextStyle(color: basicColor),
+                style: TextStyle(color: _currentTab == 0 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
@@ -186,7 +186,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 mockJobs,
-                style: TextStyle(color: basicColor),
+                style: TextStyle(color: _currentTab == 1 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
@@ -199,7 +199,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 jobs,
-                style: TextStyle(color: basicColor),
+                style: TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
             activeIcon: Icon(
@@ -212,7 +212,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             ),
             title: Text(
               updates,
-              style: TextStyle(color: basicColor),
+              style: TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
             ),
           ),
           BottomNavigationBarItem(
@@ -226,7 +226,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 profile,
-                style: TextStyle(color: basicColor),
+                style: TextStyle(color: _currentTab == 4 ? basicColor : Colors.grey),
               )),
         ]);
   }

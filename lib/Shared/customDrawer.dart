@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-Widget customDrawer(BuildContext context, String email) {
+Widget customDrawer(BuildContext context) {
 
   Future<List<String>> userInit() async {
 

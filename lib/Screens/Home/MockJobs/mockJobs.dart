@@ -19,7 +19,7 @@ class _MockJobsState extends State<MockJobs> {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        endDrawer: customDrawer(context, 'user'),
+        endDrawer: customDrawer(context),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

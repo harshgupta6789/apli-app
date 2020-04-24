@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
+import 'package:apli/Screens/Home/Profile/psychometryTest.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +17,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class Profile extends StatefulWidget {
 enum currentState { none, uploading, success, failure }
 
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
+  String email;
   TabController _tabController;
   String fileType = 'video';
   List<CameraDescription> cameras;
@@ -32,7 +35,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   String fileName = '';
   String operationText = '';
   bool isUploaded = true;
-  FirebaseUser user;
   String result = '';
   String fetchUrl;
   currentState x = currentState.none;
@@ -42,29 +44,25 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   }
 
   userAddVideoUrl(String url) async {
-    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('candidates')
-        .document(user.email)
+        .document(email)
         .updateData({'video_resume': url});
   }
 
   deleteVideoUrl() async {
-    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('candidates')
-        .document(user.email)
+        .document(email)
         .updateData({'video_resume': 'deleted'});
   }
 
   usergetVideoUrl() async {
-    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('candidates')
-        .document(user.email)
+        .document(email)
         .get()
         .then((DocumentSnapshot ds) {
-      print(ds.data['video_resume']);
       if (ds.data['video_resume'] != null &&
           ds.data['video_resume'] != 'deleted') {
         fetchUrl = ds.data['video_resume'];
@@ -288,23 +286,31 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     }
   }
 
+  getPrefs() {
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        email = prefs.getString('email');
+      });
+      usergetVideoUrl();
+      camInit();
+    });
+  }
+
   @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
-    usergetVideoUrl();
-    camInit();
+    getPrefs();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    //final user = Provider.of<User>(context);
 
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        endDrawer: customDrawer(context, 'user'),
+        endDrawer: customDrawer(context),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -455,7 +461,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               ],
             ),
           ),
-          Center(child: Image.asset("Assets/Images/job.png")),
+          PsychometryTest(),
         ], controller: _tabController));
   }
 }

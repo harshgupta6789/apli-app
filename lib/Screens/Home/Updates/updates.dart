@@ -1,4 +1,3 @@
-import 'package:apli/Models/user.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
@@ -6,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Updates extends StatefulWidget {
@@ -47,8 +45,10 @@ class _UpdatesState extends State<Updates> {
     int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch;
     Duration dt = DateTime.now().difference(
         DateTime.fromMicrosecondsSinceEpoch(timeInMicroSecondsSimceEpoch));
-    if(dt.inDays>30)
-    return (dt.inDays~/30).toStringAsFixed(0) + ' mo';
+    if(dt.isNegative)
+      return 'negative';
+    if (dt.inDays > 30)
+      return (dt.inDays ~/ 30).toStringAsFixed(0) + ' mo';
     else if (dt.inDays > 0)
       return dt.inDays.toString() + ' days';
     else if (dt.inHours > 0)
@@ -60,11 +60,16 @@ class _UpdatesState extends State<Updates> {
   }
 
   String email;
+
+  @override
+  void setState(fn) {
+    if(mounted){
+      super.setState(fn);
+    }
+  }
   getPrefs() {
     SharedPreferences.getInstance().then((prefs) {
-      setState(() {
-        email = prefs.getString('email');
-      });
+      setState((){email = prefs.getString('email');});
     });
   }
 
@@ -81,7 +86,7 @@ class _UpdatesState extends State<Updates> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, email),
+        endDrawer: customDrawer(context),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -190,24 +195,32 @@ class _UpdatesState extends State<Updates> {
                               }
                             }
                             if (isMyNotification) {
-                              myNotifications.add([
-                                title,
-                                message,
-                                tempTime == null ? null : difference(tempTime),
-                                notiType,
-                                f.documentID,
-                              ]);
+                              if(difference(tempTime) != 'negative') {
+                                myNotifications.add([
+                                  title,
+                                  message,
+                                  tempTime == null ? null : difference(tempTime),
+                                  notiType,
+                                  f.documentID,
+                                ]);
+                              }
                             }
                           }
                         });
                         if (myNotifications.length == 0)
                           return Center(
-                            child: Text('No New Updates', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                            child: Text(
+                              'No New Updates',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
                           );
                         else
                           return Padding(
                               padding: const EdgeInsets.all(4.0),
-                              child: AllNotifications(myNotifications: myNotifications,));
+                              child: AllNotifications(
+                                myNotifications: myNotifications,
+                              ));
                       } else
                         return Loading();
                     });
@@ -225,117 +238,115 @@ class _UpdatesState extends State<Updates> {
 }
 
 class AllNotifications extends StatefulWidget {
-
   List<List<String>> myNotifications = [];
 
   AllNotifications({this.myNotifications});
+
   @override
   _AllNotificationsState createState() => _AllNotificationsState();
 }
 
 class _AllNotificationsState extends State<AllNotifications> {
-
   double width, height;
   List<List<String>> myNotifications;
   List<List<String>> items;
   int count = 8;
-
 
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     myNotifications = widget.myNotifications;
-    int length = (myNotifications.length < count) ? myNotifications.length : count;
+    int length =
+        (myNotifications.length < count) ? myNotifications.length : count;
     return Container(
       child: ListView.builder(
-          itemCount: length + 1,
-          itemBuilder: (BuildContext context, int index) {
-            return index != length  ? Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Container(
-                child: Card(
-                  elevation: 0.2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(12.0),
-                      side:
-                      BorderSide(color: Colors.grey)),
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom:15.0),
-                    child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: width * 0.01,
-                                top: 5.0),
-                            child: ListTile(
-                              title: AutoSizeText(
-                                myNotifications[index][0] ??
-                                    "No Messsage Specified",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight:
-                                    FontWeight.w500),
-                                overflow:
-                                TextOverflow.ellipsis,
-                              ),
-                              subtitle: AutoSizeText(
-                                myNotifications[index][1] ??
-                                    "No Messsage Specified",
-                                maxLines: 2,
-                                overflow:
-                                TextOverflow.ellipsis,
-                              ),
-                              trailing: Text(
-                                  myNotifications[index]
-                                  [2] ??
+        itemCount: length + 1,
+        itemBuilder: (BuildContext context, int index) {
+          return index != length
+              ? Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Container(
+                    child: Card(
+                      elevation: 0.2,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: BorderSide(color: Colors.grey)),
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 15.0),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    left: width * 0.01, top: 5.0),
+                                child: ListTile(
+                                  title: AutoSizeText(
+                                    myNotifications[index][0] ??
+                                        "No Messsage Specified",
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  subtitle: AutoSizeText(
+                                    myNotifications[index][1] ??
+                                        "No Messsage Specified",
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  trailing: Text(myNotifications[index][2] ??
                                       'No Time Exception'),
-                            ),
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  top: height * 0.03,
-                                  left: width * 0.03),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: basicColor),
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      10),
                                 ),
-                                child: MaterialButton(
-                                    child: Text(
-                                      "View Application",
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: basicColor,
-                                          fontWeight:
-                                          FontWeight
-                                              .w600),
+                              ),
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height * 0.03, left: width * 0.03),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: basicColor),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                    onPressed: () => null),
-                              )),
-                        ]),
+                                    child: MaterialButton(
+                                        child: Text(
+                                          "View Application",
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: basicColor,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        onPressed: () => null),
+                                  )),
+                            ]),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ) : length == myNotifications.length ? Container() : FlatButton(child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Load More', style: TextStyle(fontSize: 12),),
-                Icon(Icons.refresh, size: 15,)
-              ],
-            ),onPressed: (){setState(() {
-              count = count + 5;
-            });},);
-          },
-        ),
+                )
+              : length == myNotifications.length
+                  ? Container()
+                  : FlatButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Load More',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Icon(
+                            Icons.refresh,
+                            size: 15,
+                          )
+                        ],
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          count = count + 10;
+                        });
+                      },
+                    );
+        },
+      ),
     );
   }
 }
-

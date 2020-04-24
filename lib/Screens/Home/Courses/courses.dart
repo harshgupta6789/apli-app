@@ -176,7 +176,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     return Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, widget.email),
+        endDrawer: customDrawer(context),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
