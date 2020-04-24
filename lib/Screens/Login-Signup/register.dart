@@ -817,10 +817,10 @@ class _RegisterState extends State<Register> {
                                                         }),
                                                         http
                                                             .post(
-                                                                "https://staging.apli.ai/accounts/passHash",
+                                                                passHash,
                                                                 body: json.decode(
                                                                     '{'
-                                                                    '"secret" : "h&%RD89itr#\$dTHioG\$s", '
+                                                                    '"secret" : $passHashSecret, '
                                                                     '"password": "$password"'
                                                                     '}'))
                                                             .then(
@@ -834,7 +834,7 @@ class _RegisterState extends State<Register> {
                                                                         .body);
                                                             if (decodedData[
                                                                     "secret"] ==
-                                                                "h&%RD89itr#\$dTHioG\$s") {
+                                                                passHashSecret) {
                                                               String hash =
                                                                   decodedData[
                                                                       "hash"];

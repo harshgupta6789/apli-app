@@ -127,10 +127,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               loading = true;
                             });
                             await http.post(
-                              "https://staging.apli.ai/accounts/passHash",
+                              passHash,
                               body: json.decode(
                             '{'
-                            '"secret" : "h&%RD89itr#\$dTHioG\$s", '
+                            '"secret" : $passHashSecret", '
                                 '"password": "$password"'
                                 '}')).then((response) async {
                                   if(response.statusCode == 200) {
@@ -140,7 +140,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             .body);
                                     if (decodedData[
                                     "secret"] ==
-                                        "h&%RD89itr#\$dTHioG\$s") {
+                                        passHashSecret) {
                                       String hash =
                                       decodedData[
                                       "hash"];

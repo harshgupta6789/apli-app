@@ -1,21 +1,65 @@
 import 'package:apli/Screens/Home/Profile/psychometryTest.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Psychometry extends StatefulWidget {
+
+  String email;
+  Psychometry({this.email});
   @override
   _PsychometryState createState() => _PsychometryState();
 }
 
-enum states { none, resume, done }
+enum States { none, resume, done }
 
 class _PsychometryState extends State<Psychometry> {
-  states _currentState = states.none;
+
+  States _currentState;
+  Map<String, dynamic> questions, answeredQuestions;
+  String email;
+
+  userInit() async {
+    await SharedPreferences.getInstance().then((prefs) async {
+      setState(() {
+        email = prefs.getString('email');
+      });
+      await Firestore.instance.collection('candPsychoQues').document('all_ques').get().then((snapshot) async {
+        questions = snapshot.data;
+        await Firestore.instance.collection('candidates').document(email).get().then((snapshot2) {
+          answeredQuestions = snapshot2.data['psycho_ques'];
+          if(answeredQuestions == null) {
+            setState(() {
+              _currentState = States.none;
+            });
+          } else if(answeredQuestions.length < questions.length) {
+            setState(() {
+              _currentState = States.resume;
+            });
+          } else {
+            setState(() {
+              _currentState = States.done;
+            });
+          }
+        });
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userInit();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (_currentState) {
-      case states.none:
+      case States.none:
         return Padding(
           padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
           child: Column(
@@ -98,7 +142,7 @@ class _PsychometryState extends State<Psychometry> {
           ),
         );
         break;
-      case states.resume:
+      case States.resume:
         return Padding(
           padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
           child: Column(
@@ -137,7 +181,7 @@ class _PsychometryState extends State<Psychometry> {
                 child: Align(
                     child: Text("Instructions to follow",
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 17,
                             fontWeight: FontWeight.w600,
                             color: basicColor)),
                     alignment: Alignment.center),
@@ -181,7 +225,7 @@ class _PsychometryState extends State<Psychometry> {
           ),
         );
         break;
-      case states.done:
+      case States.done:
         return Padding(
           padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
           child: Column(

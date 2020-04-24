@@ -83,7 +83,7 @@ class AuthService {
   //register with email and password
   Future signInWithoutAuth(String email, String password) async {
     try {
-      String url = "https://dev.apli.ai/accounts/checkLogin";
+      String url = checkLogin;
       DocumentReference userIsThere =
           Firestore.instance.collection('users').document(email);
       int result;
@@ -97,7 +97,7 @@ class AuthService {
             http.Response response = await http.post(
               url,
               body: json.decode('{'
-                  '"secret" : "j&R\$estgIKur657%3st4", '
+                  '"secret" : $checkLoginSecret, '
                   '"useremail" : "$email", '
                   '"password": "$password"'
                   '}'),
@@ -105,7 +105,7 @@ class AuthService {
             if (response.statusCode == 200) {
               var decodedData = jsonDecode(response.body);
               print(decodedData['secret']);
-              if (decodedData["secret"] == "j&R\$estgIKur657%3st4") {
+              if (decodedData["secret"] == checkLoginSecret) {
                 bool temp = decodedData["result"];
                 bool isFcm = decodedData["gen_fcm"];
                 if (temp == true) {
