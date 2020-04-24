@@ -50,7 +50,6 @@ class _PsychometryState extends State<Psychometry> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     userInit();
 
@@ -132,7 +131,7 @@ class _PsychometryState extends State<Psychometry> {
                     ),
                     child: Text('Start Test', style: TextStyle(color: basicColor, fontWeight: FontWeight.bold),),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest(questions: questions, answeredQuestions: answeredQuestions,)));
                     },
                   ),
                   alignment: Alignment.center,
@@ -170,7 +169,7 @@ class _PsychometryState extends State<Psychometry> {
                     ),
                     child: Text('Resume Test', style: TextStyle(color: basicColor, fontWeight: FontWeight.bold),),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest(questions: questions, answeredQuestions: answeredQuestions,)));
                     },
                   ),
                   alignment: Alignment.center,

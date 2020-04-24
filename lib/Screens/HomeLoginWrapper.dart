@@ -1,19 +1,8 @@
-import 'package:apli/Models/user.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Services/auth.dart';
 import 'Home/mainScreen.dart';
 import 'Login-Signup/login.dart';
-
-//class HomeLoginWrapper extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return StreamProvider<User>.value(
-//        value: AuthService().user, child: Wrapper());
-//  }
-//}
 
 class Wrapper extends StatefulWidget {
   @override
@@ -34,6 +23,7 @@ class _WrapperState extends State<Wrapper> {
       }
       else preferences.clear();
     }
+    preferences.setString('email', 'harshhvg999@gmail.com');
 
   }
   @override
@@ -46,7 +36,7 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     //final user = Provider.of<User>(context);
     if(email == null) {
-      return Login();
+      return MainScreen();
     } else {
       return MainScreen();
     }
