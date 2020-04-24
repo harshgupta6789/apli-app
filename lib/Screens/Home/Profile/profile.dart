@@ -38,8 +38,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   String fetchUrl;
   currentState x = currentState.none;
 
-  camInit() async{
-     cameras = await availableCameras();
+  camInit() async {
+    cameras = await availableCameras();
   }
 
   userAddVideoUrl(String url) async {
@@ -121,9 +121,9 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         setState(() {
           x = currentState.uploading;
         });
-      }
+      } else {}
     } catch (e) {
-      AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
+      AwesomeDialog(context: context, dialogType: DialogType.WARNING , tittle: e , body: Text("Error Has Occured")).show();
     }
   }
 
@@ -181,27 +181,30 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                 ),
               ),
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: basicColor),
-                    borderRadius: BorderRadius.circular(10),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: basicColor),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: MaterialButton(
+                        child: Text(
+                          "Record Now",
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              color: basicColor,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Camera(cameras: cameras)),
+                          );
+                          // _recordVideo();
+                        }),
                   ),
-                  child: MaterialButton(
-                      child: Text(
-                        "Record Now",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: basicColor,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () async {
-                        Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Camera(cameras: cameras)),
-                                );
-                        // _recordVideo();
-                      }),
                 ),
               ),
             ],
