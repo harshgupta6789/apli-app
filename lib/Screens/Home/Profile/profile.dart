@@ -17,6 +17,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
@@ -33,6 +34,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   List<CameraDescription> cameras;
   File file;
   String fileName = '';
+  String urlFromCamera;
   String operationText = '';
   bool isUploaded = true;
   String result = '';
@@ -124,7 +126,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         });
       } else {}
     } catch (e) {
-      AwesomeDialog(context: context, dialogType: DialogType.WARNING , tittle: e , body: Text("Error Has Occured")).show();
+      AwesomeDialog(
+              context: context,
+              dialogType: DialogType.WARNING,
+              tittle: e,
+              body: Text("Error Has Occured"))
+          .show();
     }
   }
 
@@ -141,14 +148,15 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     });
   }
 
-  Future videoPicker(BuildContext context, File video) async {
+  Future videoPicker(BuildContext context, String path) async {
+    file = File(path);
     try {
-      fileName = p.basename(video.path);
+      fileName = p.basename(path);
       setState(() {
-        fileName = p.basename(video.path);
+        fileName = p.basename(path);
       });
       print(fileName);
-      _uploadFile(file, video.path);
+      _uploadFile(file, path);
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
@@ -198,11 +206,34 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               fontWeight: FontWeight.w600),
                         ),
                         onPressed: () async {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Camera(cameras: cameras)),
-                          );
+                          var status = await Permission.storage.status;
+                          switch (status) {
+                            case PermissionStatus.undetermined:
+                              Map<Permission, PermissionStatus> statuses =
+                                  await [
+                                Permission.storage,
+                              ].request();
+                              print(statuses[Permission.storage]);
+                              break;
+                            case PermissionStatus.granted:
+                              urlFromCamera = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        Camera(cameras: cameras)),
+                              );
+                              if(urlFromCamera!=null){
+                                 videoPicker(context, urlFromCamera);
+                              }
+                              break;
+                            case PermissionStatus.denied:
+                              break;
+                            case PermissionStatus.restricted:
+                              break;
+                            case PermissionStatus.permanentlyDenied:
+                              break;
+                          }
+
                           // _recordVideo();
                         }),
                   ),
@@ -336,7 +367,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,
                   indicator: UnderlineTabIndicator(
-                      borderSide: BorderSide(width: 5.0, color: basicColor),
+                    borderSide: BorderSide(width: 5.0, color: basicColor),
                   ),
                   tabs: [
                     Tab(

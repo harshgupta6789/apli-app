@@ -13,7 +13,7 @@ class Updates extends StatefulWidget {
 }
 
 class _UpdatesState extends State<Updates> {
-  double height, width;
+  
 
   List filters = [];
   List<List<String>> myNotifications = [];
@@ -81,8 +81,7 @@ class _UpdatesState extends State<Updates> {
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,

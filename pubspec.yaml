@@ -52,6 +52,7 @@ dependencies:
   pointycastle: ^1.0.2
   steel_crypt: ^1.7.1+1
   camera:
+  permission_handler: ^5.0.0+hotfix.4
   splashscreen:
   toast:
   mailer:
