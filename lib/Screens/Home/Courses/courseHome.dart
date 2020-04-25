@@ -36,9 +36,9 @@ class _CourseMainState extends State<CourseMain> {
                         _scaffoldKey.currentState.openEndDrawer())),
           ],
           title: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
+            padding: EdgeInsets.only(bottom: 10.0),
             child: Text(courses,
-                style: TextStyle(color: Colors.white, fontSize: 24)),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
           ),
         ),
         preferredSize: Size.fromHeight(55),

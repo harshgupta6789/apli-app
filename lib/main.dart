@@ -9,7 +9,6 @@ void main() async {
 }
 
 class MyApp extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -26,9 +25,6 @@ class _MyAppState extends State<MyApp> {
             accentColor: basicColor,
             fontFamily: 'Sans'),
         home: MySplash(),
-//        routes: <String, WidgetBuilder> {
-//          '/Wrapper': (BuildContext context) => Wrapper(),
-//        },
     );
   }
 }

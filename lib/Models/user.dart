@@ -20,17 +20,3 @@ class UserInfo {
     this.user_type,
   });
 }
-
-class CandidateInfo {
-  final String email;
-  final String name;
-  final String profilePic;
-  final String phoneNo;
-
-  CandidateInfo({
-    this.email,
-    this.name,
-    this.profilePic,
-    this.phoneNo,
-  });
-}

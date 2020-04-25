@@ -4,10 +4,9 @@ import 'package:apli/Shared/customTabBar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-class Jobs extends StatefulWidget {
-  final void Function(int) callback;
+import '../../HomeLoginWrapper.dart';
 
-  Jobs(this.callback);
+class Jobs extends StatefulWidget {
   @override
   _JobsState createState() => _JobsState();
 }
@@ -43,7 +42,8 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      widget.callback(3);
+                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                          Wrapper(currentTab: 3,)), (Route<dynamic> route) => false);
                       setState(() {});
                     }),
               ),

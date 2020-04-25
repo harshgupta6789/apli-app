@@ -1,86 +1,13 @@
 import 'dart:convert';
 
-import 'package:apli/Models/user.dart';
-import 'package:apli/Services/mailer.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  Stream<User> get user {
-    return _auth.onAuthStateChanged
-        .map((FirebaseUser user) => _userFromFirebaseUser(user));
-  }
-
-  //sign in with email and password
-  Future passwordResetMail(String email) async {
-    Map<String, String> data = {
-      'email': email,
-      'OTP': '123456',
-      'time': DateTime.now().toString()
-    };
-    try {
-      MailerService(username: apliEmailID, password: apliPassword, data: data);
-    } catch (e) {
-      print(e.toString());
-    }
-//    try {
-//      await _auth.sendPasswordResetEmail(email: email);
-//      return 1;
-//    } catch (e) {
-//      print(e.toString());
-//      return -1;
-//    }
-  }
-
-  Future registerOldWithEmailAndPassword(String email, String password) async {
-    try {
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      if (user == null)
-        return -1;
-//      try {
-//        await user.sendEmailVerification();
-//      } catch (e) {
-//        print("An error occured while trying to send email verification");
-//        print(e.message);
-//      }
-      else
-        return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  Future signInWithEmailAndPassword(String email, String password) async {
-    try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = result.user;
-      if (user == null)
-        return null;
-//      if (user.isEmailVerified)
-      else
-        return _userFromFirebaseUser(user);
-//      else {
-//        user.sendEmailVerification();
-//        _auth.signOut();
-//        return -1;
-//      }
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  //register with email and password
   Future signInWithoutAuth(String email, String password) async {
     try {
       String url = checkLogin;
@@ -143,22 +70,17 @@ class AuthService {
           }
         }
       });
-      return result;
+      return result ?? -2;
     } catch (e) {
       return null;
     }
   }
 
-  // Logout
   Future signOut() async {
     try {
-      return await _auth.signOut();
+
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
   }
 }

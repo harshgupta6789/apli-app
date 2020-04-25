@@ -5,6 +5,8 @@ import 'Home/mainScreen.dart';
 import 'Login-Signup/login.dart';
 
 class Wrapper extends StatefulWidget {
+  int currentTab;
+  Wrapper({this.currentTab});
   @override
   _WrapperState createState() => _WrapperState();
 }
@@ -36,7 +38,7 @@ class _WrapperState extends State<Wrapper> {
     if(email == null) {
       return Login();
     } else {
-      return MainScreen();
+      return MainScreen(currentTab: widget.currentTab);
     }
   }
 }

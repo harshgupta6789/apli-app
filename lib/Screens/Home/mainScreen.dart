@@ -10,13 +10,15 @@ import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
+  int currentTab;
+  MainScreen({this.currentTab});
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  static int _currentTab = 0;
+  static int _currentTab;
   static TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
@@ -32,10 +34,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       // Handle notification message
       final dynamic notification = message['notification'];
     }
-  }
-
-  static doSomething(int i) { 
-    _currentTab = i;
   }
 
 
@@ -132,6 +130,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    _currentTab = widget.currentTab ?? 0;
     firebaseCloudMessagingListeners();
     _tabController = TabController(vsync: this, length: _listTabs.length);
     _tabController.animateTo(_currentTab);
@@ -148,7 +147,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   final List<Widget> _listTabs = [
     CourseMain(),
-    Jobs(doSomething),
+    Jobs(),
     Updates(),
     Profile()
   ];
