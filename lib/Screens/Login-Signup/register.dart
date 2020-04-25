@@ -122,7 +122,7 @@ class _RegisterState extends State<Register> {
             ? Loading()
             : StreamBuilder(
                 stream: Firestore.instance.collection('batches').snapshots(),
-                builder: (context, snapshot) {
+                builder: (context2, snapshot) {
                   if (snapshot.hasData) {
                     snapshot.data.documents.forEach((f) {
                       String collegeTemp = f.data['college'];
@@ -774,47 +774,18 @@ class _RegisterState extends State<Register> {
                                                         .collection('users')
                                                         .document(email);
                                                 var getDoc =
-                                                    await temp.get().then((doc) {
+                                                    await temp.get().then((doc) async {
                                                   if (doc.exists) {
-                                                    Toast.show(
-                                                        'Account already exists',
-                                                        context);
+                                                    print('object');
                                                     setState(() {
                                                       loading = false;
                                                     });
+                                                    Toast.show(
+                                                        'Account already exists',
+                                                        context);
                                                   } else {
                                                     try {
-                                                      Future.wait([
-                                                        SharedPreferences.getInstance().then((prefs) {
-                                                          prefs.setString('email', email);
-                                                          prefs.setBool('rememberMe', true);
-                                                        })
-                                                        ,Firestore.instance
-                                                            .collection(
-                                                                'candidates')
-                                                            .document(email)
-                                                            .setData({
-                                                          'First_name': fname,
-                                                          'Last_name': lname,
-                                                          'email': email,
-                                                          'name': fname +
-                                                              ' ' +
-                                                              lname,
-                                                          'ph_no':
-                                                              widget.phoneNo,
-                                                          'batch_id': batchID[
-                                                              batchText],
-                                                        }),
-                                                        Firestore.instance
-                                                            .collection(
-                                                                'rel_batch_candidates')
-                                                            .document(batchID[
-                                                                batchText])
-                                                            .setData({
-                                                          'batch_id': batchID[
-                                                              batchText],
-                                                          'candidate_id': email
-                                                        }),
+                                                      await
                                                         http
                                                             .post(
                                                                 passHash,
@@ -825,6 +796,7 @@ class _RegisterState extends State<Register> {
                                                                     '}'))
                                                             .then(
                                                                 (response) async {
+                                                                  print(response.statusCode);
                                                           if (response
                                                                   .statusCode ==
                                                               200) {
@@ -838,25 +810,60 @@ class _RegisterState extends State<Register> {
                                                               String hash =
                                                                   decodedData[
                                                                       "hash"];
-                                                              await Firestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'users')
-                                                                  .document(
-                                                                      email)
-                                                                  .setData({
-                                                                'name': fname +
-                                                                    '' +
-                                                                    lname,
-                                                                'password':
-                                                                    hash,
-                                                                'timestamp':
-                                                                    Timestamp
-                                                                        .now(),
-                                                                'user_type':
-                                                                    'Candidate'
-                                                              });
-                                                              await Future.delayed(Duration(milliseconds: 100));
+                                                              Future.wait([
+                                                                SharedPreferences.getInstance().then((prefs) {
+                                                                  prefs.setString('email', email);
+                                                                  prefs.setBool('rememberMe', true);
+                                                                }),
+                                                                Firestore
+                                                                    .instance
+                                                                    .collection(
+                                                                    'users')
+                                                                    .document(
+                                                                    email)
+                                                                    .setData({
+                                                                  'name': fname +
+                                                                      '' +
+                                                                      lname,
+                                                                  'password':
+                                                                  hash,
+                                                                  'timestamp':
+                                                                  Timestamp
+                                                                      .now(),
+                                                                  'user_type':
+                                                                  'Candidate'
+                                                                })
+                                                                ,Firestore.instance
+                                                                    .collection(
+                                                                    'candidates')
+                                                                    .document(email)
+                                                                    .setData({
+                                                                  'First_name': fname,
+                                                                  'Last_name': lname,
+                                                                  'email': email,
+                                                                  'name': fname +
+                                                                      ' ' +
+                                                                      lname,
+                                                                  'ph_no':
+                                                                  widget.phoneNo,
+                                                                  'batch_id': batchID[
+                                                                  batchText],
+                                                                }),
+                                                                Firestore.instance
+                                                                    .collection(
+                                                                    'rel_batch_candidates')
+                                                                    .document(batchID[
+                                                                batchText])
+                                                                    .setData({
+                                                                  'batch_id': batchID[
+                                                                  batchText],
+                                                                  'candidate_id': email
+                                                                }),
+
+                                                              ]);
+                                                              Toast.show(
+                                                                  'Registered Successfully',
+                                                                  context);
                                                               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                                                                   Wrapper()), (Route<dynamic> route) => false);
                                                             } else
@@ -868,7 +875,7 @@ class _RegisterState extends State<Register> {
                                                                 'Could not connect to server',
                                                                 context);
                                                         })
-                                                      ]);
+                                                      ;
                                                       setState(() {
                                                         loading = false;
                                                       });
