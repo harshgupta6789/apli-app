@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -73,14 +74,42 @@ class _CameraState extends State<Camera> {
   Widget _options() {
     if (isRecordingStopped)
       return Container(
-        color: Colors.transparent,
+        color: Colors.black,
+        height: height,
+        width: width,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
             Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: MaterialButton(
+                color: Colors.white,
+                child: Text(
+                  "Play Video",
+                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+                ),
+                onPressed: () {
+                  print(path);
+                  if (path != null) {
+                     File temp = File(path);
+                    
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                              builder: (BuildContext context) => VideoApp(
+                                
+                                  videoUrl: null,
+                                  title: "My Resume",
+                                  isCourse : false,
+                                  file: temp,
+                                      )));
+                  } else {
+                    Navigator.pop(context);
+                  }
+                }),
+          ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MaterialButton(
-                  color: Colors.grey,
+                  color: Colors.white,
                   child: Text(
                     "Upload",
                     style:
@@ -90,8 +119,7 @@ class _CameraState extends State<Camera> {
                     print(path);
                     if (path != null) {
                       Navigator.pop(context, path);
-                    }
-                    else{
+                    } else {
                       Navigator.pop(context);
                     }
                   }),
@@ -99,7 +127,7 @@ class _CameraState extends State<Camera> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: MaterialButton(
-                  color: Colors.grey,
+                  color: Colors.white,
                   child: Text(
                     "Re-Take",
                     style:

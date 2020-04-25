@@ -107,7 +107,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                   videoUrl: snapshot
                                       .data.documents[index].data['link'],
                                   title: snapshot
-                                      .data.documents[index].data['title'])));
+                                      .data.documents[index].data['title'], isCourse: true,)));
                         },
                         title: Text(
                           snapshot.data.documents[index].data['title'] ??

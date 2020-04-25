@@ -156,7 +156,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         fileName = p.basename(path);
       });
       print(fileName);
-      _uploadFile(file, path);
+      _uploadFile(file, fileName);
+      setState(() {
+        x = currentState.uploading;
+      });
     } catch (e) {
       AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
     }
@@ -222,8 +225,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     builder: (context) =>
                                         Camera(cameras: cameras)),
                               );
-                              if(urlFromCamera!=null){
-                                 videoPicker(context, urlFromCamera);
+                              if (urlFromCamera != null) {
+                                videoPicker(context, urlFromCamera);
                               }
                               break;
                             case PermissionStatus.denied:
