@@ -27,9 +27,13 @@ class _PsychometryState extends State<Psychometry> {
         email = prefs.getString('email');
       });
       await Firestore.instance.collection('candPsychoQues').document('all_ques').get().then((snapshot) async {
-        questions = snapshot.data;
+        setState(() {
+          questions = snapshot.data;
+        });
         await Firestore.instance.collection('candidates').document(email).get().then((snapshot2) {
-          answeredQuestions = snapshot2.data['psycho_ques'];
+          setState(() {
+            answeredQuestions = snapshot2.data['psycho_ques'];
+          });
           if(answeredQuestions == null) {
             setState(() {
               _currentState = States.none;
@@ -52,7 +56,6 @@ class _PsychometryState extends State<Psychometry> {
   void initState() {
     super.initState();
     userInit();
-
   }
 
   @override
