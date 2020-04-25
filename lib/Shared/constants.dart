@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 Color basicColor = Color(0xff1643CD);
 
 // ---------------Important------------------
-const String passHash = "https://staging.apli.ai/accounts/passHash";
+const String passHash = "https://dev.apli.ai/accounts/passHash";
 const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
-const String checkLogin = "https://staging.apli.ai/accounts/checkLogin";
+const String checkLogin = "https://dev.apli.ai/accounts/checkLogin";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 
 

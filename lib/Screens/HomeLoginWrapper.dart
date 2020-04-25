@@ -23,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
       }
       else preferences.clear();
     }
-    preferences.setString('email', 'harshhvg999@gmail.com');
+
   }
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _WrapperState extends State<Wrapper> {
   @override
   Widget build(BuildContext context) {
     if(email == null) {
-      return MainScreen();
+      return Login();
     } else {
       return MainScreen();
     }

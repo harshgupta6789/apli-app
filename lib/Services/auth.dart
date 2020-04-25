@@ -97,7 +97,7 @@ class AuthService {
             http.Response response = await http.post(
               url,
               body: json.decode('{'
-                  '"secret" : $checkLoginSecret, '
+                  '"secret" : "$checkLoginSecret", '
                   '"useremail" : "$email", '
                   '"password": "$password"'
                   '}'),
