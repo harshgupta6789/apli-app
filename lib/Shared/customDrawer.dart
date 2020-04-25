@@ -29,13 +29,14 @@ Widget customDrawer(BuildContext context) {
       userData.add(snapshot.data['name']);
       userData.add(snapshot.data['ph_no'].toString());
       userData.add((snapshot.data['profile_picture']));
+      userData.add((snapshot.data['Last_name']));
     });
 
     return userData;
   }
 
   return Container(
-    width: MediaQuery.of(context).size.width * 0.8,
+    width: MediaQuery.of(context).size.width * 0.85,
     height: MediaQuery.of(context).size.height * 0.7,
     color: Colors.white,
     child: ListView(
@@ -68,20 +69,24 @@ Widget customDrawer(BuildContext context) {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
-                                width: 130,
+                                width: 150,
                                 child: AutoSizeText(
-                                  snapshot.data[1] != null
+                                  snapshot.data[1] != null &&
+                                          snapshot.data[4] != null
                                       ? snapshot.data[1]
                                               .split(' ')[0][0]
                                               .toUpperCase() +
                                           snapshot.data[1]
                                               .split(' ')[0]
-                                              .substring(1)
+                                              .substring(1) +
+                                          " " +
+                                          snapshot.data[4]
                                       : 'No Name',
                                   overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
+                                  minFontSize: 10,
+                                  maxLines: 2,
                                   style: TextStyle(
-                                      fontSize: 22,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -100,7 +105,7 @@ Widget customDrawer(BuildContext context) {
               }),
         ),
         ListTile(
-          dense: true,
+            dense: true,
             title: Text("Notifications"),
             onTap: () {
               AppSettings.openAppSettings();
@@ -109,7 +114,7 @@ Widget customDrawer(BuildContext context) {
           thickness: 1,
         ),
         ListTile(
-          dense: true,
+            dense: true,
             title: Text("Rate Your Experience"),
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
@@ -126,7 +131,7 @@ Widget customDrawer(BuildContext context) {
           thickness: 1,
         ),
         ListTile(
-          dense: true,
+            dense: true,
             title: Text("Refer A Friend"),
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
@@ -139,7 +144,7 @@ Widget customDrawer(BuildContext context) {
           thickness: 1,
         ),
         ListTile(
-          dense: true,
+            dense: true,
             title: Text("Report"),
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
@@ -155,7 +160,7 @@ Widget customDrawer(BuildContext context) {
           thickness: 1,
         ),
         ListTile(
-          dense: true,
+            dense: true,
             title: Text("Log Out"),
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
