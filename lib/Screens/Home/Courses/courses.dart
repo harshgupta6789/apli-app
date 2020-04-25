@@ -1,4 +1,3 @@
-import 'package:apli/Models/user.dart';
 import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
@@ -168,6 +167,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
       case certificate:
         return _certificate();
     }
+    return null;
   }
 
   @override
@@ -182,32 +182,41 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.funnelOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.searchOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null),
-              IconButton(
+              //  Padding(
+              // padding: EdgeInsets.only(bottom:10.0),
+              // child:IconButton(
+              //     icon: Icon(
+              //       EvaIcons.funnelOutline,
+              //       color: Colors.white,
+              //     ),
+              //     onPressed: null)),
+              //  Padding(
+              // padding: EdgeInsets.only(bottom:10.0),
+              // child:IconButton(
+              //     icon: Icon(
+              //       EvaIcons.searchOutline,
+              //       color: Colors.white,
+              //     ),
+              //     onPressed: null)),
+               Padding(
+              padding: EdgeInsets.only(bottom:10.0),
+              child:IconButton(
                 icon: Icon(
                   EvaIcons.moreVerticalOutline,
                   color: Colors.white,
                 ),
                   onPressed: () => _scaffoldKey.currentState.openEndDrawer()
-              ),
+              ),)
             ],
-            title: Text(
-              courses,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            title: Padding(
+              padding: EdgeInsets.only(bottom:10.0),
+              child: Text(
+                courses,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
           ),
-          preferredSize: Size.fromHeight(70),
+          preferredSize: Size.fromHeight(55),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -254,7 +263,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 50.0, top: 30.0),
+                  padding: EdgeInsets.only(left: 40.0, top: 30.0),
                   child: Text("What's Inside:",
                       style: TextStyle(
                           color: Colors.black,

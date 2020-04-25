@@ -4,7 +4,6 @@ import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';

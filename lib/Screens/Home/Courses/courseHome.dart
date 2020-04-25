@@ -12,7 +12,6 @@ class CourseMain extends StatefulWidget {
 }
 
 class _CourseMainState extends State<CourseMain> {
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -26,55 +25,81 @@ class _CourseMainState extends State<CourseMain> {
           backgroundColor: basicColor,
           automaticallyImplyLeading: false,
           actions: <Widget>[
-            IconButton(
-                icon: Icon(
-                  EvaIcons.moreVerticalOutline,
-                  color: Colors.white,
-                ),
-                onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
+            Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.moreVerticalOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () =>
+                        _scaffoldKey.currentState.openEndDrawer())),
           ],
-          title: Text(
-            courses,
-            style: TextStyle(color: Colors.white, fontSize: 24),
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(courses,
+                style: TextStyle(color: Colors.white, fontSize: 24)),
           ),
         ),
-        preferredSize: Size.fromHeight(70),
+        preferredSize: Size.fromHeight(55),
       ),
       body: StreamBuilder(
           stream: Firestore.instance.collection('edu_courses').snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) =>
-                      Divider(
-                        thickness: 2,
-                      ),
+              return ListView.builder(
                   itemCount: snapshot.data.documents.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      contentPadding: EdgeInsets.all(10.0),
-                      title: Text(
-                        snapshot.data.documents[index].data['title'].toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 24),
-                      ),
-                      subtitle: Text("By  " +
-                          snapshot.data.documents[index].data['title']
-                              .toString()),
+                    return InkWell(
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Courses(
-                                    documentId: snapshot
-                                        .data.documents[index].documentID,
-                                email: 'user',
-                                  )),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Courses(
+                                      documentId: snapshot
+                                          .data.documents[index].documentID,
+                                      email: 'user',
+                                    )));
                       },
-                      trailing: IconButton(
-                          icon: Icon(EvaIcons.arrowIosForward),
-                          onPressed: null),
+                      child: Stack(
+                        alignment: Alignment.centerLeft,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 20.0),
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset("Assets/Images/course.png"),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 130.0,
+                            left: 50.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("Trending",
+                                      style: TextStyle(color: Colors.yellow)),
+                                  Text("Startup 101",
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                  Text("By Harvard",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: 18,
+                                          color: Colors.white)),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   });
             } else

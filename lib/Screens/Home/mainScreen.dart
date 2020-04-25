@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -17,8 +16,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  int _currentTab = 2;
-  TabController _tabController;
+  static int _currentTab = 0;
+  static TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
 
@@ -34,6 +33,11 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       final dynamic notification = message['notification'];
     }
   }
+
+  static doSomething(int i) { 
+    _currentTab = i;
+  }
+
 
   void showAlertDialog(String title, String msg, DialogType dialogType,
       BuildContext context, VoidCallback onOkPress) {
@@ -54,7 +58,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     ).show();
   }
 
-  // Or do other work.
+
+  
 
   void firebaseCloudMessagingListeners() {
     if (Platform.isIOS) {
@@ -75,8 +80,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 {
                   Navigator.pop(context);
                   setState(() {
-                    _currentTab = 3;
-                    _tabController.animateTo(3);
+                    _currentTab = 2;
+                    _tabController.animateTo(2);
                   });
                   // Navigator.push(
                   //   context,
@@ -102,15 +107,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       onResume: (Map<String, dynamic> message) async {
         print("onResume : $message");
         setState(() {
-          _currentTab = 3;
-          _tabController.animateTo(3);
+          _currentTab = 2;
+          _tabController.animateTo(2);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
         setState(() {
-          _currentTab = 3;
-          _tabController.animateTo(3);
+          _currentTab = 2;
+          _tabController.animateTo(2);
         });
       },
     );
@@ -143,8 +148,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   final List<Widget> _listTabs = [
     CourseMain(),
-    MockJobs(),
-    Jobs(),
+    Jobs(doSomething),
     Updates(),
     Profile()
   ];
@@ -177,19 +181,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
-                EvaIcons.headphonesOutline,
-                color: basicColor,
-              ),
-              icon: Icon(
-                EvaIcons.headphonesOutline,
-                color: Colors.grey,
-              ),
-              title: Text(
-                mockJobs,
-                style: TextStyle(color: _currentTab == 1 ? basicColor : Colors.grey),
-              )),
-          BottomNavigationBarItem(
-              activeIcon: Icon(
                 EvaIcons.briefcaseOutline,
                 color: basicColor,
               ),
@@ -199,7 +190,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 jobs,
-                style: TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
+                style: TextStyle(color: _currentTab == 1 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
             activeIcon: Icon(
@@ -212,7 +203,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             ),
             title: Text(
               updates,
-              style: TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
+              style: TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
             ),
           ),
           BottomNavigationBarItem(
@@ -226,7 +217,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 profile,
-                style: TextStyle(color: _currentTab == 4 ? basicColor : Colors.grey),
+                style: TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
               )),
         ]);
   }

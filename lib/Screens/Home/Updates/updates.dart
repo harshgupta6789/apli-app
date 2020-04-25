@@ -13,8 +13,6 @@ class Updates extends StatefulWidget {
 }
 
 class _UpdatesState extends State<Updates> {
-  
-
   List filters = [];
   List<List<String>> myNotifications = [];
   int currentTime = Timestamp.now().microsecondsSinceEpoch;
@@ -45,8 +43,7 @@ class _UpdatesState extends State<Updates> {
     int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch;
     Duration dt = DateTime.now().difference(
         DateTime.fromMicrosecondsSinceEpoch(timeInMicroSecondsSimceEpoch));
-    if(dt.isNegative)
-      return 'negative';
+    if (dt.isNegative) return 'negative';
     if (dt.inDays > 30)
       return (dt.inDays ~/ 30).toStringAsFixed(0) + ' mo';
     else if (dt.inDays > 0)
@@ -63,13 +60,16 @@ class _UpdatesState extends State<Updates> {
 
   @override
   void setState(fn) {
-    if(mounted){
+    if (mounted) {
       super.setState(fn);
     }
   }
+
   getPrefs() {
     SharedPreferences.getInstance().then((prefs) {
-      setState((){email = prefs.getString('email');});
+      setState(() {
+        email = prefs.getString('email');
+      });
     });
   }
 
@@ -81,7 +81,6 @@ class _UpdatesState extends State<Updates> {
 
   @override
   Widget build(BuildContext context) {
-    
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
@@ -91,27 +90,33 @@ class _UpdatesState extends State<Updates> {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.funnelOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.moreVerticalOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    _scaffoldKey.currentState.openEndDrawer();
-                  }),
+              // IconButton(
+              //     icon: Icon(
+              //       EvaIcons.funnelOutline,
+              //       color: Colors.white,
+              //     ),
+              //     onPressed: null),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.moreVerticalOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      _scaffoldKey.currentState.openEndDrawer();
+                    }),
+              ),
             ],
-            title: Text(
-              updates,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            title: Padding(
+              padding: const EdgeInsets.only(bottom:10.0),
+              child: Text(
+                updates,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
           ),
-          preferredSize: Size.fromHeight(70),
+          preferredSize: Size.fromHeight(55),
         ),
         body: FutureBuilder(
           future: userInit(email),
@@ -195,11 +200,13 @@ class _UpdatesState extends State<Updates> {
                               }
                             }
                             if (isMyNotification) {
-                              if(difference(tempTime) != 'negative') {
+                              if (difference(tempTime) != 'negative') {
                                 myNotifications.add([
                                   title,
                                   message,
-                                  tempTime == null ? null : difference(tempTime),
+                                  tempTime == null
+                                      ? null
+                                      : difference(tempTime),
                                   notiType,
                                   f.documentID,
                                 ]);

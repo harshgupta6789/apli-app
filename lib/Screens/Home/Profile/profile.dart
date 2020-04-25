@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
-import 'package:apli/Screens/Home/Profile/psychometry.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as p;
-import 'package:apli/Screens/Home/Profile/editResume.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
@@ -135,18 +131,18 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     }
   }
 
-  void _recordVideo() async {
-    ImagePicker.pickVideo(source: ImageSource.camera)
-        .then((File recordedVideo) {
-      if (recordedVideo != null && recordedVideo.path != null) {
-        GallerySaver.saveVideo(recordedVideo.path).then((onValue) {
-          if (onValue == true) {
-            filePicker(context);
-          }
-        });
-      }
-    });
-  }
+  // void _recordVideo() async {
+  //   ImagePicker.pickVideo(source: ImageSource.camera)
+  //       .then((File recordedVideo) {
+  //     if (recordedVideo != null && recordedVideo.path != null) {
+  //       GallerySaver.saveVideo(recordedVideo.path).then((onValue) {
+  //         if (onValue == true) {
+  //           filePicker(context);
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
 
   Future videoPicker(BuildContext context, String path) async {
     file = File(path);
@@ -353,16 +349,21 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              IconButton(
+               Padding(
+                padding: const EdgeInsets.only(bottom:10.0),
+                child:IconButton(
                   icon: Icon(
                     EvaIcons.moreVerticalOutline,
                     color: Colors.white,
                   ),
-                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
+                  onPressed: () => _scaffoldKey.currentState.openEndDrawer())),
             ],
-            title: Text(
-              profile,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            title: Padding(
+              padding: const EdgeInsets.only(bottom:10.0),
+              child: Text(
+                profile,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
             bottom: ColoredTabBar(
                 Colors.white,
@@ -384,124 +385,127 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   controller: _tabController,
                 )),
           ),
-          preferredSize: Size.fromHeight(120),
+          preferredSize: Size.fromHeight(105),
         ),
         body: TabBarView(children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    resumeSlogan,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 30.0),
-                        child: Image.asset("Assets/Images/job.png"),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: IconButton(
-                              icon: Icon(EvaIcons.editOutline),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditResume()),
-                                );
-                              },
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: IconButton(
-                              icon: Icon(EvaIcons.shareOutline),
-                              onPressed: () {},
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: IconButton(
-                              icon: Icon(EvaIcons.downloadOutline),
-                              onPressed: () {},
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    videoIntroSlogan,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("Instructions to follow",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w600)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem Ipsum",
-                          style: TextStyle(fontSize: 20)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem Ipsum",
-                          style: TextStyle(fontSize: 20)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem Ipsum",
-                          style: TextStyle(fontSize: 20)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text(
-                        "1. Lorem Ipsum",
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      alignment: Alignment.center),
-                ),
-                uploadVideo()
-              ],
-            ),
-          ),
-          Psychometry(),
+          Center(child: Image.asset("Assets/Images/job.png")),
+          Center(child: Image.asset("Assets/Images/job.png")),
+          Center(child: Image.asset("Assets/Images/job.png")),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Column(
+          //     children: <Widget>[
+          //       Padding(
+          //         padding: const EdgeInsets.all(20.0),
+          //         child: Text(
+          //           resumeSlogan,
+          //           style: TextStyle(fontSize: 20),
+          //         ),
+          //       ),
+          //       Row(
+          //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //         children: <Widget>[
+          //           Expanded(
+          //             child: Padding(
+          //               padding: EdgeInsets.only(left: 30.0),
+          //               child: Image.asset("Assets/Images/job.png"),
+          //             ),
+          //           ),
+          //           Padding(
+          //             padding: const EdgeInsets.all(8.0),
+          //             child: Column(
+          //               children: <Widget>[
+          //                 Padding(
+          //                   padding: const EdgeInsets.all(4.0),
+          //                   child: IconButton(
+          //                     icon: Icon(EvaIcons.editOutline),
+          //                     onPressed: () {
+          //                       Navigator.push(
+          //                         context,
+          //                         MaterialPageRoute(
+          //                             builder: (context) => EditResume()),
+          //                       );
+          //                     },
+          //                   ),
+          //                 ),
+          //                 Padding(
+          //                   padding: const EdgeInsets.all(4.0),
+          //                   child: IconButton(
+          //                     icon: Icon(EvaIcons.shareOutline),
+          //                     onPressed: () {},
+          //                   ),
+          //                 ),
+          //                 Padding(
+          //                   padding: const EdgeInsets.all(4.0),
+          //                   child: IconButton(
+          //                     icon: Icon(EvaIcons.downloadOutline),
+          //                     onPressed: () {},
+          //                   ),
+          //                 )
+          //               ],
+          //             ),
+          //           )
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: <Widget>[
+          //       Padding(
+          //         padding: const EdgeInsets.all(20.0),
+          //         child: Text(
+          //           videoIntroSlogan,
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: 20),
+          //         ),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Align(
+          //             child: Text("Instructions to follow",
+          //                 style: TextStyle(
+          //                     fontSize: 20, fontWeight: FontWeight.w600)),
+          //             alignment: Alignment.center),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Align(
+          //             child: Text("1. Lorem Ipsum",
+          //                 style: TextStyle(fontSize: 20)),
+          //             alignment: Alignment.center),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Align(
+          //             child: Text("1. Lorem Ipsum",
+          //                 style: TextStyle(fontSize: 20)),
+          //             alignment: Alignment.center),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Align(
+          //             child: Text("1. Lorem Ipsum",
+          //                 style: TextStyle(fontSize: 20)),
+          //             alignment: Alignment.center),
+          //       ),
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Align(
+          //             child: Text(
+          //               "1. Lorem Ipsum",
+          //               style: TextStyle(fontSize: 20),
+          //             ),
+          //             alignment: Alignment.center),
+          //       ),
+          //       uploadVideo()
+          //     ],
+          //   ),
+          // ),
+          // Psychometry(),
         ], controller: _tabController));
   }
 }

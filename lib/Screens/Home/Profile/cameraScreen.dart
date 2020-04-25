@@ -62,7 +62,9 @@ class _CameraState extends State<Camera> {
 
     try {
       await controller.initialize();
-    } on CameraException catch (e) {}
+    } on CameraException catch (e) {
+      print(e);
+    }
 
     if (mounted) {
       setState(() {});
@@ -141,6 +143,7 @@ class _CameraState extends State<Camera> {
                         isRecordingStopped = false;
                       });
                     } on Exception catch (e) {
+                      print(e);
                       setState(() {
                         isRecordingStopped = false;
                       });
@@ -235,6 +238,7 @@ class _CameraState extends State<Camera> {
     try {
       await controller.stopVideoRecording();
     } on CameraException catch (e) {
+      print(e);
       return null;
     }
   }

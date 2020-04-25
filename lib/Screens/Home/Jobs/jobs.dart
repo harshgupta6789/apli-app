@@ -1,12 +1,13 @@
-import 'package:apli/Models/user.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class Jobs extends StatefulWidget {
+  final void Function(int) callback;
+
+  Jobs(this.callback);
   @override
   _JobsState createState() => _JobsState();
 }
@@ -34,32 +35,50 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.funnelOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.searchOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: null),
-              IconButton(
-                  icon: Icon(
-                    EvaIcons.moreVerticalOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.funnelOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      widget.callback(3);
+                      setState(() {});
+                    }),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.searchOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: null),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: IconButton(
+                      icon: Icon(
+                        EvaIcons.moreVerticalOutline,
+                        color: Colors.white,
+                      ),
+                      onPressed: () =>
+                          _scaffoldKey.currentState.openEndDrawer())),
             ],
-            title: Text(
-              jobsAvailable,
-              style: TextStyle(color: Colors.white, fontSize: 24),
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                jobsAvailable,
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
             ),
             bottom: ColoredTabBar(
                 Colors.white,
                 TabBar(
+                  indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(width: 5.0, color: basicColor),
+                  ),
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,
                   tabs: [
@@ -75,7 +94,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                   ],
                   controller: _tabController,
                 ))),
-        preferredSize: Size.fromHeight(120),
+        preferredSize: Size.fromHeight(105),
       ),
       body: TabBarView(
         children: [
