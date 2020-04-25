@@ -1,6 +1,4 @@
-import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/constants.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class PsychometryTest extends StatefulWidget {
@@ -17,7 +15,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
   List<List<String>> remainingQuestions = [];
 
   PageController controller =
-      PageController(viewportFraction: 1, keepPage: true);
+      PageController(initialPage: 0, viewportFraction: 1, keepPage: true);
   var currentPageValue = 0.0;
 
   findRemainingQuestions() {
@@ -55,11 +53,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
   void initState() {
     super.initState();
     findRemainingQuestions();
-    controller.addListener(() {
-      setState(() {
-        currentPageValue = controller.page;
-      });
-    });
+    controller.addListener(() {});
   }
 
   void changePageViewPostion(int whichPage) {
@@ -99,197 +93,295 @@ class _PsychometryTestState extends State<PsychometryTest> {
           ),
         ),
         body: Container(
-            padding: EdgeInsets.all(20),
-            child: PageView.builder(
-                itemCount: remainingQuestions.length,
-                controller: controller,
-                physics: PageScrollPhysics(),
-                itemBuilder: (context, position) {
-                  return Container(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        Column(
-                          children: <Widget>[
-                            Padding(
-                                padding: EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                                child: Align(
-                                    child: Text('Q${position + 1}',
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    alignment: Alignment.topLeft)),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                              child: Align(
-                                  child: Text(remainingQuestions[position][1],
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                  alignment: Alignment.topLeft),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 20.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
+          padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: PageView.builder(
+            itemCount: remainingQuestions.length,
+            controller: controller,
+            physics: PageScrollPhysics(),
+            itemBuilder: (context, position) {
+              return Container(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(8.0, 20, 8, 12),
+                            child: Align(
+                                child: Text('Q${position + 1}',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                alignment: Alignment.topLeft)),
+                        SizedBox(
+                          height: height * 0.05,
+                          child: Align(
+                              child: Text(remainingQuestions[position][1],
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
-                                  )),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.grey.withOpacity(0.4))),
-                                  child: ListTile(
-                                    title: Text(
-                                      '1. Lorem ipsum dolor sit amet, consectetur',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13),
-                                    ),
-                                  )),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Visibility(
-                                  visible: position == 0 ? false : true,
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
-                                    child: Align(
-                                      child: RaisedButton(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        padding: EdgeInsets.only(
-                                            left: 22, right: 22),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
-                                          side: BorderSide(
-                                              color: basicColor, width: 1.5),
-                                        ),
-                                        child: Text(
-                                          'Back',
-                                          style: TextStyle(color: basicColor),
-                                        ),
-                                        onPressed: () {
-                                          changePageViewPostion(position);
-                                        },
-                                      ),
-                                      alignment: Alignment.bottomLeft,
-                                    ),
-                                  ),
+                              alignment: Alignment.topLeft),
+                        ),
+//                        for(int i = 0; i < 6; i++){
+//                          Padding(
+//                            padding: const EdgeInsets.only(top: 20.0),
+//                            child: Container(
+//                                decoration: BoxDecoration(
+//                                    border: Border.all(
+//                                        width: remainingQuestions[position][2] == '1' ?  1 : 2,
+//                                        color:
+//                                        remainingQuestions[
+//                                        position][2] ==
+//                                            '1'
+//                                            ? basicColor
+//                                            : Colors.grey.withOpacity(0.4))),
+//                                child: ListTile(
+//                                  title: Text(
+//                                    '1. Lorem ipsum dolor sit amet, consectetur',
+//                                    style: TextStyle(
+//                                        fontWeight: FontWeight.w600,
+//                                        color: remainingQuestions[position][2] == '1' ? basicColor : Colors.black,
+//                                        fontSize: 13),
+//                                  ),
+//                                  onTap: () {
+//                                    setState(() {
+//                                      remainingQuestions[position][2] = '1';
+//                                    });
+//                                  },
+//                                )),
+//                          )
+//                        },
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                    width: remainingQuestions[position][2] == '1' ?  2 : 1,
+                                      color:
+                                          remainingQuestions[
+                                                      position][2] ==
+                                                  '1'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '1' ? basicColor : Colors.black,
+                                      fontSize: 13),
                                 ),
-                                Visibility(
-                                  visible:
-                                      position == remainingQuestions.length - 1
-                                          ? false
-                                          : true,
-                                  child: Padding(
-                                    padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
-                                    child: Align(
-                                      child: RaisedButton(
-                                        color: Colors.white,
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(50.0),
-                                          side: BorderSide(
-                                              color: basicColor, width: 1.5),
-                                        ),
-                                        child: Text(
-                                          'Next',
-                                          style: TextStyle(color: basicColor),
-                                        ),
-                                        onPressed: () {
-                                          changePageViewPostion(position + 2);
-                                        },
-                                      ),
-                                      alignment: Alignment.bottomRight,
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '1';
+                                  });
+                                },
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: remainingQuestions[position][2] == '2' ?  2 : 1,
+                                      color:
+                                      remainingQuestions[
+                                      position][2] ==
+                                          '2'
+                                          ? basicColor
+                                          : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '2' ? basicColor : Colors.black,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '2';
+                                  });
+                                },
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: remainingQuestions[position][2] == '3' ?  2 : 1,
+                                      color:
+                                      remainingQuestions[
+                                      position][2] ==
+                                          '3'
+                                          ? basicColor
+                                          : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '3' ? basicColor : Colors.black,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '3';
+                                  });
+                                },
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: remainingQuestions[position][2] == '4' ?  2 : 1,
+                                      color:
+                                      remainingQuestions[
+                                      position][2] ==
+                                          '4'
+                                          ? basicColor
+                                          : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '4' ? basicColor : Colors.black,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '4';
+                                  });
+                                },
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: remainingQuestions[position][2] == '5' ?  2 : 1,
+                                      color:
+                                      remainingQuestions[
+                                      position][2] ==
+                                          '5'
+                                          ? basicColor
+                                          : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '5' ? basicColor : Colors.black,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '5';
+                                  });
+                                },
+                              )),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: remainingQuestions[position][2] == '6' ?  2 : 1,
+                                      color:
+                                      remainingQuestions[
+                                      position][2] ==
+                                          '6'
+                                          ? basicColor
+                                          : Colors.grey.withOpacity(0.4))),
+                              child: ListTile(
+                                title: Text(
+                                  '1. Lorem ipsum dolor sit amet, consectetur',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: remainingQuestions[position][2] == '6' ? basicColor : Colors.black,
+                                      fontSize: 13),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    remainingQuestions[position][2] = '6';
+                                  });
+                                },
+                              )),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Visibility(
+                              visible: position == 0 ? false : true,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                child: Align(
+                                  child: RaisedButton(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    padding:
+                                        EdgeInsets.only(left: 22, right: 22),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      side: BorderSide(
+                                          color: basicColor, width: 1.5),
                                     ),
+                                    child: Text(
+                                      'Back',
+                                      style: TextStyle(color: basicColor),
+                                    ),
+                                    onPressed: () {
+                                      controller.animateToPage(position - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                                    },
                                   ),
-                                )
-                              ],
+                                  alignment: Alignment.bottomLeft,
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: position == remainingQuestions.length - 1
+                                  ? false
+                                  : true,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                child: Align(
+                                  child: RaisedButton(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      side: BorderSide(
+                                          color: basicColor, width: 1.5),
+                                    ),
+                                    child: Text(
+                                      'Next',
+                                      style: TextStyle(color: basicColor),
+                                    ),
+                                    onPressed: () {
+                                      controller.animateToPage(position + 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                                    },
+                                  ),
+                                  alignment: Alignment.bottomRight,
+                                ),
+                              ),
                             )
                           ],
-                        ),
+                        )
                       ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }

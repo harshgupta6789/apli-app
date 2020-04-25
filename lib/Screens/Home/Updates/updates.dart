@@ -125,6 +125,7 @@ class _UpdatesState extends State<Updates> {
                 );
               else {
                 filters = snapshot.data;
+                print(filters);
                 return StreamBuilder(
                     stream: Firestore.instance
                         .collection("notifications")

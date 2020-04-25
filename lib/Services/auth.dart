@@ -104,13 +104,11 @@ class AuthService {
             );
             if (response.statusCode == 200) {
               var decodedData = jsonDecode(response.body);
-              print(decodedData['secret']);
               if (decodedData["secret"] == checkLoginSecret) {
                 bool temp = decodedData["result"];
                 bool isFcm = decodedData["gen_fcm"];
                 if (temp == true) {
                   print("successfull");
-                  print(isFcm);
                   if (isFcm == true) {
                     _firebaseMessaging.getToken().then((token) {
                       print(token);
@@ -136,9 +134,10 @@ class AuthService {
                     });
                   }
                   result = 1;
-                }
+                } else
+                  result = -1;
               } else
-                result = -1;
+                result = -2;
             } else
               result = -2;
           }

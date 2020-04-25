@@ -210,9 +210,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             if(snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
               String ph_no = snapshot.data;
               if(ph_no == 'NoAccount')
-                return Center(
-                  child: Text('Account does not exist'),
-                );
+                return Padding(padding: EdgeInsets.fromLTRB(120, 400, 100, 0),child: Text('Account does not exists', textAlign: TextAlign.center,),);
               else if(ph_no == 'noPhoneNo')
                 return Center(
                   child: Column(
