@@ -130,7 +130,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               passHash,
                               body: json.decode(
                             '{'
-                            '"secret" : $passHashSecret", '
+                            '"secret" : "$passHashSecret", '
                                 '"password": "$password"'
                                 '}')).then((response) async {
                                   if(response.statusCode == 200) {

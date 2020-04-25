@@ -820,7 +820,7 @@ class _RegisterState extends State<Register> {
                                                                 passHash,
                                                                 body: json.decode(
                                                                     '{'
-                                                                    '"secret" : $passHashSecret, '
+                                                                    '"secret" : "$passHashSecret", '
                                                                     '"password": "$password"'
                                                                     '}'))
                                                             .then(
