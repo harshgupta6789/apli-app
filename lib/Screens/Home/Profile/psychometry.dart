@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Psychometry extends StatefulWidget {
-
   String email;
   Psychometry({this.email});
   @override
@@ -16,7 +15,6 @@ class Psychometry extends StatefulWidget {
 enum States { none, resume, done }
 
 class _PsychometryState extends State<Psychometry> {
-
   States _currentState;
   Map<String, dynamic> questions, answeredQuestions;
   String email;
@@ -26,19 +24,27 @@ class _PsychometryState extends State<Psychometry> {
       setState(() {
         email = prefs.getString('email');
       });
-      await Firestore.instance.collection('candPsychoQues').document('all_ques').get().then((snapshot) async {
+      await Firestore.instance
+          .collection('candPsychoQues')
+          .document('all_ques')
+          .get()
+          .then((snapshot) async {
         setState(() {
           questions = snapshot.data;
         });
-        await Firestore.instance.collection('candidates').document(email).get().then((snapshot2) {
+        await Firestore.instance
+            .collection('candidates')
+            .document(email)
+            .get()
+            .then((snapshot2) {
           setState(() {
             answeredQuestions = snapshot2.data['psycho_ques'];
           });
-          if(answeredQuestions == null) {
+          if (answeredQuestions == null) {
             setState(() {
               _currentState = States.none;
             });
-          } else if(answeredQuestions.length < questions.length) {
+          } else if (answeredQuestions.length < questions.length) {
             setState(() {
               _currentState = States.resume;
             });
@@ -73,7 +79,8 @@ class _PsychometryState extends State<Psychometry> {
                     child: Text(psychometryTestSlogan,
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,)),
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
@@ -90,35 +97,50 @@ class _PsychometryState extends State<Psychometry> {
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
@@ -132,9 +154,19 @@ class _PsychometryState extends State<Psychometry> {
                       borderRadius: BorderRadius.circular(8.0),
                       side: BorderSide(color: basicColor, width: 1.5),
                     ),
-                    child: Text('Start Test', style: TextStyle(color: basicColor, fontWeight: FontWeight.bold),),
+                    child: Text(
+                      'Start Test',
+                      style: TextStyle(
+                          color: basicColor, fontWeight: FontWeight.bold),
+                    ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest(questions: questions, answeredQuestions: answeredQuestions,)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PsychometryTest(
+                                    questions: questions,
+                                    answeredQuestions: answeredQuestions,
+                                  )));
                     },
                   ),
                   alignment: Alignment.center,
@@ -155,8 +187,9 @@ class _PsychometryState extends State<Psychometry> {
                 child: Align(
                     child: Text("Finish your psychometic test!",
                         style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,)),
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
@@ -170,9 +203,19 @@ class _PsychometryState extends State<Psychometry> {
                       borderRadius: BorderRadius.circular(8.0),
                       side: BorderSide(color: basicColor, width: 1.5),
                     ),
-                    child: Text('Resume Test', style: TextStyle(color: basicColor, fontWeight: FontWeight.bold),),
+                    child: Text(
+                      'Resume Test',
+                      style: TextStyle(
+                          color: basicColor, fontWeight: FontWeight.bold),
+                    ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => PsychometryTest(questions: questions, answeredQuestions: answeredQuestions,)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PsychometryTest(
+                                    questions: questions,
+                                    answeredQuestions: answeredQuestions,
+                                  )));
                     },
                   ),
                   alignment: Alignment.center,
@@ -192,35 +235,50 @@ class _PsychometryState extends State<Psychometry> {
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
                     child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,)),
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
             ],
@@ -236,10 +294,12 @@ class _PsychometryState extends State<Psychometry> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
                 child: Align(
-                    child: Text('You have attempted the psychometric\n test! Your answers have been recorded.',
+                    child: Text(
+                        'You have attempted the psychometric\n test! Your answers have been recorded.',
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,)),
+                          fontWeight: FontWeight.bold,
+                        )),
                     alignment: Alignment.center),
               ),
             ],

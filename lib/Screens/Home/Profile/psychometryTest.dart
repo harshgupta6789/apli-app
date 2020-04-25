@@ -158,11 +158,12 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                    width: remainingQuestions[position][2] == '1' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '1'
+                                              ? 2
+                                              : 1,
                                       color:
-                                          remainingQuestions[
-                                                      position][2] ==
-                                                  '1'
+                                          remainingQuestions[position][2] == '1'
                                               ? basicColor
                                               : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
@@ -170,7 +171,10 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '1' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '1'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -185,19 +189,23 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: remainingQuestions[position][2] == '2' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '2'
+                                              ? 2
+                                              : 1,
                                       color:
-                                      remainingQuestions[
-                                      position][2] ==
-                                          '2'
-                                          ? basicColor
-                                          : Colors.grey.withOpacity(0.4))),
+                                          remainingQuestions[position][2] == '2'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
                                 title: Text(
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '2' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '2'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -212,19 +220,23 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: remainingQuestions[position][2] == '3' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '3'
+                                              ? 2
+                                              : 1,
                                       color:
-                                      remainingQuestions[
-                                      position][2] ==
-                                          '3'
-                                          ? basicColor
-                                          : Colors.grey.withOpacity(0.4))),
+                                          remainingQuestions[position][2] == '3'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
                                 title: Text(
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '3' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '3'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -239,19 +251,23 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: remainingQuestions[position][2] == '4' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '4'
+                                              ? 2
+                                              : 1,
                                       color:
-                                      remainingQuestions[
-                                      position][2] ==
-                                          '4'
-                                          ? basicColor
-                                          : Colors.grey.withOpacity(0.4))),
+                                          remainingQuestions[position][2] == '4'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
                                 title: Text(
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '4' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '4'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -266,19 +282,23 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: remainingQuestions[position][2] == '5' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '5'
+                                              ? 2
+                                              : 1,
                                       color:
-                                      remainingQuestions[
-                                      position][2] ==
-                                          '5'
-                                          ? basicColor
-                                          : Colors.grey.withOpacity(0.4))),
+                                          remainingQuestions[position][2] == '5'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
                                 title: Text(
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '5' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '5'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -293,19 +313,23 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           child: Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: remainingQuestions[position][2] == '6' ?  2 : 1,
+                                      width:
+                                          remainingQuestions[position][2] == '6'
+                                              ? 2
+                                              : 1,
                                       color:
-                                      remainingQuestions[
-                                      position][2] ==
-                                          '6'
-                                          ? basicColor
-                                          : Colors.grey.withOpacity(0.4))),
+                                          remainingQuestions[position][2] == '6'
+                                              ? basicColor
+                                              : Colors.grey.withOpacity(0.4))),
                               child: ListTile(
                                 title: Text(
                                   '1. Lorem ipsum dolor sit amet, consectetur',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
-                                      color: remainingQuestions[position][2] == '6' ? basicColor : Colors.black,
+                                      color:
+                                          remainingQuestions[position][2] == '6'
+                                              ? basicColor
+                                              : Colors.black,
                                       fontSize: 13),
                                 ),
                                 onTap: () {
@@ -338,7 +362,9 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                       style: TextStyle(color: basicColor),
                                     ),
                                     onPressed: () {
-                                      controller.animateToPage(position - 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                                      controller.animateToPage(position - 1,
+                                          duration: Duration(milliseconds: 400),
+                                          curve: Curves.linear);
                                     },
                                   ),
                                   alignment: Alignment.bottomLeft,
@@ -365,7 +391,9 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                       style: TextStyle(color: basicColor),
                                     ),
                                     onPressed: () {
-                                      controller.animateToPage(position + 1, duration: Duration(milliseconds: 400), curve: Curves.linear);
+                                      controller.animateToPage(position + 1,
+                                          duration: Duration(milliseconds: 400),
+                                          curve: Curves.linear);
                                     },
                                   ),
                                   alignment: Alignment.bottomRight,

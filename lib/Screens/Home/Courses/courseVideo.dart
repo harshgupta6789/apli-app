@@ -5,7 +5,8 @@ import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(VideoApp(
-      videoUrl: null, isCourse: null,
+      videoUrl: null,
+      isCourse: null,
     ));
 
 class VideoApp extends StatefulWidget {
@@ -14,7 +15,12 @@ class VideoApp extends StatefulWidget {
   final File file;
   final bool isCourse;
 
-  const VideoApp({Key key, @required this.videoUrl, this.title, this.file, @required this.isCourse})
+  const VideoApp(
+      {Key key,
+      @required this.videoUrl,
+      this.title,
+      this.file,
+      @required this.isCourse})
       : super(key: key);
 
   @override
@@ -38,12 +44,12 @@ class _VideoAppState extends State<VideoApp>
     SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft]);
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-        if(widget.isCourse!=true){
-            _videoPlayerController = VideoPlayerController.file(widget.file);
-        }else{
-           _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
-        }
-   
+    if (widget.isCourse != true) {
+      _videoPlayerController = VideoPlayerController.file(widget.file);
+    } else {
+      _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
+    }
+
     _videoPlayerFuture = _videoPlayerController.initialize().then((_) => {
           _videoPlayerController
             ..play()

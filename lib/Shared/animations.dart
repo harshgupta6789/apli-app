@@ -24,9 +24,7 @@ class _MyLinearProgressIndicatorState extends State<MyLinearProgressIndicator>
         duration: Duration(milliseconds: widget.seconds), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0).animate(controller)
       ..addListener(() {
-        setState(() {
-
-        });
+        setState(() {});
       });
     controller.repeat();
     controller2 =

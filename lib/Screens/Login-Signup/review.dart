@@ -27,7 +27,7 @@ class Review extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: basicColor),
-                    textAlign: TextAlign.center,
+                textAlign: TextAlign.center,
               )),
             ),
             Padding(

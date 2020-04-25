@@ -10,7 +10,6 @@ const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
 const String checkLogin = "https://dev.apli.ai/accounts/checkLogin";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 
-
 // ---------------Strings--------------------
 const String login = "Log In";
 const String email = "Email ID";
@@ -29,7 +28,8 @@ const String overview = "Overview";
 const String content = "Content";
 const String certificate = "Certificate";
 const String enroll = "Enroll";
-const String completion = "On completion of the course, you will recieve a certificate.";
+const String completion =
+    "On completion of the course, you will recieve a certificate.";
 const String copyright = "Apli | Copyrighted @2020";
 const String rememberMeText = "Remember Me";
 const String forgot = "Forgot Password?";
@@ -37,9 +37,12 @@ const String psychTest = "Test";
 const String resume = "Resume";
 const String editResume = "Edit Resume";
 const String videoIntro = "Video Intro";
-const String resumeSlogan = "Keep your resume upto date with latest \n skills for all jobs that you apply for";
-const String videoIntroSlogan = "Give a short introduction of yourself  for\n your recruiters to see";
-const String psychometryTestSlogan = "This is a psychometry test to help the\nrecruiters understand your personality";
+const String resumeSlogan =
+    "Keep your resume upto date with latest \n skills for all jobs that you apply for";
+const String videoIntroSlogan =
+    "Give a short introduction of yourself  for\n your recruiters to see";
+const String psychometryTestSlogan =
+    "This is a psychometry test to help the\nrecruiters understand your personality";
 const String apliEmailID = 'apli.ai@gmail.com';
 const String apliPassword = 'abcd1234';
 const String intro = 'Intro';

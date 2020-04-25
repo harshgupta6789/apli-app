@@ -53,9 +53,9 @@ class AuthService {
                           .then((v) {
                         if (v.data['fcm_token'] != token) {
                           Firestore.instance
-                          .collection("users")
-                          .document(email)
-                          .updateData({'fcm_token': token});
+                              .collection("users")
+                              .document(email)
+                              .updateData({'fcm_token': token});
                         }
                       });
                     });
@@ -77,9 +77,7 @@ class AuthService {
   }
 
   Future signOut() async {
-    try {
-
-    } catch (e) {
+    try {} catch (e) {
       print(e.toString());
     }
   }

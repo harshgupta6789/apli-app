@@ -18,7 +18,6 @@ class ForgotPassword extends StatefulWidget {
 double height, width;
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-
   bool loading = false, loading2 = false;
 
   String smsOTP;
@@ -43,14 +42,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
           verificationCompleted: (AuthCredential phoneAuthCredential) async {
-            try{
+            try {
               await FirebaseAuth.instance.signOut();
-            } catch(e){}
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email)));
+            } catch (e) {}
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => UpdatePassword(email: widget.email)));
           },
-          verificationFailed: (AuthException exceptio) {
-
-          });
+          verificationFailed: (AuthException exceptio) {});
     } catch (e) {
       handleError(e);
     }
@@ -88,9 +88,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 ),
                 (errorMessage != ''
                     ? Text(
-                  errorMessage,
-                  style: TextStyle(color: Colors.red),
-                )
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
+                      )
                     : Container())
               ]),
             ),
@@ -107,11 +107,15 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       setState(() {
                         loading2 = false;
                       });
-                      try{
+                      try {
                         await FirebaseAuth.instance.signOut();
-                      } catch(e){}
+                      } catch (e) {}
                       Navigator.of(context).pop();
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email)));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  UpdatePassword(email: widget.email)));
                     } else {
                       signIn();
                     }
@@ -136,14 +140,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       final FirebaseUser user = result.user;
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
-      try{
+      try {
         await FirebaseAuth.instance.signOut();
-      } catch(e){}
+      } catch (e) {}
       setState(() {
         loading2 = false;
       });
       Navigator.of(context).pop();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UpdatePassword(email: widget.email,)));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => UpdatePassword(
+                    email: widget.email,
+                  )));
     } catch (e) {
       setState(() {
         loading2 = false;
@@ -160,8 +169,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           errorMessage = 'Invalid Code';
         });
         Navigator.of(context).pop();
-        smsOTPDialog(context).then((value) {
-        });
+        smsOTPDialog(context).then((value) {});
         break;
       default:
         setState(() {
@@ -174,19 +182,20 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   Future<String> userDetails() async {
     String ph_no;
-    DocumentReference doc = Firestore.instance.collection('candidates').document(widget.email);
+    DocumentReference doc =
+        Firestore.instance.collection('candidates').document(widget.email);
     await doc.get().then((snapshot) {
-      if(!snapshot.exists) {
+      if (!snapshot.exists) {
         ph_no = 'NoAccount';
       } else {
         ph_no = snapshot.data['ph_no'].toString();
-        if(ph_no == null) {
-          ph_no =  'noPhoneNo';
+        if (ph_no == null) {
+          ph_no = 'noPhoneNo';
         } else {
-          if(ph_no.length == 10) {
-            ph_no =  '+91' + ph_no;
+          if (ph_no.length == 10) {
+            ph_no = '+91' + ph_no;
           } else {
-            ph_no =  ph_no;
+            ph_no = ph_no;
           }
         }
       }
@@ -199,95 +208,119 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return loading ? Loading() : Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: FutureBuilder(
-          future: userDetails(),
-          builder: (BuildContext context,
-              AsyncSnapshot<String>snapshot) {
-            print(snapshot.data);
-            if(snapshot.hasData && snapshot.connectionState == ConnectionState.done) {
-              String ph_no = snapshot.data;
-              if(ph_no == 'NoAccount')
-                return Padding(padding: EdgeInsets.fromLTRB(120, 400, 100, 0),child: Text('Account does not exists', textAlign: TextAlign.center,),);
-              else if(ph_no == 'noPhoneNo')
-                return Center(
-                  child: Column(
-                    children: <Widget>[
-                      Text('No Number Given'),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
-                        child: FlatButton(
-                            child: Text('Contact Us', style: TextStyle(color: basicColor),),
-                            onPressed: () async {
-                              const url =
-                                  'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            }
+    return loading
+        ? Loading()
+        : Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: SingleChildScrollView(
+              child: FutureBuilder(
+                  future: userDetails(),
+                  builder:
+                      (BuildContext context, AsyncSnapshot<String> snapshot) {
+                    print(snapshot.data);
+                    if (snapshot.hasData &&
+                        snapshot.connectionState == ConnectionState.done) {
+                      String ph_no = snapshot.data;
+                      if (ph_no == 'NoAccount')
+                        return Padding(
+                          padding: EdgeInsets.fromLTRB(120, 400, 100, 0),
+                          child: Text(
+                            'Account does not exists',
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      else if (ph_no == 'noPhoneNo')
+                        return Center(
+                          child: Column(
+                            children: <Widget>[
+                              Text('No Number Given'),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
+                                child: FlatButton(
+                                    child: Text(
+                                      'Contact Us',
+                                      style: TextStyle(color: basicColor),
+                                    ),
+                                    onPressed: () async {
+                                      const url =
+                                          'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                                      if (await canLaunch(url)) {
+                                        await launch(url);
+                                      } else {
+                                        throw 'Could not launch $url';
+                                      }
+                                    }),
+                              ),
+                            ],
+                          ),
+                        );
+                      else {
+                        return Column(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: height * 0.3, right: width * 0.5),
+                              child: Image.asset("Assets/Images/logo.png"),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(50, 50, 50, 20),
+                              child: Text(
+                                'OTP will been sent to' + ph_no,
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(50, 0, 50, 50),
+                              child: FlatButton(
+                                  child: Text(
+                                    send ? 'Resend OTP' : 'Send OTP',
+                                    style: TextStyle(color: basicColor),
+                                  ),
+                                  onPressed: () async {
+                                    setState(() {
+                                      loading2 = true;
+                                      send = true;
+                                    });
+                                    verifyPhone(ph_no);
+                                  }),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
+                              child: FlatButton(
+                                  child: Text(
+                                    'Not your number ? Contact Us',
+                                    style: TextStyle(color: basicColor),
+                                  ),
+                                  onPressed: () async {
+                                    const url =
+                                        'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                                    if (await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      throw 'Could not launch $url';
+                                    }
+                                  }),
+                            ),
+                          ],
+                        );
+                      }
+                    } else if (snapshot.hasError) {
+                      return Padding(
+                        padding: EdgeInsets.fromLTRB(100, 400, 100, 0),
+                        child: Text(
+                          'Error occured while fetching data',
+                          textAlign: TextAlign.center,
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              else {
-                return Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: height * 0.3, right: width * 0.5),
-                        child: Image.asset("Assets/Images/logo.png"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(50, 50, 50, 20),
-                        child: Text('OTP will been sent to' + ph_no, style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(50, 0, 50, 50),
-                        child: FlatButton(
-                            child: Text(send ? 'Resend OTP' : 'Send OTP', style: TextStyle(color: basicColor),),
-                            onPressed: () async {
-                              setState(() {
-                                loading2 = true;
-                                send = true;
-                              });
-                              verifyPhone(ph_no);
-                            }
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
-                        child: FlatButton(
-                            child: Text('Not your number ? Contact Us', style: TextStyle(color: basicColor),),
-                            onPressed: () async {
-                              const url =
-                                  'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                throw 'Could not launch $url';
-                              }
-                            }
-                        ),
-                      ),
-                    ],
-                );
-              }
-            } else if(snapshot.hasError) {
-              return Padding(padding: EdgeInsets.fromLTRB(100, 400, 100, 0),child: Text('Error occured while fetching data', textAlign: TextAlign.center,),);
-            } else {
-              return Container(
-                height: height,
-                child: Loading(),
-              );
-            }
-        }
-        ),
-      ),
-    );
+                      );
+                    } else {
+                      return Container(
+                        height: height,
+                        child: Loading(),
+                      );
+                    }
+                  }),
+            ),
+          );
   }
 }

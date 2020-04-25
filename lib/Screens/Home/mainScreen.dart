@@ -36,9 +36,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     }
   }
 
-
-
-
   void showAlertDialog(String title, String msg, DialogType dialogType,
       BuildContext context, VoidCallback onOkPress) {
     AwesomeDialog(
@@ -57,9 +54,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       btnOkOnPress: onOkPress,
     ).show();
   }
-
-
-  
 
   void firebaseCloudMessagingListeners() {
     if (Platform.isIOS) {
@@ -147,12 +141,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [
-    CourseMain(),
-    Jobs(),
-    Updates(),
-    Profile()
-  ];
+  final List<Widget> _listTabs = [CourseMain(), Jobs(), Updates(), Profile()];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -178,7 +167,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 courses,
-                style: TextStyle(color: _currentTab == 0 ? basicColor : Colors.grey),
+                style: TextStyle(
+                    color: _currentTab == 0 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
@@ -191,7 +181,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 jobs,
-                style: TextStyle(color: _currentTab == 1 ? basicColor : Colors.grey),
+                style: TextStyle(
+                    color: _currentTab == 1 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
             activeIcon: Icon(
@@ -204,7 +195,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             ),
             title: Text(
               updates,
-              style: TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
+              style:
+                  TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
             ),
           ),
           BottomNavigationBarItem(
@@ -218,7 +210,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
               title: Text(
                 profile,
-                style: TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
+                style: TextStyle(
+                    color: _currentTab == 3 ? basicColor : Colors.grey),
               )),
         ]);
   }

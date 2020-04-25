@@ -38,7 +38,10 @@ class _CourseMainState extends State<CourseMain> {
           title: Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: Text(courses,
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
           ),
         ),
         preferredSize: Size.fromHeight(55),
@@ -105,12 +108,6 @@ class _CourseMainState extends State<CourseMain> {
             } else
               return Loading();
           }),
-      // child: Column(children: <Widget>[
-      //   Padding(
-      //     padding: EdgeInsets.only(top: 300.0),
-      //     child: Center(child: Image.asset("Assets/Images/job.png")),
-      //   ),
-      // ]),
     );
   }
 }

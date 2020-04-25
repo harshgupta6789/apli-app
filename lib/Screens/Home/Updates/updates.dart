@@ -109,7 +109,7 @@ class _UpdatesState extends State<Updates> {
               ),
             ],
             title: Padding(
-              padding: const EdgeInsets.only(bottom:10.0),
+              padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 updates,
                 style: TextStyle(color: Colors.white, fontSize: 24),

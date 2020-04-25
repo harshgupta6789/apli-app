@@ -23,7 +23,6 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    //final user = Provider.of<User>(context);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -42,8 +41,12 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                          Wrapper(currentTab: 3,)), (Route<dynamic> route) => false);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => Wrapper(
+                                    currentTab: 3,
+                                  )),
+                          (Route<dynamic> route) => false);
                       setState(() {});
                     }),
               ),

@@ -10,7 +10,8 @@ class Courses extends StatefulWidget {
   final String documentId;
   final String email;
 
-  const Courses({Key key, @required this.documentId, @required this.email}) : super(key: key);
+  const Courses({Key key, @required this.documentId, @required this.email})
+      : super(key: key);
 
   @override
   _CoursesState createState() => _CoursesState();
@@ -103,10 +104,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (BuildContext context) => VideoApp(
-                                  videoUrl: snapshot
-                                      .data.documents[index].data['link'],
-                                  title: snapshot
-                                      .data.documents[index].data['title'], isCourse: true,)));
+                                    videoUrl: snapshot
+                                        .data.documents[index].data['link'],
+                                    title: snapshot
+                                        .data.documents[index].data['title'],
+                                    isCourse: true,
+                                  )));
                         },
                         title: Text(
                           snapshot.data.documents[index].data['title'] ??
@@ -198,18 +201,18 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
               //       color: Colors.white,
               //     ),
               //     onPressed: null)),
-               Padding(
-              padding: EdgeInsets.only(bottom:10.0),
-              child:IconButton(
-                icon: Icon(
-                  EvaIcons.moreVerticalOutline,
-                  color: Colors.white,
-                ),
-                  onPressed: () => _scaffoldKey.currentState.openEndDrawer()
-              ),)
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.moreVerticalOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
+              )
             ],
             title: Padding(
-              padding: EdgeInsets.only(bottom:10.0),
+              padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
                 courses,
                 style: TextStyle(color: Colors.white, fontSize: 24),

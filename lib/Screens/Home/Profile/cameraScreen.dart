@@ -92,16 +92,15 @@ class _CameraState extends State<Camera> {
                 onPressed: () {
                   print(path);
                   if (path != null) {
-                     File temp = File(path);
-                    
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                              builder: (BuildContext context) => VideoApp(
-                                
-                                  videoUrl: null,
-                                  title: "My Resume",
-                                  isCourse : false,
-                                  file: temp,
-                                      )));
+                    File temp = File(path);
+
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (BuildContext context) => VideoApp(
+                              videoUrl: null,
+                              title: "My Resume",
+                              isCourse: false,
+                              file: temp,
+                            )));
                   } else {
                     Navigator.pop(context);
                   }

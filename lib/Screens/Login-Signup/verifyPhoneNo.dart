@@ -1,4 +1,3 @@
-
 import 'package:apli/Screens/Login-Signup/register.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
@@ -59,10 +58,11 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           codeSent: smsOTPSent,
           timeout: const Duration(seconds: 20),
           verificationCompleted: (AuthCredential phoneAuthCredential) async {
-            try{
+            try {
               await FirebaseAuth.instance.signOut();
-            } catch(e){}
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+            } catch (e) {}
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => Register(phoneNo)));
           },
           verificationFailed: (AuthException exceptio) {
             print('${exceptio.message} verification failed');
@@ -123,11 +123,14 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                       setState(() {
                         loading = false;
                       });
-                      try{
+                      try {
                         await FirebaseAuth.instance.signOut();
-                      } catch(e){}
+                      } catch (e) {}
                       Navigator.of(context).pop();
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Register(phoneNo)));
                     } else {
                       signIn();
                     }
@@ -149,14 +152,15 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       final FirebaseUser user = result.user;
       final FirebaseUser currentUser = await _auth.currentUser();
       assert(user.uid == currentUser.uid);
-      try{
+      try {
         await FirebaseAuth.instance.signOut();
-      } catch(e){}
+      } catch (e) {}
       setState(() {
         loading = false;
       });
       Navigator.of(context).pop();
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
     } catch (e) {
       setState(() {
         loading = false;

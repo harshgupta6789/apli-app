@@ -349,17 +349,18 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-               Padding(
-                padding: const EdgeInsets.only(bottom:10.0),
-                child:IconButton(
-                  icon: Icon(
-                    EvaIcons.moreVerticalOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState.openEndDrawer())),
+              Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: IconButton(
+                      icon: Icon(
+                        EvaIcons.moreVerticalOutline,
+                        color: Colors.white,
+                      ),
+                      onPressed: () =>
+                          _scaffoldKey.currentState.openEndDrawer())),
             ],
             title: Padding(
-              padding: const EdgeInsets.only(bottom:10.0),
+              padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 profile,
                 style: TextStyle(color: Colors.white, fontSize: 24),

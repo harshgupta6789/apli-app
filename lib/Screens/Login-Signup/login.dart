@@ -146,7 +146,8 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        Toast.show('Not Internet', context,backgroundColor: Colors.red);
+                                        Toast.show('Not Internet', context,
+                                            backgroundColor: Colors.red);
                                       } else {
                                         Navigator.push(
                                             context,
@@ -161,7 +162,8 @@ class _LoginState extends State<Login> {
                                       });
                                     } else {
                                       Toast.show(
-                                          'Invalid Email Provided', context,backgroundColor: Colors.red);
+                                          'Invalid Email Provided', context,
+                                          backgroundColor: Colors.red);
                                     }
                                   }),
                             ),
