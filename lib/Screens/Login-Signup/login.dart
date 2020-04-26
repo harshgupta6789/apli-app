@@ -5,6 +5,7 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
@@ -22,8 +23,10 @@ class _LoginState extends State<Login> {
 
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool obscure = true;
   bool loading = false;
   bool rememberMe = true;
+  bool forgotPassword = false;
 
   bool validatePassword(String value) {
     Pattern pattern =
@@ -63,9 +66,23 @@ class _LoginState extends State<Login> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
+                    Visibility(
+                      visible: forgotPassword,
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height * 0.1,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text('Forgot Password', style: TextStyle(fontSize: 25),),
+                            ],
+                          )),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: height * 0.3, right: width * 0.5),
+                          top: forgotPassword ? height * 0.2 : height * 0.3, right: width * 0.5),
                       child: Image.asset("Assets/Images/logo.png"),
                     ),
                     Padding(
@@ -88,91 +105,81 @@ class _LoginState extends State<Login> {
                             return null;
                           },
                         )),
-                    Padding(
+                    Visibility(
+                      visible: !forgotPassword,
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height * 0.02,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: TextFormField(
+                            obscureText: obscure,
+                            decoration: loginFormField.copyWith(
+                                labelText: 'Password',
+                                suffixIcon: IconButton(icon: Icon(EvaIcons.eyeOutline, color: Colors.grey,), onPressed: (){setState(() {
+                                  obscure = !obscure;
+                                });},),
+                                icon:
+                                    Icon(Icons.lock_outline, color: basicColor)),
+                            onChanged: (text) {
+                              setState(() => password = text);
+                            },
+                            validator: (value) {
+                              if (!validatePassword(value)) {
+                                return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
+                              }
+                              return null;
+                            },
+                          )),
+                    ),
+                    Visibility(
+                      visible: !forgotPassword,
+                      child: Padding(
                         padding: EdgeInsets.only(
-                            top: height * 0.02,
-                            left: width * 0.1,
-                            right: width * 0.1),
-                        child: TextFormField(
-                          obscureText: true,
-                          decoration: loginFormField.copyWith(
-                              labelText: 'Password',
-                              icon:
-                                  Icon(Icons.lock_outline, color: basicColor)),
-                          onChanged: (text) {
-                            setState(() => password = text);
-                          },
-                          validator: (value) {
-                            if (!validatePassword(value)) {
-                              return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
-                            }
-                            return null;
-                          },
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: height * 0.02,
-                        left: width * 0.1,
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Checkbox(
-                              value: rememberMe,
-                              onChanged: (bool temp) {
-                                setState(() {
-                                  rememberMe = !rememberMe;
-                                });
-                              }),
-                          Text(rememberMeText),
-                          Padding(
-                            padding: EdgeInsets.only(left: width * 0.2),
-                            child: Container(
-                              width: width * 0.3,
-                              height: height * 0.1,
-                              child: FlatButton(
-                                  splashColor: Colors.white,
-                                  child: Text(
-                                    forgot,
-                                    style: TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: basicColor),
-                                  ),
-                                  onPressed: () async {
-                                    if (validateEmail((email))) {
+                          top: height * 0.02,
+                          left: width * 0.1,
+                        ),
+                        child: Row(
+                          children: <Widget>[
+                            Checkbox(
+                                value: rememberMe,
+                                onChanged: (bool temp) {
+                                  setState(() {
+                                    rememberMe = !rememberMe;
+                                  });
+                                }),
+                            Text(rememberMeText),
+                            Padding(
+                              padding: EdgeInsets.only(left: width * 0.2),
+                              child: Container(
+                                width: width * 0.3,
+                                height: height * 0.1,
+                                child: FlatButton(
+                                    splashColor: Colors.white,
+                                    child: Text(
+                                      forgot,
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: basicColor),
+                                    ),
+                                    onPressed: () {
                                       setState(() {
-                                        loading = true;
+                                        forgotPassword = true;
                                       });
-                                      var net = await Connectivity()
-                                          .checkConnectivity();
-                                      if (net == ConnectivityResult.none) {
-                                        Toast.show('Not Internet', context,
-                                            backgroundColor: Colors.red);
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ForgotPassword(
-                                                      email: email,
-                                                    )));
-                                      }
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else {
-                                      Toast.show(
-                                          'Invalid Email Provided', context,
-                                          backgroundColor: Colors.red);
-                                    }
-                                  }),
+                                    }),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(
+                        padding: forgotPassword ? EdgeInsets.only(
+                          top: height * 0.05,
+                            left: width * 0.1,
+                            right: width * 0.1
+                        ) : EdgeInsets.only(
                             top: height * 0.01,
                             left: width * 0.1,
                             right: width * 0.1),
@@ -185,14 +192,42 @@ class _LoginState extends State<Login> {
                           ),
                           child: MaterialButton(
                               child: Text(
-                                login,
+                                forgotPassword ? 'Submit' : login,
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     color: Colors.white,
                                     fontWeight: FontWeight.w600),
                               ),
                               onPressed: () async {
-                                if (_formKey.currentState.validate()) {
+                                if(forgotPassword)
+                                  if (validateEmail((email))) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    var net = await Connectivity()
+                                        .checkConnectivity();
+                                    if (net == ConnectivityResult.none) {
+                                      Toast.show('Not Internet', context,
+                                          backgroundColor: Colors.red);
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForgotPassword(
+                                                    email: email,
+                                                  )));
+                                    }
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } else {
+                                    FocusScope.of(context).requestFocus();
+                                    Toast.show(
+                                        'Enter Valid Email', context,
+                                        backgroundColor: Colors.red);
+                                  }
+                                else if (_formKey.currentState.validate()) {
                                   setState(() {
                                     loading = true;
                                   });
@@ -250,29 +285,56 @@ class _LoginState extends State<Login> {
                                 }
                               }),
                         )),
-                    Padding(
-                        padding: EdgeInsets.only(
-                            top: height * 0.05,
-                            left: width * 0.1,
-                            right: width * 0.1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(signup),
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VerifyPhoneNo()),
-                                  );
-                                },
-                                child: Text(
-                                  "Signup here",
-                                  style: TextStyle(color: basicColor),
-                                ))
-                          ],
-                        )),
+                    Visibility(
+                      visible: !forgotPassword,
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height * 0.05,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(signup),
+                              FlatButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VerifyPhoneNo()),
+                                    );
+                                  },
+                                  child: Text(
+                                    "Signup here",
+                                    style: TextStyle(color: basicColor),
+                                  ))
+                            ],
+                          )),
+                    ),
+                    Visibility(
+                      visible: forgotPassword,
+                      child: Padding(
+                          padding: EdgeInsets.only(
+                              top: height * 0.05,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text('Remember Password,'),
+                              FlatButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      forgotPassword = false;
+                                    });
+                                  },
+                                  child: Text(
+                                    "Login       ",
+                                    style: TextStyle(color: basicColor),
+                                  ))
+                            ],
+                          )),
+                    ),
                     SizedBox(
                       height: 10,
                     ),

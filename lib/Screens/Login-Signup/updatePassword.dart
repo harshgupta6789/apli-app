@@ -6,6 +6,7 @@ import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
@@ -43,6 +44,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
     }
   }
 
+  bool obscure = true;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -67,9 +70,12 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             left: width * 0.1,
                             right: width * 0.1),
                         child: TextFormField(
-                          obscureText: true,
+                          obscureText: obscure,
                           decoration: loginFormField.copyWith(
                               labelText: 'Password',
+                              suffixIcon: IconButton(icon: Icon(EvaIcons.eyeOutline, color: Colors.grey,), onPressed: (){setState(() {
+                                obscure = !obscure;
+                              });},),
                               icon:
                                   Icon(Icons.lock_outline, color: basicColor)),
                           onChanged: (text) {
@@ -88,7 +94,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             left: width * 0.1,
                             right: width * 0.1),
                         child: TextFormField(
-                          obscureText: true,
+                          obscureText: obscure,
                           decoration: loginFormField.copyWith(
                               labelText: 'Re Enter Password',
                               icon:

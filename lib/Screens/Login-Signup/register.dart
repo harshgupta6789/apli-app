@@ -251,7 +251,7 @@ class _RegisterState extends State<Register> {
                               left: width * 0.1,
                               right: width * 0.1),
                           child: TextFormField(
-                            obscureText: true,
+                            obscureText: false,
                             decoration: loginFormField.copyWith(
                                 labelText: 'Password',
                                 icon: Icon(Icons.vpn_key,
