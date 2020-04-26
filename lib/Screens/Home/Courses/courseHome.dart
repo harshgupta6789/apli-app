@@ -72,7 +72,7 @@ class _CourseMainState extends State<CourseMain> {
                             child: Center(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset("Assets/Images/course.png"),
+                                child:  Image.asset("Assets/Images/course.png" ,),
                               ),
                             ),
                           ),

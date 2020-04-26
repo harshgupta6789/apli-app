@@ -5,6 +5,7 @@ import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
@@ -15,6 +16,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../HomeLoginWrapper.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -389,9 +392,80 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           preferredSize: Size.fromHeight(105),
         ),
         body: TabBarView(children: [
-          Center(child: Image.asset("Assets/Images/job.png")),
-          Center(child: Image.asset("Assets/Images/job.png")),
-          Center(child: Image.asset("Assets/Images/job.png")),
+          Center(
+              child: Padding(
+            padding: const EdgeInsets.only(bottom: 40.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset(
+                  "Assets/Images/profile.png",
+                  height: 300,
+                  width: 300,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        text: " You can start applying for\n",
+                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        children: [
+                          TextSpan(
+                              text: "Jobs",
+                              style: TextStyle(color: basicColor),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => Wrapper(
+                                                currentTab: 1,
+                                              )),
+                                      (Route<dynamic> route) => false);
+                                  setState(() {});
+                                }),
+                          TextSpan(text: " after filling in the details.")
+                        ]),
+                  ),
+                )
+              ],
+            ),
+          )),
+          Center(
+              child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset(
+                        "Assets/Images/profile.png",
+                        height: 300,
+                        width: 300,
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Your video intro will appear here.",
+                            style: TextStyle(fontSize: 16),
+                          ))
+                    ],
+                  ))),
+          Center(
+              child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.asset("Assets/Images/profile.png",
+                          height: 300, width: 300),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Your test will be shown here.",
+                            style: TextStyle(fontSize: 16),
+                          ))
+                    ],
+                  ))),
           // Padding(
           //   padding: const EdgeInsets.all(8.0),
           //   child: Column(

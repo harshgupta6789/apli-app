@@ -266,12 +266,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 40.0, top: 30.0),
+                  padding: EdgeInsets.only(left: 45.0, top: 20.0),
                   child: Text("What's Inside:",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w700,
-                          fontSize: 24)),
+                          fontSize: 18)),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.0),
