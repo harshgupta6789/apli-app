@@ -17,7 +17,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this);
+    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
     super.initState();
   }
 

@@ -16,26 +16,33 @@ class _UpdatesState extends State<Updates> {
   List filters = [];
   List<List<String>> myNotifications = [];
   int currentTime = Timestamp.now().microsecondsSinceEpoch;
+  Timestamp userCreatedTime;
 
   Future<List<String>> userInit(String email) async {
     String batchID;
     String course;
-    List<String> tempFilters = [email];
-
-    await Firestore.instance
-        .collection('candidates')
-        .document(email)
-        .get()
-        .then((snapshot) => batchID = snapshot.data['batch_id']);
-
-    if (batchID != null) {
-      await Firestore.instance
-          .collection('batches')
-          .document(batchID)
-          .get()
-          .then((snapshot) => course = snapshot.data['course']);
-      tempFilters.add(course);
-    }
+    String email;
+    List<String> tempFilters = [];
+    await SharedPreferences.getInstance().then((prefs) async {
+      await Firestore.instance.collection('users').document(prefs.getString('email')).get().then((s) async {
+        tempFilters.add(s.data['timestamp'].microsecondsSinceEpoch.toString());
+        await Firestore.instance
+            .collection('candidates')
+            .document(prefs.getString('email'))
+            .get()
+            .then((snapshot1) async {
+          await Firestore.instance
+              .collection('batches')
+              .document(snapshot1.data['batch_id'])
+              .get()
+              .then((snapshot2){
+            course = snapshot2.data['course'];
+            tempFilters.add(prefs.getString('email'));
+            tempFilters.add(course);
+          });
+        });
+      });
+    });
     return tempFilters;
   }
 
@@ -71,12 +78,17 @@ class _UpdatesState extends State<Updates> {
         email = prefs.getString('email');
       });
     });
+    Firestore.instance.collection('users').document(email).get().then((snapshot) {
+      setState(() {
+        userCreatedTime = snapshot.data['timestamp'];
+      });
+    });
   }
 
   @override
   void initState() {
     super.initState();
-    getPrefs();
+//    getPrefs();
   }
 
   @override
@@ -142,7 +154,6 @@ class _UpdatesState extends State<Updates> {
                     builder: (context, snapshot1) {
                       if (snapshot1.hasData) {
                         snapshot1.data.documents.forEach((f) {
-                          print(f.data['tpo_name']);
                           bool isMyNotification = false;
                           String title;
                           String message, status;
@@ -196,27 +207,30 @@ class _UpdatesState extends State<Updates> {
 
                           Timestamp tempTime = f.data['time'];
                           List receivers = f.data['receivers'];
-                          if (receivers != null) {
-                            for (int i = 0; i < receivers.length; i++) {
-                              if (filters.contains(receivers[i])) {
-                                isMyNotification = true;
-                                break;
+                          if(tempTime != null)
+                            if(int.parse(filters[0]) <= tempTime.microsecondsSinceEpoch) {
+                              if (receivers != null) {
+                                for (int i = 0; i < receivers.length; i++) {
+                                  if (filters.contains(receivers[i])) {
+                                    isMyNotification = true;
+                                    break;
+                                  }
+                                }
+                                if (isMyNotification) {
+                                  if (difference(tempTime) != 'negative') {
+                                    myNotifications.add([
+                                      title,
+                                      message,
+                                      tempTime == null
+                                          ? null
+                                          : difference(tempTime),
+                                      notiType,
+                                      f.documentID,
+                                    ]);
+                                  }
+                                }
                               }
                             }
-                            if (isMyNotification) {
-                              if (difference(tempTime) != 'negative') {
-                                myNotifications.add([
-                                  title,
-                                  message,
-                                  tempTime == null
-                                      ? null
-                                      : difference(tempTime),
-                                  notiType,
-                                  f.documentID,
-                                ]);
-                              }
-                            }
-                          }
                         });
                         if (myNotifications.length == 0)
                           return Center(
@@ -237,6 +251,7 @@ class _UpdatesState extends State<Updates> {
                     });
               }
             } else if (snapshot.hasError) {
+              print(snapshot.error);
               return Center(
                 child: Text('Error, please try again later'),
               );
