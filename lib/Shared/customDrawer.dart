@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 double width, height;
 
+
 Widget customDrawer(BuildContext context, GlobalKey x) {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   width = MediaQuery.of(context).size.width;
@@ -26,9 +27,10 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
     List<String> userData = [];
 
     await SharedPreferences.getInstance().then((value) => prefs = value);
+
     if (prefs.getBool("isNotificationsEnabled") != null) {
       isSwitched = prefs.getBool("isNotificationsEnabled");
-    }
+    } else isSwitched = true;
 
     email = prefs.getString('email');
     userData.add(email);
@@ -123,23 +125,9 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: fontSize),
                 ),
-                trailing: Switch(
-                  value: isSwitched,
-                  onChanged: (value) {},
-                  activeTrackColor: Colors.lightGreenAccent,
-                  activeColor: Colors.green,
+
+              trailing: NotificationSwitch(isSwitched: isSwitched),
                 ),
-                onTap: () {
-                  isSwitched = !isSwitched;
-                  if (isSwitched == false) {
-                    _firebaseMessaging.unsubscribeFromTopic("App");
-                    prefs.setBool("isNotificationsEnabled", false);
-                  } else {
-                    _firebaseMessaging.subscribeToTopic("App");
-                    prefs.setBool("isNotificationsEnabled", true);
-                  }
-                  print(prefs.getBool("isNotificationsEnabled"));
-                }),
             Divider(
               thickness: dividerThickness,
             ),
@@ -230,4 +218,71 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
       ),
     ),
   );
+}
+
+
+
+//onTap: () {
+//                  isSwitched = !isSwitched;
+//                  if (isSwitched == false) {
+//                    _firebaseMessaging.unsubscribeFromTopic("App");
+//                    prefs.setBool("isNotificationsEnabled", false);
+//                  } else {
+//                    _firebaseMessaging.subscribeToTopic("App");
+//                    prefs.setBool("isNotificationsEnabled", true);
+//                  }
+//                  print(prefs.getBool("isNotificationsEnabled"));
+//                }
+
+
+class NotificationSwitch extends StatefulWidget {
+  bool isSwitched;
+  NotificationSwitch({this.isSwitched});
+  @override
+  _NotificationSwitchState createState() => _NotificationSwitchState();
+}
+
+class _NotificationSwitchState extends State<NotificationSwitch> {
+  bool isSwitched = false;
+
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  SharedPreferences prefs;
+  getPrefs() {
+    SharedPreferences.getInstance().then((prefs1) {
+      setState(() {
+        prefs = prefs1;
+      });
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefs();
+    setState(() {
+      isSwitched = widget.isSwitched ?? false;
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isSwitched = !isSwitched;
+        });
+        if (isSwitched == false) {
+          _firebaseMessaging.unsubscribeFromTopic("App");
+          prefs.setBool("isNotificationsEnabled", false);
+        } else {
+          _firebaseMessaging.subscribeToTopic("App");
+          prefs.setBool("isNotificationsEnabled", true);
+        }
+//        print(prefs.getBool("isNotificationsEnabled"));
+//    }
+      },
+      child: Switch(
+        value: isSwitched ?? true,
+      ),
+    );
+  }
 }

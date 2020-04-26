@@ -142,6 +142,7 @@ class _UpdatesState extends State<Updates> {
                     builder: (context, snapshot1) {
                       if (snapshot1.hasData) {
                         snapshot1.data.documents.forEach((f) {
+                          print(f.data['tpo_name']);
                           bool isMyNotification = false;
                           String title;
                           String message, status;
