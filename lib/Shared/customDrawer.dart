@@ -16,10 +16,9 @@ double width, height;
 
 
 Widget customDrawer(BuildContext context, GlobalKey x) {
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   width = MediaQuery.of(context).size.width;
   height = MediaQuery.of(context).size.height;
-  bool isSwitched = false;
+  bool isSwitched = true;
   SharedPreferences prefs;
   Future<List<String>> userInit() async {
     String email;
@@ -126,7 +125,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                       fontWeight: FontWeight.bold, fontSize: fontSize),
                 ),
 
-              trailing: NotificationSwitch(isSwitched: isSwitched),
+              trailing: NotificationSwitch(),
                 ),
             Divider(
               thickness: dividerThickness,
@@ -221,29 +220,13 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
 }
 
 
-
-//onTap: () {
-//                  isSwitched = !isSwitched;
-//                  if (isSwitched == false) {
-//                    _firebaseMessaging.unsubscribeFromTopic("App");
-//                    prefs.setBool("isNotificationsEnabled", false);
-//                  } else {
-//                    _firebaseMessaging.subscribeToTopic("App");
-//                    prefs.setBool("isNotificationsEnabled", true);
-//                  }
-//                  print(prefs.getBool("isNotificationsEnabled"));
-//                }
-
-
 class NotificationSwitch extends StatefulWidget {
-  bool isSwitched;
-  NotificationSwitch({this.isSwitched});
   @override
   _NotificationSwitchState createState() => _NotificationSwitchState();
 }
 
 class _NotificationSwitchState extends State<NotificationSwitch> {
-  bool isSwitched = false;
+  bool isSwitched = true;
 
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   SharedPreferences prefs;
@@ -252,6 +235,11 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
       setState(() {
         prefs = prefs1;
       });
+      if(prefs.containsKey('isNotificationsEnabled')) {
+        setState(() {
+          isSwitched = prefs.getBool('isNotificationsEnabled');
+        });
+      }
     });
   }
   @override
@@ -259,9 +247,6 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
     // TODO: implement initState
     super.initState();
     getPrefs();
-    setState(() {
-      isSwitched = widget.isSwitched ?? false;
-    });
   }
   @override
   Widget build(BuildContext context) {
@@ -277,11 +262,9 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
           _firebaseMessaging.subscribeToTopic("App");
           prefs.setBool("isNotificationsEnabled", true);
         }
-//        print(prefs.getBool("isNotificationsEnabled"));
-//    }
       },
       child: Switch(
-        value: isSwitched ?? true,
+        value: isSwitched,
       ),
     );
   }
