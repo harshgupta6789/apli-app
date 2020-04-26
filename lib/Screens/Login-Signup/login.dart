@@ -61,14 +61,14 @@ class _LoginState extends State<Login> {
     return loading
         ? Loading()
         : WillPopScope(
-      onWillPop: (){
-        if(forgotPassword)
-          setState(() {
-            forgotPassword = false;
-          });
+            onWillPop: () {
+              if (forgotPassword)
+                setState(() {
+                  forgotPassword = false;
+                });
 //        else SystemChannels.platform.invokeMethod('SystemNavigator.pop', true);
-      },
-          child: Scaffold(
+            },
+            child: Scaffold(
               resizeToAvoidBottomInset: false,
               body: SingleChildScrollView(
                 child: Form(
@@ -85,13 +85,19 @@ class _LoginState extends State<Login> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text('Forgot Password', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                                Text(
+                                  'Forgot Password',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ],
                             )),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
-                            top: forgotPassword ? height * 0.2 : height * 0.3, right: width * 0.5),
+                            top: forgotPassword ? height * 0.2 : height * 0.3,
+                            right: width * 0.5),
                         child: Image.asset("Assets/Images/logo.png"),
                       ),
                       Padding(
@@ -125,11 +131,19 @@ class _LoginState extends State<Login> {
                               obscureText: obscure,
                               decoration: loginFormField.copyWith(
                                   labelText: 'Password',
-                                  suffixIcon: IconButton(icon: Icon(EvaIcons.eyeOutline, color: Colors.grey,), onPressed: (){setState(() {
-                                    obscure = !obscure;
-                                  });},),
-                                  icon:
-                                      Icon(Icons.lock_outline, color: basicColor)),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      EvaIcons.eyeOutline,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        obscure = !obscure;
+                                      });
+                                    },
+                                  ),
+                                  icon: Icon(Icons.lock_outline,
+                                      color: basicColor)),
                               onChanged: (text) {
                                 setState(() => password = text);
                               },
@@ -184,14 +198,15 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       Padding(
-                          padding: forgotPassword ? EdgeInsets.only(
-                            top: height * 0.05,
-                              left: width * 0.1,
-                              right: width * 0.1
-                          ) : EdgeInsets.only(
-                              top: height * 0.01,
-                              left: width * 0.1,
-                              right: width * 0.1),
+                          padding: forgotPassword
+                              ? EdgeInsets.only(
+                                  top: height * 0.05,
+                                  left: width * 0.1,
+                                  right: width * 0.1)
+                              : EdgeInsets.only(
+                                  top: height * 0.01,
+                                  left: width * 0.1,
+                                  right: width * 0.1),
                           child: Container(
                             height: height * 0.08,
                             width: width * 0.8,
@@ -208,37 +223,36 @@ class _LoginState extends State<Login> {
                                       fontWeight: FontWeight.w600),
                                 ),
                                 onPressed: () async {
-                                  if(forgotPassword)
-                                    if (validateEmail((email))) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      var net = await Connectivity()
-                                          .checkConnectivity();
-                                      if (net == ConnectivityResult.none) {
-                                        Toast.show('Not Internet', context,
-                                            backgroundColor: Colors.red);
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ForgotPassword(
-                                                      email: email,
-                                                    )));
-                                        setState(() {
-                                          forgotPassword = false;
-                                        });
-                                      }
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    } else {
-                                      FocusScope.of(context).requestFocus();
-                                      Toast.show(
-                                          'Enter Valid Email', context,
+                                  if (forgotPassword) if (validateEmail(
+                                      (email))) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    var net = await Connectivity()
+                                        .checkConnectivity();
+                                    if (net == ConnectivityResult.none) {
+                                      Toast.show('Not Internet', context,
                                           backgroundColor: Colors.red);
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ForgotPassword(
+                                                    email: email,
+                                                  )));
+                                      setState(() {
+                                        forgotPassword = false;
+                                      });
                                     }
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  } else {
+                                    FocusScope.of(context).requestFocus();
+                                    Toast.show('Enter Valid Email', context,
+                                        backgroundColor: Colors.red);
+                                  }
                                   else if (_formKey.currentState.validate()) {
                                     setState(() {
                                       loading = true;
@@ -254,7 +268,8 @@ class _LoginState extends State<Login> {
                                         loading = false;
                                       });
                                     } else if (result == -1) {
-                                      Toast.show('Invalid username and password',
+                                      Toast.show(
+                                          'Invalid username and password',
                                           context,
                                           duration: 5,
                                           backgroundColor: Colors.red);
@@ -262,7 +277,8 @@ class _LoginState extends State<Login> {
                                         loading = false;
                                       });
                                     } else if (result == -2) {
-                                      Toast.show('Cannot connect server', context,
+                                      Toast.show(
+                                          'Cannot connect server', context,
                                           duration: 5,
                                           backgroundColor: Colors.red);
                                       setState(() {
@@ -283,8 +299,8 @@ class _LoginState extends State<Login> {
                                               builder: (context) =>
                                                   MainScreen()));
                                     }
-                                    var net =
-                                        await Connectivity().checkConnectivity();
+                                    var net = await Connectivity()
+                                        .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
                                       Toast.show(
                                           'No Internet Connection', context,
@@ -313,7 +329,8 @@ class _LoginState extends State<Login> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => VerifyPhoneNo()),
+                                            builder: (context) =>
+                                                VerifyPhoneNo()),
                                       );
                                     },
                                     child: Text(
@@ -355,6 +372,6 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ),
-        );
+          );
   }
 }

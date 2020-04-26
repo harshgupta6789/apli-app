@@ -18,7 +18,7 @@ class _CourseMainState extends State<CourseMain> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: customDrawer(context),
+      endDrawer: customDrawer(context , _scaffoldKey),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         child: AppBar(
@@ -44,7 +44,7 @@ class _CourseMainState extends State<CourseMain> {
                     fontWeight: FontWeight.bold)),
           ),
         ),
-        preferredSize: Size.fromHeight(55),
+        preferredSize: Size.fromHeight(50),
       ),
       body: StreamBuilder(
           stream: Firestore.instance.collection('edu_courses').snapshots(),
@@ -72,7 +72,9 @@ class _CourseMainState extends State<CourseMain> {
                             child: Center(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
-                                child:  Image.asset("Assets/Images/course.png" ,),
+                                child: Image.asset(
+                                  "Assets/Images/course.png",
+                                ),
                               ),
                             ),
                           ),

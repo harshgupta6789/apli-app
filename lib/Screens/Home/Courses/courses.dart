@@ -5,6 +5,7 @@ import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
@@ -38,11 +39,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(
-                    snapshot.data['overview'] ??
+                  Html(
+                    data: snapshot.data['overview'] ??
                         "Error While Fetching The Data",
-                    style: TextStyle(fontSize: 18),
-                    textAlign: TextAlign.start,
                   ),
                   Padding(
                       padding: EdgeInsets.only(top: 20.0),
@@ -52,7 +51,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         child: MaterialButton(
-                          padding: EdgeInsets.only(left: 30, right: 30),
+                            padding: EdgeInsets.only(left: 30, right: 30),
                             child: Text(
                               'ENROLL',
                               style: TextStyle(
@@ -118,7 +117,10 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           style: TextStyle(
                               fontSize: 17.0, fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text("Video | 2m", style: TextStyle(fontSize: 12.5),),
+                        subtitle: Text(
+                          "Video | 2m",
+                          style: TextStyle(fontSize: 12.5),
+                        ),
                       ),
                     )
                   ],
@@ -179,7 +181,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     return Scaffold(
         backgroundColor: Colors.white,
         key: _scaffoldKey,
-        endDrawer: customDrawer(context),
+        endDrawer: customDrawer(context , _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -215,11 +217,14 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
                 courses,
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          preferredSize: Size.fromHeight(55),
+          preferredSize: Size.fromHeight(50),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -274,7 +279,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           fontSize: 18)),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 20.0),
+                  padding: EdgeInsets.only(top: 10.0),
                   child: new TabBar(
                       controller: _tabController,
                       indicatorColor: basicColor,

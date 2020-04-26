@@ -6,6 +6,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,15 +14,21 @@ import 'package:url_launcher/url_launcher.dart';
 
 double width, height;
 
-Widget customDrawer(BuildContext context) {
+Widget customDrawer(BuildContext context, GlobalKey x) {
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   width = MediaQuery.of(context).size.width;
   height = MediaQuery.of(context).size.height;
+  bool isSwitched = false;
+  SharedPreferences prefs;
   Future<List<String>> userInit() async {
     String email;
+
     List<String> userData = [];
-    SharedPreferences prefs;
 
     await SharedPreferences.getInstance().then((value) => prefs = value);
+    if (prefs.getBool("isNotificationsEnabled") != null) {
+      isSwitched = prefs.getBool("isNotificationsEnabled");
+    }
 
     email = prefs.getString('email');
     userData.add(email);
@@ -116,10 +123,22 @@ Widget customDrawer(BuildContext context) {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: fontSize),
                 ),
-                trailing: IconButton(
-                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
+                trailing: Switch(
+                  value: isSwitched,
+                  onChanged: (value) {},
+                  activeTrackColor: Colors.lightGreenAccent,
+                  activeColor: Colors.green,
+                ),
                 onTap: () {
-                  AppSettings.openAppSettings();
+                  isSwitched = !isSwitched;
+                  if (isSwitched == false) {
+                    _firebaseMessaging.unsubscribeFromTopic("App");
+                    prefs.setBool("isNotificationsEnabled", false);
+                  } else {
+                    _firebaseMessaging.subscribeToTopic("App");
+                    prefs.setBool("isNotificationsEnabled", true);
+                  }
+                  print(prefs.getBool("isNotificationsEnabled"));
                 }),
             Divider(
               thickness: dividerThickness,

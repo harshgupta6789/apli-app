@@ -16,7 +16,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../HomeLoginWrapper.dart';
 
 class Profile extends StatefulWidget {
@@ -346,7 +345,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Colors.white,
-        endDrawer: customDrawer(context),
+        endDrawer: customDrawer(context , _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -375,7 +374,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,
                   indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 5.0, color: basicColor),
+                    borderSide: BorderSide(width: 3.0, color: basicColor),
                   ),
                   tabs: [
                     Tab(
@@ -389,12 +388,12 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   controller: _tabController,
                 )),
           ),
-          preferredSize: Size.fromHeight(105),
+          preferredSize: Size.fromHeight(100),
         ),
         body: TabBarView(children: [
           Center(
               child: Padding(
-            padding: const EdgeInsets.only(bottom: 40.0),
+            padding: const EdgeInsets.only(bottom: 50.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -409,7 +408,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     textAlign: TextAlign.center,
                     text: TextSpan(
                         text: " You can start applying for\n",
-                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        style: TextStyle(color: Colors.black, fontSize: 18),
                         children: [
                           TextSpan(
                               text: "Jobs",
@@ -433,7 +432,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           )),
           Center(
               child: Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
+                  padding: const EdgeInsets.only(bottom: 50.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -446,13 +445,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Your video intro will appear here.",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 18),
                           ))
                     ],
                   ))),
           Center(
               child: Padding(
-                  padding: const EdgeInsets.only(bottom: 40.0),
+                  padding: const EdgeInsets.only(bottom: 50.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -462,7 +461,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             "Your test will be shown here.",
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 18),
                           ))
                     ],
                   ))),

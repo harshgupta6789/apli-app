@@ -84,7 +84,7 @@ class _UpdatesState extends State<Updates> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: customDrawer(context),
+        endDrawer: customDrawer(context , _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -112,11 +112,14 @@ class _UpdatesState extends State<Updates> {
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 updates,
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
             ),
           ),
-          preferredSize: Size.fromHeight(55),
+          preferredSize: Size.fromHeight(50),
         ),
         body: FutureBuilder(
           future: userInit(email),
@@ -293,7 +296,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                                         "No Messsage Specified",
                                     maxLines: 2,
                                     style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 18,
                                         fontWeight: FontWeight.w500),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -307,24 +310,6 @@ class _AllNotificationsState extends State<AllNotifications> {
                                       'No Time Exception'),
                                 ),
                               ),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.03, left: width * 0.03),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: basicColor),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: MaterialButton(
-                                        child: Text(
-                                          "View Application",
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: basicColor,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        onPressed: () => null),
-                                  )),
                             ]),
                       ),
                     ),

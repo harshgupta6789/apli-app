@@ -5,6 +5,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'Courses/courseHome.dart';
 import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
@@ -22,6 +23,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   static TabController _tabController;
   AnimationController _animationController;
   Animation<Offset> _animation;
+  SharedPreferences prefs;
 
   static Future<dynamic> myBackgroundMessageHandler(
       Map<String, dynamic> message) async {
@@ -55,7 +57,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     ).show();
   }
 
-  void firebaseCloudMessagingListeners() {
+  void firebaseCloudMessagingListeners() async {
     if (Platform.isIOS) {
       iOSPermission();
     }
@@ -113,6 +115,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         });
       },
     );
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getBool("isNotificationsEnabled") != null) {
+      if (prefs.getBool("isNotificationsEnabled") == true) {
+        _firebaseMessaging.subscribeToTopic("App");
+      }
+    } else {
+      _firebaseMessaging.subscribeToTopic("App");
+      prefs.setBool("isNotificationsEnabled", true);
+    }
   }
 
   void iOSPermission() {
