@@ -350,7 +350,7 @@ class _RegisterState extends State<Register> {
                             const SizedBox(width: 10),
                             FlatButton(
                               onPressed: () {
-                                Navigator.pushReplacement((context), MaterialPageRoute(builder: (context) => CollegeNotFound()));
+                                Navigator.pushReplacement((context), MaterialPageRoute(builder: (context) => CollegeNotFound(phoneNo: widget.phoneNo)));
                                 setState(() {
                                   collegeNotFound = true;
                                   allSet = true;

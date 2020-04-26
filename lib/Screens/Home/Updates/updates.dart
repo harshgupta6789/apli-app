@@ -112,7 +112,7 @@ class _UpdatesState extends State<Updates> {
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 updates,
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
           ),

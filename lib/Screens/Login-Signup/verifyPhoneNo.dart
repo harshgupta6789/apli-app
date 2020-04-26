@@ -292,25 +292,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                   }
                                 }),
                           )),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        error,
-                        style: TextStyle(color: Colors.red),
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                      Center(
-                        child: Text('Or Sign Up With'),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Center(
-                        child: Image.asset("Assets/Images/logo.png"),
-                      ),
                     ],
                   ),
                 ),

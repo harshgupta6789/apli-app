@@ -41,7 +41,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   Text(
                     snapshot.data['overview'] ??
                         "Error While Fetching The Data",
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.start,
                   ),
                   Padding(
@@ -49,13 +49,14 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                       child: Container(
                         decoration: BoxDecoration(
                           color: basicColor,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: MaterialButton(
+                          padding: EdgeInsets.only(left: 30, right: 30),
                             child: Text(
-                              enroll,
+                              'ENROLL',
                               style: TextStyle(
-                                  fontSize: 18.0,
+                                  fontSize: 14.0,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600),
                             ),
@@ -115,9 +116,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           snapshot.data.documents[index].data['title'] ??
                               "Play Me",
                           style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w600),
+                              fontSize: 17.0, fontWeight: FontWeight.bold),
                         ),
-                        subtitle: Text("Video | 2m"),
+                        subtitle: Text("Video | 2m", style: TextStyle(fontSize: 12.5),),
                       ),
                     )
                   ],
@@ -132,13 +133,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
 
   Widget _certificate() {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
       child: Column(
         children: <Widget>[
           Text(
             completion,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
           ),
           Padding(
             padding: const EdgeInsets.all(20.0),
@@ -215,7 +215,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
                 courses,
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -266,7 +266,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 45.0, top: 20.0),
+                  padding: EdgeInsets.only(left: 30, top: 20.0),
                   child: Text("What's Inside:",
                       style: TextStyle(
                           color: Colors.black,

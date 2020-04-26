@@ -65,7 +65,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 jobsAvailable,
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             bottom: ColoredTabBar(
@@ -146,7 +146,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Your Incomplete jobs will be listed here.",
+                    "All caught up!",
                     style: TextStyle(fontSize: 16),
                   ))
             ],

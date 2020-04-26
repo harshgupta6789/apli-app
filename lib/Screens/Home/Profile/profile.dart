@@ -366,7 +366,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
                 profile,
-                style: TextStyle(color: Colors.white, fontSize: 24),
+                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
             bottom: ColoredTabBar(
