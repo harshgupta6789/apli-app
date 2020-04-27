@@ -6,6 +6,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../HomeLoginWrapper.dart';
 import 'Courses/courseHome.dart';
 import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
@@ -75,10 +76,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               case 'Job':
                 {
                   Navigator.pop(context);
-                  setState(() {
-                    _currentTab = 2;
-                    _tabController.animateTo(2);
-                  });
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => Wrapper(
+                                currentTab: 2,
+                              )),
+                      (Route<dynamic> route) => false);
+                  setState(() {});
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(builder: (context) => Updates()),
@@ -135,10 +139,17 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     });
   }
 
+  void checkIfLoggedIn() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("email")) {
+      firebaseCloudMessagingListeners();
+    }
+  }
+
   @override
   void initState() {
     _currentTab = widget.currentTab ?? 0;
-    firebaseCloudMessagingListeners();
+    checkIfLoggedIn();
     _tabController = TabController(vsync: this, length: _listTabs.length);
     _tabController.animateTo(_currentTab);
     _animationController = AnimationController(
