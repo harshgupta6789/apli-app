@@ -13,7 +13,7 @@ class Jobs extends StatefulWidget {
 
 class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  refresh() => setState(() {});
+  
 
   @override
   void initState() {

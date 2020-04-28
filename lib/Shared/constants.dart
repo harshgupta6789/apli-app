@@ -52,3 +52,7 @@ const String experience = 'Experience';
 const String education = 'Education';
 const String licenses = 'Licenses and Certifications';
 const String skills = 'Skills';
+const String editEdu = 'Edit Education';
+const String clg = 'College';
+const String twelve = 'Class XII';
+const String ten = 'Class X';

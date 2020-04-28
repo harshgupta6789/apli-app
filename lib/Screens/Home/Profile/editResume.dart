@@ -1,3 +1,4 @@
+import 'package:apli/Screens/Home/Profile/Profile-Tabs/edu.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,11 @@ class _EditResumeState extends State<EditResume> {
               style: TextStyle(fontWeight: FontWeight.w600),
             ),
             trailing: IconButton(
-                icon: Icon(EvaIcons.arrowIosForwardOutline), onPressed: null),
+                icon: Icon(EvaIcons.arrowIosForwardOutline),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Education()));
+                }),
           )),
     );
   }
