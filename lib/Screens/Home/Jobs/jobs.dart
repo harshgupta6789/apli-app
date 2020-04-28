@@ -24,10 +24,9 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    refresh() => setState(() {});
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: customDrawer(context, _scaffoldKey),
+      endDrawer: customDrawer(context , _scaffoldKey),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         child: AppBar(

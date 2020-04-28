@@ -243,9 +243,8 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
     getPrefs();
+    super.initState();
   }
 
   @override
@@ -264,6 +263,9 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
         }
       },
       child: Switch(
+        activeColor: basicColor,
+        activeTrackColor: basicColor,
+        inactiveTrackColor: Colors.grey,
         value: isSwitched,
       ),
     );
