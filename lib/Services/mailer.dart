@@ -1,42 +1,45 @@
+import 'dart:convert';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
+import 'package:http/http.dart' as http;
 
 class MailerService {
-  Map<String, String> data;
+  String to_email, subject, body;
+  MailerService({this.to_email, this.subject, this.body});
 
-  MailerService({Map<String, String> data}) {
-    this.data = data;
-
-    final smtpServer = gmail(apliEmailID, apliPassword);
-    final message = Message()
-      ..from = Address(apliEmailID, 'Your name')
-      ..recipients.add(apliEmailID)
-      //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
-      //..bccRecipients.add(Address('bccAddress@example.com'))
-      ..subject = data.containsKey('college')
-          ? 'New College Register ${DateTime.now().toString()}'
-          : data.containsKey('email') ? 'Pasword Forgot Mail' : ''
-      ..text = data.containsKey('college')
-          ? 'College : ${data['college']}\nState : ${data['state']}\nCity : ${data['city']}'
-          : data.containsKey('email') ? 'OTP : ${data['OTP']}' : '';
-    //..html = "<h1>Test</h1>\n<p>Hey! Here's some HTML content</p>";
-
-    sendMail() async {
-      try {
-        final sendReport = await send(message, smtpServer);
-        print('Message sent: ' + sendReport.toString());
-      } on MailerException catch (e) {
-        print('Message not sent.');
-        print(e.toString());
-        for (var p in e.problems) {
-          print('Problem: ${p.code}: ${p.msg}');
+  Future send() async {
+    int result;
+    try {
+      await http
+          .post(send_mail,
+              body: json.decode('{'
+                  '"secret" : "$send_mailSecret", '
+                  '"to_email": "$to_email",'
+                  '"subject": "$subject",'
+                  '"body": "$body"'
+                  '}'))
+          .then((response) {
+            print(response.statusCode);
+        if (response.statusCode == 200) {
+          var decodedData = jsonDecode(response.body);
+          if (decodedData["secret"] == send_mailSecret) {
+            if (decodedData["success"])
+              result = 1;
+            else
+              result = 0;
+          } else
+            result = -2;
+        } else {
+          result = -2;
         }
-      }
+      });
+      return result ?? -2;
+    } on Exception catch (e) {
+      print(e.toString());
+      return null;
     }
-
-    sendMail();
-
   }
 }
 

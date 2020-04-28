@@ -1,16 +1,16 @@
-import 'dart:convert';
 
+import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:search_widget/search_widget.dart';
-import 'package:http/http.dart' as http;
 import 'package:toast/toast.dart';
 
-import '../HomeLoginWrapper.dart';
+import '../../HomeLoginWrapper.dart';
 import 'collegeNotFound.dart';
 
 class Register extends StatefulWidget {
@@ -25,6 +25,7 @@ class Register extends StatefulWidget {
 double height, width;
 
 class _RegisterState extends State<Register> {
+  final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
@@ -233,7 +234,7 @@ class _RegisterState extends State<Register> {
                                     });
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty) {
+                                    if (!validateEmail(value)) {
                                       return 'please enter valid email';
                                     }
                                     return null;
@@ -331,7 +332,6 @@ class _RegisterState extends State<Register> {
                                           collegeSet = false;
                                         });
                                     },
-                                    // widget customization
                                     noItemsFoundWidget: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: <Widget>[
@@ -351,10 +351,6 @@ class _RegisterState extends State<Register> {
                                                         CollegeNotFound(
                                                             phoneNo: widget
                                                                 .phoneNo)));
-//                                            setState(() {
-//                                              collegeNotFound = true;
-//                                              allSet = true;
-//                                            });
                                           },
                                           child: Text(
                                             "College not found?",
@@ -458,7 +454,6 @@ class _RegisterState extends State<Register> {
                                               courseSet = false;
                                             });
                                         },
-                                        // widget customization
                                         noItemsFoundWidget: NoItemsFound(),
                                         textFieldBuilder:
                                             (TextEditingController controller,
@@ -553,7 +548,6 @@ class _RegisterState extends State<Register> {
                                               branchSet = false;
                                             });
                                         },
-                                        // widget customization
                                         noItemsFoundWidget: NoItemsFound(),
                                         textFieldBuilder:
                                             (TextEditingController controller,
@@ -641,7 +635,6 @@ class _RegisterState extends State<Register> {
                                             allSet = true;
                                           });
                                         },
-                                        // widget customization
                                         noItemsFoundWidget: NoItemsFound(),
                                         textFieldBuilder:
                                             (TextEditingController controller,
@@ -670,82 +663,8 @@ class _RegisterState extends State<Register> {
                                       ),
                               ),
                             ),
-//                            Visibility(
-//                              visible: collegeNotFound,
-//                              child: Column(
-//                                children: <Widget>[
-//                                  Padding(
-//                                      padding: EdgeInsets.only(
-//                                          top: height * 0.02,
-//                                          left: width * 0.1,
-//                                          right: width * 0.1),
-//                                      child: TextFormField(
-//                                        obscureText: false,
-//                                        decoration: loginFormField.copyWith(
-//                                            labelText: 'Field of Study',
-//                                            icon: Icon(
-//                                              Icons.book,
-//                                              color: basicColor,
-//                                            )),
-//                                        onChanged: (text) {
-//                                          setState(() => fieldOfStudy = text);
-//                                        },
-//                                        validator: (value) {
-//                                          if (value.isEmpty) {
-//                                            return 'field of study cannot be empty';
-//                                          }
-//                                          return null;
-//                                        },
-//                                      )),
-//                                  Padding(
-//                                      padding: EdgeInsets.only(
-//                                          top: height * 0.02,
-//                                          left: width * 0.1,
-//                                          right: width * 0.1),
-//                                      child: TextFormField(
-//                                        obscureText: false,
-//                                        decoration: loginFormField.copyWith(
-//                                            labelText: 'State',
-//                                            icon: Icon(
-//                                              Icons.location_on,
-//                                              color: basicColor,
-//                                            )),
-//                                        onChanged: (text) {
-//                                          setState(() => state = text);
-//                                        },
-//                                        validator: (value) {
-//                                          if (value.isEmpty) {
-//                                            return 'state cannot be empty';
-//                                          }
-//                                          return null;
-//                                        },
-//                                      )),
-//                                  Padding(
-//                                      padding: EdgeInsets.only(
-//                                          top: height * 0.02,
-//                                          left: width * 0.1,
-//                                          right: width * 0.1),
-//                                      child: TextFormField(
-//                                        obscureText: false,
-//                                        decoration: loginFormField.copyWith(
-//                                            labelText: 'City',
-//                                            icon: Icon(Icons.location_city,
-//                                                color: basicColor)),
-//                                        onChanged: (text) {
-//                                          setState(() => city = text);
-//                                        },
-//                                        validator: (value) {
-//                                          if (value.isEmpty) {
-//                                            return 'city cannot be empty';
-//                                          }
-//                                          return null;
-//                                        },
-//                                      )),
-//                                ],
-//                              ),
-//                            ),
                             Visibility(
-                                visible: allSet, //|| collegeNotFound,
+                                visible: allSet,
                                 child: Padding(
                                     padding: EdgeInsets.only(
                                         top: height * 0.05,
@@ -769,166 +688,90 @@ class _RegisterState extends State<Register> {
                                           onPressed: () async {
                                             if (_formKey.currentState
                                                 .validate()) {
-//                                              if (!collegeNotFound) {
                                               setState(() {
                                                 loading = true;
                                               });
-                                              DocumentReference temp = Firestore
-                                                  .instance
-                                                  .collection('users')
-                                                  .document(email);
-                                              var getDoc = await temp
-                                                  .get()
-                                                  .then((doc) async {
-                                                if (doc.exists) {
-                                                  print('object');
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                  Toast.show(
-                                                      'Account already exists',
-                                                      context);
-                                                } else {
-                                                  try {
-                                                    await http
-                                                        .post(passHash,
-                                                            body: json.decode(
-                                                                '{'
-                                                                '"secret" : "$passHashSecret", '
-                                                                '"password": "$password"'
-                                                                '}'))
-                                                        .then((response) async {
-                                                      print(
-                                                          response.statusCode);
-                                                      if (response.statusCode ==
-                                                          200) {
-                                                        var decodedData =
-                                                            jsonDecode(
-                                                                response.body);
-                                                        if (decodedData[
-                                                                "secret"] ==
-                                                            passHashSecret) {
-                                                          String hash =
-                                                              decodedData[
-                                                                  "hash"];
-                                                          Future.wait([
-                                                            Firestore.instance
-                                                                .collection(
-                                                                    'users')
-                                                                .document(email)
-                                                                .setData({
-                                                              'name': fname +
-                                                                  '' +
-                                                                  lname,
-                                                              'password': hash,
-                                                              'timestamp':
-                                                                  Timestamp
-                                                                      .now(),
-                                                              'user_type':
-                                                                  'Candidate'
-                                                            }),
-                                                            Firestore.instance
-                                                                .collection(
-                                                                    'candidates')
-                                                                .document(email)
-                                                                .setData({
-                                                              'First_name':
-                                                                  fname,
-                                                              'Last_name':
-                                                                  lname,
-                                                              'email': email,
-                                                              'name': fname +
-                                                                  ' ' +
-                                                                  lname,
-                                                              'ph_no': widget
-                                                                  .phoneNo,
-                                                              'batch_id':
-                                                                  batchID[
-                                                                      batchText],
-                                                            }),
-                                                            Firestore.instance
-                                                                .collection(
-                                                                    'rel_batch_candidates')
-                                                                .document(batchID[
-                                                                    batchText])
-                                                                .setData({
-                                                              'batch_id':
-                                                                  batchID[
-                                                                      batchText],
-                                                              'candidate_id':
-                                                                  email
-                                                            }),
-                                                          ]);
-                                                          Toast.show(
-                                                              'Registered Successfully',
-                                                              context);
-                                                          Navigator.of(context)
-                                                              .pushAndRemoveUntil(
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Wrapper()),
-                                                                  (Route<dynamic>
-                                                                          route) =>
-                                                                      false);
-                                                        } else
-                                                          Toast.show(
-                                                              'Could not connect to server',
-                                                              context);
-                                                      } else
-                                                        Toast.show(
-                                                            'Could not connect to server',
-                                                            context);
-                                                    });
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                  } catch (e) {
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                    Toast.show('Signup failed',
-                                                        context);
-                                                    Navigator.pop(context);
-                                                  }
-                                                }
-                                              });
-
                                               var net = await Connectivity()
                                                   .checkConnectivity();
                                               if (net ==
                                                   ConnectivityResult.none) {
                                                 Toast.show(
                                                     'No internet connection',
-                                                    context);
+                                                    context,
+                                                    duration: 5,
+                                                    backgroundColor:
+                                                        Colors.red);
                                                 setState(() {
                                                   loading = false;
                                                 });
+                                              } else {
+                                                dynamic result = await _auth
+                                                    .registerWithoutAuth(
+                                                        fname,
+                                                        lname,
+                                                        email,
+                                                        password,
+                                                        widget.phoneNo,
+                                                        collegeText,
+                                                        courseText,
+                                                        branchText,
+                                                        batchText,
+                                                        batchID[batchText]);
+                                                setState(() {
+                                                  loading = false;
+                                                });
+                                                if (result == -1) {
+                                                  //already exists
+                                                  Toast.show(
+                                                      'Account already exists, try logging in',
+                                                      context,
+                                                      duration: 5,
+                                                      backgroundColor:
+                                                          Colors.red);
+                                                } else if (result == -2) {
+                                                  //server
+                                                  Toast.show(
+                                                      'Could not connect to server',
+                                                      context,
+                                                      duration: 5,
+                                                      backgroundColor:
+                                                          Colors.red);
+                                                } else if (result == 0) {
+                                                  //failed
+                                                  Toast.show(
+                                                      'Failed, try again later',
+                                                      context,
+                                                      duration: 5,
+                                                      backgroundColor:
+                                                          Colors.red);
+                                                  Navigator.pop(context);
+                                                } else if (result == 1) {
+                                                  //success
+                                                  Toast.show(
+                                                      'Successfully registered, kindly login again',
+                                                      context,
+                                                      duration: 5,
+                                                      backgroundColor:
+                                                          Colors.red);
+                                                  Navigator.of(context)
+                                                      .pushAndRemoveUntil(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Wrapper()),
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                } else {
+                                                  Toast.show(
+                                                      'Failed, try again later',
+                                                      context,
+                                                      duration: 5,
+                                                      backgroundColor:
+                                                          Colors.red);
+                                                  Navigator.pop(context);
+                                                }
                                               }
-//                                              } else if (collegeNotFound) {
-//                                                setState(() {
-//                                                  loading = true;
-//                                                });
-//                                                //add to excel sheet
-//                                                Map<String, String> data = {
-//                                                  'college': collegeText,
-//                                                  'state': state,
-//                                                  'city': city
-//                                                };
-//                                                MailerService(
-//                                                    username: apliEmailID,
-//                                                    password: apliPassword,
-//                                                    data: data);
-//                                                setState(() {
-//                                                  loading = false;
-//                                                });
-//
-//                                                Navigator.pushReplacement(
-//                                                    context,
-//                                                    MaterialPageRoute(
-//                                                        builder: (context) =>
-//                                                            Review(false)));
-//                                              }
                                             }
                                           }),
                                     ))),

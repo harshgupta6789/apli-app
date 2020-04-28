@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/functions.dart';
@@ -12,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
-import '../HomeLoginWrapper.dart';
+import '../../HomeLoginWrapper.dart';
 
 class UpdatePassword extends StatefulWidget {
   final String email;
@@ -24,7 +23,7 @@ class UpdatePassword extends StatefulWidget {
 double width, height;
 
 class _UpdatePasswordState extends State<UpdatePassword> {
-  final AuthService _auth = AuthService();
+
   final _formKey = GlobalKey<FormState>();
 
   bool loading = false;
@@ -125,55 +124,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                   setState(() {
                                     loading = true;
                                   });
-                                  await http
-                                      .post(passHash,
-                                          body: json.decode('{'
-                                              '"secret" : "$passHashSecret", '
-                                              '"password": "$password"'
-                                              '}'))
-                                      .then((response) async {
-                                    if (response.statusCode == 200) {
-                                      var decodedData =
-                                          jsonDecode(response.body);
-                                      if (decodedData["secret"] ==
-                                          passHashSecret) {
-                                        String hash = decodedData["hash"];
-                                        await Firestore.instance
-                                            .collection('users')
-                                            .document(widget.email)
-                                            .updateData({
-                                          'password': hash,
-                                        });
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        Toast.show(
-                                            'Password updated successfully',
-                                            context);
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Wrapper()),
-                                                (Route<dynamic> route) =>
-                                                    false);
-                                      } else {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        Toast.show(
-                                            'Cannot connect server', context);
-                                      }
-                                    } else {
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                      Toast.show(
-                                          'Cannot connect server', context);
-                                    }
-                                  });
                                   var net =
-                                      await Connectivity().checkConnectivity();
+                                  await Connectivity().checkConnectivity();
                                   if (net == ConnectivityResult.none) {
                                     Toast.show(
                                         'No Internet Connection', context,
@@ -181,6 +133,54 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                         backgroundColor: Colors.red);
                                     setState(() {
                                       loading = false;
+                                    });
+                                  } else {
+                                    await http
+                                        .post(passHash,
+                                        body: json.decode('{'
+                                            '"secret" : "$passHashSecret", '
+                                            '"password": "$password"'
+                                            '}'))
+                                        .then((response) async {
+                                      if (response.statusCode == 200) {
+                                        var decodedData =
+                                        jsonDecode(response.body);
+                                        if (decodedData["secret"] ==
+                                            passHashSecret) {
+                                          String hash = decodedData["hash"];
+                                          await Firestore.instance
+                                              .collection('users')
+                                              .document(widget.email)
+                                              .updateData({
+                                            'password': hash,
+                                          });
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          Toast.show(
+                                              'Password updated successfully',
+                                              context);
+                                          Navigator.of(context)
+                                              .pushAndRemoveUntil(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Wrapper()),
+                                                  (Route<dynamic> route) =>
+                                              false);
+                                        } else {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          Toast.show(
+                                              'Cannot connect server', context);
+                                        }
+                                      } else {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        Toast.show(
+                                            'Cannot connect server', context);
+                                      }
                                     });
                                   }
                                 }

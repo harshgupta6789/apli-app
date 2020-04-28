@@ -1,6 +1,6 @@
 import 'package:apli/Screens/Home/mainScreen.dart';
-import 'package:apli/Screens/Login-Signup/forgotPassword.dart';
-import 'package:apli/Screens/Login-Signup/verifyPhoneNo.dart';
+import 'package:apli/Screens/Login-Signup/Login/forgotPassword.dart';
+import 'package:apli/Screens/Login-Signup/Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/functions.dart';
@@ -10,7 +10,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
-import '../../Services/auth.dart';
+import '../../../Services/auth.dart';
 
 double height, width;
 
@@ -207,7 +207,7 @@ class _LoginState extends State<Login> {
                                     var net = await Connectivity()
                                         .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
-                                      Toast.show('Not Internet', context,
+                                      Toast.show('No Internet', context,
                                           backgroundColor: Colors.red);
                                     } else {
                                       Navigator.push(

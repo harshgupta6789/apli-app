@@ -19,9 +19,7 @@ class _UpdatesState extends State<Updates> {
   Timestamp userCreatedTime;
 
   Future<List<String>> userInit(String email) async {
-    String batchID;
     String course;
-    String email;
     List<String> tempFilters = [];
     await SharedPreferences.getInstance().then((prefs) async {
       await Firestore.instance
@@ -29,7 +27,9 @@ class _UpdatesState extends State<Updates> {
           .document(prefs.getString('email'))
           .get()
           .then((s) async {
-        tempFilters.add(s.data['timestamp'].microsecondsSinceEpoch.toString());
+            if(s.data['timestamp'] != null) 
+              tempFilters.add(s.data['timestamp'].microsecondsSinceEpoch.toString());
+            else tempFilters.add(Timestamp.fromDate(DateTime.utc(2018)).microsecondsSinceEpoch.toString());
         await Firestore.instance
             .collection('candidates')
             .document(prefs.getString('email'))
@@ -153,7 +153,6 @@ class _UpdatesState extends State<Updates> {
                 );
               else {
                 filters = snapshot.data;
-                print(filters);
                 return StreamBuilder(
                     stream: Firestore.instance
                         .collection("notifications")

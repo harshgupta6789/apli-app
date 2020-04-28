@@ -1,12 +1,14 @@
-import 'package:apli/Screens/Login-Signup/register.dart';
-import 'package:apli/Screens/Login-Signup/review.dart';
+import 'package:apli/Screens/Login-Signup/Signup/register.dart';
+import 'package:apli/Screens/Login-Signup/Signup/review.dart';
 import 'package:apli/Services/mailer.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class CollegeNotFound extends StatefulWidget {
   String phoneNo;
@@ -173,28 +175,45 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: MaterialButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     setState(() {
                                       loading = true;
                                     });
-                                    //add to excel sheet
-                                    Map<String, String> data = {
-                                      'email': email,
-                                      'college': college,
-                                      'state': state,
-                                      'city': city
-                                    };
-                                    MailerService(data: data);
-                                    setState(() {
-                                      loading = false;
-                                    });
-
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Review(false)));
+                                    var net = await Connectivity()
+                                        .checkConnectivity();
+                                    if (net == ConnectivityResult.none) {
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      Toast.show('Not Internet', context,
+                                          backgroundColor: Colors.red);
+                                    } else {
+                                      //add to excel sheet
+                                      String body = 'Email = $email College = $college Field of Study = $fieldOfStudy State = $state City = $city';
+                                      final MailerService _mail = MailerService(to_email: 'harshhvg999@gmail.com', subject: 'abcd', body: body);
+                                      dynamic result = await _mail.send();
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      if(result == -2) {
+                                        Toast.show('Could not connect to server', context, duration: 5, backgroundColor: Colors.red);
+                                      } else if(result == 0) {
+                                        //failed
+                                        Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+//                                        Navigator.pop(context);
+                                      } else if(result == 1) {
+                                        //success
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Review(false)));
+                                      } else {
+                                        Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+//                                        Navigator.pop(context);
+                                      }
+                                    }
                                   }
                                 },
                                 child: Text(

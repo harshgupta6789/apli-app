@@ -26,7 +26,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: customDrawer(context , _scaffoldKey),
+      endDrawer: customDrawer(context, _scaffoldKey),
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         child: AppBar(
