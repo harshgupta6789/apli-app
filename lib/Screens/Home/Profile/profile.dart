@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   String result = '';
   String fetchUrl;
   currentState x = currentState.none;
+  StorageUploadTask uploadTask;
 
   camInit() async {
     cameras = await availableCameras();
@@ -55,6 +56,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         .collection('candidates')
         .document(email)
         .updateData({'video_resume': 'deleted'});
+  }
+
+  double _bytesTransferred(StorageTaskSnapshot snapshot) {
+    double res = (snapshot.bytesTransferred / 1024.0) / 1000;
+    double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
+    return double.parse(res.toStringAsFixed(4)) /
+        double.parse(res2.toStringAsFixed(4));
   }
 
   usergetVideoUrl() async {
@@ -89,15 +97,16 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     StorageReference storageReference;
     storageReference =
         FirebaseStorage.instance.ref().child("resumeVideos/$filename");
-    final StorageUploadTask uploadTask = storageReference.putFile(file);
+    uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
     if (uploadTask.isInProgress) {
       setState(() {
         x = currentState.uploading;
       });
-      print(uploadTask.lastSnapshot.bytesTransferred.toString());
+      print(_bytesTransferred(uploadTask.lastSnapshot));
     }
+
     if (url != null) {
       setState(() {
         x = currentState.success;
@@ -247,7 +256,24 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       case currentState.uploading:
         return Padding(
           padding: EdgeInsets.only(top: 40),
-          child: Align(child: Text("Uploading Your Resume!")),
+          child: StreamBuilder<StorageTaskEvent>(
+              stream: uploadTask.events,
+              builder:
+                  (context, AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                if (asyncSnapshot.hasData) {
+                  final StorageTaskEvent event = asyncSnapshot.data;
+                  final StorageTaskSnapshot snapshot = event.snapshot;
+                  return Column(
+                    children: <Widget>[
+                      //Text('${_bytesTransferred(snapshot)} Megabytes sent'),
+                      CircularProgressIndicator(
+                        value: _bytesTransferred(snapshot),
+                      )
+                    ],
+                  );
+                }
+                return Align(child: Text("Uploading Your Resume!"));
+              }),
         );
         break;
       case currentState.success:
