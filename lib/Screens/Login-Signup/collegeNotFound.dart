@@ -3,7 +3,9 @@ import 'package:apli/Screens/Login-Signup/review.dart';
 import 'package:apli/Services/mailer.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class CollegeNotFound extends StatefulWidget {
@@ -17,8 +19,9 @@ double height, width;
 
 class _CollegeNotFoundState extends State<CollegeNotFound> {
   final _formKey = GlobalKey<FormState>();
-  String fieldOfStudy = '', state = '', city = '', college = '';
+  String fieldOfStudy = '', state = '', city = '', college = '', email = '';
   bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -26,10 +29,13 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
     return loading
         ? Loading()
         : WillPopScope(
-      onWillPop: (){
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Register(widget.phoneNo)));
-      },
-          child: Scaffold(
+            onWillPop: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Register(widget.phoneNo)));
+            },
+            child: Scaffold(
               body: SingleChildScrollView(
                 child: Form(
                   key: _formKey,
@@ -40,6 +46,29 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                             top: height * 0.2, right: width * 0.5),
                         child: Image.asset("Assets/Images/logo.png"),
                       ),
+                      Padding(
+                          padding: EdgeInsets.only(
+                              top: height * 0.02,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: TextFormField(
+                            obscureText: false,
+                            decoration: loginFormField.copyWith(
+                                labelText: 'Email Address',
+                                icon: Icon(
+                                  EvaIcons.emailOutline,
+                                  color: basicColor,
+                                )),
+                            onChanged: (text) {
+                              setState(() => email = text);
+                            },
+                            validator: (value) {
+                              if (!validateEmail(value)) {
+                                return 'Email invalid';
+                              }
+                              return null;
+                            },
+                          )),
                       Padding(
                           padding: EdgeInsets.only(
                               top: height * 0.02,
@@ -118,8 +147,8 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                             obscureText: false,
                             decoration: loginFormField.copyWith(
                                 labelText: 'City',
-                                icon:
-                                    Icon(Icons.location_city, color: basicColor)),
+                                icon: Icon(Icons.location_city,
+                                    color: basicColor)),
                             onChanged: (text) {
                               setState(() => city = text);
                             },
@@ -134,7 +163,8 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                           padding: EdgeInsets.only(
                               top: height * 0.1,
                               left: width * 0.1,
-                              right: width * 0.1),
+                              right: width * 0.1,
+                              bottom: height * 0.1),
                           child: Container(
                               height: height * 0.08,
                               width: width * 0.8,
@@ -150,14 +180,12 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                     });
                                     //add to excel sheet
                                     Map<String, String> data = {
+                                      'email': email,
                                       'college': college,
                                       'state': state,
                                       'city': city
                                     };
-                                    MailerService(
-                                        username: apliEmailID,
-                                        password: apliPassword,
-                                        data: data);
+                                    MailerService(data: data);
                                     setState(() {
                                       loading = false;
                                     });
@@ -165,7 +193,8 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => Review(false)));
+                                            builder: (context) =>
+                                                Review(false)));
                                   }
                                 },
                                 child: Text(
@@ -181,6 +210,6 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                 ),
               ),
             ),
-        );
+          );
   }
 }

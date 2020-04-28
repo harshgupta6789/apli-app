@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
@@ -28,21 +29,6 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
   bool loading = false;
   String password;
-
-  bool validatePassword(String value) {
-    Pattern pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = new RegExp(pattern);
-    print(value);
-    if (value.length < 8) {
-      return false;
-    } else {
-      if (!regex.hasMatch(value))
-        return false;
-      else
-        return true;
-    }
-  }
 
   bool obscure = true;
 
@@ -73,9 +59,17 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           obscureText: obscure,
                           decoration: loginFormField.copyWith(
                               labelText: 'Password',
-                              suffixIcon: IconButton(icon: Icon(EvaIcons.eyeOutline, color: Colors.grey,), onPressed: (){setState(() {
-                                obscure = !obscure;
-                              });},),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  EvaIcons.eyeOutline,
+                                  color: Colors.grey,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    obscure = !obscure;
+                                  });
+                                },
+                              ),
                               icon:
                                   Icon(Icons.lock_outline, color: basicColor)),
                           onChanged: (text) {

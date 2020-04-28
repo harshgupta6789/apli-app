@@ -10,6 +10,9 @@ const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
 const String checkLogin = "https://dev.apli.ai/accounts/checkLogin";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 
+const String apliEmailID = 'info@apli.ai';
+const String apliPassword = 'Priyam112@';
+
 // ---------------Strings--------------------
 const String login = "Log In";
 const String email = "Email ID";
@@ -43,8 +46,6 @@ const String videoIntroSlogan =
     "Give a short introduction of yourself  for\n your recruiters to see";
 const String psychometryTestSlogan =
     "This is a psychometry test to help the\nrecruiters understand your personality";
-const String apliEmailID = 'apli.ai@gmail.com';
-const String apliPassword = 'abcd1234';
 const String intro = 'Intro';
 const String about = 'About';
 const String experience = 'Experience';

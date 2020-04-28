@@ -1,20 +1,17 @@
+import 'package:apli/Shared/constants.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
 
 class MailerService {
-  String username;
-  String password;
   Map<String, String> data;
 
-  MailerService({String username, String password, Map<String, String> data}) {
-    this.username = username;
-    this.password = password;
+  MailerService({Map<String, String> data}) {
     this.data = data;
 
-    final smtpServer = gmail(username, password);
+    final smtpServer = gmail(apliEmailID, apliPassword);
     final message = Message()
-      ..from = Address(username, 'Your name')
-      ..recipients.add(username)
+      ..from = Address(apliEmailID, 'Your name')
+      ..recipients.add(apliEmailID)
       //..ccRecipients.addAll(['destCc1@example.com', 'destCc2@example.com'])
       //..bccRecipients.add(Address('bccAddress@example.com'))
       ..subject = data.containsKey('college')
@@ -31,6 +28,7 @@ class MailerService {
         print('Message sent: ' + sendReport.toString());
       } on MailerException catch (e) {
         print('Message not sent.');
+        print(e.toString());
         for (var p in e.problems) {
           print('Problem: ${p.code}: ${p.msg}');
         }
@@ -38,6 +36,7 @@ class MailerService {
     }
 
     sendMail();
+
   }
 }
 

@@ -24,7 +24,11 @@ class _UpdatesState extends State<Updates> {
     String email;
     List<String> tempFilters = [];
     await SharedPreferences.getInstance().then((prefs) async {
-      await Firestore.instance.collection('users').document(prefs.getString('email')).get().then((s) async {
+      await Firestore.instance
+          .collection('users')
+          .document(prefs.getString('email'))
+          .get()
+          .then((s) async {
         tempFilters.add(s.data['timestamp'].microsecondsSinceEpoch.toString());
         await Firestore.instance
             .collection('candidates')
@@ -35,7 +39,7 @@ class _UpdatesState extends State<Updates> {
               .collection('batches')
               .document(snapshot1.data['batch_id'])
               .get()
-              .then((snapshot2){
+              .then((snapshot2) {
             course = snapshot2.data['course'];
             tempFilters.add(prefs.getString('email'));
             tempFilters.add(course);
@@ -78,7 +82,11 @@ class _UpdatesState extends State<Updates> {
         email = prefs.getString('email');
       });
     });
-    Firestore.instance.collection('users').document(email).get().then((snapshot) {
+    Firestore.instance
+        .collection('users')
+        .document(email)
+        .get()
+        .then((snapshot) {
       setState(() {
         userCreatedTime = snapshot.data['timestamp'];
       });
@@ -96,7 +104,7 @@ class _UpdatesState extends State<Updates> {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
-        endDrawer: customDrawer(context , _scaffoldKey),
+        endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -207,30 +215,30 @@ class _UpdatesState extends State<Updates> {
 
                           Timestamp tempTime = f.data['time'];
                           List receivers = f.data['receivers'];
-                          if(tempTime != null)
-                            if(int.parse(filters[0]) <= tempTime.microsecondsSinceEpoch) {
-                              if (receivers != null) {
-                                for (int i = 0; i < receivers.length; i++) {
-                                  if (filters.contains(receivers[i])) {
-                                    isMyNotification = true;
-                                    break;
-                                  }
+                          if (tempTime != null) if (int.parse(filters[0]) <=
+                              tempTime.microsecondsSinceEpoch) {
+                            if (receivers != null) {
+                              for (int i = 0; i < receivers.length; i++) {
+                                if (filters.contains(receivers[i])) {
+                                  isMyNotification = true;
+                                  break;
                                 }
-                                if (isMyNotification) {
-                                  if (difference(tempTime) != 'negative') {
-                                    myNotifications.add([
-                                      title,
-                                      message,
-                                      tempTime == null
-                                          ? null
-                                          : difference(tempTime),
-                                      notiType,
-                                      f.documentID,
-                                    ]);
-                                  }
+                              }
+                              if (isMyNotification) {
+                                if (difference(tempTime) != 'negative') {
+                                  myNotifications.add([
+                                    title,
+                                    message,
+                                    tempTime == null
+                                        ? null
+                                        : difference(tempTime),
+                                    notiType,
+                                    f.documentID,
+                                  ]);
                                 }
                               }
                             }
+                          }
                         });
                         if (myNotifications.length == 0)
                           return Center(

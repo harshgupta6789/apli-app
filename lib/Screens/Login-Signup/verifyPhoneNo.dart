@@ -113,7 +113,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             contentPadding: EdgeInsets.all(10),
             actions: <Widget>[
               FlatButton(
-                child: Text('Next'),
+                child: Text('Verify'),
                 onPressed: () {
                   setState(() {
                     loading = true;

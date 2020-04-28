@@ -14,7 +14,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 double width, height;
 
-
 Widget customDrawer(BuildContext context, GlobalKey x) {
   width = MediaQuery.of(context).size.width;
   height = MediaQuery.of(context).size.height;
@@ -29,7 +28,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
 
     if (prefs.getBool("isNotificationsEnabled") != null) {
       isSwitched = prefs.getBool("isNotificationsEnabled");
-    } else isSwitched = true;
+    } else
+      isSwitched = true;
 
     email = prefs.getString('email');
     userData.add(email);
@@ -118,15 +118,14 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                   }),
             ),
             ListTile(
-                dense: true,
-                title: Text(
-                  "Notifications",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
-                ),
-
+              dense: true,
+              title: Text(
+                "Notifications",
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
+              ),
               trailing: NotificationSwitch(),
-                ),
+            ),
             Divider(
               thickness: dividerThickness,
             ),
@@ -219,7 +218,6 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
   );
 }
 
-
 class NotificationSwitch extends StatefulWidget {
   @override
   _NotificationSwitchState createState() => _NotificationSwitchState();
@@ -235,19 +233,21 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
       setState(() {
         prefs = prefs1;
       });
-      if(prefs.containsKey('isNotificationsEnabled')) {
+      if (prefs.containsKey('isNotificationsEnabled')) {
         setState(() {
           isSwitched = prefs.getBool('isNotificationsEnabled');
         });
       }
     });
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getPrefs();
   }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

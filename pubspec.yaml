@@ -58,6 +58,7 @@ dependencies:
   mailer:
   loadmore: ^1.0.4
   flutter_html: ^0.11.1
+  mailer2: ^1.2.5
 
 
 dev_dependencies:

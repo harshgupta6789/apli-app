@@ -97,7 +97,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             contentPadding: EdgeInsets.all(10),
             actions: <Widget>[
               FlatButton(
-                child: Text('Next'),
+                child: Text('Verify'),
                 onPressed: () {
                   setState(() {
                     loading2 = true;
