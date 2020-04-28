@@ -33,24 +33,24 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: IconButton(
-                    icon: Icon(
-                      EvaIcons.funnelOutline,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {}),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: IconButton(
-                    icon: Icon(
-                      EvaIcons.searchOutline,
-                      color: Colors.white,
-                    ),
-                    onPressed: null),
-              ),
+//              Padding(
+//                padding: const EdgeInsets.only(bottom: 10.0),
+//                child: IconButton(
+//                    icon: Icon(
+//                      EvaIcons.funnelOutline,
+//                      color: Colors.white,
+//                    ),
+//                    onPressed: () {}),
+//              ),
+//              Padding(
+//                padding: const EdgeInsets.only(bottom: 10.0),
+//                child: IconButton(
+//                    icon: Icon(
+//                      EvaIcons.searchOutline,
+//                      color: Colors.white,
+//                    ),
+//                    onPressed: null),
+//              ),
               Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: IconButton(
