@@ -1,4 +1,4 @@
-import 'package:apli/Screens/Login-Signup/register.dart';
+import 'package:apli/Screens/Login-Signup/Signup/register.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:connectivity/connectivity.dart';

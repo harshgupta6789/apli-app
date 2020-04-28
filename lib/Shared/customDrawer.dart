@@ -1,5 +1,5 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
-import 'package:apli/Screens/Login-Signup/forgotPassword.dart';
+import 'package:apli/Screens/Login-Signup/Login/forgotPassword.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:app_settings/app_settings.dart';
