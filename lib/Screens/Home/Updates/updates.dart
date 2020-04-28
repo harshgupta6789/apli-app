@@ -12,8 +12,20 @@ class Updates extends StatefulWidget {
   _UpdatesState createState() => _UpdatesState();
 }
 
+double width, height;
+
 class _UpdatesState extends State<Updates> {
-  List filters = [];
+  List filters = [], chosenTypes = [];
+  List typesList = ['New Jobs', 'Messages', 'Applications', 'Interviews', 'Applications', 'Abcd'];
+  Map<String, String> typesMap = {
+    'New Jobs' : 'message_from_tpo',
+    'Messages' : 'added_to_placement',
+    'Applications' : 'cand_status_change',
+    'Interviews' : 'cand_status_change_from_campus',
+    'Applications' : 'message_from_company',
+    'Abcdefg' : 'apli_job',
+  };
+
   List<List<String>> myNotifications = [];
   int currentTime = Timestamp.now().microsecondsSinceEpoch;
   Timestamp userCreatedTime;
@@ -101,6 +113,8 @@ class _UpdatesState extends State<Updates> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
@@ -141,131 +155,185 @@ class _UpdatesState extends State<Updates> {
           ),
           preferredSize: Size.fromHeight(50),
         ),
-        body: FutureBuilder(
-          future: userInit(email),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data.length == 0)
-                return Center(
-                  child: Text('No New Updates'),
+        body: Column(
+          children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+            height: height * 0.07,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: typesList.length,
+              itemBuilder: (BuildContext context, int index) {
+                String temp = typesMap[typesList[index]];
+                bool contains = chosenTypes.contains(temp);
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: Stack(
+                    children: <Widget>[
+                      RaisedButton(
+                        padding: EdgeInsets.only(left: 30, right: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        color: contains ? basicColor : Colors.lightBlue[300],
+                        child: Text(typesList[index], style: TextStyle(color: contains ? Colors.white : Colors.black),),
+                        onPressed: () {
+                          if(contains)
+                            setState(() {
+                              chosenTypes.remove(temp);
+                            });
+                          else
+                            setState(() {
+                              chosenTypes.add(temp);
+                            });
+                        },
+                      ),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Visibility(
+                          visible: contains,
+                          child: Icon(Icons.done, color: Colors.white,),
+                        ),
+                      )
+                    ],
+                  ),
                 );
-              else {
-                filters = snapshot.data;
-                return StreamBuilder(
-                    stream: Firestore.instance
-                        .collection("notifications")
-                        .orderBy('time', descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot1) {
-                      if (snapshot1.hasData) {
-                        snapshot1.data.documents.forEach((f) {
-                          bool isMyNotification = false;
-                          String title;
-                          String message, status;
-                          String notiType = f.data['type'];
+              }),
+          ),
+            FutureBuilder(
+              future: userInit(email),
+              builder:
+                  (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.length == 0)
+                    return Center(
+                      child: Text('No New Updates'),
+                    );
+                  else {
+                    filters = snapshot.data;
+                    return StreamBuilder(
+                        stream: Firestore.instance
+                            .collection("notifications")
+                            .orderBy('time', descending: true)
+                            .snapshots(),
+                        builder: (context, snapshot1) {
+                          if (snapshot1.hasData) {
+                            snapshot1.data.documents.forEach((f) {
+                              bool isMyNotification = false;
+                              String title;
+                              String message, status;
+                              String notiType = f.data['type'];
 
-                          String messageToShow(
-                              String status, String name, String role) {
-                            if (status == 'HIRED' || status == 'OFFERED') {
-                              return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
-                            } else if (status == 'INTERVIEW') {
-                              return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
-                            } else if (status == 'REJECTED') {
-                              return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
-                            } else {
-                              return '';
-                            }
-                          }
+                              String messageToShow(
+                                  String status, String name, String role) {
+                                if (status == 'HIRED' || status == 'OFFERED') {
+                                  return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
+                                } else if (status == 'INTERVIEW') {
+                                  return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
+                                } else if (status == 'REJECTED') {
+                                  return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
+                                } else {
+                                  return '';
+                                }
+                              }
 
-                          switch (notiType) {
-                            case 'message_from_tpo':
-                              title = f.data['tpo_name'];
-                              message = f.data['message'];
-                              break;
-                            case 'added_to_placement':
-                              title = f.data['campus'];
-                              message = f.data['placement'];
-                              break;
-                            case 'cand_status_change':
-                              title = f.data['name'];
-                              status = f.data['status'];
-                              message = messageToShow(status,
-                                  f.data['name'] ?? '', f.data['job'] ?? '');
-                              break;
-                            case 'cand_status_change_from_campus':
-                              title = f.data['campus_id'];
-                              status = f.data['status'];
-                              message = messageToShow(status,
-                                  f.data['name'] ?? '', f.data['job'] ?? '');
-                              break;
-                            case 'message_from_company':
-                              title = f.data['name'];
-                              message = f.data['message'];
-                              break;
-                            case 'apli_job':
-                              title = f.data['name'];
-                              message = f.data['message'];
-                              break;
-                            default:
-                              message = null;
-                          }
-
-                          Timestamp tempTime = f.data['time'];
-                          List receivers = f.data['receivers'];
-                          if (tempTime != null) if (int.parse(filters[0]) <=
-                              tempTime.microsecondsSinceEpoch) {
-                            if (receivers != null) {
-                              for (int i = 0; i < receivers.length; i++) {
-                                if (filters.contains(receivers[i])) {
-                                  isMyNotification = true;
+                              switch (notiType) {
+                                case 'message_from_tpo':
+                                  title = f.data['tpo_name'];
+                                  message = f.data['message'];
                                   break;
+                                case 'added_to_placement':
+                                  title = f.data['campus'];
+                                  message = f.data['placement'];
+                                  break;
+                                case 'cand_status_change':
+                                  title = f.data['name'];
+                                  status = f.data['status'];
+                                  message = messageToShow(status,
+                                      f.data['name'] ?? '', f.data['job'] ?? '');
+                                  break;
+                                case 'cand_status_change_from_campus':
+                                  title = f.data['campus_id'];
+                                  status = f.data['status'];
+                                  message = messageToShow(status,
+                                      f.data['name'] ?? '', f.data['job'] ?? '');
+                                  break;
+                                case 'message_from_company':
+                                  title = f.data['name'];
+                                  message = f.data['message'];
+                                  break;
+                                case 'apli_job':
+                                  title = f.data['name'];
+                                  message = f.data['message'];
+                                  break;
+                                default:
+                                  message = null;
+                              }
+
+                              Timestamp tempTime = f.data['time'];
+                              List receivers = f.data['receivers'];
+                              if (tempTime != null) if (int.parse(filters[0]) <=
+                                  tempTime.microsecondsSinceEpoch) {
+                                if (receivers != null) {
+                                  for (int i = 0; i < receivers.length; i++) {
+                                    if (filters.contains(receivers[i])) {
+                                      if(chosenTypes.length > 0)
+                                        if(chosenTypes.contains(notiType))
+                                          isMyNotification = true;
+                                      else
+                                        isMyNotification = true;
+                                      break;
+                                    }
+                                  }
+                                  if (isMyNotification) {
+
+                                    if (difference(tempTime) != 'negative') {
+                                      myNotifications.add([
+                                        title,
+                                        message,
+                                        tempTime == null
+                                            ? null
+                                            : difference(tempTime),
+                                        notiType,
+                                        f.documentID,
+                                      ]);
+                                    }
+                                  }
                                 }
                               }
-                              if (isMyNotification) {
-                                if (difference(tempTime) != 'negative') {
-                                  myNotifications.add([
-                                    title,
-                                    message,
-                                    tempTime == null
-                                        ? null
-                                        : difference(tempTime),
-                                    notiType,
-                                    f.documentID,
-                                  ]);
-                                }
-                              }
-                            }
-                          }
+                            });
+                            if (myNotifications.length == 0)
+                              return Center(
+                                child: Text(
+                                  'No New Updates',
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                              );
+                            else
+                              return Expanded(
+                                child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: AllNotifications(
+                                      myNotifications: myNotifications,
+                                    )),
+                              );
+                          } else
+                            return Loading();
                         });
-                        if (myNotifications.length == 0)
-                          return Center(
-                            child: Text(
-                              'No New Updates',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          );
-                        else
-                          return Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: AllNotifications(
-                                myNotifications: myNotifications,
-                              ));
-                      } else
-                        return Loading();
-                    });
-              }
-            } else if (snapshot.hasError) {
-              print(snapshot.error);
-              return Center(
-                child: Text('Error, please try again later'),
-              );
-            } else {
-              return Loading();
-            }
-          },
+                  }
+                } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  return Center(
+                    child: Text('Error, please try again later'),
+                  );
+                } else {
+                  return Loading();
+                }
+              },
+            ),
+          ],
         ));
   }
 }
