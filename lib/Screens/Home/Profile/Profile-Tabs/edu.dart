@@ -25,6 +25,9 @@ class _EducationState extends State<Education>
   File file;
   String institute = '', stream = '', board = '', cgpa = '', unit = '';
   final format = DateFormat("yyyy-MM-dd");
+  final _formKey = GlobalKey<FormState>();
+  final _formKey1 = GlobalKey<FormState>();
+  final _formKey2 = GlobalKey<FormState>();
 
   Future filePicker(BuildContext context) async {
     try {
@@ -46,14 +49,14 @@ class _EducationState extends State<Education>
           .document(prefs.getString('email'))
           .get()
           .then((s) async {
-            print(s.data['education']['X']);
-            if(s.data['education']['X']['institute']!=null){
-               setState(() {
-                 institute = s.data['education']['X']['institute'];
-                 print(institute);
-               });
-            }
+        print(s.data['education']['X']);
+        if (s.data['education']['X']['institute'] != null) {
+          setState(() {
+            institute = s.data['education']['X']['institute'];
+            print(institute);
           });
+        }
+      });
     });
   }
 
@@ -69,7 +72,7 @@ class _EducationState extends State<Education>
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    final _formKey = GlobalKey<FormState>();
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
@@ -117,360 +120,789 @@ class _EducationState extends State<Education>
           preferredSize: Size.fromHeight(100),
         ),
         body: TabBarView(
-          children: [
-            Center(
-                child: Padding(
-              padding: const EdgeInsets.only(bottom: 50.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset(
-                    "Assets/Images/profile.png",
-                    height: 300,
-                    width: 300,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(2.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text: " You can start applying for\n",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(text: " after filling in the details.")
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            )),
-            StreamBuilder<Object>(
-                stream: null,
-                builder: (context, snapshot) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ListTile(
-                              title: Text(
-                                "12th Standard",
-                                style: TextStyle(fontWeight: FontWeight.w600),
-                              ),
-                              trailing: IconButton(
-                                  icon: Icon(EvaIcons.editOutline),
-                                  onPressed: null),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 10.0, left: 18.0),
-                              child: Text(
-                                "Institute Name :",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 15.0, left: 18.0, right: 18.0),
-                                child: TextFormField(
-                                  
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      hintText: "",
-                                      labelText:  institute??"",
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                )),
-                            Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
-                              child: Text(
-                                "Stream :",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 15.0, left: 18.0, right: 18.0),
-                                child: TextFormField(
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      hintText: 'Work Email Address',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                )),
-                            Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
-                              child: Text(
-                                "Board :",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
-                              ),
-                            ),
-                            Padding(
-                                padding: EdgeInsets.only(
-                                    top: 15.0, left: 18.0, right: 18.0),
-                                child: TextFormField(
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      hintText: 'Work Email Address',
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                )),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, left: 18.0),
-                                  child: Text(
-                                    "CGPA :",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 15.0, left: width * 0.3),
-                                  child: Text(
-                                    "Unit :",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 15.0, left: 18.0),
-                                    child: Container(
-                                      width: width * 0.41,
-                                      child: TextFormField(
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            hintText: 'Work Email Address',
-                                            labelStyle:
-                                                TextStyle(color: Colors.black)),
-                                        onChanged: (text) {
-                                          setState(() => institute = text);
-                                        },
-                                        validator: (value) {
-                                          // if (!validateEmail(value)) {
-                                          //   return 'please enter valid email';
-                                          // }
-                                          // return null;
-                                        },
-                                      ),
-                                    )),
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 15.0, left: 10.0),
-                                    child: Container(
-                                      width: width * 0.41,
-                                      child: TextFormField(
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            hintText: 'Work Email Address',
-                                            labelStyle:
-                                                TextStyle(color: Colors.black)),
-                                        onChanged: (text) {
-                                          setState(() => institute = text);
-                                        },
-                                        validator: (value) {
-                                          // if (!validateEmail(value)) {
-                                          //   return 'please enter valid email';
-                                          // }
-                                          // return null;
-                                        },
-                                      ),
-                                    )),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, left: 18.0),
-                                  child: Text(
-                                    "From",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 15.0, left: 2.0),
-                                    child: Icon(Icons.calendar_today)),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: 15.0, left: width * 0.28),
-                                  child: Text(
-                                    "To :",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 15.0, left: 18.0),
-                                    child: Container(
-                                      width: width * 0.41,
-                                      child: DateTimeField(
-                                          format: format,
-                                          onShowPicker:
-                                              (context, currentValue) async {
-                                            final date = await showDatePicker(
-                                                context: context,
-                                                firstDate: DateTime(1900),
-                                                initialDate: currentValue ??
-                                                    DateTime.now(),
-                                                lastDate: DateTime(2100));
-
-                                            return date;
-                                          },
-                                          decoration: InputDecoration(
-                                            hintText: "From",
-                                            disabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                          )),
-                                    )),
-                                Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 15.0, left: 12.0),
-                                    child: Container(
-                                      width: width * 0.41,
-                                      child: DateTimeField(
-                                          format: format,
-                                          onShowPicker:
-                                              (context, currentValue) async {
-                                            final date = await showDatePicker(
-                                                context: context,
-                                                firstDate: DateTime(1900),
-                                                initialDate: currentValue ??
-                                                    DateTime.now(),
-                                                lastDate: DateTime(2100));
-
-                                            return date;
-                                          },
-                                          decoration: InputDecoration(
-                                            hintText: "From",
-                                            disabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                          )),
-                                    )),
-                              ],
-                            ),
-                            Row(
-                              children: <Widget>[
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(top: 15.0, left: 18.0),
-                                  child: Text(
-                                    "Certificate",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                ),
-                                Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 15.0, left: width * 0.28),
-                                    child: MaterialButton(
-                                      onPressed: () {
-                                        filePicker(context);
-                                      },
-                                      child: Text("Browse"),
-                                      color: Colors.grey,
-                                    )),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-            Center(
-                child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset("Assets/Images/profile.png",
-                            height: 300, width: 300),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Your test will be shown here.",
-                              style: TextStyle(fontSize: 18),
-                            ))
-                      ],
-                    ))),
-          ],
+          children: [collg(), xii(), x()],
           controller: _tabController,
         ));
+  }
+
+  Widget collg() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                  "Current Academics",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                trailing: IconButton(
+                    icon: Icon(EvaIcons.editOutline), onPressed: null),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                  child: TextFormField(
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff4285f4))),
+                        hintText: "Course :",
+                        hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                        labelText: institute ?? "",
+                        labelStyle: TextStyle(color: Colors.black)),
+                    onChanged: (text) {
+                      setState(() => institute = text);
+                    },
+                    validator: (value) {
+                      // if (!validateEmail(value)) {
+                      //   return 'please enter valid email';
+                      // }
+                      // return null;
+                    },
+                  )),
+              Padding(
+                  padding: EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                  child: TextFormField(
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff4285f4))),
+                        hintText: "Branch :",
+                        hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                        labelStyle: TextStyle(color: Colors.black)),
+                    onChanged: (text) {
+                      setState(() => institute = text);
+                    },
+                    validator: (value) {
+                      // if (!validateEmail(value)) {
+                      //   return 'please enter valid email';
+                      // }
+                      // return null;
+                    },
+                  )),
+              Padding(
+                  padding: EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                  child: TextFormField(
+                    obscureText: false,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Color(0xff4285f4))),
+                        hintText: "Duration :",
+                        hintStyle: TextStyle(fontWeight: FontWeight.w600),
+                        labelStyle: TextStyle(color: Colors.black)),
+                    onChanged: (text) {
+                      setState(() => institute = text);
+                    },
+                    validator: (value) {
+                      // if (!validateEmail(value)) {
+                      //   return 'please enter valid email';
+                      // }
+                      // return null;
+                    },
+                  )),
+              ListTile(
+                title: Text(
+                  "Semester Scores",
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+              ),
+              ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "Sem1",
+                    style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),
+                  ),
+                ),
+                trailing: IconButton(
+                    icon: Icon(EvaIcons.editOutline), onPressed: null),
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                  child: Container(
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.grey)),
+                    child: Column(children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                              child: Container(
+                                  width: width * 0.2, child: Text("Score" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                       Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                              child: Container(
+                                  width: width * 0.2, child: Text("Live Backlogs" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                       Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                              child: Container(
+                                  width: width * 0.2, child: Text("Closed Backlogs" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                    
+                      Padding(
+                        padding: EdgeInsets.only(bottom:10.0),
+                        child: Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 18.0 ,),
+                            child: Text(
+                              "Certificate",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 20),
+                            ),
+                          ),
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(top: 15.0, left: width * 0.28),
+                              child: MaterialButton(
+                                onPressed: () {
+                                  filePicker(context);
+                                },
+                                child: Text("Browse"),
+                                color: Colors.grey,
+                              )),
+                        ],
+                    ),
+                      ),]),
+                  )),
+                  
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget xii() {
+    return StreamBuilder<Object>(
+        stream: null,
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(
+                        "12th Standard",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      trailing: IconButton(
+                          icon: Icon(EvaIcons.editOutline), onPressed: null),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0, left: 18.0),
+                      child: Text(
+                        "Institute Name :",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                        child: TextFormField(
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              hintText: "",
+                              labelText: institute ?? "",
+                              labelStyle: TextStyle(color: Colors.black)),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                          validator: (value) {
+                            // if (!validateEmail(value)) {
+                            //   return 'please enter valid email';
+                            // }
+                            // return null;
+                          },
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                      child: Text(
+                        "Stream :",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                        child: TextFormField(
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              hintText: 'Work Email Address',
+                              labelStyle: TextStyle(color: Colors.black)),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                          validator: (value) {
+                            // if (!validateEmail(value)) {
+                            //   return 'please enter valid email';
+                            // }
+                            // return null;
+                          },
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                      child: Text(
+                        "Board :",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                        child: TextFormField(
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              hintText: 'Work Email Address',
+                              labelStyle: TextStyle(color: Colors.black)),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                          validator: (value) {
+                            // if (!validateEmail(value)) {
+                            //   return 'please enter valid email';
+                            // }
+                            // return null;
+                          },
+                        )),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "CGPA :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: 15.0, left: width * 0.3),
+                          child: Text(
+                            "Unit :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: TextFormField(
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    hintText: 'Work Email Address',
+                                    labelStyle: TextStyle(color: Colors.black)),
+                                onChanged: (text) {
+                                  setState(() => institute = text);
+                                },
+                                validator: (value) {
+                                  // if (!validateEmail(value)) {
+                                  //   return 'please enter valid email';
+                                  // }
+                                  // return null;
+                                },
+                              ),
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 10.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: TextFormField(
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    hintText: 'Work Email Address',
+                                    labelStyle: TextStyle(color: Colors.black)),
+                                onChanged: (text) {
+                                  setState(() => institute = text);
+                                },
+                                validator: (value) {
+                                  // if (!validateEmail(value)) {
+                                  //   return 'please enter valid email';
+                                  // }
+                                  // return null;
+                                },
+                              ),
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "From",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 2.0),
+                            child: Icon(Icons.calendar_today)),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: 15.0, left: width * 0.28),
+                          child: Text(
+                            "To :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: DateTimeField(
+                                  format: format,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+
+                                    return date;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "From",
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                  )),
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 12.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: DateTimeField(
+                                  format: format,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+
+                                    return date;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "From",
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                  )),
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "Certificate",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                            padding:
+                                EdgeInsets.only(top: 15.0, left: width * 0.28),
+                            child: MaterialButton(
+                              onPressed: () {
+                                filePicker(context);
+                              },
+                              child: Text("Browse"),
+                              color: Colors.grey,
+                            )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget x() {
+    return StreamBuilder<Object>(
+        stream: null,
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(
+                        "12th Standard",
+                        style: TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      trailing: IconButton(
+                          icon: Icon(EvaIcons.editOutline), onPressed: null),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 10.0, left: 18.0),
+                      child: Text(
+                        "Institute Name :",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                        child: TextFormField(
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              hintText: "",
+                              labelText: institute ?? "",
+                              labelStyle: TextStyle(color: Colors.black)),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                          validator: (value) {
+                            // if (!validateEmail(value)) {
+                            //   return 'please enter valid email';
+                            // }
+                            // return null;
+                          },
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                      child: Text(
+                        "Board :",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                    ),
+                    Padding(
+                        padding:
+                            EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
+                        child: TextFormField(
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              hintText: 'Work Email Address',
+                              labelStyle: TextStyle(color: Colors.black)),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                          validator: (value) {
+                            // if (!validateEmail(value)) {
+                            //   return 'please enter valid email';
+                            // }
+                            // return null;
+                          },
+                        )),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "CGPA :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: 15.0, left: width * 0.3),
+                          child: Text(
+                            "Unit :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: TextFormField(
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    hintText: 'Work Email Address',
+                                    labelStyle: TextStyle(color: Colors.black)),
+                                onChanged: (text) {
+                                  setState(() => institute = text);
+                                },
+                                validator: (value) {
+                                  // if (!validateEmail(value)) {
+                                  //   return 'please enter valid email';
+                                  // }
+                                  // return null;
+                                },
+                              ),
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 10.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: TextFormField(
+                                obscureText: false,
+                                decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    hintText: 'Work Email Address',
+                                    labelStyle: TextStyle(color: Colors.black)),
+                                onChanged: (text) {
+                                  setState(() => institute = text);
+                                },
+                                validator: (value) {
+                                  // if (!validateEmail(value)) {
+                                  //   return 'please enter valid email';
+                                  // }
+                                  // return null;
+                                },
+                              ),
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "From",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 2.0),
+                            child: Icon(Icons.calendar_today)),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(top: 15.0, left: width * 0.28),
+                          child: Text(
+                            "To :",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: DateTimeField(
+                                  format: format,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+
+                                    return date;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "From",
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                  )),
+                            )),
+                        Padding(
+                            padding: EdgeInsets.only(top: 15.0, left: 12.0),
+                            child: Container(
+                              width: width * 0.41,
+                              child: DateTimeField(
+                                  format: format,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+
+                                    return date;
+                                  },
+                                  decoration: InputDecoration(
+                                    hintText: "From",
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                    border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff4285f4))),
+                                  )),
+                            )),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                          child: Text(
+                            "Certificate",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                        ),
+                        Padding(
+                            padding:
+                                EdgeInsets.only(top: 15.0, left: width * 0.28),
+                            child: MaterialButton(
+                              onPressed: () {
+                                filePicker(context);
+                              },
+                              child: Text("Browse"),
+                              color: Colors.grey,
+                            )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
