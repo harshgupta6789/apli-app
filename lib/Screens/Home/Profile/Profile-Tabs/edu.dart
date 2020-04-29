@@ -23,8 +23,17 @@ class _EducationState extends State<Education>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   File file;
-  String institute = '', stream = '', board = '', cgpa = '', unit = '';
+  String institute = '',
+      stream = '',
+      board = '',
+      cgpa = '',
+      unit = '',
+      i10 = '',
+      b10 = '',
+      cg10 = '',
+      u10 = '';
   final format = DateFormat("yyyy-MM-dd");
+  DateTime st10, e10 , st12 , e12;
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
@@ -49,10 +58,23 @@ class _EducationState extends State<Education>
           .document(prefs.getString('email'))
           .get()
           .then((s) async {
-        print(s.data['education']['X']);
-        if (s.data['education']['X']['institute'] != null) {
+        print(s.data['education']['XII']);
+        if (s.data['education']['XII'] != null) {
           setState(() {
-            institute = s.data['education']['X']['institute'];
+            institute = s.data['education']['XII']['institute'] ?? "";
+            board = s.data['education']['XII']['board'] ?? "";
+            stream = s.data['education']['XII']['stream'] ?? "";
+            cgpa = s.data['education']['XII']['cgpa'] ?? "";
+            unit = s.data['education']['XII']['unit'] ?? "";
+            
+            print(institute);
+          });
+        } else if (s.data['education']['X'] != null) {
+          setState(() {
+            i10 = s.data['education']['X']['institute'] ?? "";
+            b10 = s.data['education']['X']['board'] ?? "";
+            cg10 = s.data['education']['X']['cgpa'] ?? "";
+            u10 = s.data['education']['X']['unit'] ?? "";
             print(institute);
           });
         }
@@ -215,7 +237,7 @@ class _EducationState extends State<Education>
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     "Sem1",
-                    style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
                   ),
                 ),
                 trailing: IconButton(
@@ -232,122 +254,145 @@ class _EducationState extends State<Education>
                           Padding(
                               padding: EdgeInsets.only(top: 15.0, left: 18.0),
                               child: Container(
-                                  width: width * 0.2, child: Text("Score" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
-                          Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
-                              child: Container(
-                                width: width * 0.41,
-                                child: TextFormField(
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                ),
-                              )),
-                        ],
-                      ),
-                       Row(
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
-                              child: Container(
-                                  width: width * 0.2, child: Text("Live Backlogs" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
-                          Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
-                              child: Container(
-                                width: width * 0.41,
-                                child: TextFormField(
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                ),
-                              )),
-                        ],
-                      ),
-                       Row(
-                        children: <Widget>[
-                          Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
-                              child: Container(
-                                  width: width * 0.2, child: Text("Closed Backlogs" ,  style: TextStyle(fontWeight: FontWeight.w600 , fontSize: 20),))),
-                          Padding(
-                              padding: EdgeInsets.only(top: 15.0, left: width*0.1),
-                              child: Container(
-                                width: width * 0.41,
-                                child: TextFormField(
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  onChanged: (text) {
-                                    setState(() => institute = text);
-                                  },
-                                  validator: (value) {
-                                    // if (!validateEmail(value)) {
-                                    //   return 'please enter valid email';
-                                    // }
-                                    // return null;
-                                  },
-                                ),
-                              )),
-                        ],
-                      ),
-                    
-                      Padding(
-                        padding: EdgeInsets.only(bottom:10.0),
-                        child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 15.0, left: 18.0 ,),
-                            child: Text(
-                              "Certificate",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600, fontSize: 20),
-                            ),
-                          ),
+                                  width: width * 0.2,
+                                  child: Text(
+                                    "Score",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ))),
                           Padding(
                               padding:
-                                  EdgeInsets.only(top: 15.0, left: width * 0.28),
-                              child: MaterialButton(
-                                onPressed: () {
-                                  filePicker(context);
-                                },
-                                child: Text("Browse"),
-                                color: Colors.grey,
+                                  EdgeInsets.only(top: 15.0, left: width * 0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
                               )),
                         ],
-                    ),
-                      ),]),
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                              child: Container(
+                                  width: width * 0.2,
+                                  child: Text(
+                                    "Live Backlogs",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ))),
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(top: 15.0, left: width * 0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                              padding: EdgeInsets.only(top: 15.0, left: 18.0),
+                              child: Container(
+                                  width: width * 0.2,
+                                  child: Text(
+                                    "Closed Backlogs",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ))),
+                          Padding(
+                              padding:
+                                  EdgeInsets.only(top: 15.0, left: width * 0.1),
+                              child: Container(
+                                width: width * 0.41,
+                                child: TextFormField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xff4285f4))),
+                                      labelStyle:
+                                          TextStyle(color: Colors.black)),
+                                  onChanged: (text) {
+                                    setState(() => institute = text);
+                                  },
+                                  validator: (value) {
+                                    // if (!validateEmail(value)) {
+                                    //   return 'please enter valid email';
+                                    // }
+                                    // return null;
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10.0),
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 15.0,
+                                left: 18.0,
+                              ),
+                              child: Text(
+                                "Certificate",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              ),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    top: 15.0, left: width * 0.28),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    filePicker(context);
+                                  },
+                                  child: Text("Browse"),
+                                  color: Colors.grey,
+                                )),
+                          ],
+                        ),
+                      ),
+                    ]),
                   )),
-                  
             ],
           ),
         ),
@@ -388,16 +433,15 @@ class _EducationState extends State<Education>
                         padding:
                             EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
                         child: TextFormField(
+                          initialValue: institute,
                           obscureText: false,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
-                              hintText: "",
-                              labelText: institute ?? "",
                               labelStyle: TextStyle(color: Colors.black)),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            if (text != '') setState(() => institute = text);
                           },
                           validator: (value) {
                             // if (!validateEmail(value)) {
@@ -418,15 +462,15 @@ class _EducationState extends State<Education>
                         padding:
                             EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
                         child: TextFormField(
+                          initialValue: stream,
                           obscureText: false,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
-                              hintText: 'Work Email Address',
                               labelStyle: TextStyle(color: Colors.black)),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            setState(() => stream = text);
                           },
                           validator: (value) {
                             // if (!validateEmail(value)) {
@@ -447,15 +491,15 @@ class _EducationState extends State<Education>
                         padding:
                             EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
                         child: TextFormField(
+                          initialValue: board,
                           obscureText: false,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
-                              hintText: 'Work Email Address',
                               labelStyle: TextStyle(color: Colors.black)),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            setState(() => board = text);
                           },
                           validator: (value) {
                             // if (!validateEmail(value)) {
@@ -492,15 +536,15 @@ class _EducationState extends State<Education>
                             child: Container(
                               width: width * 0.41,
                               child: TextFormField(
+                                initialValue: cgpa,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff4285f4))),
-                                    hintText: 'Work Email Address',
                                     labelStyle: TextStyle(color: Colors.black)),
                                 onChanged: (text) {
-                                  setState(() => institute = text);
+                                  setState(() => cgpa = text);
                                 },
                                 validator: (value) {
                                   // if (!validateEmail(value)) {
@@ -515,15 +559,15 @@ class _EducationState extends State<Education>
                             child: Container(
                               width: width * 0.41,
                               child: TextFormField(
+                                initialValue: unit,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff4285f4))),
-                                    hintText: 'Work Email Address',
                                     labelStyle: TextStyle(color: Colors.black)),
                                 onChanged: (text) {
-                                  setState(() => institute = text);
+                                  setState(() => unit = text);
                                 },
                                 validator: (value) {
                                   // if (!validateEmail(value)) {
@@ -660,7 +704,7 @@ class _EducationState extends State<Education>
                   children: <Widget>[
                     ListTile(
                       title: Text(
-                        "12th Standard",
+                        "10th Standard",
                         style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                       trailing: IconButton(
@@ -678,16 +722,15 @@ class _EducationState extends State<Education>
                         padding:
                             EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
                         child: TextFormField(
+                          initialValue: i10,
                           obscureText: false,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
-                              hintText: "",
-                              labelText: institute ?? "",
                               labelStyle: TextStyle(color: Colors.black)),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            setState(() => i10 = text);
                           },
                           validator: (value) {
                             // if (!validateEmail(value)) {
@@ -709,14 +752,14 @@ class _EducationState extends State<Education>
                             EdgeInsets.only(top: 15.0, left: 18.0, right: 18.0),
                         child: TextFormField(
                           obscureText: false,
+                          initialValue: b10,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
-                              hintText: 'Work Email Address',
                               labelStyle: TextStyle(color: Colors.black)),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            setState(() => b10 = text);
                           },
                           validator: (value) {
                             // if (!validateEmail(value)) {
@@ -753,15 +796,15 @@ class _EducationState extends State<Education>
                             child: Container(
                               width: width * 0.41,
                               child: TextFormField(
+                                initialValue: cg10,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff4285f4))),
-                                    hintText: 'Work Email Address',
                                     labelStyle: TextStyle(color: Colors.black)),
                                 onChanged: (text) {
-                                  setState(() => institute = text);
+                                  setState(() => cg10 = text);
                                 },
                                 validator: (value) {
                                   // if (!validateEmail(value)) {
@@ -776,15 +819,15 @@ class _EducationState extends State<Education>
                             child: Container(
                               width: width * 0.41,
                               child: TextFormField(
+                                initialValue: u10,
                                 obscureText: false,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xff4285f4))),
-                                    hintText: 'Work Email Address',
                                     labelStyle: TextStyle(color: Colors.black)),
                                 onChanged: (text) {
-                                  setState(() => institute = text);
+                                  setState(() => u10 = text);
                                 },
                                 validator: (value) {
                                   // if (!validateEmail(value)) {
