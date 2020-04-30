@@ -160,7 +160,6 @@ class _VideoAppState extends State<VideoApp>
                               heroTag: 'lololol',
                               backgroundColor: Colors.transparent,
                               onPressed: () {
-                                print(_videoPlayerController.value.position);
                                 _videoPlayerController.seekTo(
                                     _videoPlayerController.value.position +
                                         Duration(seconds: 10));

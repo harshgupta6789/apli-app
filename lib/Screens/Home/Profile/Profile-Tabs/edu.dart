@@ -33,7 +33,7 @@ class _EducationState extends State<Education>
       cg10 = '',
       u10 = '';
   final format = DateFormat("yyyy-MM-dd");
-  DateTime st10, e10 , st12 , e12;
+  DateTime st10, e10, st12, e12;
   final _formKey = GlobalKey<FormState>();
   final _formKey1 = GlobalKey<FormState>();
   final _formKey2 = GlobalKey<FormState>();
@@ -66,7 +66,7 @@ class _EducationState extends State<Education>
             stream = s.data['education']['XII']['stream'] ?? "";
             cgpa = s.data['education']['XII']['cgpa'] ?? "";
             unit = s.data['education']['XII']['unit'] ?? "";
-            
+
             print(institute);
           });
         } else if (s.data['education']['X'] != null) {

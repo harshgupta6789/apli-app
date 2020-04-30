@@ -151,21 +151,18 @@ class AuthService {
   }
 
   Future signOut() async {
-    try {} catch (e) {
-    }
+    try {} catch (e) {}
   }
 
   Future updatePassword(String email, String password) async {
     int result;
     try {
       dynamic response = await passHashResponse(password);
-      if(response == null) {
-        result =  null;
+      if (response == null) {
+        result = null;
       } else if (response.statusCode == 200) {
-        var decodedData =
-        jsonDecode(response.body);
-        if (decodedData["secret"] ==
-            passHashSecret) {
+        var decodedData = jsonDecode(response.body);
+        if (decodedData["secret"] == passHashSecret) {
           String hash = decodedData["hash"];
           await Firestore.instance
               .collection('users')
@@ -173,13 +170,13 @@ class AuthService {
               .updateData({
             'password': hash,
           });
-          result =  1;
+          result = 1;
         } else {
           result = -2;
         }
       }
       return -10;
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }
@@ -187,15 +184,17 @@ class AuthService {
   Future passHashResponse(String password) async {
     http.Response result;
     try {
-      await http.post(passHash,
-          body: json.decode('{'
-            '"secret" : "$passHashSecret", '
-            '"password": "$password"'
-            '}')).then((response) {
-              result = response;
+      await http
+          .post(passHash,
+              body: json.decode('{'
+                  '"secret" : "$passHashSecret", '
+                  '"password": "$password"'
+                  '}'))
+          .then((response) {
+        result = response;
       });
       return result;
-    } catch(e) {
+    } catch (e) {
       return null;
     }
   }

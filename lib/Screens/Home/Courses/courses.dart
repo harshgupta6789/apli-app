@@ -2,6 +2,7 @@ import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +19,14 @@ class Courses extends StatefulWidget {
   _CoursesState createState() => _CoursesState();
 }
 
+double height, width;
+Orientation orientation;
+
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: _listTabs.length);
-    print(widget.documentId);
     super.initState();
   }
 
@@ -36,6 +39,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -63,7 +67,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                       )),
                 ],
               ),
-              padding: const EdgeInsets.all(20.0),
             );
           } else {
             return Loading();
@@ -177,6 +180,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    orientation = MediaQuery.of(context).orientation;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -226,77 +232,90 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
           ),
           preferredSize: Size.fromHeight(50),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Stack(
-                  alignment: Alignment.centerLeft,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Center(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Image.asset("Assets/Images/course.png"),
-                        ),
+        body: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 20,
+                        left: orientation == Orientation.portrait ? 20 : 100,
+                        right: orientation == Orientation.portrait ? 20 : 100),
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.centerLeft,
+                        children: <Widget>[
+                          SizedBox(
+                              width: double.infinity,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.asset(
+                                  "Assets/Images/course.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              )),
+                          Positioned(
+                            top: 130.0,
+                            left: 50.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("Trending",
+                                      style: TextStyle(color: Colors.yellow)),
+                                  Text("Startup 101",
+                                      style: TextStyle(
+                                        fontSize: 28,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      )),
+                                  Text("By Harvard",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w100,
+                                          fontSize: 18,
+                                          color: Colors.white)),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Positioned(
-                      top: 130.0,
-                      left: 50.0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text("Trending",
-                                style: TextStyle(color: Colors.yellow)),
-                            Text("Startup 101",
-                                style: TextStyle(
-                                  fontSize: 28,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                )),
-                            Text("By Harvard",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w100,
-                                    fontSize: 18,
-                                    color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 30, top: 20.0),
-                  child: Text("What's Inside:",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18)),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: new TabBar(
-                      controller: _tabController,
-                      indicatorColor: basicColor,
-                      unselectedLabelColor: Colors.grey,
-                      labelColor: basicColor,
-                      tabs: _listTabs),
-                ),
-                new Container(
-                  height: 500.0,
-                  child: new TabBarView(
-                    controller: _tabController,
-                    children: _listTabs.map((Tab tab) {
-                      return _getWidget(tab);
-                    }).toList(),
                   ),
-                )
-              ]),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: orientation == Orientation.portrait ? 30 : 100,
+                        top: 20.0),
+                    child: Text("What's Inside:",
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18)),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10.0),
+                    child: new TabBar(
+                        controller: _tabController,
+                        indicatorColor: basicColor,
+                        unselectedLabelColor: Colors.grey,
+                        labelColor: basicColor,
+                        tabs: _listTabs),
+                  ),
+                  new Container(
+                    height: 500.0,
+                    child: new TabBarView(
+                      controller: _tabController,
+                      children: _listTabs.map((Tab tab) {
+                        return _getWidget(tab);
+                      }).toList(),
+                    ),
+                  )
+                ]),
+          ),
         ));
   }
 }

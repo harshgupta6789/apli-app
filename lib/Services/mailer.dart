@@ -21,7 +21,6 @@ class MailerService {
                   '"body": "$body"'
                   '}'))
           .then((response) {
-            print(response.statusCode);
         if (response.statusCode == 200) {
           var decodedData = jsonDecode(response.body);
           if (decodedData["secret"] == send_mailSecret) {
@@ -37,7 +36,6 @@ class MailerService {
       });
       return result ?? -2;
     } on Exception catch (e) {
-      print(e.toString());
       return null;
     }
   }

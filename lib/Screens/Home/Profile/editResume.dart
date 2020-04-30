@@ -23,7 +23,6 @@ class _EditResumeState extends State<EditResume> {
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForwardOutline),
                 onPressed: () {
-                  print('abcd');
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Education()));
                 }),

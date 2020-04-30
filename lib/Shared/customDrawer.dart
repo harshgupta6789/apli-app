@@ -1,8 +1,7 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
-import 'package:apli/Screens/Login-Signup/Login/forgotPassword.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
-import 'package:app_settings/app_settings.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -17,7 +16,8 @@ double width, height;
 Widget customDrawer(BuildContext context, GlobalKey x) {
   width = MediaQuery.of(context).size.width;
   height = MediaQuery.of(context).size.height;
-  bool isSwitched = true;
+  double dividerThickness = 2;
+  double fontSize = 15;
   SharedPreferences prefs;
   Future<List<String>> userInit() async {
     String email;
@@ -27,11 +27,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
     await SharedPreferences.getInstance().then((value) => prefs = value);
 
     if (prefs.getBool("isNotificationsEnabled") != null) {
-      isSwitched = prefs.getBool("isNotificationsEnabled");
     } else
-      isSwitched = true;
-
-    email = prefs.getString('email');
+      email = prefs.getString('email');
     userData.add(email);
 
     await Firestore.instance
@@ -52,170 +49,181 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
     return userData;
   }
 
-  double dividerThickness = 2;
-  double fontSize = 15;
-  return Padding(
-    padding: EdgeInsets.fromLTRB(width * 0.3, height * 0.05, 0, height * 0.03),
-    child: ClipRRect(
-      borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(7), bottomLeft: Radius.circular(7)),
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: FutureBuilder(
-                  future: userInit(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<String>> snapshot) {
-                    if (snapshot.hasData &&
-                        snapshot.connectionState == ConnectionState.done) {
-                      return Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10.0, left: 10),
-                            child: CircleAvatar(
-                              minRadius: 30,
-                              maxRadius: 35,
-                              backgroundImage: snapshot.data[3] != null
-                                  ? NetworkImage(snapshot.data[3])
-                                  : null,
+  Widget sideNav() {
+    return Padding(
+      padding:
+          EdgeInsets.fromLTRB(width * 0.3, height * 0.05, 0, height * 0.03),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(7), bottomLeft: Radius.circular(7)),
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: FutureBuilder(
+                    future: userInit(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>> snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.connectionState == ConnectionState.done) {
+                        return Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 10.0, left: 10),
+                              child: CircleAvatar(
+                                minRadius: 30,
+                                maxRadius: 35,
+                                backgroundImage: snapshot.data[3] != null
+                                    ? NetworkImage(snapshot.data[3])
+                                    : null,
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, top: 10.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 130,
-                                    child: AutoSizeText(
-                                      snapshot.data[1] != null
-                                          ? snapshot.data[1]
-                                          : 'No Name',
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 20.0, top: 10.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 130,
+                                      child: AutoSizeText(
+                                        snapshot.data[1] != null
+                                            ? snapshot.data[1]
+                                            : 'No Name',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
-                                  ),
-                                ]),
-                          ),
-                        ],
-                      );
-                    } else if (snapshot.hasError) {
-                      print(snapshot.error);
-                      return Center(
-                        child: Text('Error, please try again later'),
-                      );
+                                  ]),
+                            ),
+                          ],
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(
+                          child: Text('Error, please try again later'),
+                        );
+                      } else {
+                        return Loading();
+                      }
+                    }),
+              ),
+              ListTile(
+                dense: true,
+                title: Text(
+                  "Notifications",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: fontSize),
+                ),
+                trailing: NotificationSwitch(),
+              ),
+              Divider(
+                thickness: dividerThickness,
+              ),
+              ListTile(
+                  dense: true,
+                  title: Text(
+                    "Rate Your Experience",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: fontSize),
+                  ),
+                  trailing: IconButton(
+                      icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
+                  onTap: () async {
+                    const url =
+                        'https://play.google.com/store/apps/details?id=com.example.apliauth';
+                    if (await canLaunch(url)) {
+                      await launch(url);
                     } else {
-                      return Loading();
+                      throw 'Could not launch $url';
                     }
                   }),
-            ),
-            ListTile(
-              dense: true,
-              title: Text(
-                "Notifications",
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: fontSize),
+              Divider(
+                thickness: dividerThickness,
               ),
-              trailing: NotificationSwitch(),
-            ),
-            Divider(
-              thickness: dividerThickness,
-            ),
-            ListTile(
+              ListTile(
+                  dense: true,
+                  title: Text(
+                    "Refer A Friend",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: fontSize),
+                  ),
+                  trailing: IconButton(
+                      icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
+                  onTap: () async {
+                    const url =
+                        'https://play.google.com/store/apps/details?id=com.example.apliauth';
+                    Share.share(url);
+                  }),
+              Divider(
+                thickness: dividerThickness,
+              ),
+              ListTile(
+                  dense: true,
+                  title: Text(
+                    "Report",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: fontSize),
+                  ),
+                  trailing: IconButton(
+                      icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
+                  onTap: () async {
+                    const url =
+                        'mailto:info@apli.ai?subject=Regarding Apli App';
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  }),
+              Divider(
+                thickness: dividerThickness,
+              ),
+              ListTile(
+                  dense: true,
+                  title: Text(
+                    "Log Out",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: fontSize),
+                  ),
+                  trailing: IconButton(
+                      icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
+                  onTap: () async {
+                    SharedPreferences preferences =
+                        await SharedPreferences.getInstance();
+                    preferences.clear();
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => Wrapper()),
+                        (Route<dynamic> route) => false);
+                  }),
+              Divider(
+                thickness: dividerThickness,
+              ),
+              ListTile(
                 dense: true,
-                title: Text(
-                  "Rate Your Experience",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
-                ),
-                trailing: IconButton(
-                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-                onTap: () async {
-                  const url =
-                      'https://play.google.com/store/apps/details?id=com.example.apliauth';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                }),
-            Divider(
-              thickness: dividerThickness,
-            ),
-            ListTile(
-                dense: true,
-                title: Text(
-                  "Refer A Friend",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
-                ),
-                trailing: IconButton(
-                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-                onTap: () async {
-                  const url =
-                      'https://play.google.com/store/apps/details?id=com.example.apliauth';
-                  Share.share(url);
-                }),
-            Divider(
-              thickness: dividerThickness,
-            ),
-            ListTile(
-                dense: true,
-                title: Text(
-                  "Report",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
-                ),
-                trailing: IconButton(
-                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-                onTap: () async {
-                  const url = 'mailto:info@apli.ai?subject=Regarding Apli App';
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw 'Could not launch $url';
-                  }
-                }),
-            Divider(
-              thickness: dividerThickness,
-            ),
-            ListTile(
-                dense: true,
-                title: Text(
-                  "Log Out",
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
-                ),
-                trailing: IconButton(
-                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-                onTap: () async {
-                  SharedPreferences preferences =
-                      await SharedPreferences.getInstance();
-                  preferences.clear();
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => Wrapper()),
-                      (Route<dynamic> route) => false);
-                }),
-            Divider(
-              thickness: dividerThickness,
-            ),
-            ListTile(
-              dense: true,
-              title: Text(copyright),
-            ),
-          ],
+                title: Text(copyright),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  return MediaQuery.of(context).orientation == Orientation.portrait
+      ? sideNav()
+      : ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: sideNav(),
+          ),
+        );
 }
 
 class NotificationSwitch extends StatefulWidget {

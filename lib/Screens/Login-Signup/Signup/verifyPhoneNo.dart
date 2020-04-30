@@ -46,9 +46,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         loading = false;
       });
       this.verificationId = verId;
-      smsOTPDialog(context).then((value) {
-        print('1');
-      });
+      smsOTPDialog(context).then((value) {});
     };
     try {
       await _auth.verifyPhoneNumber(
@@ -65,9 +63,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Register(phoneNo)));
           },
-          verificationFailed: (AuthException exceptio) {
-            print('${exceptio.message} verification failed');
-          });
+          verificationFailed: (AuthException exceptio) {});
     } catch (e) {
       handleError(e);
     }
@@ -183,7 +179,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   }
 
   handleError(PlatformException error) {
-    print(error);
     switch (error.code) {
       case 'ERROR_INVALID_VERIFICATION_CODE':
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -191,9 +186,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           errorMessage = 'Invalid Code';
         });
         Navigator.of(context).pop();
-        smsOTPDialog(context).then((value) {
-          print('sign in');
-        });
+        smsOTPDialog(context).then((value) {});
         break;
       default:
         setState(() {
@@ -221,19 +214,17 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                   width: width,
                   height: 60,
                   color: basicColor,
-                  padding:
-                  EdgeInsets.only(top: 10, bottom: 5),
+                  padding: EdgeInsets.only(top: 10, bottom: 5),
                   child: Center(
-                    child: FlatButton(
-                      child: Text(
-                        'Already have an account?  Sign In',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    )
-                  ),
+                      child: FlatButton(
+                    child: Text(
+                      'Already have an account?  Sign In',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )),
                 ),
               ),
               elevation: 0,
@@ -339,7 +330,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
               setState(() {
                 countryCode = country.isoCode;
               });
-              print("${country.name}");
             },
           ),
           SizedBox(

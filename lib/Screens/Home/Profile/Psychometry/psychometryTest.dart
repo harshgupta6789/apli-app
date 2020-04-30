@@ -107,8 +107,8 @@ class _PsychometryTestState extends State<PsychometryTest> {
                     await Firestore.instance
                         .collection('candidates')
                         .document(widget.email)
-                        .setData({'psycho_ques': answeredQuestions}, merge: true).then(
-                            (f) {
+                        .setData({'psycho_ques': answeredQuestions},
+                            merge: true).then((f) {
                       setState(() {
                         loading = false;
                       });
@@ -137,159 +137,146 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           padding: EdgeInsets.all(20),
                           child: Column(
                             children: [
-                                  Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(8.0, 20, 8, 12),
-                                      child: Align(
-                                          child: Text('Q${position + 1}',
-                                              style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.topLeft)),
-                                  SizedBox(
-                                    height: height * 0.05,
-                                    child: Align(
-                                        child: Text(
-                                            remainingQuestions[position][1],
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        alignment: Alignment.topLeft),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: 6,
-                                      itemBuilder:
-                                          (BuildContext context, int i) {
-                                        return Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5.0),
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(3),
-                                                  border: Border.all(
-                                                      width: remainingQuestions[
-                                                                      position]
-                                                                  [2] ==
-                                                              (i + 1).toString()
-                                                          ? 1
-                                                          : 2,
-                                                      color: remainingQuestions[
-                                                                      position]
-                                                                  [2] ==
-                                                              (i + 1).toString()
-                                                          ? basicColor
-                                                          : Colors.grey
-                                                              .withOpacity(
-                                                                  0.4))),
-                                              child: ListTile(
-                                                title: Text(
-                                                  '1. Lorem ipsum dolor sit amet, consectetur',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: remainingQuestions[
-                                                                      position]
-                                                                  [2] ==
+                              Padding(
+                                  padding: EdgeInsets.fromLTRB(8.0, 20, 8, 12),
+                                  child: Align(
+                                      child: Text('Q${position + 1}',
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      alignment: Alignment.topLeft)),
+                              SizedBox(
+                                height: height * 0.05,
+                                child: Align(
+                                    child: Text(remainingQuestions[position][1],
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                    alignment: Alignment.topLeft),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: 6,
+                                  itemBuilder: (BuildContext context, int i) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 5.0),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              border: Border.all(
+                                                  width: remainingQuestions[
+                                                              position][2] ==
                                                           (i + 1).toString()
-                                                          ? basicColor
-                                                          : Colors.black,
-                                                      fontSize: 13),
-                                                ),
-                                                onTap: () {
-                                                  setState(() {
-                                                    remainingQuestions[position]
-                                                        [2] = (i +1).toString();
-                                                    checkCount();
-                                                  });
-                                                },
-                                              )),
-                                        );
-                                      }),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Visibility(
-                                        visible: position == 0 ? false : true,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              8.0, 35, 8, 8),
-                                          child: Align(
-                                            child: RaisedButton(
-                                              color: Colors.white,
-                                              elevation: 0,
-                                              padding: EdgeInsets.only(
-                                                  left: 22, right: 22),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50.0),
-                                                side: BorderSide(
-                                                    color: basicColor,
-                                                    width: 1.5),
-                                              ),
-                                              child: Text(
-                                                'Back',
-                                                style: TextStyle(
-                                                    color: basicColor),
-                                              ),
-                                              onPressed: () {
-                                                controller.animateToPage(
-                                                    position - 1,
-                                                    duration: Duration(
-                                                        milliseconds: 200),
-                                                    curve: Curves.linear);
-                                              },
+                                                      ? 1
+                                                      : 2,
+                                                  color: remainingQuestions[
+                                                              position][2] ==
+                                                          (i + 1).toString()
+                                                      ? basicColor
+                                                      : Colors.grey
+                                                          .withOpacity(0.4))),
+                                          child: ListTile(
+                                            title: Text(
+                                              '1. Lorem ipsum dolor sit amet, consectetur',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: remainingQuestions[
+                                                              position][2] ==
+                                                          (i + 1).toString()
+                                                      ? basicColor
+                                                      : Colors.black,
+                                                  fontSize: 13),
                                             ),
-                                            alignment: Alignment.bottomLeft,
+                                            onTap: () {
+                                              setState(() {
+                                                remainingQuestions[position]
+                                                    [2] = (i + 1).toString();
+                                                checkCount();
+                                              });
+                                            },
+                                          )),
+                                    );
+                                  }),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Visibility(
+                                    visible: position == 0 ? false : true,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                      child: Align(
+                                        child: RaisedButton(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          padding: EdgeInsets.only(
+                                              left: 22, right: 22),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            side: BorderSide(
+                                                color: basicColor, width: 1.5),
                                           ),
+                                          child: Text(
+                                            'Back',
+                                            style: TextStyle(color: basicColor),
+                                          ),
+                                          onPressed: () {
+                                            controller.animateToPage(
+                                                position - 1,
+                                                duration:
+                                                    Duration(milliseconds: 200),
+                                                curve: Curves.linear);
+                                          },
                                         ),
+                                        alignment: Alignment.bottomLeft,
                                       ),
-                                      Visibility(
-                                        visible: position ==
-                                                remainingQuestions.length - 1
-                                            ? false
-                                            : true,
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              8.0, 35, 8, 8),
-                                          child: Align(
-                                            child: RaisedButton(
-                                              color: Colors.white,
-                                              elevation: 0,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(50.0),
-                                                side: BorderSide(
-                                                    color: basicColor,
-                                                    width: 1.5),
-                                              ),
-                                              child: Text(
-                                                'Next',
-                                                style: TextStyle(
-                                                    color: basicColor),
-                                              ),
-                                              onPressed: () {
-                                                controller.animateToPage(
-                                                    position + 1,
-                                                    duration: Duration(
-                                                        milliseconds: 200),
-                                                    curve: Curves.linear);
-                                              },
-                                            ),
-                                            alignment: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  Visibility(
+                                    visible: position ==
+                                            remainingQuestions.length - 1
+                                        ? false
+                                        : true,
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                      child: Align(
+                                        child: RaisedButton(
+                                          color: Colors.white,
+                                          elevation: 0,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(50.0),
+                                            side: BorderSide(
+                                                color: basicColor, width: 1.5),
                                           ),
+                                          child: Text(
+                                            'Next',
+                                            style: TextStyle(color: basicColor),
+                                          ),
+                                          onPressed: () {
+                                            controller.animateToPage(
+                                                position + 1,
+                                                duration:
+                                                    Duration(milliseconds: 200),
+                                                curve: Curves.linear);
+                                          },
                                         ),
-                                      )
-                                    ],
+                                        alignment: Alignment.bottomRight,
+                                      ),
+                                    ),
                                   )
+                                ],
+                              )
                             ],
                           ),
                         ),

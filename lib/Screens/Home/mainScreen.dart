@@ -68,7 +68,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
         showAlertDialog(message['notification']['title'],
             message['notification']['body'], DialogType.INFO, context, () {
           if (message['data']['type'] != null) {
@@ -105,14 +104,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       },
       // onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
-        print("onResume : $message");
         setState(() {
           _currentTab = 2;
           _tabController.animateTo(2);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
         setState(() {
           _currentTab = 2;
           _tabController.animateTo(2);
@@ -134,9 +131,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+        .listen((IosNotificationSettings settings) {});
   }
 
   void checkIfLoggedIn() async {

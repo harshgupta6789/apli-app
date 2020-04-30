@@ -1,6 +1,7 @@
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class Jobs extends StatefulWidget {
 
 class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  
 
   @override
   void initState() {
@@ -97,70 +97,78 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
       body: TabBarView(
         children: [
           Center(
-              child: Padding(
-            padding: EdgeInsets.only(bottom: 50.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset("Assets/Images/job.png"),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        text:
-                            "I know you are interested in job \nbut first build your ",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                        children: [
-                          TextSpan(
-                              text: "Profile",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                currentTab: 3,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                  setState(() {});
-                                }),
-                        ]),
-                  ),
-                )
-              ],
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "I know you are interested in job \nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                                text: "Profile",
+                                style: TextStyle(color: basicColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                                  currentTab: 3,
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                    setState(() {});
+                                  }),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
             ),
           )),
           Center(
-              child: Padding(
-                  padding: EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset("Assets/Images/job.png"),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Your jobs will be listed here.",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  ))),
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Your jobs will be listed here.",
+                        style: TextStyle(fontSize: 18),
+                      ))
+                ],
+              ),
+            ),
+          )),
           Center(
-              child: Padding(
-                  padding: EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset("Assets/Images/job.png"),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "All caught up!",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  ))),
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "All caught up!",
+                        style: TextStyle(fontSize: 18),
+                      ))
+                ],
+              ),
+            ),
+          )),
         ],
         controller: _tabController,
       ),

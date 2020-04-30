@@ -42,7 +42,11 @@ class _SkillsState extends State<Skills> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Expanded(child: Text('Add Skills', style: TextStyle(fontWeight: FontWeight.bold),)),
+                  Expanded(
+                      child: Text(
+                    'Add Skills',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )),
                   Expanded(
                     child: IconButton(
                       icon: Icon(EvaIcons.editOutline),
@@ -58,46 +62,54 @@ class _SkillsState extends State<Skills> {
               child: TextField(
                 controller: _textEditingController,
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  hintText: 'eg. Management, Programming',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
-                  )
-                ),
+                    prefixIcon: Icon(Icons.search),
+                    hintText: 'eg. Management, Programming',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    )),
               ),
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: 3,
+                  itemCount: 3,
                   itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Column(
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
-                        Text('Skill'),
-                        SizedBox(height: 3,),
-                        TextFormField(
-                          decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(2))),
-                          initialValue: 'JavaScript',
-                          enabled: false,
-                        )
+                        Column(
+                          children: <Widget>[
+                            Text('Skill'),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(2))),
+                              initialValue: 'JavaScript',
+                              enabled: false,
+                            )
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Text('Proficiency'),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            TextFormField(
+                              decoration: InputDecoration(
+                                  fillColor: Colors.grey,
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(2))),
+                              initialValue: 'Basic',
+                              enabled: false,
+                            )
+                          ],
+                        ),
                       ],
-                    ),
-                    Column(
-                      children: <Widget>[
-                        Text('Proficiency'),
-                        SizedBox(height: 3,),
-                        TextFormField(
-                          decoration: InputDecoration(fillColor: Colors.grey,border: OutlineInputBorder(borderRadius: BorderRadius.circular(2))),
-                          initialValue: 'Basic',
-                          enabled: false,
-                        )
-                      ],
-                    ),
-                  ],
-                );
-              }),
+                    );
+                  }),
             )
           ],
         ),

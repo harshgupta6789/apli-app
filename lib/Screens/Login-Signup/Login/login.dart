@@ -209,7 +209,9 @@ class _LoginState extends State<Login> {
                                   ),
                                   onPressed: () async {
                                     if (forgotPassword) if (validateEmail(
-                                        (email)) && email != '' && email != null) {
+                                            (email)) &&
+                                        email != '' &&
+                                        email != null) {
                                       setState(() {
                                         loading = true;
                                       });
@@ -219,9 +221,12 @@ class _LoginState extends State<Login> {
                                         Toast.show('No Internet', context,
                                             backgroundColor: Colors.red);
                                       } else {
-                                        DocumentReference doc = Firestore.instance.collection('users').document(email);
+                                        DocumentReference doc = Firestore
+                                            .instance
+                                            .collection('users')
+                                            .document(email);
                                         await doc.get().then((onValue) {
-                                          if(onValue.exists) {
+                                          if (onValue.exists) {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -233,7 +238,11 @@ class _LoginState extends State<Login> {
                                               forgotPassword = false;
                                             });
                                           } else {
-                                            Toast.show('Account does not exists', context, duration: 5, backgroundColor: Colors.red);
+                                            Toast.show(
+                                                'Account does not exists',
+                                                context,
+                                                duration: 5,
+                                                backgroundColor: Colors.red);
                                           }
                                         });
                                       }
@@ -276,12 +285,14 @@ class _LoginState extends State<Login> {
                                           loading = false;
                                         });
                                       } else if (result == 1) {
-                                        Toast.show('Login Successfull', context, backgroundColor: Colors.red);
+                                        Toast.show('Login Successfull', context,
+                                            backgroundColor: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
                                         SharedPreferences prefs =
-                                            await SharedPreferences.getInstance();
+                                            await SharedPreferences
+                                                .getInstance();
                                         prefs.setString('email', email);
                                         prefs.setBool('rememberMe', rememberMe);
                                         Navigator.pushReplacement(
@@ -305,32 +316,35 @@ class _LoginState extends State<Login> {
                                   }),
                             )),
                         Padding(
-                              padding: EdgeInsets.only(
-                                  top: height * 0.05,
-                                  left: width * 0.1,
-                                  right: width * 0.1),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(forgotPassword ? 'Remember Password?' : signup),
-                                  FlatButton(
-                                      onPressed: () {
-                                        forgotPassword ? setState(() {
-                                          forgotPassword = false;
-                                        }) :  Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  VerifyPhoneNo()),
-                                        );
-                                      },
-                                      child: Text(
-                                        forgotPassword ? 'Login' :
-                                        "Signup here",
-                                        style: TextStyle(color: basicColor),
-                                      ))
-                                ],
-                              )),
+                            padding: EdgeInsets.only(
+                                top: height * 0.05,
+                                left: width * 0.1,
+                                right: width * 0.1),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text(forgotPassword
+                                    ? 'Remember Password?'
+                                    : signup),
+                                FlatButton(
+                                    onPressed: () {
+                                      forgotPassword
+                                          ? setState(() {
+                                              forgotPassword = false;
+                                            })
+                                          : Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      VerifyPhoneNo()),
+                                            );
+                                    },
+                                    child: Text(
+                                      forgotPassword ? 'Login' : "Signup here",
+                                      style: TextStyle(color: basicColor),
+                                    ))
+                              ],
+                            )),
                         SizedBox(
                           height: 10,
                         ),

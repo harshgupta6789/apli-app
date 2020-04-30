@@ -1,4 +1,3 @@
-
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -229,8 +228,8 @@ class _RegisterState extends State<Register> {
                                     obscureText: false,
                                     decoration: loginFormField.copyWith(
                                         labelText: 'Email ID',
-                                        icon:
-                                            Icon(Icons.email, color: basicColor)),
+                                        icon: Icon(Icons.email,
+                                            color: basicColor)),
                                     onChanged: (text) {
                                       setState(() {
                                         error = '';
@@ -307,7 +306,8 @@ class _RegisterState extends State<Register> {
                                       dataList: course.keys.toList(),
                                       hideSearchBoxWhenItemSelected: false,
                                       listContainerHeight:
-                                          MediaQuery.of(context).size.height / 4,
+                                          MediaQuery.of(context).size.height /
+                                              4,
                                       queryBuilder:
                                           (String query, List<String> list) {
                                         return list.where((String item) {
@@ -342,8 +342,8 @@ class _RegisterState extends State<Register> {
                                           Icon(
                                             Icons.folder_open,
                                             size: 24,
-                                            color:
-                                                Colors.grey[900].withOpacity(0.7),
+                                            color: Colors.grey[900]
+                                                .withOpacity(0.7),
                                           ),
                                           const SizedBox(width: 10),
                                           FlatButton(
@@ -419,9 +419,11 @@ class _RegisterState extends State<Register> {
                                               decoration: loginFormField.copyWith(
                                                   labelText: courseText,
                                                   icon: Icon(
-                                                      Icons.collections_bookmark,
+                                                      Icons
+                                                          .collections_bookmark,
                                                       color: basicColor),
-                                                  suffixIcon: Icon(Icons.delete)),
+                                                  suffixIcon:
+                                                      Icon(Icons.delete)),
                                             ),
                                           ),
                                         )
@@ -429,14 +431,17 @@ class _RegisterState extends State<Register> {
                                           dataList: course[collegeText],
                                           hideSearchBoxWhenItemSelected: false,
                                           listContainerHeight:
-                                              MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .height /
                                                   4,
-                                          queryBuilder:
-                                              (String query, List<String> list) {
+                                          queryBuilder: (String query,
+                                              List<String> list) {
                                             return list.where((String item) {
                                               return item
                                                   .toLowerCase()
-                                                  .contains(query.toLowerCase());
+                                                  .contains(
+                                                      query.toLowerCase());
                                             }).toList();
                                           },
                                           popupListItemBuilder: (String item) {
@@ -511,11 +516,14 @@ class _RegisterState extends State<Register> {
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
-                                              decoration: loginFormField.copyWith(
-                                                  labelText: branchText,
-                                                  icon: Icon(Icons.library_books,
-                                                      color: basicColor),
-                                                  suffixIcon: Icon(Icons.delete)),
+                                              decoration:
+                                                  loginFormField.copyWith(
+                                                      labelText: branchText,
+                                                      icon: Icon(
+                                                          Icons.library_books,
+                                                          color: basicColor),
+                                                      suffixIcon:
+                                                          Icon(Icons.delete)),
                                             ),
                                           ),
                                         )
@@ -523,14 +531,17 @@ class _RegisterState extends State<Register> {
                                           dataList: branch[courseText],
                                           hideSearchBoxWhenItemSelected: false,
                                           listContainerHeight:
-                                              MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .height /
                                                   4,
-                                          queryBuilder:
-                                              (String query, List<String> list) {
+                                          queryBuilder: (String query,
+                                              List<String> list) {
                                             return list.where((String item) {
                                               return item
                                                   .toLowerCase()
-                                                  .contains(query.toLowerCase());
+                                                  .contains(
+                                                      query.toLowerCase());
                                             }).toList();
                                           },
                                           popupListItemBuilder: (String item) {
@@ -602,11 +613,13 @@ class _RegisterState extends State<Register> {
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
-                                              decoration: loginFormField.copyWith(
-                                                  labelText: batchText,
-                                                  icon: Icon(Icons.book,
-                                                      color: basicColor),
-                                                  suffixIcon: Icon(Icons.delete)),
+                                              decoration:
+                                                  loginFormField.copyWith(
+                                                      labelText: batchText,
+                                                      icon: Icon(Icons.book,
+                                                          color: basicColor),
+                                                      suffixIcon:
+                                                          Icon(Icons.delete)),
                                             ),
                                           ),
                                         )
@@ -614,14 +627,17 @@ class _RegisterState extends State<Register> {
                                           dataList: batch[branchText],
                                           hideSearchBoxWhenItemSelected: false,
                                           listContainerHeight:
-                                              MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .height /
                                                   4,
-                                          queryBuilder:
-                                              (String query, List<String> list) {
+                                          queryBuilder: (String query,
+                                              List<String> list) {
                                             return list.where((String item) {
                                               return item
                                                   .toLowerCase()
-                                                  .contains(query.toLowerCase());
+                                                  .contains(
+                                                      query.toLowerCase());
                                             }).toList();
                                           },
                                           popupListItemBuilder: (String item) {
@@ -679,7 +695,8 @@ class _RegisterState extends State<Register> {
                                         width: width * 0.8,
                                         decoration: BoxDecoration(
                                           color: basicColor,
-                                          borderRadius: BorderRadius.circular(10),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
                                         ),
                                         child: MaterialButton(
                                             child: Text(

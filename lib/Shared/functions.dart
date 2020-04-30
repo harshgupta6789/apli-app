@@ -11,7 +11,6 @@ bool validatePassword(String value) {
   Pattern pattern =
       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
   RegExp regex = new RegExp(pattern);
-  print(value);
   if (value.length < 8) {
     return false;
   } else {

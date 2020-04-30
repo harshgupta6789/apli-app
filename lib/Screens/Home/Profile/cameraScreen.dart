@@ -62,9 +62,7 @@ class _CameraState extends State<Camera> {
 
     try {
       await controller.initialize();
-    } on CameraException catch (e) {
-      print(e);
-    }
+    } on CameraException catch (e) {}
 
     if (mounted) {
       setState(() {});
@@ -90,7 +88,6 @@ class _CameraState extends State<Camera> {
                   style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
                 ),
                 onPressed: () {
-                  print(path);
                   if (path != null) {
                     File temp = File(path);
 
@@ -117,7 +114,6 @@ class _CameraState extends State<Camera> {
                         TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
                   ),
                   onPressed: () {
-                    print(path);
                     if (path != null) {
                       Navigator.pop(context, path);
                     } else {
@@ -142,7 +138,6 @@ class _CameraState extends State<Camera> {
                         isRecordingStopped = false;
                       });
                     } on Exception catch (e) {
-                      print(e);
                       setState(() {
                         isRecordingStopped = false;
                       });
@@ -196,7 +191,6 @@ class _CameraState extends State<Camera> {
   }
 
   Future<String> startVideoRecording() async {
-    print('startVideoRecording');
     if (!controller.value.isInitialized) {
       return null;
     }
@@ -217,7 +211,6 @@ class _CameraState extends State<Camera> {
     try {
       await controller.startVideoRecording(filePath);
     } on CameraException catch (e) {
-      print(e);
       return null;
     }
     path = filePath;
@@ -237,7 +230,6 @@ class _CameraState extends State<Camera> {
     try {
       await controller.stopVideoRecording();
     } on CameraException catch (e) {
-      print(e);
       return null;
     }
   }

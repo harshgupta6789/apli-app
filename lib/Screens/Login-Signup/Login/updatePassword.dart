@@ -24,7 +24,6 @@ class UpdatePassword extends StatefulWidget {
 double width, height;
 
 class _UpdatePasswordState extends State<UpdatePassword> {
-
   final _formKey = GlobalKey<FormState>();
 
   bool loading = false;
@@ -72,8 +71,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     });
                                   },
                                 ),
-                                icon:
-                                    Icon(Icons.lock_outline, color: basicColor)),
+                                icon: Icon(Icons.lock_outline,
+                                    color: basicColor)),
                             onChanged: (text) {
                               setState(() => password = text);
                             },
@@ -93,8 +92,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             obscureText: obscure,
                             decoration: loginFormField.copyWith(
                                 labelText: 'Re Enter Password',
-                                icon:
-                                    Icon(Icons.lock_outline, color: basicColor)),
+                                icon: Icon(Icons.lock_outline,
+                                    color: basicColor)),
                             validator: (value) {
                               if (value != password) {
                                 return 'Passowrd do not match';
@@ -107,7 +106,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               top: height * 0.1,
                               left: width * 0.1,
                               right: width * 0.1,
-                          bottom: 20),
+                              bottom: 20),
                           child: Container(
                             height: 70,
                             width: width * 0.8,
@@ -128,8 +127,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     setState(() {
                                       loading = true;
                                     });
-                                    var net =
-                                    await Connectivity().checkConnectivity();
+                                    var net = await Connectivity()
+                                        .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
                                       Toast.show(
                                           'No Internet Connection', context,
@@ -141,14 +140,14 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     } else {
                                       await http
                                           .post(passHash,
-                                          body: json.decode('{'
-                                              '"secret" : "$passHashSecret", '
-                                              '"password": "$password"'
-                                              '}'))
+                                              body: json.decode('{'
+                                                  '"secret" : "$passHashSecret", '
+                                                  '"password": "$password"'
+                                                  '}'))
                                           .then((response) async {
                                         if (response.statusCode == 200) {
                                           var decodedData =
-                                          jsonDecode(response.body);
+                                              jsonDecode(response.body);
                                           if (decodedData["secret"] ==
                                               passHashSecret) {
                                             String hash = decodedData["hash"];
@@ -166,17 +165,17 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                                 context);
                                             Navigator.of(context)
                                                 .pushAndRemoveUntil(
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        Wrapper()),
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Wrapper()),
                                                     (Route<dynamic> route) =>
-                                                false);
+                                                        false);
                                           } else {
                                             setState(() {
                                               loading = false;
                                             });
-                                            Toast.show(
-                                                'Cannot connect server', context);
+                                            Toast.show('Cannot connect server',
+                                                context);
                                           }
                                         } else {
                                           setState(() {

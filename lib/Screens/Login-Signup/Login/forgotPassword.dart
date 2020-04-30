@@ -224,24 +224,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             bottomNavigationBar: BottomAppBar(
               color: Colors.transparent,
               child: Container(
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, bottom: 5),
-                    child: FlatButton(
-                        child: Text(
-                          'Need Help ? Contact Us',
-                          style: TextStyle(color: basicColor),
-                        ),
-                        onPressed: () async {
-                          const url =
-                              'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          } else {
-                            throw 'Could not launch $url';
-                          }
-                        }),
-                  ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10, bottom: 5),
+                  child: FlatButton(
+                      child: Text(
+                        'Need Help ? Contact Us',
+                        style: TextStyle(color: basicColor),
+                      ),
+                      onPressed: () async {
+                        const url =
+                            'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                        if (await canLaunch(url)) {
+                          await launch(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }),
+                ),
               ),
               elevation: 0,
             ),
@@ -259,7 +258,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           return Container(
                             height: height,
                             child: Center(
-                              child: Text('No Number Given!!', style: TextStyle(fontWeight: FontWeight.bold),),
+                              child: Text(
+                                'No Number Given!!',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                             ),
                           );
                         else {

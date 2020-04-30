@@ -179,7 +179,11 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 ),
                                 child: MaterialButton(
                                   onPressed: () async {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => Review(false)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Review(false)));
 //                                    if (_formKey.currentState.validate()) {
 //                                      setState(() {
 //                                        loading = true;
