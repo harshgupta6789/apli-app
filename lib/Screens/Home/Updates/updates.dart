@@ -218,6 +218,7 @@ class _UpdatesState extends State<Updates> {
                             .snapshots(),
                         builder: (context, snapshot1) {
                           if (snapshot1.hasData) {
+                            myNotifications = [];
                             snapshot1.data.documents.forEach((f) {
                               bool isMyNotification = false;
                               String title;

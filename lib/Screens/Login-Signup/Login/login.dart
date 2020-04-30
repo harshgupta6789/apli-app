@@ -261,7 +261,7 @@ class _LoginState extends State<Login> {
                                         loading = false;
                                       });
                                     } else if (result == 1) {
-                                      Toast.show('Login Successfull', context);
+                                      Toast.show('Login Successfull', context, backgroundColor: Colors.red);
                                       setState(() {
                                         loading = false;
                                       });
