@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/cameraScreen.dart';
-import 'package:apli/Screens/Home/Profile/psychometry.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
@@ -18,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../HomeLoginWrapper.dart';
+import 'Psychometry/psychometry.dart';
 import 'editResume.dart';
 
 class Profile extends StatefulWidget {
@@ -422,195 +422,195 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           preferredSize: Size.fromHeight(100),
         ),
         body: TabBarView(children: [
-          Center(
-              child: Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset(
-                  "Assets/Images/profile.png",
-                  height: 300,
-                  width: 300,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        text: " You can start applying for\n",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                        children: [
-                          TextSpan(
-                              text: "Jobs",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                currentTab: 1,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                  setState(() {});
-                                }),
-                          TextSpan(text: " after filling in the details.")
-                        ]),
-                  ),
-                )
-              ],
-            ),
-          )),
-          Center(
-              child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
-                        "Assets/Images/profile.png",
-                        height: 300,
-                        width: 300,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Your video intro will appear here.",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  ))),
-          Center(
-              child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset("Assets/Images/profile.png",
-                          height: 300, width: 300),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Your test will be shown here.",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  ))),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Column(
-//               children: <Widget>[
-//                 Padding(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: Text(
-//                     resumeSlogan,
-//                     style: TextStyle(fontSize: 20),
-//                   ),
-//                 ),
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: <Widget>[
-//                     Expanded(
-//                       child: Padding(
-//                         padding: EdgeInsets.only(left: 30.0),
-//                         child: Image.asset("Assets/Images/job.png"),
-//                       ),
-//                     ),
-//                     Padding(
-//                       padding: const EdgeInsets.all(8.0),
-//                       child: Column(
-//                         children: <Widget>[
-//                           Padding(
-//                             padding: const EdgeInsets.all(4.0),
-//                             child: IconButton(
-//                               icon: Icon(EvaIcons.editOutline),
-//                               onPressed: () {
-//                                 Navigator.push(
-//                                   context,
-//                                   MaterialPageRoute(
-//                                       builder: (context) => EditResume()),
-//                                 );
-//                               },
-//                             ),
-//                           ),
-//                           Padding(
-//                             padding: const EdgeInsets.all(4.0),
-//                             child: IconButton(
-//                               icon: Icon(EvaIcons.shareOutline),
-//                               onPressed: () {},
-//                             ),
-//                           ),
-//                           Padding(
-//                             padding: const EdgeInsets.all(4.0),
-//                             child: IconButton(
-//                               icon: Icon(EvaIcons.downloadOutline),
-//                               onPressed: () {},
-//                             ),
-//                           )
-//                         ],
-//                       ),
-//                     )
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: <Widget>[
-//                 Padding(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: Text(
-//                     videoIntroSlogan,
-//                     textAlign: TextAlign.center,
-//                     style: TextStyle(fontSize: 20),
-//                   ),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Align(
-//                       child: Text("Instructions to follow",
-//                           style: TextStyle(
-//                               fontSize: 20, fontWeight: FontWeight.w600)),
-//                       alignment: Alignment.center),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Align(
-//                       child: Text("1. Lorem Ipsum",
-//                           style: TextStyle(fontSize: 20)),
-//                       alignment: Alignment.center),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Align(
-//                       child: Text("1. Lorem Ipsum",
-//                           style: TextStyle(fontSize: 20)),
-//                       alignment: Alignment.center),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Align(
-//                       child: Text("1. Lorem Ipsum",
-//                           style: TextStyle(fontSize: 20)),
-//                       alignment: Alignment.center),
-//                 ),
-//                 Padding(
-//                   padding: const EdgeInsets.all(8.0),
-//                   child: Align(
-//                       child: Text(
-//                         "1. Lorem Ipsum",
-//                         style: TextStyle(fontSize: 20),
-//                       ),
-//                       alignment: Alignment.center),
-//                 ),
-//                 uploadVideo()
-//               ],
-//             ),
-//           ),
-//           Psychometry(),
+//          Center(
+//              child: Padding(
+//            padding: const EdgeInsets.only(bottom: 50.0),
+//            child: Column(
+//              mainAxisAlignment: MainAxisAlignment.center,
+//              children: <Widget>[
+//                Image.asset(
+//                  "Assets/Images/profile.png",
+//                  height: 300,
+//                  width: 300,
+//                ),
+//                Padding(
+//                  padding: const EdgeInsets.all(2.0),
+//                  child: RichText(
+//                    textAlign: TextAlign.center,
+//                    text: TextSpan(
+//                        text: " You can start applying for\n",
+//                        style: TextStyle(color: Colors.black, fontSize: 18),
+//                        children: [
+//                          TextSpan(
+//                              text: "Jobs",
+//                              style: TextStyle(color: basicColor),
+//                              recognizer: TapGestureRecognizer()
+//                                ..onTap = () {
+//                                  Navigator.of(context).pushAndRemoveUntil(
+//                                      MaterialPageRoute(
+//                                          builder: (context) => Wrapper(
+//                                                currentTab: 1,
+//                                              )),
+//                                      (Route<dynamic> route) => false);
+//                                  setState(() {});
+//                                }),
+//                          TextSpan(text: " after filling in the details.")
+//                        ]),
+//                  ),
+//                )
+//              ],
+//            ),
+//          )),
+//          Center(
+//              child: Padding(
+//                  padding: const EdgeInsets.only(bottom: 50.0),
+//                  child: Column(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      Image.asset(
+//                        "Assets/Images/profile.png",
+//                        height: 300,
+//                        width: 300,
+//                      ),
+//                      Padding(
+//                          padding: const EdgeInsets.all(8.0),
+//                          child: Text(
+//                            "Your video intro will appear here.",
+//                            style: TextStyle(fontSize: 18),
+//                          ))
+//                    ],
+//                  ))),
+//          Center(
+//              child: Padding(
+//                  padding: const EdgeInsets.only(bottom: 50.0),
+//                  child: Column(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      Image.asset("Assets/Images/profile.png",
+//                          height: 300, width: 300),
+//                      Padding(
+//                          padding: const EdgeInsets.all(8.0),
+//                          child: Text(
+//                            "Your test will be shown here.",
+//                            style: TextStyle(fontSize: 18),
+//                          ))
+//                    ],
+//                  ))),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Column(
+               children: <Widget>[
+                 Padding(
+                   padding: const EdgeInsets.all(20.0),
+                   child: Text(
+                     resumeSlogan,
+                     style: TextStyle(fontSize: 20),
+                   ),
+                 ),
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   children: <Widget>[
+                     Expanded(
+                       child: Padding(
+                         padding: EdgeInsets.only(left: 30.0),
+                         child: Image.asset("Assets/Images/job.png"),
+                       ),
+                     ),
+                     Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Column(
+                         children: <Widget>[
+                           Padding(
+                             padding: const EdgeInsets.all(4.0),
+                             child: IconButton(
+                               icon: Icon(EvaIcons.editOutline),
+                               onPressed: () {
+                                 Navigator.push(
+                                   context,
+                                   MaterialPageRoute(
+                                       builder: (context) => EditResume()),
+                                 );
+                               },
+                             ),
+                           ),
+                           Padding(
+                             padding: const EdgeInsets.all(4.0),
+                             child: IconButton(
+                               icon: Icon(EvaIcons.shareOutline),
+                               onPressed: () {},
+                             ),
+                           ),
+                           Padding(
+                             padding: const EdgeInsets.all(4.0),
+                             child: IconButton(
+                               icon: Icon(EvaIcons.downloadOutline),
+                               onPressed: () {},
+                             ),
+                           )
+                         ],
+                       ),
+                     )
+                   ],
+                 ),
+               ],
+             ),
+           ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: <Widget>[
+                 Padding(
+                   padding: const EdgeInsets.all(20.0),
+                   child: Text(
+                     videoIntroSlogan,
+                     textAlign: TextAlign.center,
+                     style: TextStyle(fontSize: 20),
+                   ),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       child: Text("Instructions to follow",
+                           style: TextStyle(
+                               fontSize: 20, fontWeight: FontWeight.w600)),
+                       alignment: Alignment.center),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       child: Text("1. Lorem Ipsum",
+                           style: TextStyle(fontSize: 20)),
+                       alignment: Alignment.center),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       child: Text("1. Lorem Ipsum",
+                           style: TextStyle(fontSize: 20)),
+                       alignment: Alignment.center),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       child: Text("1. Lorem Ipsum",
+                           style: TextStyle(fontSize: 20)),
+                       alignment: Alignment.center),
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Align(
+                       child: Text(
+                         "1. Lorem Ipsum",
+                         style: TextStyle(fontSize: 20),
+                       ),
+                       alignment: Alignment.center),
+                 ),
+                 uploadVideo()
+               ],
+             ),
+           ),
+           Psychometry(),
         ], controller: _tabController));
   }
 }

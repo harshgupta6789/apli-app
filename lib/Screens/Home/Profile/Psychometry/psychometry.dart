@@ -1,4 +1,4 @@
-import 'package:apli/Screens/Home/Profile/psychometryTest.dart';
+import 'package:apli/Screens/Home/Profile/psychometry/psychometryTest.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

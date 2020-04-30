@@ -1,6 +1,7 @@
 import 'package:apli/Screens/Login-Signup/Login/updatePassword.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class ForgotPassword extends StatefulWidget {
 double height, width;
 
 class _ForgotPasswordState extends State<ForgotPassword> {
-  bool loading = false, loading2 = false;
+  bool loading = false;
 
   String smsOTP;
   String verificationId;
@@ -28,7 +29,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Future<void> verifyPhone(String phoneNo) async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {
-        loading2 = false;
+        loading = false;
       });
       this.verificationId = verId;
       smsOTPDialog(context).then((value) {});
@@ -61,71 +62,83 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new AlertDialog(
-            title: Text('Enter OTP'),
-            content: Container(
-              height: 100,
-              child: Column(children: [
-                PinCodeTextField(
-                  length: 6,
-                  activeFillColor: basicColor,
-                  activeColor: basicColor,
-                  inactiveFillColor: Colors.black,
-                  selectedColor: basicColor,
-                  inactiveColor: Colors.black,
-                  obsecureText: false,
-                  animationType: AnimationType.fade,
-                  shape: PinCodeFieldShape.box,
-                  animationDuration: Duration(milliseconds: 300),
-                  borderRadius: BorderRadius.circular(5),
-                  fieldHeight: 50,
-                  fieldWidth: 40,
-                  onChanged: (value) {
-                    setState(() {
-                      this.smsOTP = value;
-                    });
-                  },
-                ),
-                (errorMessage != ''
-                    ? Text(
-                        errorMessage,
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : Container())
-              ]),
-            ),
-            contentPadding: EdgeInsets.all(10),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Verify'),
-                onPressed: () {
-                  setState(() {
-                    loading2 = true;
-                  });
-                  _auth.currentUser().then((user) async {
-                    if (user != null) {
-                      setState(() {
-                        loading2 = false;
-                      });
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                      } catch (e) {}
-                      Navigator.of(context).pop();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  UpdatePassword(email: widget.email)));
-                    } else {
-                      signIn();
-                    }
-                  });
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.transparent,
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(top: height * 0.2),
+                  child: new AlertDialog(
+                    title: Text('Enter OTP'),
+                    content: Container(
+                      height: 100,
+                      child: Column(children: [
+                        PinCodeTextField(
+                          length: 6,
+                          activeFillColor: basicColor,
+                          activeColor: basicColor,
+                          inactiveFillColor: Colors.black,
+                          selectedColor: basicColor,
+                          inactiveColor: Colors.black,
+                          obsecureText: false,
+                          animationType: AnimationType.fade,
+                          shape: PinCodeFieldShape.box,
+                          animationDuration: Duration(milliseconds: 300),
+                          borderRadius: BorderRadius.circular(5),
+                          fieldHeight: 50,
+                          fieldWidth: 40,
+                          onChanged: (value) {
+                            setState(() {
+                              this.smsOTP = value;
+                            });
+                          },
+                        ),
+                        (errorMessage != ''
+                            ? Text(
+                                errorMessage,
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container())
+                      ]),
+                    ),
+                    contentPadding: EdgeInsets.all(10),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Verify'),
+                        onPressed: () {
+                          setState(() {
+                            loading = true;
+                          });
+                          _auth.currentUser().then((user) async {
+                            if (user != null) {
+                              setState(() {
+                                loading = false;
+                              });
+                              try {
+                                await FirebaseAuth.instance.signOut();
+                              } catch (e) {}
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          UpdatePassword(email: widget.email)));
+                            } else {
+                              signIn();
+                            }
+                          });
 //                  _auth.currentUser().then((user) {
 //                    signIn();
 //                  });
-                },
-              )
-            ],
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           );
         });
   }
@@ -144,7 +157,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         await FirebaseAuth.instance.signOut();
       } catch (e) {}
       setState(() {
-        loading2 = false;
+        loading = false;
       });
       Navigator.of(context).pop();
       Navigator.pushReplacement(
@@ -155,7 +168,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   )));
     } catch (e) {
       setState(() {
-        loading2 = false;
+        loading = false;
       });
       handleError(e);
     }
@@ -185,18 +198,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     DocumentReference doc =
         Firestore.instance.collection('candidates').document(widget.email);
     await doc.get().then((snapshot) {
-      if (!snapshot.exists) {
-        ph_no = 'NoAccount';
+      ph_no = snapshot.data['ph_no'].toString();
+      if (ph_no == null) {
+        ph_no = 'noPhoneNo';
       } else {
-        ph_no = snapshot.data['ph_no'].toString();
-        if (ph_no == null) {
-          ph_no = 'noPhoneNo';
+        if (ph_no.length == 10) {
+          ph_no = '+91' + ph_no;
         } else {
-          if (ph_no.length == 10) {
-            ph_no = '+91' + ph_no;
-          } else {
-            ph_no = ph_no;
-          }
+          ph_no = ph_no;
         }
       }
     });
@@ -212,114 +221,108 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         ? Loading()
         : Scaffold(
             resizeToAvoidBottomInset: false,
-            body: SingleChildScrollView(
-              child: FutureBuilder(
-                  future: userDetails(),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    print(snapshot.data);
-                    if (snapshot.hasData &&
-                        snapshot.connectionState == ConnectionState.done) {
-                      String ph_no = snapshot.data;
-                      if (ph_no == 'NoAccount')
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(120, 400, 100, 0),
-                          child: Text(
-                            'Account does not exists',
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      else if (ph_no == 'noPhoneNo')
-                        return Center(
-                          child: Column(
-                            children: <Widget>[
-                              Text('No Number Given'),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
-                                child: FlatButton(
+            bottomNavigationBar: BottomAppBar(
+              color: Colors.transparent,
+              child: Container(
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 10, bottom: 5),
+                    child: FlatButton(
+                        child: Text(
+                          'Need Help ? Contact Us',
+                          style: TextStyle(color: basicColor),
+                        ),
+                        onPressed: () async {
+                          const url =
+                              'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        }),
+                  ),
+              ),
+              elevation: 0,
+            ),
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: FutureBuilder(
+                    future: userDetails(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.connectionState == ConnectionState.done) {
+                        String ph_no = snapshot.data;
+                        if (ph_no == 'noPhoneNo')
+                          return Container(
+                            height: height,
+                            child: Center(
+                              child: Text('No Number Given!!', style: TextStyle(fontWeight: FontWeight.bold),),
+                            ),
+                          );
+                        else {
+                          return Container(
+                            padding: EdgeInsets.all(20),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height * 0.2, right: width * 0.5),
+                                  child: Image.asset("Assets/Images/logo.png"),
+                                ),
+                                Container(
+                                  width: width,
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: Center(
                                     child: Text(
-                                      'Contact Us',
-                                      style: TextStyle(color: basicColor),
+                                      'OTP will been sent to' + ph_no,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                    onPressed: () async {
-                                      const url =
-                                          'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
-                                      if (await canLaunch(url)) {
-                                        await launch(url);
-                                      } else {
-                                        throw 'Could not launch $url';
-                                      }
-                                    }),
-                              ),
-                            ],
+                                  ),
+                                ),
+                                Container(
+                                  width: width,
+                                  child: Center(
+                                    child: FlatButton(
+                                        child: Text(
+                                          send ? 'Resend OTP' : 'Send OTP',
+                                          style: TextStyle(color: basicColor),
+                                        ),
+                                        onPressed: () async {
+                                          setState(() {
+                                            loading = true;
+                                            send = true;
+                                          });
+                                          verifyPhone(ph_no);
+                                        }),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      } else if (snapshot.hasError) {
+                        return Container(
+                          height: height,
+                          child: Center(
+                            child: Text(
+                              'Error occured while fetching data',
+                            ),
                           ),
                         );
-                      else {
-                        return Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: height * 0.3, right: width * 0.5),
-                              child: Image.asset("Assets/Images/logo.png"),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(50, 50, 50, 20),
-                              child: Text(
-                                'OTP will been sent to' + ph_no,
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(50, 0, 50, 50),
-                              child: FlatButton(
-                                  child: Text(
-                                    send ? 'Resend OTP' : 'Send OTP',
-                                    style: TextStyle(color: basicColor),
-                                  ),
-                                  onPressed: () async {
-                                    setState(() {
-                                      loading2 = true;
-                                      send = true;
-                                    });
-                                    verifyPhone(ph_no);
-                                  }),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(50, 200, 50, 50),
-                              child: FlatButton(
-                                  child: Text(
-                                    'Not your number ? Contact Us',
-                                    style: TextStyle(color: basicColor),
-                                  ),
-                                  onPressed: () async {
-                                    const url =
-                                        'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
-                                    if (await canLaunch(url)) {
-                                      await launch(url);
-                                    } else {
-                                      throw 'Could not launch $url';
-                                    }
-                                  }),
-                            ),
-                          ],
+                      } else {
+                        return Container(
+                          height: height,
+                          child: Loading(),
                         );
                       }
-                    } else if (snapshot.hasError) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(100, 400, 100, 0),
-                        child: Text(
-                          'Error occured while fetching data',
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    } else {
-                      return Container(
-                        height: height,
-                        child: Loading(),
-                      );
-                    }
-                  }),
+                    }),
+              ),
             ),
           );
   }

@@ -1,6 +1,7 @@
 import 'package:apli/Screens/Login-Signup/Signup/register.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/country_pickers.dart';
@@ -77,67 +78,79 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          return new AlertDialog(
-            title: Text('Enter OTP'),
-            content: Container(
-              height: 100,
-              child: Column(children: [
-                PinCodeTextField(
-                  length: 6,
-                  activeFillColor: basicColor,
-                  activeColor: basicColor,
-                  inactiveFillColor: Colors.black,
-                  selectedColor: basicColor,
-                  inactiveColor: Colors.black,
-                  obsecureText: false,
-                  animationType: AnimationType.fade,
-                  shape: PinCodeFieldShape.box,
-                  animationDuration: Duration(milliseconds: 300),
-                  borderRadius: BorderRadius.circular(5),
-                  fieldHeight: 50,
-                  fieldWidth: 40,
-                  onChanged: (value) {
-                    setState(() {
-                      this.smsOTP = value;
-                    });
-                  },
-                ),
-                (errorMessage != ''
-                    ? Text(
-                        errorMessage,
-                        style: TextStyle(color: Colors.red),
+          return Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.transparent,
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.only(top: height * 0.2),
+                  child: AlertDialog(
+                    title: Text('Enter OTP'),
+                    content: Container(
+                      height: 100,
+                      child: Column(children: [
+                        PinCodeTextField(
+                          length: 6,
+                          activeFillColor: basicColor,
+                          activeColor: basicColor,
+                          inactiveFillColor: Colors.black,
+                          selectedColor: basicColor,
+                          inactiveColor: Colors.black,
+                          obsecureText: false,
+                          animationType: AnimationType.fade,
+                          shape: PinCodeFieldShape.box,
+                          animationDuration: Duration(milliseconds: 300),
+                          borderRadius: BorderRadius.circular(5),
+                          fieldHeight: 50,
+                          fieldWidth: 40,
+                          onChanged: (value) {
+                            setState(() {
+                              this.smsOTP = value;
+                            });
+                          },
+                        ),
+                        (errorMessage != ''
+                            ? Text(
+                                errorMessage,
+                                style: TextStyle(color: Colors.red),
+                              )
+                            : Container())
+                      ]),
+                    ),
+                    contentPadding: EdgeInsets.all(10),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Verify'),
+                        onPressed: () {
+                          setState(() {
+                            loading = true;
+                          });
+                          _auth.currentUser().then((user) async {
+                            if (user != null) {
+                              setState(() {
+                                loading = false;
+                              });
+                              try {
+                                await FirebaseAuth.instance.signOut();
+                              } catch (e) {}
+                              Navigator.of(context).pop();
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Register(phoneNo)));
+                            } else {
+                              signIn();
+                            }
+                          });
+                        },
                       )
-                    : Container())
-              ]),
+                    ],
+                  ),
+                ),
+              ),
             ),
-            contentPadding: EdgeInsets.all(10),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Verify'),
-                onPressed: () {
-                  setState(() {
-                    loading = true;
-                  });
-                  _auth.currentUser().then((user) async {
-                    if (user != null) {
-                      setState(() {
-                        loading = false;
-                      });
-                      try {
-                        await FirebaseAuth.instance.signOut();
-                      } catch (e) {}
-                      Navigator.of(context).pop();
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Register(phoneNo)));
-                    } else {
-                      signIn();
-                    }
-                  });
-                },
-              )
-            ],
           );
         });
   }
@@ -205,94 +218,95 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                     topLeft: Radius.circular(40),
                     topRight: Radius.circular(40)),
                 child: Container(
+                  width: width,
+                  height: 60,
                   color: basicColor,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 80, top: 10, bottom: 5),
-                    child: Row(
-                      children: <Widget>[
-                        FlatButton(
-                          child: Text(
-                            'Already have an account?  Sign In',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                        )
-                      ],
-                    ),
+                  padding:
+                  EdgeInsets.only(top: 10, bottom: 5),
+                  child: Center(
+                    child: FlatButton(
+                      child: Text(
+                        'Already have an account?  Sign In',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
                   ),
                 ),
               ),
               elevation: 0,
             ),
-            body: SingleChildScrollView(
-              padding: EdgeInsets.all(8.0),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 50, 10, 10),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Let's get you signed up",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                      Card(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            ListTile(
-                                title: _buildCountryPickerDropdown(
-                                    hasPriorityList: true)),
-                          ],
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(8.0),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(10, height * 0.1, 10, 10),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        Text(
+                          "Let's get you signed up",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
                         ),
-                      ),
-                      SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                          'By signing up, you are agreeing to our terms & conditions'),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              top: height * 0.05,
-                              left: width * 0.1,
-                              right: width * 0.1),
-                          child: Container(
-                            height: height * 0.08,
-                            width: width * 0.8,
-                            decoration: BoxDecoration(
-                              color: basicColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: MaterialButton(
-                                child: Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () async {
-                                  if (_formKey.currentState.validate()) {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    var net = await Connectivity()
-                                        .checkConnectivity();
-                                    if (net == ConnectivityResult.none) {
-                                      Toast.show('No Internet', context);
+                        SizedBox(
+                          height: height * 0.1,
+                        ),
+                        Card(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              ListTile(
+                                  title: _buildCountryPickerDropdown(
+                                      hasPriorityList: true)),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.05,
+                        ),
+                        Text(
+                            'By signing up, you are agreeing to our terms & conditions'),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                top: height * 0.05,
+                                left: width * 0.1,
+                                right: width * 0.1),
+                            child: Container(
+                              height: 70,
+                              width: width * 0.8,
+                              decoration: BoxDecoration(
+                                color: basicColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: MaterialButton(
+                                  child: Text(
+                                    'Sign Up',
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var net = await Connectivity()
+                                          .checkConnectivity();
+                                      if (net == ConnectivityResult.none) {
+                                        Toast.show('No Internet', context);
+                                      }
+                                      verifyPhone();
                                     }
-                                    verifyPhone();
-                                  }
-                                }),
-                          )),
-                    ],
+                                  }),
+                            )),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -343,7 +357,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                 setState(() => phoneNo = countryCode + text);
               },
               validator: (value) {
-                if (value.length != 10 && isNumeric(value)) {
+                if (value.length != 10) {
                   return 'invalid phone number';
                 }
                 return null;
