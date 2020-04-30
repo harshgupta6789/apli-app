@@ -18,32 +18,24 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
   height = MediaQuery.of(context).size.height;
   double dividerThickness = 2;
   double fontSize = 15;
-  SharedPreferences prefs;
-  Future<List<String>> userInit() async {
-    String email;
 
+  Future<List<String>> userInit() async {
     List<String> userData = [];
 
-    await SharedPreferences.getInstance().then((value) => prefs = value);
-
-    if (prefs.getBool("isNotificationsEnabled") != null) {
-    } else
-      email = prefs.getString('email');
-    userData.add(email);
-
-    await Firestore.instance
-        .collection('candidates')
-        .document(email)
-        .get()
-        .then((snapshot) {
-      String fname = snapshot.data['First_name'];
-      String lname = snapshot.data['Last_name'];
-      if (lname == null)
-        userData.add(fname);
-      else
-        userData.add(fname + ' ' + lname);
-      userData.add(snapshot.data['ph_no'].toString());
-      userData.add((snapshot.data['profile_picture']));
+    await SharedPreferences.getInstance().then((value) async {
+      await Firestore.instance
+          .collection('candidates')
+          .document(value.getString('email'))
+          .get()
+          .then((snapshot) {
+        String fname = snapshot.data['First_name'];
+        String lname = snapshot.data['Last_name'];
+        if (lname == null)
+          userData.add(fname);
+        else
+          userData.add(fname + ' ' + lname);
+        userData.add((snapshot.data['profile_picture']));
+      });
     });
 
     return userData;
@@ -76,8 +68,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                               child: CircleAvatar(
                                 minRadius: 30,
                                 maxRadius: 35,
-                                backgroundImage: snapshot.data[3] != null
-                                    ? NetworkImage(snapshot.data[3])
+                                backgroundImage: snapshot.data[1] != null
+                                    ? NetworkImage(snapshot.data[1])
                                     : null,
                               ),
                             ),
@@ -91,8 +83,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                                     SizedBox(
                                       width: 130,
                                       child: AutoSizeText(
-                                        snapshot.data[1] != null
-                                            ? snapshot.data[1]
+                                        snapshot.data[0] != null
+                                            ? snapshot.data[0]
                                             : 'No Name',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
