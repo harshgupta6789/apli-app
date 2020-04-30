@@ -35,10 +35,8 @@ class AuthService {
                 bool temp = decodedData["result"];
                 bool isFcm = decodedData["gen_fcm"];
                 if (temp == true) {
-                  print("successfull");
                   if (isFcm == true) {
                     _firebaseMessaging.getToken().then((token) {
-                      print(token);
                       Firestore.instance
                           .collection("users")
                           .document(email)
@@ -154,14 +152,13 @@ class AuthService {
 
   Future signOut() async {
     try {} catch (e) {
-      print(e.toString());
     }
   }
 
   Future updatePassword(String email, String password) async {
     int result;
     try {
-      dynamic response = await passHash(password);
+      dynamic response = await passHashResponse(password);
       if(response == null) {
         result =  null;
       } else if (response.statusCode == 200) {
@@ -183,12 +180,11 @@ class AuthService {
       }
       return -10;
     } catch(e) {
-      print(e.toString());
       return null;
     }
   }
 
-  Future passHash(String password) async {
+  Future passHashResponse(String password) async {
     http.Response result;
     try {
       await http.post(passHash,

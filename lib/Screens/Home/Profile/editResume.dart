@@ -11,7 +11,7 @@ class EditResume extends StatefulWidget {
 class _EditResumeState extends State<EditResume> {
   Widget resumeTile(String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Container(
           decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.withOpacity(0.4))),
@@ -23,6 +23,7 @@ class _EditResumeState extends State<EditResume> {
             trailing: IconButton(
                 icon: Icon(EvaIcons.arrowIosForwardOutline),
                 onPressed: () {
+                  print('abcd');
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => Education()));
                 }),

@@ -155,51 +155,50 @@ class _UpdatesState extends State<Updates> {
           ),
           preferredSize: Size.fromHeight(50),
         ),
-        body: Column(
-          children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-            height: height * 0.07,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: typesList.length,
-              itemBuilder: (BuildContext context, int index) {
-                String temp = typesMap[typesList[index]];
-                bool contains = chosenTypes.contains(temp);
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Stack(
-                    children: <Widget>[
-                      RaisedButton(
-                        padding: EdgeInsets.only(left: 30, right: 30),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        color: contains ? basicColor : Colors.lightBlue[300],
-                        child: Text(typesList[index], style: TextStyle(color: contains ? Colors.white : Colors.black),),
-                        onPressed: () {
-                          if(contains)
-                            setState(() {
-                              chosenTypes.remove(temp);
-                            });
-                          else
-                            setState(() {
-                              chosenTypes.add(temp);
-                            });
-                        },
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Visibility(
-                          visible: contains,
-                          child: Icon(Icons.done, color: Colors.white,),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }),
-          ),
+        body:
+//          Container(
+//            padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+//            height: height * 0.07,
+//            child: ListView.builder(
+//              scrollDirection: Axis.horizontal,
+//              itemCount: typesList.length,
+//              itemBuilder: (BuildContext context, int index) {
+//                String temp = typesMap[typesList[index]];
+//                bool contains = chosenTypes.contains(temp);
+//                return Padding(
+//                  padding: const EdgeInsets.only(right: 8.0),
+//                  child: Stack(
+//                    children: <Widget>[
+//                      RaisedButton(
+//                        padding: EdgeInsets.only(left: 30, right: 30),
+//                        shape: RoundedRectangleBorder(
+//                          borderRadius: BorderRadius.circular(15),
+//                        ),
+//                        color: contains ? basicColor : Colors.lightBlue[300],
+//                        child: Text(typesList[index], style: TextStyle(color: contains ? Colors.white : Colors.black),),
+//                        onPressed: () {
+//                          if(contains)
+//                            setState(() {
+//                              chosenTypes.remove(temp);
+//                            });
+//                          else
+//                            setState(() {
+//                              chosenTypes.add(temp);
+//                            });
+//                        },
+//                      ),
+//                      Align(
+//                        alignment: Alignment.center,
+//                        child: Visibility(
+//                          visible: contains,
+//                          child: Icon(Icons.done, color: Colors.white,),
+//                        ),
+//                      )
+//                    ],
+//                  ),
+//                );
+//              }),
+//          ),
             FutureBuilder(
               future: userInit(email),
               builder:
@@ -278,12 +277,14 @@ class _UpdatesState extends State<Updates> {
                                 if (receivers != null) {
                                   for (int i = 0; i < receivers.length; i++) {
                                     if (filters.contains(receivers[i])) {
-                                      if(chosenTypes.length > 0)
-                                        if(chosenTypes.contains(notiType))
-                                          isMyNotification = true;
-                                      else
-                                        isMyNotification = true;
+                                      isMyNotification = true;
                                       break;
+//                                      if(chosenTypes.length > 0)
+//                                        if(chosenTypes.contains(notiType))
+//                                          isMyNotification = true;
+//                                      else
+//                                        isMyNotification = true;
+//                                      break;
                                     }
                                   }
                                   if (isMyNotification) {
@@ -312,12 +313,11 @@ class _UpdatesState extends State<Updates> {
                                 ),
                               );
                             else
-                              return Expanded(
-                                child: Padding(
+                              return Padding(
                                     padding: const EdgeInsets.all(4.0),
                                     child: AllNotifications(
                                       myNotifications: myNotifications,
-                                    )),
+                                    ),
                               );
                           } else
                             return Loading();
@@ -332,9 +332,7 @@ class _UpdatesState extends State<Updates> {
                   return Loading();
                 }
               },
-            ),
-          ],
-        ));
+            ));
   }
 }
 

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class MyLinearProgressIndicator extends StatefulWidget {
-  int seconds;
-  MyLinearProgressIndicator({this.seconds});
+  int milliSeconds;
+  MyLinearProgressIndicator({this.milliSeconds});
   @override
   _MyLinearProgressIndicatorState createState() =>
       _MyLinearProgressIndicatorState();
@@ -21,7 +21,7 @@ class _MyLinearProgressIndicatorState extends State<MyLinearProgressIndicator>
   void initState() {
     super.initState();
     controller = AnimationController(
-        duration: Duration(milliseconds: widget.seconds), vsync: this);
+        duration: Duration(milliseconds: widget.milliSeconds), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0).animate(controller)
       ..addListener(() {
         setState(() {});
@@ -29,7 +29,7 @@ class _MyLinearProgressIndicatorState extends State<MyLinearProgressIndicator>
     controller.repeat();
     controller2 =
         AnimationController(duration: const Duration(seconds: 1), vsync: this);
-    color = ColorTween(begin: basicColor, end: Colors.red).animate(controller)
+    color = ColorTween(begin: Colors.green, end: Colors.red).animate(controller)
       ..addListener(() {
         setState(() {});
       });
