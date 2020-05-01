@@ -65,7 +65,7 @@ class _CourseMainState extends State<CourseMain> {
                       itemCount: snapshot.data.documents.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 20),
+                          padding: const EdgeInsets.only(bottom: 20, top: 20),
                           child: InkWell(
                             onTap: () {
                               Navigator.push(
@@ -81,23 +81,22 @@ class _CourseMainState extends State<CourseMain> {
                               child: Stack(
                                 alignment: Alignment.centerLeft,
                                 children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 20.0),
-                                    child: Center(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.asset(
-                                          "Assets/Images/course.png",
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Image.asset(
+                                            "Assets/Images/course.png",
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                    ),
                                   ),
                                   Positioned(
-                                    top: 130.0,
-                                    left: 50.0,
+                                    top: height * 0.15,
+                                    left: width * 0.1,
                                     child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
+                                      padding: const EdgeInsets.all(0.0),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

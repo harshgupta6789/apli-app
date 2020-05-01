@@ -86,13 +86,14 @@ class _LoginState extends State<Login> {
                                 left: width * 0.1,
                                 right: width * 0.1),
                             child: TextFormField(
-                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: forgotPassword ? TextInputAction.done : TextInputAction.next,
                               onFieldSubmitted: (_) =>
                                   FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: loginFormField.copyWith(
-                                  labelText: 'Email Address',
-                                  icon: Icon(Icons.email, color: basicColor)),
+                                  hintText: 'Email Address',
+                                  prefixIcon: Icon(EvaIcons.emailOutline, color: basicColor)),
                               onChanged: (text) {
                                 setState(() => email = text);
                               },
@@ -113,16 +114,16 @@ class _LoginState extends State<Login> {
                               child: TextFormField(
                                 obscureText: obscure,
                                 decoration: loginFormField.copyWith(
-                                    labelText: 'Password',
+                                    hintText: 'Password',
                                     suffixIcon: IconButton(
-                                      icon: obscure
+                                      icon: !obscure
                                           ? Icon(
                                               EvaIcons.eyeOffOutline,
-                                              color: Colors.grey,
+                                              color: basicColor,
                                             )
                                           : Icon(
                                               EvaIcons.eyeOutline,
-                                              color: Colors.blue,
+                                              color: Colors.grey,
                                             ),
                                       onPressed: () {
                                         setState(() {
@@ -130,7 +131,7 @@ class _LoginState extends State<Login> {
                                         });
                                       },
                                     ),
-                                    icon: Icon(Icons.lock_outline,
+                                    prefixIcon: Icon(Icons.lock_outline,
                                         color: basicColor)),
                                 onChanged: (text) {
                                   setState(() => password = text);

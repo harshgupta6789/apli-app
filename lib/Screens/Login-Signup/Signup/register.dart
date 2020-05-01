@@ -6,6 +6,7 @@ import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:search_widget/search_widget.dart';
 import 'package:toast/toast.dart';
@@ -180,10 +181,13 @@ class _RegisterState extends State<Register> {
                                       right: width * 0.1),
                                   child: TextFormField(
                                     obscureText: false,
+                                    textInputAction: TextInputAction.next,
+                                    onFieldSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
                                     decoration: loginFormField.copyWith(
-                                        labelText: 'First Name',
-                                        icon: Icon(
-                                          Icons.person,
+                                        hintText: 'First Name',
+                                        prefixIcon: Icon(
+                                          EvaIcons.personOutline,
                                           color: basicColor,
                                         )),
                                     onChanged: (text) {
@@ -203,10 +207,13 @@ class _RegisterState extends State<Register> {
                                       right: width * 0.1),
                                   child: TextFormField(
                                     obscureText: false,
+                                    textInputAction: TextInputAction.next,
+                                    onFieldSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
                                     decoration: loginFormField.copyWith(
-                                        labelText: 'Last Name',
-                                        icon: Icon(
-                                          Icons.person_add,
+                                        hintText: 'Last Name',
+                                        prefixIcon: Icon(
+                                          EvaIcons.personAddOutline,
                                           color: basicColor,
                                         )),
                                     onChanged: (text) {
@@ -226,9 +233,13 @@ class _RegisterState extends State<Register> {
                                       right: width * 0.1),
                                   child: TextFormField(
                                     obscureText: false,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                    onFieldSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
                                     decoration: loginFormField.copyWith(
-                                        labelText: 'Email ID',
-                                        icon: Icon(Icons.email,
+                                        hintText: 'Email ID',
+                                        prefixIcon: Icon(EvaIcons.emailOutline,
                                             color: basicColor)),
                                     onChanged: (text) {
                                       setState(() {
@@ -250,9 +261,13 @@ class _RegisterState extends State<Register> {
                                       right: width * 0.1),
                                   child: TextFormField(
                                     obscureText: false,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    textInputAction: TextInputAction.next,
+                                    onFieldSubmitted: (_) =>
+                                        FocusScope.of(context).nextFocus(),
                                     decoration: loginFormField.copyWith(
-                                        labelText: 'Password',
-                                        icon: Icon(Icons.vpn_key,
+                                        hintText: 'Password',
+                                        prefixIcon: Icon(EvaIcons.lockOutline,
                                             color: basicColor)),
                                     onChanged: (text) {
                                       setState(() => password = text);
@@ -286,17 +301,14 @@ class _RegisterState extends State<Register> {
                                             right: width * 0.1),
                                         child: TextFormField(
                                           enabled: false,
-                                          onChanged: (text) {
-                                            setState(() {
-                                              collegeText = text;
-                                            });
-                                          },
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.grey[600]),
                                           decoration: loginFormField.copyWith(
-                                              labelText: collegeText,
-                                              icon: Icon(Icons.school,
+                                              hintText: collegeText,
+                                              hintStyle: TextStyle(
+                                                  color: Colors.black),
+                                              prefixIcon: Icon(Icons.school,
                                                   color: basicColor),
                                               suffixIcon: Icon(Icons.delete)),
                                         ),
@@ -377,12 +389,14 @@ class _RegisterState extends State<Register> {
                                           child: TextFormField(
                                             controller: controller,
                                             focusNode: focusNode,
+                                            textInputAction:
+                                                TextInputAction.next,
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 color: Colors.grey[600]),
                                             decoration: loginFormField.copyWith(
-                                                labelText: 'College Name',
-                                                icon: Icon(
+                                                hintText: 'College Name',
+                                                prefixIcon: Icon(
                                                   Icons.school,
                                                   color: basicColor,
                                                 )),
@@ -417,8 +431,10 @@ class _RegisterState extends State<Register> {
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
                                               decoration: loginFormField.copyWith(
-                                                  labelText: courseText,
-                                                  icon: Icon(
+                                                  hintText: courseText,
+                                                  hintStyle: TextStyle(
+                                                      color: Colors.black),
+                                                  prefixIcon: Icon(
                                                       Icons
                                                           .collections_bookmark,
                                                       color: basicColor),
@@ -475,13 +491,15 @@ class _RegisterState extends State<Register> {
                                               child: TextFormField(
                                                 controller: controller,
                                                 focusNode: focusNode,
+                                                textInputAction:
+                                                    TextInputAction.next,
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.grey[600]),
                                                 decoration:
                                                     loginFormField.copyWith(
-                                                        labelText: 'Course',
-                                                        icon: Icon(
+                                                        hintText: 'Course',
+                                                        prefixIcon: Icon(
                                                           Icons
                                                               .collections_bookmark,
                                                           color: basicColor,
@@ -518,8 +536,10 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      labelText: branchText,
-                                                      icon: Icon(
+                                                      hintText: branchText,
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.black),
+                                                      prefixIcon: Icon(
                                                           Icons.library_books,
                                                           color: basicColor),
                                                       suffixIcon:
@@ -575,13 +595,15 @@ class _RegisterState extends State<Register> {
                                               child: TextFormField(
                                                 controller: controller,
                                                 focusNode: focusNode,
+                                                textInputAction:
+                                                    TextInputAction.next,
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.grey[600]),
                                                 decoration:
                                                     loginFormField.copyWith(
-                                                        labelText: 'Branch',
-                                                        icon: Icon(
+                                                        hintText: 'Branch',
+                                                        prefixIcon: Icon(
                                                           Icons.library_books,
                                                           color: basicColor,
                                                         )),
@@ -615,8 +637,11 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      labelText: batchText,
-                                                      icon: Icon(Icons.book,
+                                                      hintText: batchText,
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.black),
+                                                      prefixIcon: Icon(
+                                                          Icons.book,
                                                           color: basicColor),
                                                       suffixIcon:
                                                           Icon(Icons.delete)),
@@ -667,13 +692,15 @@ class _RegisterState extends State<Register> {
                                               child: TextFormField(
                                                 controller: controller,
                                                 focusNode: focusNode,
+                                                textInputAction:
+                                                    TextInputAction.next,
                                                 style: TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.grey[600]),
                                                 decoration:
                                                     loginFormField.copyWith(
-                                                        labelText: 'Batch',
-                                                        icon: Icon(
+                                                        hintText: 'Batch',
+                                                        prefixIcon: Icon(
                                                           Icons.book,
                                                           color: basicColor,
                                                         )),
@@ -683,119 +710,119 @@ class _RegisterState extends State<Register> {
                                         ),
                                 ),
                               ),
-                              Visibility(
-                                  visible: allSet,
-                                  child: Padding(
-                                      padding: EdgeInsets.only(
-                                          top: height * 0.05,
-                                          left: width * 0.1,
-                                          right: width * 0.1),
-                                      child: Container(
-                                        height: height * 0.08,
-                                        width: width * 0.8,
-                                        decoration: BoxDecoration(
-                                          color: basicColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                              Padding(
+                                  padding: EdgeInsets.only(
+                                      top: height * 0.05,
+                                      left: width * 0.1,
+                                      right: width * 0.1),
+                                  child: Container(
+                                    height: 70,
+                                    width: width * 0.8,
+                                    decoration: BoxDecoration(
+                                      color: basicColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: MaterialButton(
+                                        disabledColor: Colors.grey,
+                                        child: Text(
+                                          'Register',
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
                                         ),
-                                        child: MaterialButton(
-                                            child: Text(
-                                              'Register',
-                                              style: TextStyle(
-                                                  fontSize: 18.0,
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            onPressed: () async {
-                                              if (_formKey.currentState
-                                                  .validate()) {
-                                                setState(() {
-                                                  loading = true;
-                                                });
-                                                var net = await Connectivity()
-                                                    .checkConnectivity();
-                                                if (net ==
-                                                    ConnectivityResult.none) {
-                                                  Toast.show(
-                                                      'No internet connection',
-                                                      context,
-                                                      duration: 5,
-                                                      backgroundColor:
-                                                          Colors.red);
+                                        onPressed: !allSet
+                                            ? null
+                                            : () async {
+                                                if (_formKey.currentState
+                                                    .validate()) {
                                                   setState(() {
-                                                    loading = false;
+                                                    loading = true;
                                                   });
-                                                } else {
-                                                  dynamic result = await _auth
-                                                      .registerWithoutAuth(
-                                                          fname,
-                                                          lname,
-                                                          email,
-                                                          password,
-                                                          widget.phoneNo,
-                                                          collegeText,
-                                                          courseText,
-                                                          branchText,
-                                                          batchText,
-                                                          batchID[batchText]);
-                                                  setState(() {
-                                                    loading = false;
-                                                  });
-                                                  if (result == -1) {
-                                                    //already exists
+                                                  var net = await Connectivity()
+                                                      .checkConnectivity();
+                                                  if (net ==
+                                                      ConnectivityResult.none) {
                                                     Toast.show(
-                                                        'Account already exists, try logging in',
+                                                        'No internet connection',
                                                         context,
                                                         duration: 5,
                                                         backgroundColor:
                                                             Colors.red);
-                                                  } else if (result == -2) {
-                                                    //server
-                                                    Toast.show(
-                                                        'Could not connect to server',
-                                                        context,
-                                                        duration: 5,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                  } else if (result == 0) {
-                                                    //failed
-                                                    Toast.show(
-                                                        'Failed, try again later',
-                                                        context,
-                                                        duration: 5,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                    Navigator.pop(context);
-                                                  } else if (result == 1) {
-                                                    //success
-                                                    Toast.show(
-                                                        'Successfully registered, kindly login again',
-                                                        context,
-                                                        duration: 5,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                    Navigator.of(context)
-                                                        .pushAndRemoveUntil(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Wrapper()),
-                                                            (Route<dynamic>
-                                                                    route) =>
-                                                                false);
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
                                                   } else {
-                                                    Toast.show(
-                                                        'Failed, try again later',
-                                                        context,
-                                                        duration: 5,
-                                                        backgroundColor:
-                                                            Colors.red);
-                                                    Navigator.pop(context);
+                                                    dynamic result = await _auth
+                                                        .registerWithoutAuth(
+                                                            fname,
+                                                            lname,
+                                                            email,
+                                                            password,
+                                                            widget.phoneNo,
+                                                            collegeText,
+                                                            courseText,
+                                                            branchText,
+                                                            batchText,
+                                                            batchID[batchText]);
+                                                    setState(() {
+                                                      loading = false;
+                                                    });
+                                                    if (result == -1) {
+                                                      //already exists
+                                                      Toast.show(
+                                                          'Account already exists, try logging in',
+                                                          context,
+                                                          duration: 5,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                    } else if (result == -2) {
+                                                      //server
+                                                      Toast.show(
+                                                          'Could not connect to server',
+                                                          context,
+                                                          duration: 5,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                    } else if (result == 0) {
+                                                      //failed
+                                                      Toast.show(
+                                                          'Failed, try again later',
+                                                          context,
+                                                          duration: 5,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                      Navigator.pop(context);
+                                                    } else if (result == 1) {
+                                                      //success
+                                                      Toast.show(
+                                                          'Successfully registered, kindly login again',
+                                                          context,
+                                                          duration: 5,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                      Navigator.of(context)
+                                                          .pushAndRemoveUntil(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Wrapper()),
+                                                              (Route<dynamic>
+                                                                      route) =>
+                                                                  false);
+                                                    } else {
+                                                      Toast.show(
+                                                          'Failed, try again later',
+                                                          context,
+                                                          duration: 5,
+                                                          backgroundColor:
+                                                              Colors.red);
+                                                      Navigator.pop(context);
+                                                    }
                                                   }
                                                 }
-                                              }
-                                            }),
-                                      ))),
+                                              }),
+                                  )),
                               Padding(
                                   padding: EdgeInsets.only(
                                       top: height * 0.05,

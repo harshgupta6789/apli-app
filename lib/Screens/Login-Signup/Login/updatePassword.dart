@@ -31,6 +31,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
   bool obscure = true;
 
+  final focus = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -58,10 +60,20 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               right: width * 0.1),
                           child: TextFormField(
                             obscureText: obscure,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.visiblePassword,
+                            onFieldSubmitted: (v){
+                              FocusScope.of(context).requestFocus(focus);
+                            },
                             decoration: loginFormField.copyWith(
-                                labelText: 'Password',
+                                hintText: 'Password',
                                 suffixIcon: IconButton(
-                                  icon: Icon(
+                                  icon: !obscure
+                                      ? Icon(
+                                    EvaIcons.eyeOffOutline,
+                                    color: basicColor,
+                                  )
+                                      : Icon(
                                     EvaIcons.eyeOutline,
                                     color: Colors.grey,
                                   ),
@@ -71,7 +83,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     });
                                   },
                                 ),
-                                icon: Icon(Icons.lock_outline,
+                                icon: Icon(EvaIcons.lockOutline,
                                     color: basicColor)),
                             onChanged: (text) {
                               setState(() => password = text);
@@ -90,9 +102,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               right: width * 0.1),
                           child: TextFormField(
                             obscureText: obscure,
+                            focusNode: focus,
                             decoration: loginFormField.copyWith(
                                 labelText: 'Re Enter Password',
-                                icon: Icon(Icons.lock_outline,
+                                icon: Icon(EvaIcons.lockOutline,
                                     color: basicColor)),
                             validator: (value) {
                               if (value != password) {

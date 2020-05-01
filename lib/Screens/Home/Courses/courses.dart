@@ -261,10 +261,10 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                 ),
                               )),
                           Positioned(
-                            top: 130.0,
-                            left: 50.0,
+                            top: height * 0.15,
+                            left: width * 0.1,
                             child: Padding(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(0.0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[

@@ -58,10 +58,14 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 right: width * 0.1),
                             child: TextFormField(
                               obscureText: false,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
                               decoration: loginFormField.copyWith(
-                                  labelText: 'Email Address',
-                                  icon: Icon(
-                                    EvaIcons.emailOutline,
+                                  hintText: 'Email Address',
+                                  prefixIcon: Icon(
+                                    EvaIcons.email,
                                     color: basicColor,
                                   )),
                               onChanged: (text) {
@@ -69,7 +73,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                               },
                               validator: (value) {
                                 if (!validateEmail(value)) {
-                                  return 'Email invalid';
+                                  return 'email invalid';
                                 }
                                 return null;
                               },
@@ -81,9 +85,12 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 right: width * 0.1),
                             child: TextFormField(
                               obscureText: false,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
                               decoration: loginFormField.copyWith(
-                                  labelText: 'College',
-                                  icon: Icon(
+                                  hintText: 'College',
+                                  prefixIcon: Icon(
                                     Icons.school,
                                     color: basicColor,
                                   )),
@@ -92,7 +99,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                               },
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'college of study cannot be empty';
+                                  return 'college cannot be empty';
                                 }
                                 return null;
                               },
@@ -104,9 +111,12 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 right: width * 0.1),
                             child: TextFormField(
                               obscureText: false,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
                               decoration: loginFormField.copyWith(
-                                  labelText: 'Field of Study',
-                                  icon: Icon(
+                                  hintText: 'Field of Study',
+                                  prefixIcon: Icon(
                                     Icons.book,
                                     color: basicColor,
                                   )),
@@ -127,9 +137,12 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 right: width * 0.1),
                             child: TextFormField(
                               obscureText: false,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
                               decoration: loginFormField.copyWith(
-                                  labelText: 'State',
-                                  icon: Icon(
+                                  hintText: 'State',
+                                  prefixIcon: Icon(
                                     Icons.location_on,
                                     color: basicColor,
                                   )),
@@ -150,9 +163,10 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 right: width * 0.1),
                             child: TextFormField(
                               obscureText: false,
+                              textInputAction: TextInputAction.done,
                               decoration: loginFormField.copyWith(
-                                  labelText: 'City',
-                                  icon: Icon(Icons.location_city,
+                                  hintText: 'City',
+                                  prefixIcon: Icon(Icons.location_city,
                                       color: basicColor)),
                               onChanged: (text) {
                                 setState(() => city = text);
@@ -179,50 +193,45 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 ),
                                 child: MaterialButton(
                                   onPressed: () async {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Review(false)));
-//                                    if (_formKey.currentState.validate()) {
-//                                      setState(() {
-//                                        loading = true;
-//                                      });
-//                                      var net = await Connectivity()
-//                                          .checkConnectivity();
-//                                      if (net == ConnectivityResult.none) {
-//                                        setState(() {
-//                                          loading = false;
-//                                        });
-//                                        Toast.show('Not Internet', context,
-//                                            backgroundColor: Colors.red);
-//                                      } else {
-//                                        //add to excel sheet
-//                                        String body = 'Email = $email College = $college Field of Study = $fieldOfStudy State = $state City = $city';
-//                                        final MailerService _mail = MailerService(to_email: 'harshhvg999@gmail.com', subject: 'abcd', body: body);
-//                                        dynamic result = await _mail.send();
-//                                        setState(() {
-//                                          loading = false;
-//                                        });
-//                                        if(result == -2) {
-//                                          Toast.show('Could not connect to server', context, duration: 5, backgroundColor: Colors.red);
-//                                        } else if(result == 0) {
-//                                          //failed
-//                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
-////                                        Navigator.pop(context);
-//                                        } else if(result == 1) {
-//                                          //success
-//                                          Navigator.pushReplacement(
-//                                              context,
-//                                              MaterialPageRoute(
-//                                                  builder: (context) =>
-//                                                      Review(false)));
-//                                        } else {
-//                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
-////                                        Navigator.pop(context);
-//                                        }
-//                                      }
-//                                    }
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      var net = await Connectivity()
+                                          .checkConnectivity();
+                                      if (net == ConnectivityResult.none) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        Toast.show('Not Internet', context,
+                                            backgroundColor: Colors.red);
+                                      } else {
+                                        //add to excel sheet
+                                        String body = 'Email = $email College = $college Field of Study = $fieldOfStudy State = $state City = $city';
+                                        final MailerService _mail = MailerService(to_email: 'harshhvg999@gmail.com', subject: 'abcd', body: body);
+                                        dynamic result = await _mail.send();
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        if(result == -2) {
+                                          Toast.show('Could not connect to server', context, duration: 5, backgroundColor: Colors.red);
+                                        } else if(result == 0) {
+                                          //failed
+                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+//                                        Navigator.pop(context);
+                                        } else if(result == 1) {
+                                          //success
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Review(false)));
+                                        } else {
+                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+//                                        Navigator.pop(context);
+                                        }
+                                      }
+                                    }
                                   },
                                   child: Text(
                                     'Register',

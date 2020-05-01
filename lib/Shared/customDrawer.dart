@@ -82,7 +82,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     SizedBox(
-                                      width: 130,
+                                      width: width * 0.3,
                                       child: AutoSizeText(
                                         snapshot.data[0] != null
                                             ? snapshot.data[0]
