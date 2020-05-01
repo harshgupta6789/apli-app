@@ -55,6 +55,7 @@ dependencies:
   mailer: ^3.0.4
   loadmore: ^1.0.4
   flutter_html: ^0.11.1
+  double_back_to_close_app: ^1.2.0
   datetime_picker_formfield: ^1.0.0
 
 

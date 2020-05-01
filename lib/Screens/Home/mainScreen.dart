@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -237,10 +238,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: _bottomNavigationBar(),
-        body: TabBarView(
-          children: _listTabs,
-          controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
+        body: DoubleBackToCloseApp(
+          child: TabBarView(
+            children: _listTabs,
+            controller: _tabController,
+            physics: NeverScrollableScrollPhysics(),
+          ),
+          snackBar: const SnackBar(
+            content: Text('Press again to exit the app'),
+          ),
         ));
   }
 }

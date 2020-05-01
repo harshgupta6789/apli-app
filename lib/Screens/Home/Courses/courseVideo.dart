@@ -120,11 +120,6 @@ class _VideoAppState extends State<VideoApp>
                     alignment: Alignment.center,
                     child: _controls
                         ? FloatingActionButton(
-                            elevation: 0,
-                            disabledElevation: 0.0,
-                            focusElevation: 0.0,
-                            highlightElevation: 0.0,
-                            hoverElevation: 0.0,
                             heroTag: 'nonononon',
                             backgroundColor: Colors.transparent,
                             onPressed: () {
@@ -152,11 +147,6 @@ class _VideoAppState extends State<VideoApp>
                         ? Padding(
                             padding: const EdgeInsets.only(right: 50.0),
                             child: FloatingActionButton(
-                              elevation: 0,
-                              disabledElevation: 0.0,
-                              focusElevation: 0.0,
-                              highlightElevation: 0.0,
-                              hoverElevation: 0.0,
                               heroTag: 'lololol',
                               backgroundColor: Colors.transparent,
                               onPressed: () {
@@ -178,11 +168,6 @@ class _VideoAppState extends State<VideoApp>
                         ? Padding(
                             padding: const EdgeInsets.only(left: 50.0),
                             child: FloatingActionButton(
-                              elevation: 0,
-                              disabledElevation: 0.0,
-                              focusElevation: 0.0,
-                              highlightElevation: 0.0,
-                              hoverElevation: 0.0,
                               heroTag: 'none',
                               backgroundColor: Colors.transparent,
                               onPressed: () {

@@ -6,14 +6,17 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          SpinKitWave(
-            color: basicColor,
-            size: 50.0,
-          )
-        ],
+      child: Container(
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SpinKitWave(
+              color: basicColor,
+              size: 50.0,
+            )
+          ],
+        ),
       ),
     );
   }

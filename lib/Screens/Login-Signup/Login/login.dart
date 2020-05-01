@@ -86,6 +86,9 @@ class _LoginState extends State<Login> {
                                 left: width * 0.1,
                                 right: width * 0.1),
                             child: TextFormField(
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: loginFormField.copyWith(
                                   labelText: 'Email Address',
@@ -112,10 +115,15 @@ class _LoginState extends State<Login> {
                                 decoration: loginFormField.copyWith(
                                     labelText: 'Password',
                                     suffixIcon: IconButton(
-                                      icon: Icon(
-                                        EvaIcons.eyeOutline,
-                                        color: Colors.grey,
-                                      ),
+                                      icon: obscure
+                                          ? Icon(
+                                              EvaIcons.eyeOffOutline,
+                                              color: Colors.grey,
+                                            )
+                                          : Icon(
+                                              EvaIcons.eyeOutline,
+                                              color: Colors.blue,
+                                            ),
                                       onPressed: () {
                                         setState(() {
                                           obscure = !obscure;

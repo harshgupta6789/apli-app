@@ -41,30 +41,31 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
             return Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Html(
                     data: snapshot.data['overview'] ??
                         "Error While Fetching The Data",
                   ),
-                  Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: basicColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: MaterialButton(
-                            padding: EdgeInsets.only(left: 30, right: 30),
-                            child: Text(
-                              'ENROLL',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                            onPressed: () => null),
-                      )),
+                  // Padding(
+                  //     padding: EdgeInsets.only(top: 20.0),
+                  //     child: Container(
+                  //       decoration: BoxDecoration(
+                  //         color: basicColor,
+                  //         borderRadius: BorderRadius.circular(5),
+                  //       ),
+                  //       child: MaterialButton(
+                  //           padding: EdgeInsets.only(left: 30, right: 30),
+                  //           child: Text(
+                  //             'ENROLL',
+                  //             style: TextStyle(
+                  //                 fontSize: 14.0,
+                  //                 color: Colors.white,
+                  //                 fontWeight: FontWeight.w600),
+                  //           ),
+                  //           onPressed: () => null),
+                  //     )),
                 ],
               ),
             );
@@ -91,6 +92,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
                 return Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     // Padding(
@@ -140,6 +142,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     return Padding(
       padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
             completion,

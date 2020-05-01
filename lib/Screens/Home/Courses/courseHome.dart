@@ -58,7 +58,7 @@ class _CourseMainState extends State<CourseMain> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
                 child: ScrollConfiguration(
                   behavior: MyBehavior(),
                   child: ListView.builder(
@@ -81,13 +81,15 @@ class _CourseMainState extends State<CourseMain> {
                               child: Stack(
                                 alignment: Alignment.centerLeft,
                                 children: <Widget>[
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.asset(
-                                        "Assets/Images/course.png",
-                                        fit: BoxFit.cover,
+                                  Padding(
+                                    padding: EdgeInsets.only(top: 20.0),
+                                    child: Center(
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Image.asset(
+                                          "Assets/Images/course.png",
+                                        ),
                                       ),
                                     ),
                                   ),
