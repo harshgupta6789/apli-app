@@ -74,7 +74,7 @@ class _UpdatesState extends State<Updates> {
   }
 
   String difference(Timestamp time) {
-    int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch;
+    int timeInMicroSecondsSimceEpoch = time.microsecondsSinceEpoch - 19800000000;
     Duration dt = DateTime.now().difference(
         DateTime.fromMicrosecondsSinceEpoch(timeInMicroSecondsSimceEpoch));
     if (dt.isNegative) return 'negative';
