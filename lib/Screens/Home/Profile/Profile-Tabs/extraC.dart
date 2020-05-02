@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Awards extends StatefulWidget {
+class ExtraC extends StatefulWidget {
   @override
-  _AwardsState createState() => _AwardsState();
+  _ExtraCState createState() => _ExtraCState();
 }
 
-class _AwardsState extends State<Awards> {
+class _ExtraCState extends State<ExtraC> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

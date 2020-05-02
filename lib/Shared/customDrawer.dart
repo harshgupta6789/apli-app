@@ -270,7 +270,7 @@ class _NotificationSwitchState extends State<NotificationSwitch> {
         activeColor: basicColor,
         activeTrackColor: basicColor,
         inactiveTrackColor: Colors.grey,
-        value: isSwitched,
+        value: isSwitched, onChanged: (bool value) {},
       ),
     );
   }

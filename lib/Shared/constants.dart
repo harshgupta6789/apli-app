@@ -49,7 +49,9 @@ const String videoIntroSlogan =
 const String psychometryTestSlogan =
     "This is a psychometry test to help the\nrecruiters understand your personality";
 const String intro = 'Intro';
-const String about = 'About';
+const String extra = 'Exta-Curriculars';
+const String projects = 'Projects';
+const String awards = 'Awards';
 const String experience = 'Experience';
 const String education = 'Education';
 const String licenses = 'Licenses and Certifications';
