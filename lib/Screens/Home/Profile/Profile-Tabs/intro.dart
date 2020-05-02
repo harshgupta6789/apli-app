@@ -317,9 +317,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address']
-                                        ['country'] ??
-                                    "Country",
+                                labelText: snapshot.data['Address'] != null
+                                    ? snapshot.data['Address']['country'] ??
+                                        "Country"
+                                    : "Country",
                                 hintText: 'Country',
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
@@ -341,8 +342,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address']['state'] ??
-                                    "State",
+                                labelText: snapshot.data['Address'] != null
+                                    ? snapshot.data['Address']['state'] ??
+                                        "State"
+                                    : "State",
                                 hintText: 'State',
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
@@ -364,10 +367,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address']
-                                            ['postal_code']
-                                        .toString() ??
-                                    "Postal Code",
+                                labelText: snapshot.data['Address'] != null
+                                    ? snapshot.data['Address']['postal_code'] ??
+                                        "Postal Code"
+                                    : "Postal Code",
                                 hintText: 'Postal Code',
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
@@ -390,7 +393,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 labelText:
-                                    snapshot.data['Address']['city'] ?? "City",
+                                   snapshot.data['Address'] != null
+                                    ? snapshot.data['Address']['city'] ??
+                                        "City"
+                                    : "City",
                                 hintText: 'City',
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
