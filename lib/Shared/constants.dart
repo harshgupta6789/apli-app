@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 
 Color basicColor = Color(0xff1643CD);
 
+// ---------------Sizes----------------------
+
+const FontWeight appBarFontWeight = FontWeight.bold;
+const double preferredSize = 50;
+
 // ---------------Important------------------
 const String passHash = "https://staging.apli.ai/accounts/passHash";
 const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";

@@ -8,7 +8,6 @@ class Skills extends StatefulWidget {
 
 class _SkillsState extends State<Skills> {
   double width, height;
-  TextEditingController _textEditingController;
 
   @override
   void initState() {
@@ -23,12 +22,12 @@ class _SkillsState extends State<Skills> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70),
+        preferredSize: Size.fromHeight(preferredSize),
         child: AppBar(
           backgroundColor: basicColor,
           title: Text(
             'Skills',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: appBarFontWeight),
           ),
         ),
       ),
