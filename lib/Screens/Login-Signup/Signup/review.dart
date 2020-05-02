@@ -1,4 +1,4 @@
-import 'package:apli/Screens/Home/Profile/Profile-Tabs/edu.dart';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:flutter/material.dart';
