@@ -207,19 +207,31 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                             backgroundColor: Colors.red);
                                       } else {
                                         //add to excel sheet
-                                        String body = 'Email = $email College = $college Field of Study = $fieldOfStudy State = $state City = $city';
-                                        final MailerService _mail = MailerService(to_email: 'harshhvg999@gmail.com', subject: 'abcd', body: body);
+                                        String body =
+                                            'Email = $email, College = $college, Field of Study = $fieldOfStudy, State = $state, City = $city';
+                                        final MailerService _mail =
+                                            MailerService(
+                                                to_email: '$apliEmailID',
+                                                subject: 'College Not Found',
+                                                body: body);
                                         dynamic result = await _mail.send();
                                         setState(() {
                                           loading = false;
                                         });
-                                        if(result == -2) {
-                                          Toast.show('Could not connect to server', context, duration: 5, backgroundColor: Colors.red);
-                                        } else if(result == 0) {
+                                        if (result == -2) {
+                                          Toast.show(
+                                              'Could not connect to server',
+                                              context,
+                                              duration: 5,
+                                              backgroundColor: Colors.red);
+                                        } else if (result == 0) {
                                           //failed
-                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+                                          Toast.show('Failed, try again later',
+                                              context,
+                                              duration: 5,
+                                              backgroundColor: Colors.red);
 //                                        Navigator.pop(context);
-                                        } else if(result == 1) {
+                                        } else if (result == 1) {
                                           //success
                                           Navigator.pushReplacement(
                                               context,
@@ -227,7 +239,10 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                                   builder: (context) =>
                                                       Review(false)));
                                         } else {
-                                          Toast.show('Failed, try again later', context, duration: 5, backgroundColor: Colors.red);
+                                          Toast.show('Failed, try again later',
+                                              context,
+                                              duration: 5,
+                                              backgroundColor: Colors.red);
 //                                        Navigator.pop(context);
                                         }
                                       }

@@ -62,7 +62,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             obscureText: obscure,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.visiblePassword,
-                            onFieldSubmitted: (v){
+                            onFieldSubmitted: (v) {
                               FocusScope.of(context).requestFocus(focus);
                             },
                             decoration: loginFormField.copyWith(
@@ -70,13 +70,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 suffixIcon: IconButton(
                                   icon: !obscure
                                       ? Icon(
-                                    EvaIcons.eyeOffOutline,
-                                    color: basicColor,
-                                  )
+                                          EvaIcons.eyeOffOutline,
+                                          color: basicColor,
+                                        )
                                       : Icon(
-                                    EvaIcons.eyeOutline,
-                                    color: Colors.grey,
-                                  ),
+                                          EvaIcons.eyeOutline,
+                                          color: Colors.grey,
+                                        ),
                                   onPressed: () {
                                     setState(() {
                                       obscure = !obscure;

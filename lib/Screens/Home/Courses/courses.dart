@@ -186,7 +186,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     orientation = MediaQuery.of(context).orientation;
-    print(height);
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -247,8 +246,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   Padding(
                     padding: EdgeInsets.only(
                         top: height * 0.02,
-                        left: orientation == Orientation.portrait ? width * 0.05 : 100,
-                        right: orientation == Orientation.portrait ? width * 0.05 : 100),
+                        left: orientation == Orientation.portrait
+                            ? width * 0.05
+                            : 100,
+                        right: orientation == Orientation.portrait
+                            ? width * 0.05
+                            : 100),
                     child: Center(
                       child: Stack(
                         alignment: Alignment.centerLeft,
@@ -295,7 +298,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                     padding: EdgeInsets.only(
                         left: orientation == Orientation.portrait ? 30 : 100,
                         top: 20.0,
-                    bottom: 20),
+                        bottom: 20),
                     child: Text("What's Inside:",
                         style: TextStyle(
                             color: Colors.black,

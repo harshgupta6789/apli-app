@@ -15,7 +15,7 @@ class MailerService {
       await http
           .post(send_mail,
               body: json.decode('{'
-                  '"secret" : "$send_mailSecret", '
+                  '"secret": "$send_mailSecret",'
                   '"to_email": "$to_email",'
                   '"subject": "$subject",'
                   '"body": "$body"'
@@ -23,7 +23,7 @@ class MailerService {
           .then((response) {
         if (response.statusCode == 200) {
           var decodedData = jsonDecode(response.body);
-          if (decodedData["secret"] == send_mailSecret) {
+          if (true) {
             if (decodedData["success"])
               result = 1;
             else

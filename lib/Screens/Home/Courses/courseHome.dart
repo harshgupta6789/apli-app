@@ -84,13 +84,12 @@ class _CourseMainState extends State<CourseMain> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            "Assets/Images/course.png",
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        "Assets/Images/course.png",
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   ),
                                   Positioned(
                                     top: height * 0.15,

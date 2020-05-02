@@ -115,7 +115,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                       fontWeight: FontWeight.bold, fontSize: fontSize),
                 ),
                 //trailing: NotificationSwitch(),
-                onTap: (){
+                onTap: () {
                   AppSettings.openAppSettings();
                 },
               ),

@@ -87,13 +87,16 @@ class _LoginState extends State<Login> {
                                 right: width * 0.1),
                             child: TextFormField(
                               keyboardType: TextInputType.emailAddress,
-                              textInputAction: forgotPassword ? TextInputAction.done : TextInputAction.next,
+                              textInputAction: forgotPassword
+                                  ? TextInputAction.done
+                                  : TextInputAction.next,
                               onFieldSubmitted: (_) =>
                                   FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: loginFormField.copyWith(
                                   hintText: 'Email Address',
-                                  prefixIcon: Icon(EvaIcons.emailOutline, color: basicColor)),
+                                  prefixIcon: Icon(EvaIcons.emailOutline,
+                                      color: basicColor)),
                               onChanged: (text) {
                                 setState(() => email = text);
                               },

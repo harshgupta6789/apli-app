@@ -10,7 +10,7 @@ const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
 const String checkLogin = "https://dev.apli.ai/accounts/checkLogin";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 const String send_mail = "https://dev.apli.ai/accounts/send_mail";
-const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM ";
+const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';

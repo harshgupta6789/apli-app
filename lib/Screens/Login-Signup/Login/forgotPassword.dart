@@ -67,80 +67,84 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               return Scaffold(
                 resizeToAvoidBottomInset: true,
                 backgroundColor: Colors.transparent,
-                body: loading ? Loading() : ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: height * 0.2),
-                      child: new AlertDialog(
-                        title: Text('Enter OTP'),
-                        content: Container(
-                          height: 100,
-                          child: Column(children: [
-                            PinCodeTextField(
-                              length: 6,
-                              activeFillColor: basicColor,
-                              activeColor: basicColor,
-                              inactiveFillColor: Colors.black,
-                              selectedColor: basicColor,
-                              inactiveColor: Colors.black,
-                              obsecureText: false,
-                              animationType: AnimationType.fade,
-                              shape: PinCodeFieldShape.box,
-                              animationDuration: Duration(milliseconds: 300),
-                              borderRadius: BorderRadius.circular(5),
-                              fieldHeight: 50,
-                              fieldWidth: 40,
-                              onChanged: (value) {
-                                setState(() {
-                                  this.smsOTP = value;
-                                });
-                              },
-                            ),
-                            (errorMessage != ''
-                                ? Text(
-                              errorMessage,
-                              style: TextStyle(color: Colors.red),
-                            )
-                                : Container())
-                          ]),
-                        ),
-                        contentPadding: EdgeInsets.all(10),
-                        actions: <Widget>[
-                          FlatButton(
-                            child: Text('Verify'),
-                            onPressed: () {
-                              setState(() {
-                                loading = true;
-                              });
-                              _auth.currentUser().then((user) async {
-                                if (user != null) {
-                                  setState(() {
-                                    loading = false;
-                                  });
-                                  try {
-                                    await FirebaseAuth.instance.signOut();
-                                  } catch (e) {}
-                                  Navigator.of(context).pop();
-                                  Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              UpdatePassword(email: widget.email)));
-                                } else {
-                                  signIn();
-                                }
-                              });
+                body: loading
+                    ? Loading()
+                    : ScrollConfiguration(
+                        behavior: MyBehavior(),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: height * 0.2),
+                            child: new AlertDialog(
+                              title: Text('Enter OTP'),
+                              content: Container(
+                                height: 100,
+                                child: Column(children: [
+                                  PinCodeTextField(
+                                    length: 6,
+                                    activeFillColor: basicColor,
+                                    activeColor: basicColor,
+                                    inactiveFillColor: Colors.black,
+                                    selectedColor: basicColor,
+                                    inactiveColor: Colors.black,
+                                    obsecureText: false,
+                                    animationType: AnimationType.fade,
+                                    shape: PinCodeFieldShape.box,
+                                    animationDuration:
+                                        Duration(milliseconds: 300),
+                                    borderRadius: BorderRadius.circular(5),
+                                    fieldHeight: 50,
+                                    fieldWidth: 40,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        this.smsOTP = value;
+                                      });
+                                    },
+                                  ),
+                                  (errorMessage != ''
+                                      ? Text(
+                                          errorMessage,
+                                          style: TextStyle(color: Colors.red),
+                                        )
+                                      : Container())
+                                ]),
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Verify'),
+                                  onPressed: () {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    _auth.currentUser().then((user) async {
+                                      if (user != null) {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        try {
+                                          await FirebaseAuth.instance.signOut();
+                                        } catch (e) {}
+                                        Navigator.of(context).pop();
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UpdatePassword(
+                                                        email: widget.email)));
+                                      } else {
+                                        signIn();
+                                      }
+                                    });
 //                  _auth.currentUser().then((user) {
 //                    signIn();
 //                  });
-                            },
-                          )
-                        ],
+                                  },
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
               );
             },
           );
