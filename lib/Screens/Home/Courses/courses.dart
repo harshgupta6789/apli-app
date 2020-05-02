@@ -39,7 +39,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.fromLTRB(20.0, 20, 20, 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -140,7 +140,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
 
   Widget _certificate() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(40, 20, 40, 20),
+      padding: const EdgeInsets.fromLTRB(40, 20, 40, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -186,6 +186,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     orientation = MediaQuery.of(context).orientation;
+    print(height);
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         backgroundColor: Colors.white,
@@ -241,12 +242,13 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(
-                        top: 20,
-                        left: orientation == Orientation.portrait ? 20 : 100,
-                        right: orientation == Orientation.portrait ? 20 : 100),
+                        top: height * 0.02,
+                        left: orientation == Orientation.portrait ? width * 0.05 : 100,
+                        right: orientation == Orientation.portrait ? width * 0.05 : 100),
                     child: Center(
                       child: Stack(
                         alignment: Alignment.centerLeft,
@@ -292,31 +294,31 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   Padding(
                     padding: EdgeInsets.only(
                         left: orientation == Orientation.portrait ? 30 : 100,
-                        top: 20.0),
+                        top: 20.0,
+                    bottom: 20),
                     child: Text("What's Inside:",
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w700,
                             fontSize: 18)),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 10.0),
-                    child: new TabBar(
+                  Container(
+                    child: TabBar(
                         controller: _tabController,
                         indicatorColor: basicColor,
                         unselectedLabelColor: Colors.grey,
                         labelColor: basicColor,
                         tabs: _listTabs),
                   ),
-                  new Container(
-                    height: 500.0,
-                    child: new TabBarView(
+                  SizedBox(
+                    height: height * 0.83,
+                    child: TabBarView(
                       controller: _tabController,
                       children: _listTabs.map((Tab tab) {
                         return _getWidget(tab);
                       }).toList(),
                     ),
-                  )
+                  ),
                 ]),
           ),
         ));
