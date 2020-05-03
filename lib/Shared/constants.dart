@@ -10,11 +10,11 @@ const FontWeight appBarFontWeight = FontWeight.bold;
 const double preferredSize = 50;
 
 // ---------------Important------------------
-const String passHash = "https://staging.apli.ai/accounts/passHash";
+const String passHash = "https://dev.apli.ai/accounts/api/passHash";
 const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
-const String checkLogin = "https://dev.apli.ai/accounts/checkLogin";
+const String checkLogin = "https://dev.apli.ai/accounts/api/login";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
-const String send_mail = "https://dev.apli.ai/accounts/send_mail";
+const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
 const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 
 const String apliEmailID = 'info@apli.ai';

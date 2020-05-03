@@ -9,7 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
 import '../../HomeLoginWrapper.dart';
@@ -143,10 +142,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     var net = await Connectivity()
                                         .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
-                                      Toast.show(
-                                          'No Internet Connection', context,
-                                          duration: 5,
-                                          backgroundColor: Colors.red);
+                                      showToast('No Internet Connection', context);
                                       setState(() {
                                         loading = false;
                                       });
@@ -173,9 +169,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             setState(() {
                                               loading = false;
                                             });
-                                            Toast.show(
-                                                'Password updated successfully',
-                                                context);
+                                            showToast('Password updated successfully', context);
                                             Navigator.of(context)
                                                 .pushAndRemoveUntil(
                                                     MaterialPageRoute(
@@ -187,15 +181,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             setState(() {
                                               loading = false;
                                             });
-                                            Toast.show('Cannot connect server',
-                                                context);
+                                            showToast('Cannot connect server', context);
                                           }
                                         } else {
                                           setState(() {
                                             loading = false;
                                           });
-                                          Toast.show(
-                                              'Cannot connect server', context);
+                                          showToast('Cannot connect server', context);
                                         }
                                       });
                                     }

@@ -11,7 +11,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
 import '../../../Services/auth.dart';
 
 double height, width;
@@ -230,8 +229,7 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        Toast.show('No Internet', context,
-                                            backgroundColor: Colors.red);
+                                        showToast('No Internet', context);
                                       } else {
                                         DocumentReference doc = Firestore
                                             .instance
@@ -250,11 +248,7 @@ class _LoginState extends State<Login> {
                                               forgotPassword = false;
                                             });
                                           } else {
-                                            Toast.show(
-                                                'Account does not exists',
-                                                context,
-                                                duration: 5,
-                                                backgroundColor: Colors.red);
+                                            showToast('Account does not exists', context);
                                           }
                                         });
                                       }
@@ -262,8 +256,7 @@ class _LoginState extends State<Login> {
                                         loading = false;
                                       });
                                     } else {
-                                      Toast.show('Enter Valid Email', context,
-                                          backgroundColor: Colors.red);
+                                      showToast('Enter Valid Email', context);
                                     }
                                     else if (_formKey.currentState.validate()) {
                                       setState(() {
@@ -272,33 +265,22 @@ class _LoginState extends State<Login> {
                                       dynamic result = await _auth
                                           .signInWithoutAuth(email, password);
                                       if (result == -10) {
-                                        Toast.show(
-                                            'Account does not exists', context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
+                                        showToast('Account does not exists', context);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -1) {
-                                        Toast.show(
-                                            'Invalid username and password',
-                                            context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
+                                        showToast('Invalid username and password', context);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -2) {
-                                        Toast.show(
-                                            'Cannot connect server', context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
+                                        showToast('Cannot connect server', context);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == 1) {
-                                        Toast.show('Login Successfull', context,
-                                            backgroundColor: Colors.red);
+                                        showToast('Login Successfull', context);
                                         setState(() {
                                           loading = false;
                                         });
@@ -316,10 +298,7 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        Toast.show(
-                                            'No Internet Connection', context,
-                                            duration: 5,
-                                            backgroundColor: Colors.red);
+                                        showToast('No Internet Connection', context);
                                         setState(() {
                                           loading = false;
                                         });
