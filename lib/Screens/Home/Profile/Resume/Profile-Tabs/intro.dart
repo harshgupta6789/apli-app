@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -15,12 +17,15 @@ class BasicIntro extends StatefulWidget {
 }
 
 class _BasicIntroState extends State<BasicIntro> {
+  double width, height;
   File _image;
+  bool loading = false, check = false;
   NetworkImage img;
   String dropdownValue;
   String userEmail;
   List<String> gendersList = ['male', 'female', 'other'];
-  String fname = '',
+  String profile = '',
+      fname = '',
       mname = '',
       lname = '',
       email = '',
@@ -31,12 +36,44 @@ class _BasicIntroState extends State<BasicIntro> {
       state = '',
       postal = '',
       city = '';
+  Map<String, dynamic> address;
+  Timestamp dob;
+  var decoration = InputDecoration(
+      border:
+          OutlineInputBorder(borderSide: BorderSide(color: Color(0xff4285f4))),
+      contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+      hintStyle: TextStyle(fontWeight: FontWeight.w600),
+      labelStyle: TextStyle(color: Colors.black));
 
-  void fetchInfo() async {
+  getPrefs() async {
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
-        setState(() {
+        if (mounted)
+          setState(() {
+            userEmail = prefs.getString('email');
+          });
+        else
           userEmail = prefs.getString('email');
+        await Firestore.instance.collection('candidates').document(userEmail).get().then((snapshot) {
+          profile = snapshot.data['First_name'];
+          fname = snapshot.data['First_name'];
+          mname = snapshot.data['Middle_name'];
+          lname = snapshot.data['Last_name'];
+          email = snapshot.data['email'];
+          mno = snapshot.data['ph_no'];
+          dob = snapshot.data['dob'];
+          gender = snapshot.data['gender'];
+          address = snapshot.data['Address'] ?? {};
+          bldg = address['address'];
+          country = address['country'];
+          state = address['state'];
+          postal = address['postal_code'];
+          city = address['city'];
+          check = true;
+//          if(mounted)
+            setState(() {
+
+            });
         });
       }
     });
@@ -52,7 +89,12 @@ class _BasicIntroState extends State<BasicIntro> {
 
   @override
   void initState() {
-    fetchInfo();
+    //getPrefs().then((value) {});
+    (() async {
+      await getPrefs();
+      setState(() {});
+    })();
+    print(profile);
     super.initState();
   }
 
@@ -60,407 +102,345 @@ class _BasicIntroState extends State<BasicIntro> {
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-          backgroundColor: basicColor,
-          automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                onPressed: () => Navigator.pop(context)),
-          ),
-          title: Padding(
-            padding: const EdgeInsets.only(bottom: 10.0),
-            child: Text(
-              intro,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        preferredSize: Size.fromHeight(55),
-      ),
-      body: FutureBuilder(
-        future: Firestore.instance
-            .collection('candidates')
-            .document(userEmail)
-            .get(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data != null) {
-              return SingleChildScrollView(
-                  child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 10.0, top: 20.0, right: 20.0),
-                  child: Column(
-                    children: <Widget>[
-                      CircleAvatar(
-                          minRadius: 55, maxRadius: 60, backgroundImage: null),
-                      MaterialButton(
-                        onPressed: getImage,
-                        child: Text("Change Profile Photo",
-                            style: TextStyle(color: basicColor)),
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    return loading
+        ? Loading()
+        : Scaffold(
+            appBar: PreferredSize(
+              child: AppBar(
+                backgroundColor: basicColor,
+                automaticallyImplyLeading: false,
+                leading: Padding(
+                  padding: EdgeInsets.only(bottom: 5.0),
+                  child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
                       ),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                      onPressed: () => Navigator.pop(context)),
+                ),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    'Basic Info',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              preferredSize: Size.fromHeight(55),
+            ),
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          left: width * 0.1, top: 20, right: width * 0.1),
+                      child: Column(
+                        children: <Widget>[
+                          CircleAvatar(
+                              minRadius: 55,
+                              maxRadius: 60,
+                              backgroundImage: _image != null
+                                  ? FileImage(_image)
+                                  : profile == null
+                                  ? NetworkImage(profile)
+                                  : null),
+                          MaterialButton(
+                            onPressed: getImage,
+                            child: Text("Change Profile Photo",
+                                style: TextStyle(color: basicColor)),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            initialValue: fname ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['First_name'] != null
-                                    ? snapshot.data['First_name'] ?? ""
-                                    : "First Name",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => fname = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: mname ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Middle_name'] != null
-                                    ? snapshot.data['Middle_name'] ?? ""
-                                    : "Middle Name",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => mname = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: lname ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Last_name'] != null
-                                    ? snapshot.data['Last_name'] ?? ""
-                                    : "Last Name",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => lname = text);
                             },
-                          )),
-                      Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          TextFormField(
+                            initialValue: email ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['email'] != null
-                                    ? snapshot.data['email'] ?? ""
-                                    : "Email",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => email = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: mno ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['ph_no'] != null
-                                    ? snapshot.data['ph_no'].toString() ?? ""
-                                    : "Mobile",
-                                hintText: 'Mobile',
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => mno = text);
                             },
-                          )),
-                      Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(30.0),
-                        child: DateTimeField(
-                            format: format,
-                            onShowPicker: (context, currentValue) async {
-                              final date = await showDatePicker(
-                                  context: context,
-                                  firstDate: DateTime(1900),
-                                  initialDate: currentValue ?? DateTime.now(),
-                                  lastDate: DateTime(2100));
-
-                              return date;
-                            },
-                            textInputAction: TextInputAction.next,
-                            onFieldSubmitted: (_) =>
-                                FocusScope.of(context).nextFocus(),
-                            decoration: InputDecoration(
-                              contentPadding: new EdgeInsets.symmetric(
-                                  vertical: 2.0, horizontal: 10.0),
-                              labelText: snapshot.data['dob'] != null
-                                  ? format
-                                          .format(DateTime
-                                              .fromMicrosecondsSinceEpoch(
-                                                  snapshot.data['dob']
-                                                      .microsecondsSinceEpoch))
-                                          .toString() ??
-                                      "DOB"
-                                  : "DOB",
-                              disabledBorder: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff4285f4))),
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff4285f4))),
-                            )),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey),
-                                  borderRadius: BorderRadius.circular(10)),
-
-                              // dropdown below..
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text("Gender : "),
-                                  DropdownButton<String>(
-                                    value: dropdownValue,
-                                    icon: Icon(Icons.arrow_drop_down),
-                                    iconSize: 42,
-                                    underline: SizedBox(),
-                                    onChanged: (String newValue) {
-                                      setState(() {
-                                        dropdownValue = newValue;
-                                      });
-                                    },
-                                    items: <String>['Male', 'Female', 'Other']
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          DateTimeField(
+                              format: format,
+                              onShowPicker: (context, currentValue) async {
+                                final date = await showDatePicker(
+                                    context: context,
+                                    firstDate: DateTime(1900),
+                                    initialDate:
+                                    currentValue ?? DateTime.now(),
+                                    lastDate: DateTime(2100));
+                                var temp = dob != null
+                                    ? format
+                                    .format(DateTime
+                                    .fromMicrosecondsSinceEpoch(
+                                    dob
+                                        .microsecondsSinceEpoch))
+                                    .toString() ??
+                                    "DOB"
+                                    : "DOB";
+                                return date;
+                              },
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
+                              decoration: decoration.copyWith(
+                                disabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff4285f4))),
+                                border: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Color(0xff4285f4))),
+                              )),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: Container(
+                              color: Colors.grey[300],
+                              padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                              child: DropdownButton<String>(
+                                value: 'Male',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
+                                icon: Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 10.0),
+                                  child: Icon(Icons.keyboard_arrow_down),
+                                ),
+                                underline: SizedBox(),
+                                items: <String>['Male', 'Female', 'Other']
+                                    .map<DropdownMenuItem<String>>(
+                                        (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
                                       );
                                     }).toList(),
-                                  ),
-                                ],
-                              ))),
-                      Divider(
-                        thickness: 0.5,
-                        color: Colors.black,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                                onChanged: (value) {
+                                  print(gender);
+                                  setState(() {
+                                    gender = value;
+                                  });
+                                  print(gender);
+//                                      setState(() {
+//                                        skills[index1][
+//                                        skillName]
+//                                        [index2][
+//                                        miniSkill] = value;
+//                                      });
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                            color: Colors.black,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ListTile(
+                            leading: Text(
+                              'Address',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
+                            ),
+                            contentPadding: EdgeInsets.only(left: 0),
+                          ),
+                          TextFormField(
+                            initialValue: bldg ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['address'] ??
-                                        "Address"
-                                    : "Street",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => bldg = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: country ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['country'] ??
-                                        "Country"
-                                    : "Country",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => country = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: state ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['state'] ??
-                                        "State"
-                                    : "State",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => state = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: postal ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['postal_code']
-                                            .toString() ??
-                                        "Postal Code"
-                                    : "Postal Code",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => postal = text);
                             },
-                          )),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: TextFormField(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            initialValue: city ?? '',
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             obscureText: false,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle:
-                                    TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['city'] ?? "City"
-                                    : "City",
-                                labelStyle: TextStyle(color: Colors.black)),
+                            decoration: decoration,
                             onChanged: (text) {
                               setState(() => city = text);
                             },
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: MaterialButton(
-                              child: Text(
-                                "Save",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () {}),
-                        ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RaisedButton(
+                            color: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              side:
+                              BorderSide(color: basicColor, width: 1.5),
+                            ),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () async {
+//                            setState(() {
+//                              loading = true;
+//                            });
+//                            await Firestore.instance
+//                                .collection('candidates')
+//                                .document(email)
+//                                .setData({'skills': skills},
+//                                merge: true).then((f) {
+//                              showToast('Data Updated Successfully', context);
+//                              Navigator.pop(context);
+//                            });
+                            },
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ));
-            }
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error"));
-          } else {
-            return Loading();
-          }
-          return Loading();
-        },
-      ),
-    );
+                    ),
+                  )),
+            )
+          );
   }
 }
