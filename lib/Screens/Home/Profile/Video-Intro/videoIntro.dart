@@ -20,7 +20,8 @@ class VideoIntro extends StatefulWidget {
   _VideoIntroState createState() => _VideoIntroState();
 }
 
-class _VideoIntroState extends State<VideoIntro> with SingleTickerProviderStateMixin {
+class _VideoIntroState extends State<VideoIntro>
+    with SingleTickerProviderStateMixin {
   String email;
   String fileType = 'video';
   List<CameraDescription> cameras;
@@ -124,10 +125,10 @@ class _VideoIntroState extends State<VideoIntro> with SingleTickerProviderStateM
       } else {}
     } catch (e) {
       AwesomeDialog(
-          context: context,
-          dialogType: DialogType.WARNING,
-          tittle: e,
-          body: Text("Error Has Occured"))
+              context: context,
+              dialogType: DialogType.WARNING,
+              tittle: e,
+              body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -170,46 +171,53 @@ class _VideoIntroState extends State<VideoIntro> with SingleTickerProviderStateM
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: basicColor),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: MaterialButton(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                  child: Align(
+                    child: RaisedButton(
+                      color: Colors.white,
+                      elevation: 0,
+                      padding: EdgeInsets.only(left: 22, right: 22),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        side: BorderSide(color: basicColor, width: 1.5),
+                      ),
                       child: Text(
-                        "Upload From Gallery",
+                        'Upload From Gallery',
                         style: TextStyle(
-                            fontSize: 18.0,
-                            color: basicColor,
-                            fontWeight: FontWeight.w600),
+                            color: basicColor, fontWeight: FontWeight.bold),
                       ),
                       onPressed: () {
                         filePicker(context);
-                      }),
+                      },
+                    ),
+                    alignment: Alignment.center,
+                  ),
                 ),
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: basicColor),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: MaterialButton(
+                  padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                  child: Align(
+                    child: RaisedButton(
+                        color: Colors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.only(left: 22, right: 22),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
                         child: Text(
-                          "Record Now",
+                          'Record Now',
                           style: TextStyle(
-                              fontSize: 18.0,
-                              color: basicColor,
-                              fontWeight: FontWeight.w600),
+                              color: basicColor, fontWeight: FontWeight.bold),
                         ),
                         onPressed: () async {
                           var status = await Permission.storage.status;
                           switch (status) {
                             case PermissionStatus.undetermined:
                               Map<Permission, PermissionStatus> statuses =
-                              await [
+                                  await [
                                 Permission.storage,
                               ].request();
                               break;
@@ -234,9 +242,10 @@ class _VideoIntroState extends State<VideoIntro> with SingleTickerProviderStateM
 
                           // _recordVideo();
                         }),
+                    alignment: Alignment.center,
                   ),
                 ),
-              ),
+              )
             ],
           ),
         );
@@ -368,29 +377,26 @@ class _VideoIntroState extends State<VideoIntro> with SingleTickerProviderStateM
             padding: const EdgeInsets.all(8.0),
             child: Align(
                 child: Text("Instructions to follow",
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w600)),
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                 alignment: Alignment.center),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
-                child: Text("1. Lorem Ipsum",
-                    style: TextStyle(fontSize: 20)),
+                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
                 alignment: Alignment.center),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
-                child: Text("1. Lorem Ipsum",
-                    style: TextStyle(fontSize: 20)),
+                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
                 alignment: Alignment.center),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(
-                child: Text("1. Lorem Ipsum",
-                    style: TextStyle(fontSize: 20)),
+                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
                 alignment: Alignment.center),
           ),
           Padding(

@@ -34,10 +34,11 @@ class _BasicIntroState extends State<BasicIntro> {
 
   void fetchInfo() async {
     await SharedPreferences.getInstance().then((prefs) async {
-      setState(() {
-         userEmail = prefs.getString('email');
-      });
-     
+      if (prefs.getString('email') != null) {
+        setState(() {
+          userEmail = prefs.getString('email');
+        });
+      }
     });
   }
 
@@ -89,7 +90,7 @@ class _BasicIntroState extends State<BasicIntro> {
       body: FutureBuilder(
         future: Firestore.instance
             .collection('candidates')
-            .document(userEmail)
+            .document("appcandidate@gmail.com")
             .get(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -246,13 +247,14 @@ class _BasicIntroState extends State<BasicIntro> {
                             decoration: InputDecoration(
                               contentPadding: new EdgeInsets.symmetric(
                                   vertical: 2.0, horizontal: 10.0),
-                              labelText: format
+                              labelText: snapshot.data['dob'] != null
+                                    ? format
                                       .format(
                                           DateTime.fromMicrosecondsSinceEpoch(
                                               snapshot.data['dob']
                                                   .microsecondsSinceEpoch))
                                       .toString() ??
-                                  "DOB",
+                                  "DOB":"DOB",
                               disabledBorder: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
@@ -367,7 +369,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
                                 labelText: snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['postal_code'] ??
+                                    ? snapshot.data['Address']['postal_code']
+                                            .toString() ??
                                         "Postal Code"
                                     : "Postal Code",
                                 hintText: 'Postal Code',
@@ -391,10 +394,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText:
-                                   snapshot.data['Address'] != null
-                                    ? snapshot.data['Address']['city'] ??
-                                        "City"
+                                labelText: snapshot.data['Address'] != null
+                                    ? snapshot.data['Address']['city'] ?? "City"
                                     : "City",
                                 hintText: 'City',
                                 labelStyle: TextStyle(color: Colors.black)),
@@ -425,8 +426,11 @@ class _BasicIntroState extends State<BasicIntro> {
                 ),
               ));
             }
-          }else if(snapshot.hasError){
-            return Center(child:Text("Error"));
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error"));
+          }
+          else{
+            return Loading();
           }
           return Loading();
         },
