@@ -18,6 +18,7 @@ class BasicIntro extends StatefulWidget {
 class _BasicIntroState extends State<BasicIntro> {
   File _image;
   NetworkImage img;
+  String dropdownValue;
   String userEmail;
   List<String> gendersList = ['male', 'female', 'other'];
   String fname = '',
@@ -90,7 +91,7 @@ class _BasicIntroState extends State<BasicIntro> {
       body: FutureBuilder(
         future: Firestore.instance
             .collection('candidates')
-            .document("appcandidate@gmail.com")
+            .document(userEmail)
             .get(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
@@ -125,7 +126,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['First_name'] ?? "",
+                                labelText: snapshot.data['First_name'] != null
+                                    ? snapshot.data['First_name'] ?? ""
+                                    : "First Name",
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => fname = text);
@@ -146,8 +149,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Middle_name'] ?? "",
-                                hintText: 'Middle Name',
+                                labelText: snapshot.data['Middle_name'] != null
+                                    ? snapshot.data['Middle_name'] ?? ""
+                                    : "Middle Name",
+                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => mname = text);
@@ -168,8 +173,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['Last_name'] ?? "",
-                                hintText: 'Last Name',
+                                labelText: snapshot.data['Last_name'] != null
+                                    ? snapshot.data['Last_name'] ?? ""
+                                    : "Last Name",
+                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => lname = text);
@@ -194,8 +201,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText: snapshot.data['email'] ?? "",
-                                hintText: 'Email',
+                                labelText: snapshot.data['email'] != null
+                                    ? snapshot.data['email'] ?? ""
+                                    : "Email",
+                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => email = text);
@@ -216,8 +225,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                     vertical: 2.0, horizontal: 10.0),
                                 hintStyle:
                                     TextStyle(fontWeight: FontWeight.w600),
-                                labelText:
-                                    snapshot.data['ph_no'].toString() ?? "",
+                                labelText: snapshot.data['ph_no'] != null
+                                    ? snapshot.data['ph_no'].toString() ?? ""
+                                    : "Mobile",
                                 hintText: 'Mobile',
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
@@ -248,13 +258,14 @@ class _BasicIntroState extends State<BasicIntro> {
                               contentPadding: new EdgeInsets.symmetric(
                                   vertical: 2.0, horizontal: 10.0),
                               labelText: snapshot.data['dob'] != null
-                                    ? format
-                                      .format(
-                                          DateTime.fromMicrosecondsSinceEpoch(
-                                              snapshot.data['dob']
-                                                  .microsecondsSinceEpoch))
-                                      .toString() ??
-                                  "DOB":"DOB",
+                                  ? format
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  snapshot.data['dob']
+                                                      .microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
+                                  : "DOB",
                               disabledBorder: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
@@ -263,17 +274,44 @@ class _BasicIntroState extends State<BasicIntro> {
                                       BorderSide(color: Color(0xff4285f4))),
                             )),
                       ),
-                      Padding(
-                          padding: EdgeInsets.all(30.0),
-                          child: DropDownField(
-                              value: gender,
-                              labelText: 'Gender',
-                              items: gendersList,
-                              setter: (dynamic newValue) {
-                                setState(() {
-                                  gender = newValue;
-                                });
-                              })),
+                        Padding(
+                        padding: EdgeInsets.all(30.0),
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color:Colors.grey),
+                             
+                              borderRadius: BorderRadius.circular(10)),
+
+                          // dropdown below..
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text("Gender : "),
+                              DropdownButton<String>(
+                                value: dropdownValue,
+                                icon: Icon(Icons.arrow_drop_down),
+                                iconSize: 42,
+                                underline: SizedBox(),
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue;
+                                  });
+                                },
+                                items: <String>[
+                                  'Male',
+                                  'Female',
+                                  'Other'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ))),
                       Divider(
                         thickness: 0.5,
                         color: Colors.black,
@@ -297,7 +335,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['address'] ??
                                         "Address"
                                     : "Street",
-                                hintText: 'Street',
+                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => bldg = text);
@@ -322,7 +360,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['country'] ??
                                         "Country"
                                     : "Country",
-                                hintText: 'Country',
+                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => country = text);
@@ -347,7 +385,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['state'] ??
                                         "State"
                                     : "State",
-                                hintText: 'State',
+                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => state = text);
@@ -373,7 +411,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                             .toString() ??
                                         "Postal Code"
                                     : "Postal Code",
-                                hintText: 'Postal Code',
+                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => postal = text);
@@ -397,7 +435,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 labelText: snapshot.data['Address'] != null
                                     ? snapshot.data['Address']['city'] ?? "City"
                                     : "City",
-                                hintText: 'City',
+                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => city = text);
@@ -428,8 +466,7 @@ class _BasicIntroState extends State<BasicIntro> {
             }
           } else if (snapshot.hasError) {
             return Center(child: Text("Error"));
-          }
-          else{
+          } else {
             return Loading();
           }
           return Loading();
