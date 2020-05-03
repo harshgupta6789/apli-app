@@ -11,7 +11,7 @@ const double preferredSize = 50;
 
 // ---------------Important------------------
 const String passHash = "https://dev.apli.ai/accounts/api/passHash";
-const String passHashSecret = "h&%RD89itr#\$dTHioG\$s";
+const String passHashSecret = "YjVd13QEMZe0JsWlkqDyEjE9jpNTZyvQ";
 const String checkLogin = "https://dev.apli.ai/accounts/api/login";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
