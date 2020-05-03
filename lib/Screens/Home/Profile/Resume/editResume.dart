@@ -1,4 +1,3 @@
-
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -18,30 +17,29 @@ class EditResume extends StatefulWidget {
 }
 
 class _EditResumeState extends State<EditResume> {
-
   double height, width;
 
   Widget resumeTile(String text, Widget x) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: Container(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Container(
           decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.withOpacity(0.4))),
           child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => x));
-              },
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => x));
+            },
             child: ListTile(
-              title: Text(
-                text,
-                style: TextStyle(fontWeight: FontWeight.w600),
-              ),
-              trailing: IconButton(
+                title: Text(
+                  text,
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                trailing: IconButton(
                   icon: Icon(EvaIcons.arrowIosForwardOutline),
-            )),
+                )),
           ),
-    ));
+        ));
   }
 
   @override
@@ -64,7 +62,11 @@ class _EditResumeState extends State<EditResume> {
         behavior: MyBehavior(),
         child: SingleChildScrollView(
             child: Padding(
-          padding: EdgeInsets.only(top: height * 0.1, left: width * 0.05, right: width * 0.05, bottom: height * 0.1),
+          padding: EdgeInsets.only(
+              top: height * 0.1,
+              left: width * 0.05,
+              right: width * 0.05,
+              bottom: height * 0.1),
           child: Column(
             children: <Widget>[
               resumeTile(intro, BasicIntro()),

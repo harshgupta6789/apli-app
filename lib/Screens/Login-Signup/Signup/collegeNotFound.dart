@@ -217,10 +217,13 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                           loading = false;
                                         });
                                         if (result == -2) {
-                                          showToast('Could not connect to server', context);
+                                          showToast(
+                                              'Could not connect to server',
+                                              context);
                                         } else if (result == 0) {
                                           //failed
-                                          showToast('Failed, try again later', context);
+                                          showToast('Failed, try again later',
+                                              context);
 //                                        Navigator.pop(context);
                                         } else if (result == 1) {
                                           //success
@@ -230,7 +233,8 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                                   builder: (context) =>
                                                       Review(false)));
                                         } else {
-                                          showToast('Failed, try again later', context);
+                                          showToast('Failed, try again later',
+                                              context);
 //                                        Navigator.pop(context);
                                         }
                                       }

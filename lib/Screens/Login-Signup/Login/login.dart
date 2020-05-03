@@ -248,7 +248,8 @@ class _LoginState extends State<Login> {
                                               forgotPassword = false;
                                             });
                                           } else {
-                                            showToast('Account does not exists', context);
+                                            showToast('Account does not exists',
+                                                context);
                                           }
                                         });
                                       }
@@ -265,17 +266,21 @@ class _LoginState extends State<Login> {
                                       dynamic result = await _auth
                                           .signInWithoutAuth(email, password);
                                       if (result == -10) {
-                                        showToast('Account does not exists', context);
+                                        showToast(
+                                            'Account does not exists', context);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -1) {
-                                        showToast('Invalid username and password', context);
+                                        showToast(
+                                            'Invalid username and password',
+                                            context);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -2) {
-                                        showToast('Cannot connect server', context);
+                                        showToast(
+                                            'Cannot connect server', context);
                                         setState(() {
                                           loading = false;
                                         });
@@ -298,7 +303,8 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        showToast('No Internet Connection', context);
+                                        showToast(
+                                            'No Internet Connection', context);
                                         setState(() {
                                           loading = false;
                                         });

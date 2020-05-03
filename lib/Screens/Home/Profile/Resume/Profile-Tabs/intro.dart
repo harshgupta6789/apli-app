@@ -152,7 +152,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                 labelText: snapshot.data['Middle_name'] != null
                                     ? snapshot.data['Middle_name'] ?? ""
                                     : "Middle Name",
-                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => mname = text);
@@ -176,7 +175,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                 labelText: snapshot.data['Last_name'] != null
                                     ? snapshot.data['Last_name'] ?? ""
                                     : "Last Name",
-                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => lname = text);
@@ -204,7 +202,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                 labelText: snapshot.data['email'] != null
                                     ? snapshot.data['email'] ?? ""
                                     : "Email",
-                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => email = text);
@@ -274,44 +271,42 @@ class _BasicIntroState extends State<BasicIntro> {
                                       BorderSide(color: Color(0xff4285f4))),
                             )),
                       ),
-                        Padding(
-                        padding: EdgeInsets.all(30.0),
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          decoration: BoxDecoration(
-                            border: Border.all(color:Colors.grey),
-                             
-                              borderRadius: BorderRadius.circular(10)),
+                      Padding(
+                          padding: EdgeInsets.all(30.0),
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(10)),
 
-                          // dropdown below..
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text("Gender : "),
-                              DropdownButton<String>(
-                                value: dropdownValue,
-                                icon: Icon(Icons.arrow_drop_down),
-                                iconSize: 42,
-                                underline: SizedBox(),
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue;
-                                  });
-                                },
-                                items: <String>[
-                                  'Male',
-                                  'Female',
-                                  'Other'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ))),
+                              // dropdown below..
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text("Gender : "),
+                                  DropdownButton<String>(
+                                    value: dropdownValue,
+                                    icon: Icon(Icons.arrow_drop_down),
+                                    iconSize: 42,
+                                    underline: SizedBox(),
+                                    onChanged: (String newValue) {
+                                      setState(() {
+                                        dropdownValue = newValue;
+                                      });
+                                    },
+                                    items: <String>['Male', 'Female', 'Other']
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
+                              ))),
                       Divider(
                         thickness: 0.5,
                         color: Colors.black,
@@ -335,7 +330,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['address'] ??
                                         "Address"
                                     : "Street",
-                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => bldg = text);
@@ -360,7 +354,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['country'] ??
                                         "Country"
                                     : "Country",
-                                
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => country = text);
@@ -385,7 +378,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ? snapshot.data['Address']['state'] ??
                                         "State"
                                     : "State",
-                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => state = text);
@@ -411,7 +403,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                             .toString() ??
                                         "Postal Code"
                                     : "Postal Code",
-                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => postal = text);
@@ -435,7 +426,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                 labelText: snapshot.data['Address'] != null
                                     ? snapshot.data['Address']['city'] ?? "City"
                                     : "City",
-                               
                                 labelStyle: TextStyle(color: Colors.black)),
                             onChanged: (text) {
                               setState(() => city = text);
