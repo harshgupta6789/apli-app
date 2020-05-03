@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -41,6 +42,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   }
 
   Future<void> verifyPhone() async {
+    print('abd');
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {
         loading = false;
@@ -48,6 +50,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       this.verificationId = verId;
       smsOTPDialog(context).then((value) {});
     };
+    print('abd');
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNo, // PHONE NUMBER TO SEND OTP
@@ -63,7 +66,13 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Register(phoneNo)));
           },
-          verificationFailed: (AuthException exceptio) {});
+          verificationFailed: (AuthException exceptio) {
+            print(exceptio.message);
+            showToast('Unexpected error', context);
+            setState(() {
+              loading = false;
+            });
+          });
     } catch (e) {
       handleError(e);
     }
