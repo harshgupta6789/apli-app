@@ -9,7 +9,6 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
 
 class CollegeNotFound extends StatefulWidget {
   String phoneNo;
@@ -203,8 +202,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                         setState(() {
                                           loading = false;
                                         });
-                                        Toast.show('Not Internet', context,
-                                            backgroundColor: Colors.red);
+                                        showToast('No Internet', context);
                                       } else {
                                         //add to excel sheet
                                         String body =
@@ -219,17 +217,10 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                           loading = false;
                                         });
                                         if (result == -2) {
-                                          Toast.show(
-                                              'Could not connect to server',
-                                              context,
-                                              duration: 5,
-                                              backgroundColor: Colors.red);
+                                          showToast('Could not connect to server', context);
                                         } else if (result == 0) {
                                           //failed
-                                          Toast.show('Failed, try again later',
-                                              context,
-                                              duration: 5,
-                                              backgroundColor: Colors.red);
+                                          showToast('Failed, try again later', context);
 //                                        Navigator.pop(context);
                                         } else if (result == 1) {
                                           //success
@@ -239,10 +230,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                                   builder: (context) =>
                                                       Review(false)));
                                         } else {
-                                          Toast.show('Failed, try again later',
-                                              context,
-                                              duration: 5,
-                                              backgroundColor: Colors.red);
+                                          showToast('Failed, try again later', context);
 //                                        Navigator.pop(context);
                                         }
                                       }

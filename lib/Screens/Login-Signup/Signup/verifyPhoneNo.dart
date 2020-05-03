@@ -1,5 +1,6 @@
 import 'package:apli/Screens/Login-Signup/Signup/register.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:connectivity/connectivity.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -299,7 +299,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        Toast.show('No Internet', context);
+                                        showToast('No Internet', context);
                                       }
                                       verifyPhone();
                                     }
