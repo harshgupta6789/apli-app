@@ -85,7 +85,8 @@ class _VideoAppState extends State<VideoApp>
                       _controls = !_controls;
                     });
 //                    if(_controls)
-//                      Future.delayed(Duration(seconds: 3), ((){
+//                      Future.delayed(Duration(s
+//                      econds: 3), ((){
 //                        setState(() {
 //                          _controls = !_controls;
 //                        });
