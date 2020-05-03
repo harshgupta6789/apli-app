@@ -222,6 +222,15 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                     onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
               )
             ],
+            leading: Padding(
+            padding: EdgeInsets.only(bottom: 5.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.pop(context)),
+          ),
             title: Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(

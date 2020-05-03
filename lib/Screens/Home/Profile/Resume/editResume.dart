@@ -1,14 +1,14 @@
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Awards/certi.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/eduHome.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/exp.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraC.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/projects.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-import 'Profile-Tabs/certi.dart';
-import 'Profile-Tabs/edu.dart';
-import 'Profile-Tabs/exp.dart';
-import 'Profile-Tabs/extraC.dart';
 import 'Profile-Tabs/intro.dart';
-import 'Profile-Tabs/projects.dart';
 import 'Profile-Tabs/skills.dart';
 
 class EditResume extends StatefulWidget {
@@ -50,11 +50,25 @@ class _EditResumeState extends State<EditResume> {
       appBar: PreferredSize(
         child: AppBar(
           backgroundColor: basicColor,
-          automaticallyImplyLeading: true,
-          title: Text(
-            editResume,
-            style: TextStyle(color: Colors.white, fontSize: 24),
+          automaticallyImplyLeading: false,
+          leading: Padding(
+            padding: EdgeInsets.only(bottom: 5.0),
+            child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.pop(context)),
           ),
+          title: Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: Text(
+            editResume,
+           style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+          ),)
         ),
         preferredSize: Size.fromHeight(50),
       ),
@@ -70,7 +84,7 @@ class _EditResumeState extends State<EditResume> {
           child: Column(
             children: <Widget>[
               resumeTile(intro, BasicIntro()),
-              resumeTile(education, Education()),
+              resumeTile(education, EducationOverview()),
               resumeTile(experience, Expereince()),
               resumeTile(projects, Projects()),
               resumeTile(extra, ExtraC()),
