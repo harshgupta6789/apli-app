@@ -1,5 +1,6 @@
 import 'package:apli/Screens/Login-Signup/Login/updatePassword.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,7 +52,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 MaterialPageRoute(
                     builder: (context) => UpdatePassword(email: widget.email)));
           },
-          verificationFailed: (AuthException exceptio) {});
+          verificationFailed: (AuthException exceptio) {
+            print(exceptio.message);
+            showToast('Unexpected Error', context);
+            setState(() {
+              loading = false;
+            });
+          });
     } catch (e) {
       handleError(e);
     }

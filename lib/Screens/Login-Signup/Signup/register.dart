@@ -742,7 +742,9 @@ class _RegisterState extends State<Register> {
                                                       .checkConnectivity();
                                                   if (net ==
                                                       ConnectivityResult.none) {
-                                                    showToast('No internet connection', context);
+                                                    showToast(
+                                                        'No internet connection',
+                                                        context);
                                                     setState(() {
                                                       loading = false;
                                                     });
@@ -764,17 +766,25 @@ class _RegisterState extends State<Register> {
                                                     });
                                                     if (result == -1) {
                                                       //already exists
-                                                      showToast('Account already exists, try logging in', context);
+                                                      showToast(
+                                                          'Account already exists, try logging in',
+                                                          context);
                                                     } else if (result == -2) {
                                                       //server
-                                                      showToast('Could not connect to server', context);
+                                                      showToast(
+                                                          'Could not connect to server',
+                                                          context);
                                                     } else if (result == 0) {
                                                       //failed
-                                                      showToast('Failed, try again later', context);
+                                                      showToast(
+                                                          'Failed, try again later',
+                                                          context);
                                                       Navigator.pop(context);
                                                     } else if (result == 1) {
                                                       //success
-                                                      showToast('Successfully registered, kindly login again', context);
+                                                      showToast(
+                                                          'Successfully registered, kindly login again',
+                                                          context);
                                                       Navigator.of(context)
                                                           .pushAndRemoveUntil(
                                                               MaterialPageRoute(
@@ -785,7 +795,9 @@ class _RegisterState extends State<Register> {
                                                                       route) =>
                                                                   false);
                                                     } else {
-                                                      showToast('Failed, try again later', context);
+                                                      showToast(
+                                                          'Failed, try again later',
+                                                          context);
                                                       Navigator.pop(context);
                                                     }
                                                   }

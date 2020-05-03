@@ -142,7 +142,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     var net = await Connectivity()
                                         .checkConnectivity();
                                     if (net == ConnectivityResult.none) {
-                                      showToast('No Internet Connection', context);
+                                      showToast(
+                                          'No Internet Connection', context);
                                       setState(() {
                                         loading = false;
                                       });
@@ -169,7 +170,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             setState(() {
                                               loading = false;
                                             });
-                                            showToast('Password updated successfully', context);
+                                            showToast(
+                                                'Password updated successfully',
+                                                context);
                                             Navigator.of(context)
                                                 .pushAndRemoveUntil(
                                                     MaterialPageRoute(
@@ -181,13 +184,15 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                             setState(() {
                                               loading = false;
                                             });
-                                            showToast('Cannot connect server', context);
+                                            showToast('Cannot connect server',
+                                                context);
                                           }
                                         } else {
                                           setState(() {
                                             loading = false;
                                           });
-                                          showToast('Cannot connect server', context);
+                                          showToast(
+                                              'Cannot connect server', context);
                                         }
                                       });
                                     }
