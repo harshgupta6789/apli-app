@@ -13,11 +13,11 @@ class Resume extends StatefulWidget {
 class _ResumeState extends State<Resume> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ScrollConfiguration(
-        behavior: MyBehavior(),
-        child: SingleChildScrollView(
+    return ScrollConfiguration(
+      behavior: MyBehavior(),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
               Padding(

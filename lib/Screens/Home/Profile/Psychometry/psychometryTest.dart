@@ -146,16 +146,12 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                             fontWeight: FontWeight.bold,
                                           )),
                                       alignment: Alignment.topLeft)),
-                              SizedBox(
-                                height: height * 0.05,
-                                child: Align(
-                                    child: Text(remainingQuestions[position][1],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                    alignment: Alignment.topLeft),
-                              ),
+                              Text(remainingQuestions[position][1],
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  )),
                               SizedBox(
                                 height: 20,
                               ),
