@@ -248,12 +248,10 @@ class _SkillsState extends State<Skills> {
                                             child: IconButton(
                                               icon: Icon(Icons.delete_outline),
                                               onPressed: () {
-                                                print(index2);
-                                                print(skills[index1][skillName].elementAt(index2));
+                                                skills[index1][skillName].removeAt(index2);
                                                 setState(() {
-                                                  skills[index1][skillName].removeAt(index2);
+
                                                 });
-                                                print(skills[index1][skillName]);
                                               },
                                             ),
                                           )

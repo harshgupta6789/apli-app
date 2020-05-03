@@ -207,7 +207,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         Firestore.instance.collection('candidates').document(widget.email);
     await doc.get().then((snapshot) {
       ph_no = snapshot.data['ph_no'].toString();
-      if (ph_no == null) {
+      if (ph_no == 'null') {
         ph_no = 'noPhoneNo';
       } else {
         if (ph_no.length == 10) {

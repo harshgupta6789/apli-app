@@ -80,98 +80,98 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           preferredSize: Size.fromHeight(100),
         ),
         body: TabBarView(children: [
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 50.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      "Assets/Images/profile.png",
-                      height: 300,
-                      width: 300,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                            text: " You can start applying for\n",
-                            style: TextStyle(color: Colors.black, fontSize: 18),
-                            children: [
-                              TextSpan(
-                                  text: "Jobs",
-                                  style: TextStyle(color: basicColor),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) => Wrapper(
-                                                    currentTab: 1,
-                                                  )),
-                                          (Route<dynamic> route) => false);
-                                      setState(() {});
-                                    }),
-                              TextSpan(text: " after filling in the details.")
-                            ]),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          )),
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset(
-                        "Assets/Images/profile.png",
-                        height: 300,
-                        width: 300,
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Your video intro will appear here.",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  )),
-            ),
-          )),
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset("Assets/Images/profile.png",
-                          height: 300, width: 300),
-                      Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Your test will be shown here.",
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
-                  )),
-            ),
-          )),
-//          Resume(),
-//          VideoIntro(),
-//          Psychometry(),
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Padding(
+//                padding: const EdgeInsets.only(bottom: 50.0),
+//                child: Column(
+//                  mainAxisAlignment: MainAxisAlignment.center,
+//                  children: <Widget>[
+//                    Image.asset(
+//                      "Assets/Images/profile.png",
+//                      height: 300,
+//                      width: 300,
+//                    ),
+//                    Padding(
+//                      padding: const EdgeInsets.all(2.0),
+//                      child: RichText(
+//                        textAlign: TextAlign.center,
+//                        text: TextSpan(
+//                            text: " You can start applying for\n",
+//                            style: TextStyle(color: Colors.black, fontSize: 18),
+//                            children: [
+//                              TextSpan(
+//                                  text: "Jobs",
+//                                  style: TextStyle(color: basicColor),
+//                                  recognizer: TapGestureRecognizer()
+//                                    ..onTap = () {
+//                                      Navigator.of(context).pushAndRemoveUntil(
+//                                          MaterialPageRoute(
+//                                              builder: (context) => Wrapper(
+//                                                    currentTab: 1,
+//                                                  )),
+//                                          (Route<dynamic> route) => false);
+//                                      setState(() {});
+//                                    }),
+//                              TextSpan(text: " after filling in the details.")
+//                            ]),
+//                      ),
+//                    )
+//                  ],
+//                ),
+//              ),
+//            ),
+//          )),
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Padding(
+//                  padding: const EdgeInsets.only(bottom: 50.0),
+//                  child: Column(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      Image.asset(
+//                        "Assets/Images/profile.png",
+//                        height: 300,
+//                        width: 300,
+//                      ),
+//                      Padding(
+//                          padding: const EdgeInsets.all(8.0),
+//                          child: Text(
+//                            "Your video intro will appear here.",
+//                            style: TextStyle(fontSize: 18),
+//                          ))
+//                    ],
+//                  )),
+//            ),
+//          )),
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Padding(
+//                  padding: const EdgeInsets.only(bottom: 50.0),
+//                  child: Column(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      Image.asset("Assets/Images/profile.png",
+//                          height: 300, width: 300),
+//                      Padding(
+//                          padding: const EdgeInsets.all(8.0),
+//                          child: Text(
+//                            "Your test will be shown here.",
+//                            style: TextStyle(fontSize: 18),
+//                          ))
+//                    ],
+//                  )),
+//            ),
+//          )),
+          Resume(),
+          VideoIntro(),
+          Psychometry(),
         ], controller: _tabController));
   }
 }
