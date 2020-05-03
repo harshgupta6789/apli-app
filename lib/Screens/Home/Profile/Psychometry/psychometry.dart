@@ -1,6 +1,7 @@
 import 'package:apli/Screens/Home/Profile/psychometry/psychometryTest.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,9 @@ class _PsychometryState extends State<Psychometry> {
 
   userInit() async {
     await SharedPreferences.getInstance().then((prefs) async {
-      setState(() {
+      if(!mounted)
+        email = prefs.getString('email');
+      else setState(() {
         email = prefs.getString('email');
       });
       await Firestore.instance
@@ -29,7 +32,9 @@ class _PsychometryState extends State<Psychometry> {
           .document('all_ques')
           .get()
           .then((snapshot) async {
-        setState(() {
+            if(!mounted)
+              questions = snapshot.data;
+        else setState(() {
           questions = snapshot.data;
         });
         await Firestore.instance
@@ -37,19 +42,27 @@ class _PsychometryState extends State<Psychometry> {
             .document(email)
             .get()
             .then((snapshot2) {
-          setState(() {
+              if(!mounted)
+                answeredQuestions = snapshot2.data['psycho_ques'];
+          else setState(() {
             answeredQuestions = snapshot2.data['psycho_ques'];
           });
           if (answeredQuestions == null) {
-            setState(() {
+            if(!mounted)
+              _currentState = States.none;
+            else setState(() {
               _currentState = States.none;
             });
           } else if (answeredQuestions.length < questions.length) {
-            setState(() {
+            if(!mounted)
+              _currentState = States.resume;
+            else setState(() {
               _currentState = States.resume;
             });
           } else {
-            setState(() {
+            if(!mounted)
+              _currentState = States.done;
+            else setState(() {
               _currentState = States.done;
             });
           }
@@ -68,113 +81,116 @@ class _PsychometryState extends State<Psychometry> {
   Widget build(BuildContext context) {
     switch (_currentState) {
       case States.none:
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                  child: Align(
-                      child: Text(psychometryTestSlogan,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
-                  child: Align(
-                      child: Text("Instructions to follow",
-                          style: TextStyle(
-                              fontSize: 17,
+        return ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
+                    child: Align(
+                        child: Text(psychometryTestSlogan,
+                            style: TextStyle(
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: basicColor)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
-                  child: Align(
-                    child: RaisedButton(
-                      color: Colors.white,
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(color: basicColor, width: 1.5),
-                      ),
-                      child: Text(
-                        'Start Test',
-                        style: TextStyle(
-                            color: basicColor, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PsychometryTest(
-                                      email: email,
-                                      questions: questions,
-                                      answeredQuestions: answeredQuestions,
-                                    )));
-                      },
-                    ),
-                    alignment: Alignment.center,
+                            )),
+                        alignment: Alignment.center),
                   ),
-                )
-              ],
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                    child: Align(
+                        child: Text("Instructions to follow",
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: basicColor)),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                    child: Align(
+                      child: RaisedButton(
+                        color: Colors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.only(left: 22, right: 22),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
+                        child: Text(
+                          'Start Test',
+                          style: TextStyle(
+                              color: basicColor, fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PsychometryTest(
+                                        email: email,
+                                        questions: questions,
+                                        answeredQuestions: answeredQuestions,
+                                      )));
+                        },
+                      ),
+                      alignment: Alignment.center,
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         );

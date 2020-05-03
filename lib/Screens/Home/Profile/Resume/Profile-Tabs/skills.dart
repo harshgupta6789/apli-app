@@ -109,6 +109,7 @@ class _SkillsState extends State<Skills> {
                                         padding:
                                             EdgeInsets.fromLTRB(20, 20, 20, 20),
                                         child: TextField(
+                                          autofocus: true,
                                           style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12),
@@ -409,6 +410,7 @@ class _SkillsState extends State<Skills> {
                                                             EdgeInsets.fromLTRB(
                                                                 20, 20, 20, 20),
                                                         child: TextField(
+                                                          autofocus: true,
                                                           style: TextStyle(
                                                               fontWeight:
                                                                   FontWeight

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Profile/Video-Intro/cameraScreen.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -165,14 +166,12 @@ class _VideoIntroState extends State<VideoIntro>
   Widget uploadVideo() {
     switch (x) {
       case currentState.none:
-        return Padding(
-          padding: EdgeInsets.only(top: 40.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Expanded(
+              Container(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                  padding: EdgeInsets.fromLTRB(0, 35, 5, 8),
                   child: Align(
                     child: RaisedButton(
                       color: Colors.white,
@@ -191,13 +190,13 @@ class _VideoIntroState extends State<VideoIntro>
                         filePicker(context);
                       },
                     ),
-                    alignment: Alignment.center,
+                    alignment: Alignment.topLeft,
                   ),
                 ),
               ),
-              Expanded(
+              Container(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                  padding: EdgeInsets.fromLTRB(5, 35, 0, 8),
                   child: Align(
                     child: RaisedButton(
                         color: Colors.white,
@@ -247,7 +246,6 @@ class _VideoIntroState extends State<VideoIntro>
                 ),
               )
             ],
-          ),
         );
         break;
       case currentState.uploading:
@@ -360,56 +358,88 @@ class _VideoIntroState extends State<VideoIntro>
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Text(
-              videoIntroSlogan,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20),
-            ),
+    return ScrollConfiguration(
+      behavior: MyBehavior(),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
+                child: Align(
+                    child: Text(videoIntroSlogan,
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                child: Align(
+                    child: Text("Instructions to follow",
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                            color: basicColor)),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                    child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                    child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                    child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                    child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                    child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    alignment: Alignment.center),
+              ),
+              uploadVideo()
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                child: Text("Instructions to follow",
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-                alignment: Alignment.center),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
-                alignment: Alignment.center),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
-                alignment: Alignment.center),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                child: Text("1. Lorem Ipsum", style: TextStyle(fontSize: 20)),
-                alignment: Alignment.center),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-                child: Text(
-                  "1. Lorem Ipsum",
-                  style: TextStyle(fontSize: 20),
-                ),
-                alignment: Alignment.center),
-          ),
-          uploadVideo()
-        ],
+        ),
       ),
     );
   }
