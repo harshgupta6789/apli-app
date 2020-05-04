@@ -30,7 +30,7 @@ class _VideoIntroState extends State<VideoIntro>
   String fileName = '';
   String urlFromCamera;
   String operationText = '';
-  bool isUploaded = true;
+  bool isUploaded = true, error = false;
   String result = '';
   String fetchUrl;
   currentState x = currentState.none;
@@ -62,30 +62,36 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   usergetVideoUrl() async {
-    await Firestore.instance
-        .collection('candidates')
-        .document(email)
-        .get()
-        .then((DocumentSnapshot ds) {
-      if (ds.data['video_resume'] != null &&
-          ds.data['video_resume'] != 'deleted') {
-        fetchUrl = ds.data['video_resume'];
-        setState(() {
-          x = currentState.success;
-        });
-      } else {
-        setState(() {
-          x = currentState.none;
-        });
-      }
-      // if (fetchUrl!=null) {
-      //   setState(() {
-      //     x = currentState.success;
-      //     print(fetchUrl);
-      //     print(x);
-      //   });
-      // }
-    });
+    try {
+      await Firestore.instance
+          .collection('candidates')
+          .document(email)
+          .get()
+          .then((DocumentSnapshot ds) {
+        if (ds.data['video_resume'] != null &&
+            ds.data['video_resume'] != 'deleted') {
+          fetchUrl = ds.data['video_resume'];
+          setState(() {
+            x = currentState.success;
+          });
+        } else {
+          setState(() {
+            x = currentState.none;
+          });
+        }
+        // if (fetchUrl!=null) {
+        //   setState(() {
+        //     x = currentState.success;
+        //     print(fetchUrl);
+        //     print(x);
+        //   });
+        // }
+      });
+    } catch(e) {
+      setState(() {
+        error = true;
+      });
+    }
   }
 
   Future<void> _uploadFile(File file, String filename) async {
@@ -358,7 +364,9 @@ class _VideoIntroState extends State<VideoIntro>
 
   @override
   Widget build(BuildContext context) {
-    return ScrollConfiguration(
+    if(error)
+      return Center(child: Text('Error occured, try again later'),);
+    else return ScrollConfiguration(
       behavior: MyBehavior(),
       child: SingleChildScrollView(
         child: Padding(

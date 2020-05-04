@@ -24,19 +24,23 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
     List<String> userData = [];
 
     await SharedPreferences.getInstance().then((value) async {
-      await Firestore.instance
-          .collection('candidates')
-          .document(value.getString('email'))
-          .get()
-          .then((snapshot) {
-        String fname = snapshot.data['First_name'];
-        String lname = snapshot.data['Last_name'];
-        if (lname == null)
-          userData.add(fname);
-        else
-          userData.add(fname + ' ' + lname);
-        userData.add((snapshot.data['profile_picture']));
-      });
+      try {
+        await Firestore.instance
+            .collection('candidates')
+            .document(value.getString('email'))
+            .get()
+            .then((snapshot) {
+          String fname = snapshot.data['First_name'];
+          String lname = snapshot.data['Last_name'];
+          if (lname == null)
+            userData.add(fname);
+          else
+            userData.add(fname + ' ' + lname);
+          userData.add((snapshot.data['profile_picture']));
+        });
+      } catch(e) {
+        userData = ['error'];
+      }
     });
 
     return userData;
@@ -61,6 +65,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                         AsyncSnapshot<List<String>> snapshot) {
                       if (snapshot.hasData &&
                           snapshot.connectionState == ConnectionState.done) {
+                        if(snapshot.data[0] == 'error')
+                          return Text('Error occured, try again later');
                         return Row(
                           children: <Widget>[
                             Padding(
@@ -114,6 +120,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                   style: TextStyle(
                       fontWeight: FontWeight.bold, fontSize: fontSize),
                 ),
+                trailing: IconButton(
+                    icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
                 //trailing: NotificationSwitch(),
                 onTap: () {
                   AppSettings.openAppSettings();

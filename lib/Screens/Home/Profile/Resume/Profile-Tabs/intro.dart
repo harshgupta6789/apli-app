@@ -96,12 +96,7 @@ class _BasicIntroState extends State<BasicIntro> {
 
   @override
   void initState() {
-    //getPrefs().then((value) {});
-    (() async {
-      await getPrefs();
-      setState(() {});
-    })();
-    print(profile);
+    getPrefs();
     super.initState();
   }
 
@@ -111,6 +106,7 @@ class _BasicIntroState extends State<BasicIntro> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    print(check);
     return loading
         ? Loading()
         : Scaffold(

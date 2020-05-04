@@ -299,6 +299,11 @@ class _LoginState extends State<Login> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     MainScreen()));
+                                      } else {
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                        showToast('Failed, try again later', context);
                                       }
                                       var net = await Connectivity()
                                           .checkConnectivity();

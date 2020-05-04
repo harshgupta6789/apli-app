@@ -17,13 +17,22 @@ class _WrapperState extends State<Wrapper> {
 
   getPref() async {
     preferences = await SharedPreferences.getInstance();
+    preferences.setString('email', 'harshhvg999@gmail.com');
+    setState(() {
+      email = 'harshhvg999@gmail.com';
+    });
     if (preferences.containsKey('email')) {
-      if (preferences.getBool('rememberMe')) {
-        setState(() {
-          email = preferences.getString('email');
-        });
-      } else
+      if(preferences.containsKey('rememberMe')) {
+        if (preferences.getBool('rememberMe')) {
+          setState(() {
+            email = preferences.getString('email');
+          });
+        } else {
+          preferences.clear();
+        }
+      } else {
         preferences.clear();
+      }
     }
   }
 

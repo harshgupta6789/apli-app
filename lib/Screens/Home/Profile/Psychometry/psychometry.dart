@@ -19,6 +19,7 @@ class _PsychometryState extends State<Psychometry> {
   States _currentState;
   Map<String, dynamic> questions, answeredQuestions;
   String email;
+  bool error = false;
 
   userInit() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -27,47 +28,53 @@ class _PsychometryState extends State<Psychometry> {
       else setState(() {
         email = prefs.getString('email');
       });
-      await Firestore.instance
-          .collection('candPsychoQues')
-          .document('all_ques')
-          .get()
-          .then((snapshot) async {
-            if(!mounted)
-              questions = snapshot.data;
-        else setState(() {
-          questions = snapshot.data;
-        });
+      try {
         await Firestore.instance
-            .collection('candidates')
-            .document(email)
+            .collection('candPsychoQues')
+            .document('all_ques')
             .get()
-            .then((snapshot2) {
-              if(!mounted)
-                answeredQuestions = snapshot2.data['psycho_ques'];
+            .then((snapshot) async {
+          if(!mounted)
+            questions = snapshot.data;
           else setState(() {
-            answeredQuestions = snapshot2.data['psycho_ques'];
+            questions = snapshot.data;
           });
-          if (answeredQuestions == null) {
+          await Firestore.instance
+              .collection('candidates')
+              .document(email)
+              .get()
+              .then((snapshot2) {
             if(!mounted)
-              _currentState = States.none;
+              answeredQuestions = snapshot2.data['psycho_ques'];
             else setState(() {
-              _currentState = States.none;
+              answeredQuestions = snapshot2.data['psycho_ques'];
             });
-          } else if (answeredQuestions.length < questions.length) {
-            if(!mounted)
-              _currentState = States.resume;
-            else setState(() {
-              _currentState = States.resume;
-            });
-          } else {
-            if(!mounted)
-              _currentState = States.done;
-            else setState(() {
-              _currentState = States.done;
-            });
-          }
+            if (answeredQuestions == null) {
+              if(!mounted)
+                _currentState = States.none;
+              else setState(() {
+                _currentState = States.none;
+              });
+            } else if (answeredQuestions.length < questions.length) {
+              if(!mounted)
+                _currentState = States.resume;
+              else setState(() {
+                _currentState = States.resume;
+              });
+            } else {
+              if(!mounted)
+                _currentState = States.done;
+              else setState(() {
+                _currentState = States.done;
+              });
+            }
+          });
         });
-      });
+      } catch(e) {
+        setState(() {
+          error = true;
+        });
+      }
     });
   }
 
@@ -79,7 +86,9 @@ class _PsychometryState extends State<Psychometry> {
 
   @override
   Widget build(BuildContext context) {
-    switch (_currentState) {
+    if(error)
+      return Center(child: Text('Error occured, try again later'),);
+    else switch (_currentState) {
       case States.none:
         return ScrollConfiguration(
           behavior: MyBehavior(),
