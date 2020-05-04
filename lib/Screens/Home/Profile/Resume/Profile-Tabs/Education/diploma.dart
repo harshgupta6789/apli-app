@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -50,17 +51,6 @@ class _DiplomaState extends State<Diploma> {
   void initState() {
     fetchInfo();
     super.initState();
-  }
-
-  InputDecoration x(String t) {
-    return InputDecoration(
-        hintText: t,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff4285f4))),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        labelStyle: TextStyle(color: Colors.black));
   }
 
   @override
@@ -178,13 +168,12 @@ class _DiplomaState extends State<Diploma> {
                               padding:
                                   EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
                               child: DropdownButton<String>(
-                                hint: Text("Unit"),
+                                hint: Text("Unit", style: TextStyle(fontSize: 13),),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 12),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: width * 0.1),
+                                    fontSize: 13),
+                                icon: Expanded(
                                   child: Icon(Icons.keyboard_arrow_down),
                                 ),
                                 underline: SizedBox(),
@@ -252,60 +241,76 @@ class _DiplomaState extends State<Diploma> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10.0),
+                      SizedBox(height: 15.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Text(
-                            "Certificate",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 20),
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  hintText: 'Certificate',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
+                                      borderSide: BorderSide(color: Color(0xff4285f4))),
+                                  contentPadding:
+                                  new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                                  hintStyle: TextStyle(fontWeight: FontWeight.w400),
+                                  labelStyle: TextStyle(color: Colors.black))
+                            ),
                           ),
-                          MaterialButton(
-                            onPressed: () {
-                              filePicker(context);
-                            },
-                            child: Text("Browse"),
+                          Container(
                             color: Colors.grey,
+                            width: width * 0.25,
+                            child: TextField(
+                              enabled: false,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                  hintText: 'Browse',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
+                                      borderSide: BorderSide(color: Color(0xff4285f4))),
+                                  contentPadding:
+                                  new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+                                  hintStyle: TextStyle(fontSize: 13),
+                                  labelStyle: TextStyle(color: Colors.black))
+                            ),
                           ),
                         ],
                       ),
-                      SizedBox(height: 30.0),
+                      SizedBox(height: height * 0.2),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: basicColor),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: MaterialButton(
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: basicColor,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  onPressed: () {}),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: basicColor),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: MaterialButton(
-                                  child: Text(
-                                    "Save",
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: basicColor,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  onPressed: () {}),
-                            ),
+                            RaisedButton(
+                                color: Colors.transparent,
+                                elevation: 0,
+                                padding: EdgeInsets.only(left: 22, right: 22),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  side:
+                                      BorderSide(color: basicColor, width: 1.2),
+                                ),
+                                child: Text(
+                                  'Delete',
+                                  style: TextStyle(color: basicColor),
+                                ),
+                                onPressed: () {print(Theme.of(context).scaffoldBackgroundColor);}),
+                            RaisedButton(
+                                color: Colors.transparent,
+                                elevation: 0,
+                                padding: EdgeInsets.only(left: 22, right: 22),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  side:
+                                  BorderSide(color: basicColor, width: 1.2),
+                                ),
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(color: basicColor),
+                                ),
+                                onPressed: () {}),
                           ],
                         ),
                       ),

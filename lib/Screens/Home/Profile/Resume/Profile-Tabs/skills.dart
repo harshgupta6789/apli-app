@@ -106,6 +106,7 @@ class _SkillsState extends State<Skills> {
                                           color: basicColor, width: 1.5),
                                     ),
                                     onPressed: () {
+                                      newSkillGroup = null;
                                       showDialog(
                                         context: context,
                                         builder: (_) => SimpleDialog(

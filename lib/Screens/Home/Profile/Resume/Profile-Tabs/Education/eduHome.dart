@@ -13,6 +13,9 @@ class EducationOverview extends StatefulWidget {
 double height, width;
 
 class _EducationOverviewState extends State<EducationOverview> {
+
+  double fontSize = 16;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -44,13 +47,13 @@ class _EducationOverviewState extends State<EducationOverview> {
       body: ScrollConfiguration(
         child: SingleChildScrollView(
             child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 40.0, 10.0, 10.0),
+          padding: EdgeInsets.fromLTRB(width * 0.05, 40.0, width * 0.05, 0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                   Widget>[
             Text(
               clg,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 10.0, 20.0),
@@ -67,7 +70,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         noDetails,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: fontSize, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
@@ -79,10 +82,10 @@ class _EducationOverviewState extends State<EducationOverview> {
                                 MaterialPageRoute(
                                     builder: (context) => CurrentEducation())),
                             child: Text(
-                              "Add Now",
+                              "Add now",
                               style: TextStyle(
                                   color: basicColor,
-                                  fontSize: 18,
+                                  fontSize: fontSize,
                                   fontWeight: FontWeight.bold),
                             ))),
                   ],
@@ -91,7 +94,7 @@ class _EducationOverviewState extends State<EducationOverview> {
             ),
             Text(
               otherCourses,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 10.0, 20.0),
@@ -108,7 +111,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         noDetails,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: fontSize, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
@@ -120,10 +123,10 @@ class _EducationOverviewState extends State<EducationOverview> {
                                 MaterialPageRoute(
                                     builder: (context) => CurrentEducation())),
                             child: Text(
-                              "Add Now",
+                              "Add now",
                               style: TextStyle(
                                   color: basicColor,
-                                  fontSize: 18,
+                                  fontSize: fontSize,
                                   fontWeight: FontWeight.bold),
                             ))),
                   ],
@@ -132,7 +135,7 @@ class _EducationOverviewState extends State<EducationOverview> {
             ),
             Text(
               twelve,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 10.0, 20.0),
@@ -149,7 +152,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         noDetails,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: fontSize, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
@@ -161,10 +164,10 @@ class _EducationOverviewState extends State<EducationOverview> {
                                 MaterialPageRoute(
                                     builder: (context) => Diploma())),
                             child: Text(
-                              "Add Now",
+                              "Add now",
                               style: TextStyle(
                                   color: basicColor,
-                                  fontSize: 18,
+                                  fontSize: fontSize,
                                   fontWeight: FontWeight.bold),
                             ))),
                   ],
@@ -173,7 +176,7 @@ class _EducationOverviewState extends State<EducationOverview> {
             ),
             Text(
               ten,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 20.0, 10.0, 10.0),
@@ -190,7 +193,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         noDetails,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: fontSize, fontWeight: FontWeight.bold),
                       ),
                     ),
                     Padding(
@@ -202,16 +205,17 @@ class _EducationOverviewState extends State<EducationOverview> {
                                 MaterialPageRoute(
                                     builder: (context) => Tenth())),
                             child: Text(
-                              "Add Now",
+                              "Add now",
                               style: TextStyle(
                                   color: basicColor,
-                                  fontSize: 18,
+                                  fontSize: fontSize,
                                   fontWeight: FontWeight.bold),
                             ))),
                   ],
                 ),
               ),
             ),
+                SizedBox(height: 40,)
           ]),
         )),
         behavior: MyBehavior(),

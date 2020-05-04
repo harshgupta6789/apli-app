@@ -211,7 +211,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                           EdgeInsets.fromLTRB(8.0, 35, 8, 8),
                                       child: Align(
                                         child: RaisedButton(
-                                          color: Colors.white,
+                                          color: Colors.transparent,
                                           elevation: 0,
                                           padding: EdgeInsets.only(
                                               left: 22, right: 22),
@@ -247,7 +247,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                           EdgeInsets.fromLTRB(8.0, 35, 8, 8),
                                       child: Align(
                                         child: RaisedButton(
-                                          color: Colors.white,
+                                          color: Colors.transparent,
                                           elevation: 0,
                                           shape: RoundedRectangleBorder(
                                             borderRadius:

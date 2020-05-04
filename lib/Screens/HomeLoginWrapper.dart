@@ -17,10 +17,6 @@ class _WrapperState extends State<Wrapper> {
 
   getPref() async {
     preferences = await SharedPreferences.getInstance();
-    preferences.setString('email', 'harshhvg999@gmail.com');
-    setState(() {
-      email = 'harshhvg999@gmail.com';
-    });
     if (preferences.containsKey('email')) {
       if(preferences.containsKey('rememberMe')) {
         if (preferences.getBool('rememberMe')) {
