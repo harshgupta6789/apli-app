@@ -35,9 +35,10 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-
-     
+    if (email == null) {
+      return Login();
+    } else {
       return MainScreen(currentTab: widget.currentTab);
-   
-}
+    }
+  }
 }
