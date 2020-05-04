@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +21,7 @@ class BasicIntro extends StatefulWidget {
 class _BasicIntroState extends State<BasicIntro> {
   double width, height;
   File _image;
-  bool loading = false, check = false;
+  bool loading = false, check = false, error = false;
   NetworkImage img;
   String dropdownValue;
   String userEmail;
@@ -48,29 +50,35 @@ class _BasicIntroState extends State<BasicIntro> {
           });
         else
           userEmail = prefs.getString('email');
-        await Firestore.instance
-            .collection('candidates')
-            .document(userEmail)
-            .get()
-            .then((snapshot) {
-          profile = snapshot.data['First_name'];
-          fname = snapshot.data['First_name'];
-          mname = snapshot.data['Middle_name'];
-          lname = snapshot.data['Last_name'];
-          email = snapshot.data['email'];
-          mno = snapshot.data['ph_no'];
-          dob = snapshot.data['dob'];
-          gender = snapshot.data['gender'];
-          address = snapshot.data['Address'] ?? {};
-          bldg = address['address'];
-          country = address['country'];
-          state = address['state'];
-          postal = address['postal_code'];
-          city = address['city'];
-          check = true;
-//          if(mounted)
-          setState(() {});
-        });
+        try {
+          await Firestore.instance
+              .collection('candidates')
+              .document(userEmail)
+              .get()
+              .then((snapshot) {
+            setState(() {
+              profile = snapshot.data['profile_picture'];
+              fname = snapshot.data['First_name'];
+              mname = snapshot.data['Middle_name'];
+              lname = snapshot.data['Last_name'];
+              email = snapshot.data['email'];
+              mno = snapshot.data['ph_no'];
+              dob = snapshot.data['dob'];
+              gender = snapshot.data['gender'];
+              address = snapshot.data['Address'] ?? {};
+              bldg = address['address'];
+              country = address['country'];
+              state = address['state'];
+              postal = address['postal_code'];
+              city = address['city'];
+              check = true;
+            });
+          });
+        } catch (e) {
+          setState(() {
+            error = true;
+          });
+        }
       }
     });
   }
@@ -100,14 +108,13 @@ class _BasicIntroState extends State<BasicIntro> {
     super.initState();
   }
 
-  final format = DateFormat("yyyy-MM-dd");
+  final format = DateFormat("dd-MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    print(check);
-    return loading
+    return loading || !check
         ? Loading()
         : Scaffold(
             appBar: PreferredSize(
@@ -151,7 +158,7 @@ class _BasicIntroState extends State<BasicIntro> {
                           maxRadius: 60,
                           backgroundImage: _image != null
                               ? FileImage(_image)
-                              : profile == null ? NetworkImage(profile) : null),
+                              : profile != null ? NetworkImage(profile) : null),
                       MaterialButton(
                         onPressed: getImage,
                         child: Text("Change Profile Photo",
@@ -211,6 +218,10 @@ class _BasicIntroState extends State<BasicIntro> {
                       ),
                       DateTimeField(
                           format: format,
+                          initialValue: dob == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                                  dob.microsecondsSinceEpoch),
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
@@ -227,6 +238,14 @@ class _BasicIntroState extends State<BasicIntro> {
                                 : "DOB";
                             return date;
                           },
+                          onChanged: (date) {
+                            setState(() {
+                              dob = date == null
+                                  ? null
+                                  : Timestamp.fromMicrosecondsSinceEpoch(
+                                      date.microsecondsSinceEpoch);
+                            });
+                          },
                           textInputAction: TextInputAction.next,
                           onFieldSubmitted: (_) =>
                               FocusScope.of(context).nextFocus(),
@@ -234,44 +253,53 @@ class _BasicIntroState extends State<BasicIntro> {
                       SizedBox(
                         height: 15,
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: Container(
-                          color: Colors.grey[300],
-                          padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                          child: DropdownButton<String>(
-                            hint: Text("Gender"),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 12),
-                            icon: Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
-                              child: Icon(Icons.keyboard_arrow_down),
+                      Stack(
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: TextFormField(
+                              enabled: false,
+                              initialValue: 'Gender',
+                              style: TextStyle(fontWeight: FontWeight.w500),
+                              decoration: x("Last Name"),
                             ),
-                            underline: SizedBox(),
-                            items: <String>['Male', 'Female', 'Other']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              print(gender);
-                              setState(() {
-                                gender = value;
-                              });
-                              print(gender);
-//                                      setState(() {
-//                                        skills[index1][
-//                                        skillName]
-//                                        [index2][
-//                                        miniSkill] = value;
-//                                      });
-                            },
                           ),
-                        ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                child: DropdownButton<String>(
+                                  hint: Text("Gender"),
+                                  value: gender ?? 'Male',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14),
+                                  icon: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Icon(Icons.keyboard_arrow_down),
+                                  ),
+                                  underline: SizedBox(),
+                                  items: <String>['Male', 'Female', 'Other']
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      gender = value;
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(
                         height: 20,
@@ -362,7 +390,7 @@ class _BasicIntroState extends State<BasicIntro> {
                         height: 20,
                       ),
                       RaisedButton(
-                        color: Colors.white,
+                        color: Colors.transparent,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6.0),
@@ -373,17 +401,39 @@ class _BasicIntroState extends State<BasicIntro> {
                           style: TextStyle(color: basicColor),
                         ),
                         onPressed: () async {
-//                            setState(() {
-//                              loading = true;
-//                            });
-//                            await Firestore.instance
-//                                .collection('candidates')
-//                                .document(email)
-//                                .setData({'skills': skills},
-//                                merge: true).then((f) {
-//                              showToast('Data Updated Successfully', context);
-//                              Navigator.pop(context);
-//                            });
+                          setState(() {
+                            loading = true;
+                          });
+                          await Firestore.instance
+                              .collection('candidates')
+                              .document(email)
+                              .setData({
+                            'First_name': fname,
+                            'Middle_name': mname,
+                            'Last_name': lname,
+                            'dob': dob,
+                            'gender': gender,
+                            'Address': {
+                              'address': bldg,
+                              'country': country,
+                              'state': state,
+                              'postal_code': postal,
+                              'city': city
+                            }
+                          }, merge: true).then((f) async {
+                            if(_image != null) {
+                              StorageReference storageReference;
+                              storageReference =
+                                  FirebaseStorage.instance.ref().child("resumePictures/$email");
+                              StorageUploadTask uploadTask = storageReference.putFile(_image);
+                              final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+                              await downloadUrl.ref.getDownloadURL().then((url) async {
+                                await Firestore.instance.collection('candidates').document(email).setData({'profile_picture' : url}, merge: true);
+                              });
+                              showToast('Data Updated Successfully', context);
+                            }
+                            Navigator.pop(context);
+                          });
                         },
                       ),
                       SizedBox(

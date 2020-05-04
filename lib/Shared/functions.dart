@@ -34,6 +34,8 @@ InputDecoration x(String t) {
       hintText: t,
       border: OutlineInputBorder(
           borderSide: BorderSide(color: Color(0xff4285f4))),
+      disabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Color(0xff4285f4))),
       contentPadding:
       new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
       hintStyle: TextStyle(fontWeight: FontWeight.w400),
