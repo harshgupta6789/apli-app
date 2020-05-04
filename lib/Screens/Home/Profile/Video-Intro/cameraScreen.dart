@@ -28,9 +28,9 @@ class _CameraState extends State<Camera> {
       (Timer timer) => setState(
         () {
           seconds = seconds + 1;
-          if (seconds == 60) {
-            minute = minute + 1;
-            seconds = 0;
+          if (seconds >= 59 && _isRecording) {
+            print("x");
+            stopVideoRecording();
           }
         },
       ),
@@ -115,6 +115,7 @@ class _CameraState extends State<Camera> {
                   ),
                   onPressed: () {
                     if (path != null) {
+                      print(path);
                       Navigator.pop(context, path);
                     } else {
                       Navigator.pop(context);

@@ -58,6 +58,7 @@ dependencies:
   double_back_to_close_app: ^1.2.0
   datetime_picker_formfield: ^1.0.0
   dropdownfield: ^1.0.3
+  awsome_video_player: ^1.0.8+1
 
 
 dev_dependencies:
