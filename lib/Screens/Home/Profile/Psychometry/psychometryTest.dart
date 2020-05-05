@@ -45,6 +45,18 @@ class _PsychometryTestState extends State<PsychometryTest> {
     });
   }
 
+  sortRemainingQuestions() {
+    List<List<String>> temp = [];
+    for(int i = 0; i < remainingQuestions.length; i++) {
+      temp.add([]);
+    }
+    for(int i = 0; i < remainingQuestions.length; i++) {
+      temp[int.parse(remainingQuestions[i][0].substring(1)) - 1] = remainingQuestions[i];
+    }
+    remainingQuestions = temp;
+    setState(() { });
+  }
+
   checkCount() {
     int count = 0;
     remainingQuestions.forEach((f) {
@@ -60,6 +72,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
   void initState() {
     super.initState();
     findRemainingQuestions();
+    sortRemainingQuestions();
     controller.addListener(() {});
   }
 
@@ -112,6 +125,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                       setState(() {
                         loading = false;
                       });
+                      print(answeredQuestions);
                       Navigator.pop(context);
                     });
                   },
