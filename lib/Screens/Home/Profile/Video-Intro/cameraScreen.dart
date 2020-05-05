@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/Home/Courses/courseVideo.dart';
+import 'package:apli/Shared/functions.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
@@ -116,7 +118,10 @@ class _CameraState extends State<Camera> {
                   onPressed: () {
                     if (path != null) {
                       print(path);
-                      Navigator.pop(context , path);
+                      Navigator.pop(context, path);
+                      showToast(
+                          'Recorded Video Will Be Stored In Storage/Apli Folder',
+                          context);
                     } else {
                       Navigator.pop(context);
                     }
@@ -198,6 +203,12 @@ class _CameraState extends State<Camera> {
     setState(() {
       _isRecording = true;
     });
+    AwesomeDialog(
+            context: context,
+            dialogType: DialogType.WARNING,
+            tittle: "Note",
+            body: Text("Video Will Be Stopped After 1 Minute"))
+        .show();
     startTimer();
 
     final String dirPath = 'storage/emulated/0/apli';

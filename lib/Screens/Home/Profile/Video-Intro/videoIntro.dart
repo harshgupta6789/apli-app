@@ -14,6 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 enum currentState { none, uploading, success, failure }
 
@@ -36,6 +37,13 @@ class _VideoIntroState extends State<VideoIntro>
   String fetchUrl;
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
+  // YoutubePlayerController _controller = YoutubePlayerController(
+  //   initialVideoId: 'wfd3eGkCatE',
+  //   flags: YoutubePlayerFlags(
+  //     autoPlay: true,
+  //     mute: true,
+  //   ),
+  // );
 
   camInit() async {
     cameras = await availableCameras();
@@ -177,96 +185,183 @@ class _VideoIntroState extends State<VideoIntro>
   Widget uploadVideo() {
     switch (x) {
       case currentState.none:
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 35, 5, 8),
-                child: Align(
-                  child: RaisedButton(
-                    color: Colors.white,
-                    elevation: 0,
-                    padding: EdgeInsets.only(left: 22, right: 22),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      side: BorderSide(color: basicColor, width: 1.5),
-                    ),
-                    child: Text(
-                      'Upload \nFrom Gallery',
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
+              child: Align(
+                  child: Text(videoIntroSlogan,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: basicColor, fontWeight: FontWeight.bold),
-                    ),
-                    onPressed: () {
-                      filePicker(context);
-                    },
-                  ),
-                  alignment: Alignment.topLeft,
-                ),
-              ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
             ),
-            Container(
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(5, 35, 0, 8),
-                child: Align(
-                  child: RaisedButton(
-                      color: Colors.white,
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(color: basicColor, width: 1.5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+              child: Align(
+                  child: Text("Instructions to follow",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                          color: basicColor)),
+                  alignment: Alignment.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  alignment: Alignment.center),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(0, 35, 5, 8),
+                    child: Align(
+                      child: RaisedButton(
+                        color: Colors.white,
+                        elevation: 0,
+                        padding: EdgeInsets.only(left: 22, right: 22),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
                         child: Text(
-                          'Record Now',
+                          'Upload \nFrom Gallery',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               color: basicColor, fontWeight: FontWeight.bold),
                         ),
+                        onPressed: () {
+                          filePicker(context);
+                        },
                       ),
-                      onPressed: () async {
-                        var status = await Permission.storage.status;
-                        switch (status) {
-                          case PermissionStatus.undetermined:
-                            Map<Permission, PermissionStatus> statuses = await [
-                              Permission.storage,
-                            ].request();
-                            break;
-                          case PermissionStatus.granted:
-                            urlFromCamera = await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Camera(cameras: cameras)),
-                            );
-                            print(urlFromCamera);
-                            if (urlFromCamera != null) {
-                              //filePicker(context);
-                              videoPicker(urlFromCamera);
-                            }
-                            break;
-                          case PermissionStatus.denied:
-                            break;
-                          case PermissionStatus.restricted:
-                            break;
-                          case PermissionStatus.permanentlyDenied:
-                            break;
-                        }
-
-                        // _recordVideo();
-                      }),
-                  alignment: Alignment.center,
+                      alignment: Alignment.topLeft,
+                    ),
+                  ),
                 ),
-              ),
+                Container(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(5, 35, 0, 8),
+                    child: Align(
+                      child: RaisedButton(
+                          color: Colors.white,
+                          elevation: 0,
+                          padding: EdgeInsets.only(left: 22, right: 22),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(color: basicColor, width: 1.5),
+                          ),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            child: Text(
+                              'Record Now',
+                              style: TextStyle(
+                                  color: basicColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          onPressed: () async {
+                            var status = await Permission.storage.status;
+                            switch (status) {
+                              case PermissionStatus.undetermined:
+                                Map<Permission, PermissionStatus> statuses =
+                                    await [
+                                  Permission.storage,
+                                ].request();
+                                break;
+                              case PermissionStatus.granted:
+                             
+                                urlFromCamera = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Camera(cameras: cameras)),
+                                );
+                                print(urlFromCamera);
+                                if (urlFromCamera != null) {
+                                  filePicker(context);
+                                  // videoPicker(urlFromCamera);
+                                }
+                                break;
+                              case PermissionStatus.denied:
+                                break;
+                              case PermissionStatus.restricted:
+                                break;
+                              case PermissionStatus.permanentlyDenied:
+                                break;
+                            }
+
+                            // _recordVideo();
+                          }),
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                )
+              ],
             )
           ],
         );
+
         break;
       case currentState.uploading:
         return Padding(
-          padding: EdgeInsets.only(top: 40, left: 50, right: 50),
+          padding: EdgeInsets.only(top: 100, left: 50, right: 50),
           child: StreamBuilder<StorageTaskEvent>(
               stream: uploadTask.events,
               builder:
@@ -285,7 +380,7 @@ class _VideoIntroState extends State<VideoIntro>
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                            '${_bytesTransferred(snapshot)} MB Uploaded...'),
+                            '${_bytesTransferred(snapshot)} MB Uploaded...' , textAlign: TextAlign.center,),
                       ),
                     ],
                   );
@@ -295,75 +390,76 @@ class _VideoIntroState extends State<VideoIntro>
         );
         break;
       case currentState.success:
-        return Padding(
-          padding: EdgeInsets.only(top: 40.0),
-          child: Align(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: AwsomeVideoPlayer(fetchUrl ?? ""),
+        return Align(
+          child: Column(
+            children: <Widget>[
+              // YoutubePlayer(
+              //   controller: _controller,
+              //   showVideoProgressIndicator: true,
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: AwsomeVideoPlayer(fetchUrl ?? ""),
+              ),
+              Icon(
+                Icons.done_outline,
+                size: 50.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  "Your Resume Has Been Uploaded Succesfully!",
+                  textAlign: TextAlign.center,
                 ),
-                Icon(
-                  Icons.done_outline,
-                  size: 50.0,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    "Your Resume Has Been Uploaded Succesfully!",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.red),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: MaterialButton(
-                      child: Text(
-                        "Delete & Re-Upload",
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.red,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      onPressed: () {
-                        AwesomeDialog(
-                          context: context,
-                          dialogType: DialogType.ERROR,
-                          tittle: "Are You Sure?",
-                          desc: "Yes!",
-                          btnCancelText: "Cancel",
-                          btnCancelOnPress: () {
-                            Navigator.of(context).pop();
-                          },
-                          btnOkOnPress: () async {
-                            await usergetVideoUrl();
-                            if (fetchUrl != null) {
-                              var ref = FirebaseStorage.instance
-                                  .getReferenceFromUrl(fetchUrl);
+                child: MaterialButton(
+                    child: Text(
+                      "Delete & Re-Upload",
+                      style: TextStyle(
+                          fontSize: 18.0,
+                          color: Colors.red,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    onPressed: () {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        tittle: "Are You Sure?",
+                        desc: "Yes!",
+                        btnCancelText: "Cancel",
+                        btnCancelOnPress: () {
+                          Navigator.of(context).pop();
+                        },
+                        btnOkOnPress: () async {
+                          await usergetVideoUrl();
+                          if (fetchUrl != null) {
+                            var ref = FirebaseStorage.instance
+                                .getReferenceFromUrl(fetchUrl);
 
-                              await ref.then((reference) {
-                                reference.delete().then((x) {
-                                  setState(() {
-                                    x = currentState.none;
-                                    fetchUrl = null;
-                                  });
-                                  deleteVideoUrl();
-                                  usergetVideoUrl();
+                            await ref.then((reference) {
+                              reference.delete().then((x) {
+                                setState(() {
+                                  x = currentState.none;
+                                  fetchUrl = null;
                                 });
+                                deleteVideoUrl();
+                                usergetVideoUrl();
                               });
-                            }
-                          },
-                          btnOkText: "Delete",
-                        ).show();
-                      }),
-                ),
-              ],
-            ),
-            alignment: Alignment.center,
+                            });
+                          }
+                        },
+                        btnOkText: "Delete",
+                      ).show();
+                    }),
+              ),
+            ],
           ),
+          alignment: Alignment.center,
         );
       default:
         return Loading();
@@ -398,89 +494,7 @@ class _VideoIntroState extends State<VideoIntro>
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                  child: Align(
-                      child: Text(videoIntroSlogan,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
-                  child: Align(
-                      child: Text("Instructions to follow",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                              color: basicColor)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                uploadVideo()
-              ],
-            ),
+            child: uploadVideo(),
           ),
         ),
       );
