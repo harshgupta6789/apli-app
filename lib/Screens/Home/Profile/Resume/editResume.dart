@@ -1,6 +1,5 @@
 
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/eduHome.dart';
-import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/exp.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraC.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/projects.dart';
 import 'package:apli/Shared/constants.dart';
@@ -8,7 +7,8 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-import 'Profile-Tabs/Awards/awards.dart';
+import 'Profile-Tabs/Experience/experience.dart';
+import 'Profile-Tabs/awards.dart';
 import 'Profile-Tabs/intro.dart';
 import 'Profile-Tabs/skills.dart';
 
@@ -86,7 +86,7 @@ class _EditResumeState extends State<EditResume> {
             children: <Widget>[
               resumeTile(intro, BasicIntro()),
               resumeTile(education, EducationOverview()),
-              resumeTile(experience, Expereince()),
+              resumeTile(experience, Experience()),
               resumeTile(projects, Projects()),
               resumeTile(extra, ExtraC()),
               resumeTile(awards, Awards()),

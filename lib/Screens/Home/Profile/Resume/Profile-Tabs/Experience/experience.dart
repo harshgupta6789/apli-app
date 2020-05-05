@@ -1,0 +1,314 @@
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/newExperience.dart';
+import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class Experience extends StatelessWidget {
+  double width, height;
+  String userEmail;
+
+  InputDecoration x(String t) {
+    return InputDecoration(
+        hintText: t,
+        border: OutlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff4285f4))),
+        contentPadding:
+            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+        hintStyle: TextStyle(fontWeight: FontWeight.w600),
+        labelStyle: TextStyle(color: Colors.black));
+  }
+
+  Future<List> getInfo() async {
+    List temp;
+    await SharedPreferences.getInstance().then((value) async {
+      try {
+        await Firestore.instance
+            .collection('candidates')
+            .document(value.getString('email'))
+            .get()
+            .then((snapshot) {
+          temp = snapshot.data['experience'] ?? [];
+        });
+      } catch (e) {
+        temp = ['error'];
+      }
+    });
+    return temp;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    return Scaffold(
+        appBar: PreferredSize(
+          child: AppBar(
+            backgroundColor: basicColor,
+            automaticallyImplyLeading: false,
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                experience,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            leading: Padding(
+              padding: EdgeInsets.only(bottom: 10.0),
+              child: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.pop(context)),
+            ),
+          ),
+          preferredSize: Size.fromHeight(55),
+        ),
+        body: FutureBuilder(
+          future: Firestore.instance
+              .collection('candidates')
+              .document(userEmail)
+              .get(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return FutureBuilder(
+              future: getInfo(),
+              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+                if (snapshot.hasData &&
+                    snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.data.contains('error'))
+                    return Center(
+                      child: Text('Error occured, try again later'),
+                    );
+                  else
+                    return Experiences(
+                      experiences: snapshot.data ?? {},
+                    );
+                } else {
+                  if (snapshot.hasError)
+                    return Center(
+                      child: Text('Error occured, try again later'),
+                    );
+                  else
+                    return Loading();
+                }
+              },
+            );
+          },
+        ));
+  }
+}
+
+class Experiences extends StatefulWidget {
+  List experiences;
+  Experiences({this.experiences});
+
+  @override
+  _ExperiencesState createState() => _ExperiencesState();
+}
+
+class _ExperiencesState extends State<Experiences> {
+  double width, height;
+  bool loading = false;
+
+  List experiences;
+
+  @override
+  void initState() {
+    experiences = widget.experiences;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    return loading
+        ? Loading()
+        : Container(
+            padding: EdgeInsets.fromLTRB(width * 0.05, 30, width * 0.05, 0),
+            child: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+                      child: RaisedButton(
+                        padding: EdgeInsets.all(0),
+                        color: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewExperience(old: false,)));
+                        },
+                        child: ListTile(
+                          leading: Text(
+                            'Add New Experience',
+                            style: TextStyle(
+                                color: basicColor, fontWeight: FontWeight.w600),
+                          ),
+                          trailing: Icon(
+                            Icons.add,
+                            color: basicColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: experiences.length,
+                        itemBuilder: (BuildContext context1, int index) {
+                          String from = experiences[index]['from'] == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                                          experiences[index]['from']
+                                              .microsecondsSinceEpoch)
+                                      .month
+                                      .toString() +
+                                  '-' +
+                                  DateTime.fromMicrosecondsSinceEpoch(
+                                          experiences[index]['from']
+                                              .microsecondsSinceEpoch)
+                                      .year
+                                      .toString();
+                          String to = experiences[index]['to'] == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                                          experiences[index]['to']
+                                              .microsecondsSinceEpoch)
+                                      .month
+                                      .toString() +
+                                  '-' +
+                                  DateTime.fromMicrosecondsSinceEpoch(
+                                          experiences[index]['to']
+                                              .microsecondsSinceEpoch)
+                                      .year
+                                      .toString();
+                          String duration = (from ?? '') + ' to ' + (to ?? '');
+                          return Column(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(border: Border.all()),
+                                padding: EdgeInsets.all(8),
+                                child: ListTile(
+                                  title: Text(
+                                    experiences[index]['designation'] ??
+                                        'designation',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w600),
+                                  ),
+                                  trailing: PopupMenuButton<int>(
+                                    icon: Icon(Icons.more_vert),
+                                    onSelected: (int result) async {
+                                      if (result == 0) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    NewExperience(
+                                                      experiences: experiences,
+                                                      index: index,
+                                                      old: true,
+                                                    )));
+                                      } else if (result == 1) {
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        experiences.removeAt(index);
+                                        await SharedPreferences.getInstance()
+                                            .then((prefs) async {
+                                          await Firestore.instance
+                                              .collection('candidates')
+                                              .document(
+                                                  prefs.getString('email'))
+                                              .setData({
+                                            'experience': experiences
+                                          }).then((f) {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          });
+                                        });
+                                      }
+                                    },
+                                    itemBuilder: (BuildContext context) =>
+                                        <PopupMenuEntry<int>>[
+                                      const PopupMenuItem<int>(
+                                        value: 0,
+                                        child: Text(
+                                          'Edit',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13),
+                                        ),
+                                      ),
+                                      const PopupMenuItem<int>(
+                                        value: 1,
+                                        child: Text(
+                                          'Delete',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 13),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  subtitle: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text('Type: ' +
+                                          (experiences[index]['Type'] ?? '')),
+                                      Text('Company: ' +
+                                          (experiences[index]['company'] ??
+                                              '')),
+                                      Text('Duration: ' + duration),
+                                      Text('Industry Type: ' +
+                                          (experiences[index]['industry'] ??
+                                              '')),
+                                      Text('Domain: ' +
+                                          (experiences[index]['domain'] ?? '')),
+                                      Text('Responsibilities: '),
+                                      Text('1: ' +
+                                          experiences[index]['information'][0]),
+                                      Text('2: ' +
+                                          experiences[index]['information'][1]),
+                                      Text('3: ' +
+                                          experiences[index]['information'][2]),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+  }
+}

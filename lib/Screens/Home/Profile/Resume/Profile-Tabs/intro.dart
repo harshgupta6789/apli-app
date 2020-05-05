@@ -21,16 +21,15 @@ class BasicIntro extends StatefulWidget {
 class _BasicIntroState extends State<BasicIntro> {
   double width, height;
   File _image;
-  bool loading = false, check = false, error = false;
+  bool loading = false, error = false;
   NetworkImage img;
   String dropdownValue;
-  String userEmail;
   List<String> gendersList = ['male', 'female', 'other'];
   String profile = '',
       fname = '',
       mname = '',
       lname = '',
-      email = '',
+      email,
       mno = '',
       gender = '',
       bldg = '',
@@ -44,16 +43,10 @@ class _BasicIntroState extends State<BasicIntro> {
   getPrefs() async {
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
-        if (mounted)
-          setState(() {
-            userEmail = prefs.getString('email');
-          });
-        else
-          userEmail = prefs.getString('email');
         try {
           await Firestore.instance
               .collection('candidates')
-              .document(userEmail)
+              .document(prefs.getString('email'))
               .get()
               .then((snapshot) {
             setState(() {
@@ -71,7 +64,6 @@ class _BasicIntroState extends State<BasicIntro> {
               state = address['state'];
               postal = address['postal_code'];
               city = address['city'];
-              check = true;
             });
           });
         } catch (e) {
@@ -114,7 +106,7 @@ class _BasicIntroState extends State<BasicIntro> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    return loading || !check
+    return email == null ? Loading() :  loading
         ? Loading()
         : Scaffold(
             appBar: PreferredSize(
@@ -404,36 +396,54 @@ class _BasicIntroState extends State<BasicIntro> {
                           setState(() {
                             loading = true;
                           });
-                          await Firestore.instance
-                              .collection('candidates')
-                              .document(email)
-                              .setData({
-                            'First_name': fname,
-                            'Middle_name': mname,
-                            'Last_name': lname,
-                            'dob': dob,
-                            'gender': gender,
-                            'Address': {
-                              'address': bldg,
-                              'country': country,
-                              'state': state,
-                              'postal_code': postal,
-                              'city': city
-                            }
-                          }, merge: true).then((f) async {
-                            if(_image != null) {
-                              StorageReference storageReference;
-                              storageReference =
-                                  FirebaseStorage.instance.ref().child("resumePictures/$email");
-                              StorageUploadTask uploadTask = storageReference.putFile(_image);
-                              final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-                              await downloadUrl.ref.getDownloadURL().then((url) async {
-                                await Firestore.instance.collection('candidates').document(email).setData({'profile_picture' : url}, merge: true);
-                              });
+                          if(_image == null) {
+                            await Firestore.instance
+                                .collection('candidates')
+                                .document(email)
+                                .setData({
+                              'First_name': fname,
+                              'Middle_name': mname,
+                              'Last_name': lname,
+                              'dob': dob,
+                              'gender': gender,
+                              'Address': {
+                                'address': bldg,
+                                'country': country,
+                                'state': state,
+                                'postal_code': postal,
+                                'city': city
+                              }
+                            }, merge: true).then((v) {
                               showToast('Data Updated Successfully', context);
-                            }
-                            Navigator.pop(context);
-                          });
+                              Navigator.pop(context);
+                            });
+                          } else {
+                            StorageReference storageReference;
+                            storageReference =
+                                FirebaseStorage.instance.ref().child("resumePictures/$email");
+                            StorageUploadTask uploadTask = storageReference.putFile(_image);
+                            final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+                            await downloadUrl.ref.getDownloadURL().then((url) async {
+                              await Firestore.instance.collection('candidates').document(email).setData({
+                                'profile_picture' : url,
+                                'First_name': fname,
+                                'Middle_name': mname,
+                                'Last_name': lname,
+                                'dob': dob,
+                                'gender': gender,
+                                'Address': {
+                                  'address': bldg,
+                                  'country': country,
+                                  'state': state,
+                                  'postal_code': postal,
+                                  'city': city
+                                }
+                              }, merge: true).then((v) {
+                                showToast('Data Updated Successfully', context);
+                                Navigator.pop(context);
+                              });
+                            });
+                          }
                         },
                       ),
                       SizedBox(
