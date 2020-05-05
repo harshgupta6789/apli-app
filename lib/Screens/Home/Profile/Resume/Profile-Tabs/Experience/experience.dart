@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Experience extends StatelessWidget {
   double width, height;
   String userEmail;
+  bool error;
 
   InputDecoration x(String t) {
     return InputDecoration(
@@ -33,7 +34,8 @@ class Experience extends StatelessWidget {
           temp = snapshot.data['experience'] ?? [];
         });
       } catch (e) {
-        temp = ['error'];
+        print(e.toString());
+        temp = [{'error' : true}];
       }
     });
     return temp;
@@ -78,13 +80,13 @@ class Experience extends StatelessWidget {
               builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                 if (snapshot.hasData &&
                     snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data.contains('error'))
+                  if(snapshot.data.length > 0 && snapshot.data[0].containsKey('error'))
                     return Center(
                       child: Text('Error occured, try again later'),
                     );
                   else
                     return Experiences(
-                      experiences: snapshot.data ?? {},
+                      experiences: snapshot.data ?? [],
                     );
                 } else {
                   if (snapshot.hasError)
@@ -148,7 +150,7 @@ class _ExperiencesState extends State<Experiences> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NewExperience(old: false,)));
+                                  builder: (context) => NewExperience(old: false, experiences: experiences, index: experiences.length,)));
                         },
                         child: ListTile(
                           leading: Text(
@@ -200,6 +202,10 @@ class _ExperiencesState extends State<Experiences> {
                                       .year
                                       .toString();
                           String duration = (from ?? '') + ' to ' + (to ?? '');
+                          String info1, info2, info3;
+                          info1 = experiences[index]['information'] == null ? '' : experiences[index]['information'][0];
+                          info2 = experiences[index]['information'] == null ? '' : experiences[index]['information'][1];
+                          info3 = experiences[index]['information'] == null ? '' : experiences[index]['information'][2];
                           return Column(
                             children: <Widget>[
                               Container(
@@ -229,21 +235,8 @@ class _ExperiencesState extends State<Experiences> {
                                         setState(() {
                                           loading = true;
                                         });
-                                        experiences.removeAt(index);
-                                        await SharedPreferences.getInstance()
-                                            .then((prefs) async {
-                                          await Firestore.instance
-                                              .collection('candidates')
-                                              .document(
-                                                  prefs.getString('email'))
-                                              .setData({
-                                            'experience': experiences
-                                          }).then((f) {
-                                            setState(() {
-                                              loading = false;
-                                            });
-                                          });
-                                        });
+                                        //experiences.removeAt(index);
+                                        // TODO call API
                                       }
                                     },
                                     itemBuilder: (BuildContext context) =>
@@ -288,13 +281,14 @@ class _ExperiencesState extends State<Experiences> {
                                           (experiences[index]['domain'] ?? '')),
                                       Text('Responsibilities: '),
                                       Text('1: ' +
-                                          experiences[index]['information'][0]),
+                                          info1),
                                       Text('2: ' +
-                                          experiences[index]['information'][1]),
+                                          info2),
                                       Text('3: ' +
-                                          experiences[index]['information'][2]),
+                                          info3),
                                     ],
                                   ),
+                                  contentPadding: EdgeInsets.only(left: 8),
                                 ),
                               ),
                               SizedBox(

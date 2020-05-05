@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as p;
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -25,25 +28,49 @@ class NewExperience extends StatefulWidget {
 class _NewExperienceState extends State<NewExperience> {
   double width, height, scale;
   List experiences;
-  String email;
+  String email, type, certificate, company, designation, domain, industry, fileName;
+  List information;
+  Timestamp from, to;
   int index;
   File file;
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
+  StorageUploadTask uploadTask;
+
+  Future<void> _uploadFile(File file, String filename) async {
+    StorageReference storageReference;
+    storageReference =
+        FirebaseStorage.instance.ref().child("documents/$filename");
+    uploadTask = storageReference.putFile(file);
+    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+    await downloadUrl.ref.getDownloadURL().then((url) {
+      if (url != null) {
+        setState(() {
+          certificate = url;
+        });
+      } else if (url == null) {}
+    });
+  }
 
   Future filePicker(BuildContext context) async {
     try {
-      file = await FilePicker.getFile(type: FileType.custom);
-      setState(() {
-
-      });
+      file = await FilePicker.getFile(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
+      );
+      if (file != null) {
+        fileName = p.basename(file.path);
+        setState(() {
+          fileName = p.basename(file.path);
+        });
+      } else {}
     } catch (e) {
       AwesomeDialog(
-              context: context,
-              dialogType: DialogType.WARNING,
-              tittle: e,
-              body: Text("Error Has Occured"))
+          context: context,
+          dialogType: DialogType.WARNING,
+          tittle: e,
+          body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -55,27 +82,33 @@ class _NewExperienceState extends State<NewExperience> {
       });
     });
   }
+  
+  validateBulletPoint(String value) {
+    if(value.length < 80 || value.length > 110)
+      return false;
+    else return true;
+  }
 
   @override
   void initState() {
-    getInfo();
-    if(widget.old == true) {
-      experiences = widget.experiences;
-      index = widget.index;
+    experiences = widget.experiences;
+    index = widget.index;
+    if(widget.old == false) {
+      experiences.add({});
     }
+    type = experiences[index]['Type'] ?? 'Internship';
+    certificate = experiences[index]['certificate'];
+    company = experiences[index]['company'] ?? '';
+    designation = experiences[index]['designation'] ?? '';
+    domain = experiences[index]['domain'] ?? 'Software';
+    industry = experiences[index]['industry'] ?? 'Financial';
+    information = experiences[index]['information'] ?? ['', '', ''];
+    from = experiences[index]['from'] ?? null;
+    to = experiences[index]['to'] ?? null;
+    getInfo();
     super.initState();
   }
 
-  InputDecoration x(String t) {
-    return InputDecoration(
-        hintText: t,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff4285f4))),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        labelStyle: TextStyle(color: Colors.black));
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +117,7 @@ class _NewExperienceState extends State<NewExperience> {
     if(width < 360)
       scale = 0.7;
     else scale = 1;
-    return loading ? Loading() : Scaffold(
+    return loading || email == null ? Loading() : Scaffold(
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -115,7 +148,7 @@ class _NewExperienceState extends State<NewExperience> {
               key: _formKey,
               child: Padding(
                 padding: EdgeInsets.only(
-                    left: width * 0.1 * scale, top: 20, right: width * 0.1 * scale),
+                    left: width * 0.08 * scale, top: 20, right: width * 0.08 * scale),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,9 +160,9 @@ class _NewExperienceState extends State<NewExperience> {
                           alignment: Alignment.centerLeft,
                           child: TextFormField(
                             enabled: false,
-                            initialValue: 'Experience Type',
+                            initialValue: '',
                             style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Last Name"),
+                            decoration: x("Experience Type"),
                           ),
                         ),
                         Align(
@@ -137,16 +170,16 @@ class _NewExperienceState extends State<NewExperience> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: Container(
-                              padding: EdgeInsets.fromLTRB(0 * scale, 0, 0 * scale, 0),
+                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
                               child: DropdownButton<String>(
                                 hint: Text("Experience Type"),
-                                value: experiences[index]['Type'] == null ? 'Male' : (experiences[index]['Type'].substring(0, 1)).toUpperCase() + experiences[index]['Type'].substring(1),
+                                value: (type.substring(0, 1)).toUpperCase() + type.substring(1),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 14),
                                 icon: Padding(
-                                  padding: EdgeInsets.only(left: 0.0 * scale),
+                                  padding: EdgeInsets.only(left: 10.0 * scale),
                                   child: Icon(Icons.keyboard_arrow_down),
                                 ),
                                 underline: SizedBox(),
@@ -160,7 +193,7 @@ class _NewExperienceState extends State<NewExperience> {
                                     }).toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    experiences[index]['Type'] = value;
+                                    type = value;
                                   });
                                 },
                               ),
@@ -171,14 +204,20 @@ class _NewExperienceState extends State<NewExperience> {
                     ),
                     SizedBox(height: 15.0),
                     TextFormField(
-                      initialValue: experiences[index]['company'] ?? '',
+                      initialValue: company,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       decoration: x("Company"),
                       onChanged: (text) {
-                        setState(() => experiences[index]['company'] = text);
+                        setState(() => company = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'companycannot be empty';
+                        }
+                        return null;
                       },
                     ),
                     SizedBox(height: 15.0),
@@ -189,21 +228,21 @@ class _NewExperienceState extends State<NewExperience> {
                           width: width * 0.35 * scale,
                           child: DateTimeField(
                               format: format,
-                              initialValue: experiences[index]['from'] == null
+                              initialValue: from == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  experiences[index]['from'].microsecondsSinceEpoch),
+                                  from.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = experiences[index]['from'] != null
+                                var temp = from != null
                                     ? format
                                     .format(
                                     DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['from'].microsecondsSinceEpoch))
+                                        from.microsecondsSinceEpoch))
                                     .toString() ??
                                     "DOB"
                                     : "DOB";
@@ -211,7 +250,7 @@ class _NewExperienceState extends State<NewExperience> {
                               },
                               onChanged: (date) {
                                 setState(() {
-                                  experiences[index]['from'] = date == null
+                                  from = (date == null)
                                       ? null
                                       : Timestamp.fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
@@ -226,21 +265,21 @@ class _NewExperienceState extends State<NewExperience> {
                           width: width * 0.35 * scale,
                           child: DateTimeField(
                               format: format,
-                              initialValue: experiences[index]['to'] == null
+                              initialValue: to == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  experiences[index]['to'].microsecondsSinceEpoch),
+                                  to.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = experiences[index]['to'] != null
+                                var temp = to != null
                                     ? format
                                     .format(
                                     DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['to'].microsecondsSinceEpoch))
+                                        to.microsecondsSinceEpoch))
                                     .toString() ??
                                     "DOB"
                                     : "DOB";
@@ -248,7 +287,7 @@ class _NewExperienceState extends State<NewExperience> {
                               },
                               onChanged: (date) {
                                 setState(() {
-                                  experiences[index]['to'] = date == null
+                                  to = (date == null)
                                       ? null
                                       : Timestamp.fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
@@ -263,14 +302,20 @@ class _NewExperienceState extends State<NewExperience> {
                     ),
                     SizedBox(height: 15.0),
                     TextFormField(
-                      initialValue: experiences[index]['designation'] ?? '',
+                      initialValue: designation,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       decoration: x("Designation"),
                       onChanged: (text) {
-                        setState(() => experiences[index]['designation'] = text);
+                        setState(() => designation = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'designation name cannot be empty';
+                        }
+                        return null;
                       },
                     ),
                     SizedBox(height: 15),
@@ -280,9 +325,9 @@ class _NewExperienceState extends State<NewExperience> {
                           alignment: Alignment.centerLeft,
                           child: TextFormField(
                             enabled: false,
-                            initialValue: 'Industry Type',
+                            initialValue: '',
                             style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Last Name"),
+                            decoration: x("Industry Type"),
                           ),
                         ),
                         Align(
@@ -293,7 +338,7 @@ class _NewExperienceState extends State<NewExperience> {
                               padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
                               child: DropdownButton<String>(
                                 hint: Text("Industry Type"),
-                                value: experiences[index]['industry'] == null ? 'Male' : experiences[index]['industry'].substring(0, 1).toUpperCase() + experiences[index]['industry'].substring(1),
+                                value: industry.substring(0, 1).toUpperCase() + industry.substring(1),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
@@ -303,7 +348,7 @@ class _NewExperienceState extends State<NewExperience> {
                                   child: Icon(Icons.keyboard_arrow_down),
                                 ),
                                 underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Employment']
+                                items: <String>['Male', 'Female', 'Other', 'Financial']
                                     .map<DropdownMenuItem<String>>(
                                         (String value) {
                                       return DropdownMenuItem<String>(
@@ -313,7 +358,7 @@ class _NewExperienceState extends State<NewExperience> {
                                     }).toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    experiences[index]['industry'] = value;
+                                    industry = value;
                                   });
                                 },
                               ),
@@ -329,9 +374,9 @@ class _NewExperienceState extends State<NewExperience> {
                           alignment: Alignment.centerLeft,
                           child: TextFormField(
                             enabled: false,
-                            initialValue: 'Domain',
+                            initialValue: '',
                             style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Last Name"),
+                            decoration: x("Domain"),
                           ),
                         ),
                         Align(
@@ -342,7 +387,7 @@ class _NewExperienceState extends State<NewExperience> {
                               padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
                               child: DropdownButton<String>(
                                 hint: Text("Domain"),
-                                value: experiences[index]['domain'] == null ? 'Male' : experiences[index]['domain'].substring(0, 1).toUpperCase() + experiences[index]['domain'].substring(1),
+                                value: domain.substring(0, 1).toUpperCase() + domain.substring(1),
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w400,
@@ -352,7 +397,7 @@ class _NewExperienceState extends State<NewExperience> {
                                   child: Icon(Icons.keyboard_arrow_down),
                                 ),
                                 underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Software Development']
+                                items: <String>['Male', 'Female', 'Other', 'Software']
                                     .map<DropdownMenuItem<String>>(
                                         (String value) {
                                       return DropdownMenuItem<String>(
@@ -362,7 +407,7 @@ class _NewExperienceState extends State<NewExperience> {
                                     }).toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    experiences[index]['domain'] = value;
+                                    domain = value;
                                   });
                                 },
                               ),
@@ -372,46 +417,61 @@ class _NewExperienceState extends State<NewExperience> {
                       ],
                     ),
                     SizedBox(height: 15.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          "Certificate",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 20),
-                        ),
-                        SizedBox(
-                          width: width * 0.2 * scale,
-                          child: Stack(
-                            children: <Widget>[
-                              Align(alignment: Alignment.bottomLeft,child: AutoSizeText(file == null ? '' : file.path.split('/').last, overflow: TextOverflow.clip,
-                                maxLines: 1,)),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Visibility(
-                                  visible: file != null || experiences[index]['certificate'] != null,
-                                  child: IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        file = null;
-                                        experiences[index]['certificate'] = null;
-                                      });
-                                    },
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Color(0xff4285f4)
+                        )
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(left: 5.0),
+                            child: Text(
+                              "Certificate : ",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 14),
+                            ),
+                          ),
+                          SizedBox(
+                            width: width * 0.2 * scale,
+                            child: Stack(
+                              children: <Widget>[
+                                Align(alignment: Alignment.bottomLeft,child: AutoSizeText(fileName ?? '', overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,)),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Visibility(
+                                    visible: file != null,
+                                    child: IconButton(
+                                      icon: Icon(Icons.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          file = null;
+                                          fileName = null;
+                                          certificate = null;
+                                        });
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        MaterialButton(
-                          onPressed: () {
-                            filePicker(context);
-                          },
-                          child: Text("Browse"),
-                          color: Colors.grey,
-                        ),
-                      ],
+                          Padding(
+                            padding: EdgeInsets.only(right: 5),
+                            child: MaterialButton(
+                              onPressed: () {
+                                filePicker(context);
+                              },
+                              child: Text("Browse"),
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 15),
                     Text(
@@ -428,11 +488,10 @@ class _NewExperienceState extends State<NewExperience> {
                     Text(
                       "Bullet Point 1",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18),
+                          fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     SizedBox(height: 15),
                     TextFormField(
-                      maxLength: 110,
                       maxLines: 3,
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -446,20 +505,20 @@ class _NewExperienceState extends State<NewExperience> {
                               borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                      initialValue: experiences[index]['information'] == null ? '' :  (experiences[index]['information'][0] ?? ''),
+                      initialValue: information[0],
                       onChanged: (text) {
                         setState(() => experiences[index]['information'][0] = text);
                       },
                     ),
+                    Text('Character count: ${information[0].length}', style: TextStyle(fontSize: 11,color: (information[0].length < 80 || information[0].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 15),
                     Text(
                       "Bullet Point 2",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18),
+                          fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     SizedBox(height: 15),
                     TextFormField(
-                      maxLength: 110,
                       maxLines: 3,
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -473,20 +532,20 @@ class _NewExperienceState extends State<NewExperience> {
                               borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                      initialValue: experiences[index]['information'] == null ? '' :  (experiences[index]['information'][1] ?? ''),
+                      initialValue: information[1],
                       onChanged: (text) {
-                        setState(() => experiences[index]['information'][1] = text);
+                        setState(() => information[1] = text);
                       },
                     ),
+                    Text('Character count: ${information[1].length}', style: TextStyle(fontSize: 11,color: (information[1].length < 80 || information[1].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 15),
                     Text(
                       "Bullet Point 3",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 18),
+                          fontWeight: FontWeight.w500, fontSize: 18),
                     ),
                     SizedBox(height: 15),
                     TextFormField(
-                      maxLength: 110,
                       maxLines: 3,
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
@@ -500,12 +559,13 @@ class _NewExperienceState extends State<NewExperience> {
                               borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                      initialValue: experiences[index]['information'] == null ? '' :  (experiences[index]['information'][2] ?? ''),
+                      initialValue: information[2],
                       obscureText: false,
                       onChanged: (text) {
-                        setState(() => experiences[index]['information'][2] = text);
+                        setState(() => information[2] = text);
                       },
                     ),
+                    Text('Character count: ${information[2].length}', style: TextStyle(fontSize: 11,color: (information[2].length < 80 || information[2].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 30.0),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
@@ -529,22 +589,20 @@ class _NewExperienceState extends State<NewExperience> {
                                 setState(() {
                                   loading = true;
                                 });
-                                experiences.removeAt(index);
-                                await SharedPreferences.getInstance()
-                                    .then((prefs) async {
-                                  await Firestore.instance
-                                      .collection('candidates')
-                                      .document(
-                                      prefs.getString('email'))
-                                      .setData({
-                                    'experience': experiences
-                                  }).then((f) {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      loading = false;
-                                    });
-                                  });
-                                });
+                                Navigator.pop(context);
+//                                experiences.removeAt(index);
+//                                await SharedPreferences.getInstance()
+//                                    .then((prefs) async {
+//                                  await Firestore.instance
+//                                      .collection('candidates')
+//                                      .document(
+//                                      prefs.getString('email'))
+//                                      .setData({
+//                                    'experience': experiences
+//                                  }, merge: true).then((f) {
+//                                    Navigator.pop(context);
+//                                  });
+//                                });
                               }),
                           RaisedButton(
                               color: Colors.transparent,
@@ -560,21 +618,32 @@ class _NewExperienceState extends State<NewExperience> {
                                 style: TextStyle(color: basicColor),
                               ),
                               onPressed: () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                await SharedPreferences.getInstance()
-                                    .then((prefs) async {
-                                  await Firestore.instance
-                                      .collection('candidates')
-                                      .document(
-                                      prefs.getString('email'))
-                                      .setData({
-                                    'experience': experiences
-                                  }).then((f) {
-                                    Navigator.pop(context);
-                                  });
-                                });
+                                if(_formKey.currentState.validate())
+                                  if(validateBulletPoint(information[0]))
+                                    if(validateBulletPoint(information[1]))
+                                      if(validateBulletPoint(information[2]))
+                                        Navigator.pop(context);
+//                                  setState(() {
+//                                    loading = true;
+//                                  });
+//                                  experiences[index]['Type'] = type;
+//                                  experiences[index]['company'] = company;
+//                                  experiences[index]['designation'] = designation;
+//                                  experiences[index]['domain'] = domain;
+//                                  experiences[index]['from'] = from;
+//                                  experiences[index]['industry'] = industry;
+//                                  experiences[index]['information'] = information;
+//                                  experiences[index]['to'] = to;
+//                                  if(file == null) {
+//                                    // TODO call API
+//                                    Navigator.pop(context);
+//                                  } else {
+//                                    _uploadFile(file, fileName).then((t) {
+//                                      experiences[index]['certificate'] = certificate;
+//                                      // TODO call API
+//                                      Navigator.pop(context);
+//                                    });
+//                                  }
                               }),
                         ],
                       ),

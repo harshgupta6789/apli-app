@@ -102,6 +102,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
                     child: Align(
                         child: Text(psychometryTestSlogan,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -112,6 +113,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                     child: Align(
                         child: Text("Instructions to follow",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
@@ -122,6 +124,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                         child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -132,6 +135,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                         child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -142,6 +146,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                         child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -152,6 +157,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                         child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -162,6 +168,7 @@ class _PsychometryState extends State<Psychometry> {
                     padding: const EdgeInsets.all(8.0),
                     child: Align(
                         child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -215,6 +222,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
                   child: Align(
                       child: Text("Finish your psychometic test!",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -255,6 +263,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                   child: Align(
                       child: Text("Instructions to follow",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w600,
@@ -265,6 +274,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                       child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -275,6 +285,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                       child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -285,6 +296,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                       child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -295,6 +307,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                       child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -305,6 +318,7 @@ class _PsychometryState extends State<Psychometry> {
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
                       child: Text("1. Lorem ipsum dolor sit amet, consectetur",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -328,6 +342,7 @@ class _PsychometryState extends State<Psychometry> {
                   child: Align(
                       child: Text(
                           'You have attempted the psychometric\n test! Your answers have been recorded.',
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

@@ -67,6 +67,7 @@ class _BasicIntroState extends State<BasicIntro> {
             });
           });
         } catch (e) {
+          print(e.toString());
           setState(() {
             error = true;
           });
@@ -135,7 +136,7 @@ class _BasicIntroState extends State<BasicIntro> {
               ),
               preferredSize: Size.fromHeight(55),
             ),
-            body: ScrollConfiguration(
+            body: error ? Center(child: Text('Error occured, try again later'),) : ScrollConfiguration(
               behavior: MyBehavior(),
               child: SingleChildScrollView(
                   child: Form(
