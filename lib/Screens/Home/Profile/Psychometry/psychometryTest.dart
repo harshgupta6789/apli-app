@@ -125,7 +125,6 @@ class _PsychometryTestState extends State<PsychometryTest> {
                       setState(() {
                         loading = false;
                       });
-                      print(answeredQuestions);
                       Navigator.pop(context);
                     });
                   },

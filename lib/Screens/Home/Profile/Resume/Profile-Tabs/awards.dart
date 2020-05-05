@@ -4,10 +4,8 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
@@ -98,19 +96,6 @@ class _AwardsFormState extends State<AwardsForm> {
   bool loading = false;
   Timestamp newAwardDate;
   Map<String, TextEditingController> temp = {}, temp2 = {};
-
-  Future filePicker(BuildContext context) async {
-    try {
-      file = await FilePicker.getFile(type: FileType.custom);
-    } catch (e) {
-      AwesomeDialog(
-          context: context,
-          dialogType: DialogType.WARNING,
-          tittle: e,
-          body: Text("Error Has Occured"))
-          .show();
-    }
-  }
 
   @override
   void initState() {

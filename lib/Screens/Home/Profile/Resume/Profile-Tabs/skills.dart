@@ -12,7 +12,7 @@ class Skills extends StatefulWidget {
 }
 
 class _SkillsState extends State<Skills> {
-  double width, height;
+  double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
 
@@ -66,6 +66,9 @@ class _SkillsState extends State<Skills> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if(width < 360)
+      scale = 0.7;
+    else scale = 1;
     return loading
         ? Loading()
         : Scaffold(
@@ -90,12 +93,12 @@ class _SkillsState extends State<Skills> {
                         behavior: MyBehavior(),
                         child: SingleChildScrollView(
                           child: Container(
-                            padding: EdgeInsets.all(width * 0.04),
+                            padding: EdgeInsets.all(width * 0.04 * scale),
                             child: Column(
                               children: <Widget>[
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(25, 5, 25, 5),
+                                  EdgeInsets.fromLTRB(25 * scale, 5, 25 * scale, 5),
                                   child: RaisedButton(
                                     padding: EdgeInsets.all(0),
                                     color: Colors.white,
@@ -118,9 +121,9 @@ class _SkillsState extends State<Skills> {
                                           ),
                                           children: <Widget>[
                                             Container(
-                                              width: width * 0.35,
+                                              width: width * 0.4 * scale,
                                               padding: EdgeInsets.fromLTRB(
-                                                  20, 20, 20, 20),
+                                                  20 * scale, 20, 20 * scale, 20),
                                               child: TextField(
                                                 autofocus: true,
                                                 style: TextStyle(
@@ -130,7 +133,7 @@ class _SkillsState extends State<Skills> {
                                                     hintText:
                                                         'eg: Management, Programming',
                                                     contentPadding:
-                                                        EdgeInsets.all(10),
+                                                        EdgeInsets.all(10 * scale),
                                                     border: OutlineInputBorder(
                                                         borderRadius:
                                                             BorderRadius
@@ -273,7 +276,7 @@ class _SkillsState extends State<Skills> {
                                                                 .spaceBetween,
                                                         children: <Widget>[
                                                           SizedBox(
-                                                            width: width * 0.4,
+                                                            width: width * 0.4 * scale,
                                                             child:
                                                                 TextFormField(
                                                               controller: temp[
@@ -289,7 +292,7 @@ class _SkillsState extends State<Skills> {
                                                                   InputDecoration(
                                                                       contentPadding:
                                                                           EdgeInsets.all(
-                                                                              10),
+                                                                              10 * scale),
                                                                       border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius.circular(5),
                                                                           borderSide: BorderSide(
@@ -327,16 +330,15 @@ class _SkillsState extends State<Skills> {
                                                               padding:
                                                                   EdgeInsets
                                                                       .fromLTRB(
-                                                                          10,
+                                                                          10 * scale,
                                                                           0,
-                                                                          5,
+                                                                          5 * scale,
                                                                           0),
                                                               child:
                                                                   DropdownButton<
                                                                       String>(
                                                                 value:
-                                                                    proficiency ??
-                                                                        'Basic',
+                                                                    proficiency == null ? 'Basic' : proficiency.substring(0, 1).toUpperCase() + proficiency.substring(1),
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .black,
@@ -346,10 +348,10 @@ class _SkillsState extends State<Skills> {
                                                                     fontSize:
                                                                         12),
                                                                 icon: Padding(
-                                                                  padding: const EdgeInsets
+                                                                  padding: EdgeInsets
                                                                           .only(
                                                                       left:
-                                                                          10.0),
+                                                                          10.0 * scale),
                                                                   child: Icon(Icons
                                                                       .keyboard_arrow_down),
                                                                 ),
@@ -387,7 +389,7 @@ class _SkillsState extends State<Skills> {
                                                           Container(
                                                             padding:
                                                                 EdgeInsets.only(
-                                                                    right: 15),
+                                                                    right: 15 * scale),
                                                             child: IconButton(
                                                               icon: Icon(Icons
                                                                   .delete_outline),
@@ -433,7 +435,7 @@ class _SkillsState extends State<Skills> {
                                                       .spaceBetween,
                                               children: <Widget>[
                                                 SizedBox(
-                                                  width: width * 0.4,
+                                                  width: width * 0.4 * scale,
                                                   child: InkWell(
                                                     onTap: () {
                                                       showDialog(
@@ -451,13 +453,13 @@ class _SkillsState extends State<Skills> {
                                                           children: <Widget>[
                                                             Container(
                                                               width:
-                                                                  width * 0.35,
+                                                                  width * 0.35 * scale,
                                                               padding:
                                                                   EdgeInsets
                                                                       .fromLTRB(
+                                                                          20 * scale,
                                                                           20,
-                                                                          20,
-                                                                          20,
+                                                                          20 * scale,
                                                                           20),
                                                               child: TextField(
                                                                 autofocus: true,
@@ -469,7 +471,7 @@ class _SkillsState extends State<Skills> {
                                                                         12),
                                                                 decoration: InputDecoration(
                                                                     hintText: 'eg: Javascript, Python3',
-                                                                    contentPadding: EdgeInsets.all(10),
+                                                                    contentPadding: EdgeInsets.all(10 * scale),
                                                                     border: OutlineInputBorder(
                                                                         borderRadius: BorderRadius.circular(5),
                                                                         borderSide: BorderSide(
@@ -558,7 +560,7 @@ class _SkillsState extends State<Skills> {
                                                                 contentPadding:
                                                                     EdgeInsets
                                                                         .all(
-                                                                            10),
+                                                                            10 * scale),
                                                                 border:
                                                                     OutlineInputBorder(
                                                                         borderRadius:
@@ -580,7 +582,7 @@ class _SkillsState extends State<Skills> {
                                                     color: Colors.grey[300],
                                                     padding:
                                                         EdgeInsets.fromLTRB(
-                                                            10, 0, 5, 0),
+                                                            10 * scale, 0, 5 * scale, 0),
                                                     child: IgnorePointer(
                                                       ignoring: true,
                                                       child: DropdownButton<
@@ -593,9 +595,9 @@ class _SkillsState extends State<Skills> {
                                                             fontSize: 13),
                                                         icon: Padding(
                                                           padding:
-                                                              const EdgeInsets
+                                                          EdgeInsets
                                                                       .only(
-                                                                  left: 10.0),
+                                                                  left: 10.0 * scale),
                                                           child: Icon(Icons
                                                               .keyboard_arrow_down),
                                                         ),
@@ -619,7 +621,7 @@ class _SkillsState extends State<Skills> {
                                                 ),
                                                 Container(
                                                   padding: EdgeInsets.only(
-                                                      right: 15),
+                                                      right: 15 * scale),
                                                   child: IconButton(
                                                     icon: Icon(
                                                         Icons.delete_outline),
