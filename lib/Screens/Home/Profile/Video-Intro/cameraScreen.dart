@@ -79,30 +79,30 @@ class _CameraState extends State<Camera> {
         width: width,
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <
             Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: MaterialButton(
-                color: Colors.white,
-                child: Text(
-                  "Play Video",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-                ),
-                onPressed: () {
-                  if (path != null) {
-                    File temp = File(path);
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: MaterialButton(
+          //       color: Colors.white,
+          //       child: Text(
+          //         "Play Video",
+          //         style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
+          //       ),
+          //       onPressed: () {
+          //         if (path != null) {
+          //           File temp = File(path);
 
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => VideoApp(
-                              videoUrl: null,
-                              title: "My Resume",
-                              isCourse: false,
-                              file: temp,
-                            )));
-                  } else {
-                    Navigator.pop(context);
-                  }
-                }),
-          ),
+          //           Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //               builder: (BuildContext context) => VideoApp(
+          //                     videoUrl: null,
+          //                     title: "My Resume",
+          //                     isCourse: false,
+          //                     file: temp,
+          //                   )));
+          //         } else {
+          //           Navigator.pop(context);
+          //         }
+          //       }),
+          // ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -116,7 +116,7 @@ class _CameraState extends State<Camera> {
                   onPressed: () {
                     if (path != null) {
                       print(path);
-                      Navigator.pop(context, path);
+                      Navigator.pop(context , path);
                     } else {
                       Navigator.pop(context);
                     }

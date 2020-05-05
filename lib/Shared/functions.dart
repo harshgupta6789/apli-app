@@ -31,13 +31,24 @@ showToast(String msg, BuildContext context) {
 
 InputDecoration x(String t) {
   return InputDecoration(
-      hintText: t,
-      border: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xff4285f4))),
-      disabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xff4285f4))),
-      contentPadding:
-      new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
+      prefixIcon: Padding(
+        padding: EdgeInsets.only(left: 10),
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 13,
+            ),
+            Text(t + " : "),
+          ],
+        ),
+      ),
+      //hintText: t,
+
+      border:
+          OutlineInputBorder(borderSide: BorderSide(color: Color(0xff4285f4))),
+      disabledBorder:
+          OutlineInputBorder(borderSide: BorderSide(color: Color(0xff4285f4))),
+      contentPadding: new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
       hintStyle: TextStyle(fontWeight: FontWeight.w400),
       labelStyle: TextStyle(color: Colors.black));
 }

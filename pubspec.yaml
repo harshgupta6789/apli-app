@@ -59,6 +59,7 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   dropdownfield: ^1.0.3
   awsome_video_player: ^1.0.8+1
+  youtube_player_flutter: ^6.1.1
 
 
 dev_dependencies:

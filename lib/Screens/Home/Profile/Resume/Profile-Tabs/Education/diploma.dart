@@ -18,20 +18,42 @@ class Diploma extends StatefulWidget {
 class _DiplomaState extends State<Diploma> {
   double height, width;
   File file;
+  bool error = false;
   final format = DateFormat("yyyy-MM-dd");
   final _formKey = GlobalKey<FormState>();
   String userEmail;
   String unit = '/100';
-  String institute, stream, board, cgpa, i10, b10, cg10, u10;
+  String institute, stream, board, cgpa;
+  DateTime from, to;
+  TextEditingController txt;
 
-  void fetchInfo() async {
-    await SharedPreferences.getInstance().then((prefs) async {
-      if (prefs.getString('email') != null) {
-        setState(() {
-          userEmail = prefs.getString('email');
+  void getInfo() async {
+    try {
+      await SharedPreferences.getInstance().then((prefs) async {
+        await Firestore.instance
+            .collection('candidates')
+            .document(prefs.getString('email'))
+            .get()
+            .then((s) {
+          print(s.data['education']['XII']);
+          if (s.data['education']['XII'] != null) {
+            setState(() {
+              institute = s.data['education']['XII']['institute'];
+              board = s.data['education']['XII']['board'];
+              stream = s.data['education']['XII']['stream'];
+              cgpa = s.data['education']['XII']['cgpa'];
+              unit = s.data['education']['XII']['unit'];
+               txt = new TextEditingController(text: institute);
+              print(institute);
+            });
+          }
         });
-      }
-    });
+      });
+    } catch (e) {
+      setState(() {
+        error = true;
+      });
+    }
   }
 
   Future filePicker(BuildContext context) async {
@@ -49,7 +71,7 @@ class _DiplomaState extends State<Diploma> {
 
   @override
   void initState() {
-    fetchInfo();
+    getInfo();
     super.initState();
   }
 
@@ -81,245 +103,238 @@ class _DiplomaState extends State<Diploma> {
           ),
           preferredSize: Size.fromHeight(55),
         ),
-        body: FutureBuilder(
-          future: Firestore.instance
-              .collection('candidates')
-              .document(userEmail)
-              .get(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            return SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      left: width * 0.1, top: 20, right: width * 0.1),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: width * 0.1, top: 20, right: width * 0.1),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 30),
+                  TextFormField(
+                  controller: txt,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Institute Name"),
+                    onChanged: (text) {
+                      setState(() => institute = text);
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    initialValue: stream ?? null,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Stream"),
+                    onChanged: (text) {
+                      setState(() => stream = text);
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    initialValue: board ?? null,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Board"),
+                    onChanged: (text) {
+                      setState(() => board = text);
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      SizedBox(height: 30),
-                      TextFormField(
-                        initialValue: institute ?? null,
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (_) =>
-                            FocusScope.of(context).nextFocus(),
-                        obscureText: false,
-                        decoration: x("Institute Name"),
-                        onChanged: (text) {
-                          setState(() => institute = text);
-                        },
+                      Container(
+                        width: width * 0.35,
+                        child: TextFormField(
+                          initialValue: cgpa ?? null,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          obscureText: false,
+                          decoration: x("CGPA"),
+                          onChanged: (text) {
+                            setState(() => institute = text);
+                          },
+                        ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        initialValue: stream ?? null,
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (_) =>
-                            FocusScope.of(context).nextFocus(),
-                        obscureText: false,
-                        decoration: x("Stream"),
-                        onChanged: (text) {
-                          setState(() => stream = text);
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        initialValue: board ?? null,
-                        textInputAction: TextInputAction.next,
-                        onFieldSubmitted: (_) =>
-                            FocusScope.of(context).nextFocus(),
-                        obscureText: false,
-                        decoration: x("Board"),
-                        onChanged: (text) {
-                          setState(() => board = text);
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: width * 0.35,
-                            child: TextFormField(
-                              initialValue: institute ?? null,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).nextFocus(),
-                              obscureText: false,
-                              decoration: x("CGPA"),
-                              onChanged: (text) {
-                                setState(() => institute = text);
-                              },
+                      Container(
+                        width: width * 0.35,
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                            //color: Colors.white,
+                            border: Border.all(color: Colors.grey)),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
+                          child: DropdownButton<String>(
+                            hint: Text(
+                              "Unit",
+                              style: TextStyle(fontSize: 13),
                             ),
-                          ),
-                          Container(
-                            width: width * 0.35,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5.0)),
-                                //color: Colors.white,
-                                border: Border.all(color: Colors.grey)),
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.fromLTRB(width * 0.05, 0, 0, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Unit", style: TextStyle(fontSize: 13),),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13),
-                                icon: Expanded(
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>[
-                                  '/10',
-                                  '/100',
-                                  '/4'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    unit = value;
-                                  });
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13),
+                            icon: Expanded(
+                              child: Icon(Icons.keyboard_arrow_down),
+                            ),
+                            underline: SizedBox(),
+                            items: <String>['/10', '/100', '/4']
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                unit = value;
+                              });
 //                                      setState(() {
 //                                        skills[index1][
 //                                        skillName]
 //                                        [index2][
 //                                        miniSkill] = value;
 //                                      });
-                                },
-                              ),
-                            ),
+                            },
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 15.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                format: format,
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-
-                                  return date;
-                                },
-                                decoration: x("From")),
-                          ),
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                format: format,
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-
-                                  return date;
-                                },
-                                decoration: x("To")),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 15.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  hintText: 'Certificate',
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), bottomLeft: Radius.circular(5)),
-                                      borderSide: BorderSide(color: Color(0xff4285f4))),
-                                  contentPadding:
-                                  new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                  hintStyle: TextStyle(fontWeight: FontWeight.w400),
-                                  labelStyle: TextStyle(color: Colors.black))
-                            ),
-                          ),
-                          Container(
-                            color: Colors.grey,
-                            width: width * 0.25,
-                            child: TextField(
-                              enabled: false,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                  hintText: 'Browse',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5)),
-                                      borderSide: BorderSide(color: Color(0xff4285f4))),
-                                  contentPadding:
-                                  new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-                                  hintStyle: TextStyle(fontSize: 13),
-                                  labelStyle: TextStyle(color: Colors.black))
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: height * 0.2),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            RaisedButton(
-                                color: Colors.transparent,
-                                elevation: 0,
-                                padding: EdgeInsets.only(left: 22, right: 22),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  side:
-                                      BorderSide(color: basicColor, width: 1.2),
-                                ),
-                                child: Text(
-                                  'Delete',
-                                  style: TextStyle(color: basicColor),
-                                ),
-                                onPressed: () {print(Theme.of(context).scaffoldBackgroundColor);}),
-                            RaisedButton(
-                                color: Colors.transparent,
-                                elevation: 0,
-                                padding: EdgeInsets.only(left: 22, right: 22),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  side:
-                                  BorderSide(color: basicColor, width: 1.2),
-                                ),
-                                child: Text(
-                                  'Save',
-                                  style: TextStyle(color: basicColor),
-                                ),
-                                onPressed: () {}),
-                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
+                  SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                        width: width * 0.35,
+                        child: DateTimeField(
+                            initialValue: from ?? null,
+                            format: format,
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+
+                              return date;
+                            },
+                            decoration: x("From")),
+                      ),
+                      Container(
+                        width: width * 0.35,
+                        child: DateTimeField(
+                            initialValue: to ?? null,
+                            format: format,
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+
+                              return date;
+                            },
+                            decoration: x("To")),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                            decoration: InputDecoration(
+                                hintText: 'Certificate',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(5),
+                                        bottomLeft: Radius.circular(5)),
+                                    borderSide:
+                                        BorderSide(color: Color(0xff4285f4))),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 2.0, horizontal: 10.0),
+                                hintStyle:
+                                    TextStyle(fontWeight: FontWeight.w400),
+                                labelStyle: TextStyle(color: Colors.black))),
+                      ),
+                      Container(
+                        color: Colors.grey,
+                        width: width * 0.25,
+                        child: TextField(
+                            enabled: false,
+                            textAlign: TextAlign.center,
+                            decoration: InputDecoration(
+                                hintText: 'Browse',
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(5),
+                                        bottomRight: Radius.circular(5)),
+                                    borderSide:
+                                        BorderSide(color: Color(0xff4285f4))),
+                                contentPadding: new EdgeInsets.symmetric(
+                                    vertical: 2.0, horizontal: 10.0),
+                                hintStyle: TextStyle(fontSize: 13),
+                                labelStyle: TextStyle(color: Colors.black))),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: height * 0.2),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              'Delete',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () {
+                              print(Theme.of(context).scaffoldBackgroundColor);
+                            }),
+                        RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () {}),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            );
-          },
+            ),
+          ),
         ));
   }
 }
