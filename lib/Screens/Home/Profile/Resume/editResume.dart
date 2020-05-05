@@ -72,6 +72,7 @@ class _EditResumeState extends State<EditResume> {
           ),)
         ),
         preferredSize: Size.fromHeight(50),
+
       ),
       body: ScrollConfiguration(
         behavior: MyBehavior(),
