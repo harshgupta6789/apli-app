@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -15,15 +16,18 @@ class CurrentEducation extends StatefulWidget {
 }
 
 class _CurrentEducationState extends State<CurrentEducation> {
-  double height, width;
+  double height, width, scale;
   File file;
   bool loading = false, error = false;
-  String institute = '';
-  final format = DateFormat("yyyy-MM-dd");
+  String institute = '', email;
+  final format = DateFormat("yyyy-MM");
   final _formKey = GlobalKey<FormState>();
   String userEmail;
   String batchId;
-  int semToBuild;
+  double heightOfContainer = 90;
+  String course, branch, duration;
+  int semToBuild = 1;
+  Map<int, dynamic> sems = {};
 
   void getInfo() async {
     try {
@@ -33,27 +37,59 @@ class _CurrentEducationState extends State<CurrentEducation> {
             .document(prefs.getString('email'))
             .get()
             .then((s) {
-          if (s.data['batch_id'] == null) {
-            var bId = Firestore.instance
-                .collection('rel_batch_candidates')
-                .where('candidate_id', isEqualTo: prefs.getString('email'))
-                .limit(1);
-            bId.getDocuments().then((data) {
-              print(data.documents[0].data['batch_id']);
-              batchId = data.documents[0].data['batch_id'];
+          var bId = Firestore.instance
+              .collection('rel_batch_candidates')
+              .where('candidate_id', isEqualTo: prefs.getString('email'))
+              .limit(1);
+          bId.getDocuments().then((data) {
+            print(data.documents[0].data['batch_id']);
+            batchId = data.documents[0].data['batch_id'];
 
-              var details = Firestore.instance
-                  .collection('batches')
-                  .where('batch_id', isEqualTo: batchId)
-                  .limit(1);
-              details.getDocuments().then((data) {
-                print(data.documents[0].data);
-                setState(() {
-                  semToBuild = data.documents[0].data['total_semester'];
-                });
+            var details = Firestore.instance
+                .collection('batches')
+                .where('batch_id', isEqualTo: batchId)
+                .limit(1);
+            details.getDocuments().then((data) {
+              print(data.documents[0].data);
+              setState(() {
+                email = s.data['email'];
+                semToBuild = data.documents[0].data['total_semester'];
+                course = data.documents[0].data['course'];
+                branch = data.documents[0].data['branch'];
+                duration = data.documents[0].data['batch_year'];
+                if (s.data['education'] != null) {
+                  if (s.data['education'][course] != null) {
+                    if (s.data['education'][course]['sem_records'] != null) {
+                      for (int i = 0; i < semToBuild; i++) {
+                        sems[i] = {
+                          'certificate': s.data['education'][course]
+                                  ['sem_records'][i]['certificate']
+                              .toString(),
+                          'closed_backlog': s.data['education'][course]
+                                  ['sem_records'][i]['closed_backlog']
+                              .toString(),
+                          'live_backlog': s.data['education'][course]
+                                  ['sem_records'][i]['live_backlog']
+                              .toString(),
+                          'semester_score': s.data['education'][course]
+                                  ['sem_records'][i]['semester_score']
+                              .toString()
+                        };
+                      }
+                      print(sems);
+                      //print(s.data['education'][course]['sem_records'][0]);
+
+                    }
+                  }
+                }
               });
             });
-          }
+          });
+          // if (s.data['sem_records'] != null) {
+          //   setState(() {
+          //     semToBuild = s.data['sem_records'].length;
+          //   });
+          // }
         });
       });
     } catch (e) {
@@ -82,21 +118,14 @@ class _CurrentEducationState extends State<CurrentEducation> {
     super.initState();
   }
 
-  InputDecoration x(String t) {
-    return InputDecoration(
-        hintText: t,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff4285f4))),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        labelStyle: TextStyle(color: Colors.black));
-  }
-
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if (width < 360)
+      scale = semToBuild.toDouble() + 1;
+    else
+      scale = semToBuild.toDouble();
     return email == null
         ? Loading()
         : loading
@@ -145,11 +174,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     "Course",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 20),
+                                        fontSize: 18),
                                   )),
                               Container(
                                 width: width * 0.6,
                                 child: TextFormField(
+                                  initialValue: course,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -179,11 +209,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     "Branch",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 20),
+                                        fontSize: 18),
                                   )),
                               Container(
                                 width: width * 0.6,
                                 child: TextFormField(
+                                  initialValue: branch,
                                   obscureText: false,
                                   decoration: InputDecoration(
                                       border: OutlineInputBorder(
@@ -213,11 +244,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     "Duration",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 20),
+                                        fontSize: 18),
                                   )),
                               Container(
                                   width: width * 0.6,
                                   child: TextFormField(
+                                    initialValue: duration,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -243,81 +275,128 @@ class _CurrentEducationState extends State<CurrentEducation> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w400, fontSize: 18),
                           ),
-                          SizedBox(height: 15.0),
-                          Container(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: semToBuild ?? 1,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          "Sem $index",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20),
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          onFieldSubmitted: (_) =>
-                                              FocusScope.of(context)
-                                                  .nextFocus(),
-                                          obscureText: false,
-                                          decoration: x("Institute "),
-                                          onChanged: (text) {
-                                            setState(() => institute = text);
-                                          },
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          onFieldSubmitted: (_) =>
-                                              FocusScope.of(context)
-                                                  .nextFocus(),
-                                          obscureText: false,
-                                          decoration: x("Closed Backlogs"),
-                                          onChanged: (text) {
-                                            setState(() => institute = text);
-                                          },
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        TextFormField(
-                                          textInputAction: TextInputAction.next,
-                                          onFieldSubmitted: (_) =>
-                                              FocusScope.of(context)
-                                                  .nextFocus(),
-                                          obscureText: false,
-                                          decoration: x("Live Backlogs"),
-                                          onChanged: (text) {
-                                            setState(() => institute = text);
-                                          },
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              "Certificate",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 20),
-                                            ),
-                                            MaterialButton(
-                                              onPressed: () {
-                                                filePicker(context);
-                                              },
-                                              child: Text("Browse"),
-                                              color: Colors.grey,
-                                            ),
-                                          ],
-                                        ),
-                                      ]);
-                                }),
-                          ),
+                          SizedBox(height: 20.0),
+                          ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: semToBuild,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        "Sem ${index + 1}",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20),
+                                      ),
+                                      SizedBox(height: 15.0),
+                                      TextFormField(
+                                        initialValue: sems[index] != null
+                                            ? sems[index]['semester_score']
+                                            : null,
+                                        textInputAction: TextInputAction.next,
+                                        onFieldSubmitted: (_) =>
+                                            FocusScope.of(context).nextFocus(),
+                                        obscureText: false,
+                                        decoration: x("Score"),
+                                        onChanged: (text) {
+                                          setState(() => institute = text);
+                                        },
+                                      ),
+                                      SizedBox(height: 15.0),
+                                      TextFormField(
+                                        initialValue: sems[index] != null
+                                            ? sems[index]['closed_backlog']
+                                            : null,
+                                        textInputAction: TextInputAction.next,
+                                        onFieldSubmitted: (_) =>
+                                            FocusScope.of(context).nextFocus(),
+                                        obscureText: false,
+                                        decoration: x("Closed Backlogs"),
+                                        onChanged: (text) {
+                                          setState(() => institute = text);
+                                        },
+                                      ),
+                                      SizedBox(height: 15.0),
+                                      TextFormField(
+                                        initialValue: sems[index] != null
+                                            ? sems[index]['live_backlog']
+                                            : null,
+                                        textInputAction: TextInputAction.next,
+                                        onFieldSubmitted: (_) =>
+                                            FocusScope.of(context).nextFocus(),
+                                        obscureText: false,
+                                        decoration: x("Live Backlogs"),
+                                        onChanged: (text) {
+                                          setState(() => institute = text);
+                                        },
+                                      ),
+                                      SizedBox(height: 15.0),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: TextField(
+                                                decoration: InputDecoration(
+                                                    hintText: 'Certificate',
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    5),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    5)),
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff4285f4))),
+                                                    contentPadding:
+                                                        new EdgeInsets.symmetric(
+                                                            vertical: 2.0,
+                                                            horizontal: 10.0),
+                                                    hintStyle: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                    labelStyle: TextStyle(color: Colors.black))),
+                                          ),
+                                          Container(
+                                            color: Colors.grey,
+                                            width: width * 0.25,
+                                            child: TextField(
+                                                enabled: false,
+                                                textAlign: TextAlign.center,
+                                                decoration: InputDecoration(
+                                                    hintText: 'Browse',
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    5),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    5)),
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff4285f4))),
+                                                    contentPadding:
+                                                        new EdgeInsets.symmetric(
+                                                            vertical: 2.0,
+                                                            horizontal: 10.0),
+                                                    hintStyle: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.w600),
+                                                    labelStyle: TextStyle(color: Colors.black))),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 30.0)
+                                    ]);
+                              }),
                           SizedBox(height: 30.0),
                           Padding(
                             padding: const EdgeInsets.only(bottom: 20.0),

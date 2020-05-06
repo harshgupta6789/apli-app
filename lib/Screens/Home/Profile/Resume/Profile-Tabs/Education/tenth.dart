@@ -23,12 +23,13 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
   double height, width;
   File file;
   bool error = false, loading = false;
-  final format = DateFormat("yyyy-MM-dd");
+  final format = DateFormat("yyyy-MM");
   final _formKey = GlobalKey<FormState>();
   String email, fileName;
-  String institute = '', board = '', cgpa = '', unit = '';
+  String institute = '', board = '', cgpa = '', unit;
   DateTime from, to;
   StorageUploadTask uploadTask;
+  Map<String, dynamic> education;
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -43,41 +44,40 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
   }
 
   void getInfo() async {
-    try {
-      await SharedPreferences.getInstance().then((prefs) async {
-        await Firestore.instance
-            .collection('candidates')
-            .document(prefs.getString('email'))
-            .get()
-            .then((s) {
-          print(s.data['education']['X']);
-          if (s.data['education']['X'] != null) {
+    await SharedPreferences.getInstance().then((prefs) async {
+      if (prefs.getString('email') != null) {
+        try {
+          await Firestore.instance
+              .collection('candidates')
+              .document(prefs.getString('email'))
+              .get()
+              .then((s) {
             setState(() {
-              institute = s.data['education']['X']['institute'];
-              board = s.data['education']['X']['board'];
+              if (s.data['education'] == null) {
+                email = s.data['email'];
+                print(email);
+              } else {
+                education = s.data['education']['X'] ?? {};
+                institute = education['institute'];
+                board = education['board'];
 
-              cgpa = s.data['education']['X']['cgpa'];
-              unit = s.data['education']['X']['unit'];
-              if (s.data['education']['X']['start'] != null) {
+                cgpa = education['cgpa'];
+                unit = education['unit'];
                 from = DateTime.fromMicrosecondsSinceEpoch(
-                    s.data['education']['X']['start'].microsecondsSinceEpoch);
-              }
-              if (s.data['education']['X']['end'] != null) {
+                    education['start'].microsecondsSinceEpoch);
                 to = DateTime.fromMicrosecondsSinceEpoch(
-                    s.data['education']['X']['end'].microsecondsSinceEpoch);
+                    education['end'].microsecondsSinceEpoch);
+                email = s.data['email'];
               }
-
-              email = s.data['email'];
-              print(institute);
             });
-          }
-        });
-      });
-    } catch (e) {
-      setState(() {
-        error = true;
-      });
-    }
+          });
+        } catch (e) {
+          setState(() {
+            error = true;
+          });
+        }
+      }
+    });
   }
 
   Future filePicker(BuildContext context) async {
@@ -207,50 +207,56 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                               ),
                               Container(
                                 width: width * 0.35,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    //color: Colors.white,
-                                    border: Border.all(color: Colors.grey)),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      width * 0.05, 0, 0, 0),
-                                  child: DropdownButton<String>(
-                                    hint: Text(
-                                      "Unit",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: TextFormField(
+                                        enabled: false,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
+                                        decoration: x("Unit"),
+                                      ),
                                     ),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 12),
-                                    icon: Padding(
-                                      padding:
-                                          EdgeInsets.only(left: width * 0.1),
-                                      child: Icon(Icons.keyboard_arrow_down),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                          child: DropdownButton<String>(
+                                            //hint: Text("Unit"),
+                                            value: unit ?? '/4',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14),
+                                            icon: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0),
+                                              child: Icon(
+                                                  Icons.keyboard_arrow_down),
+                                            ),
+                                            underline: SizedBox(),
+                                            items: <String>['/4', '/10', '/100']
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                unit = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    underline: SizedBox(),
-                                    items: <String>['/10', '/100', '/4']
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        unit = value;
-                                      });
-//                                      setState(() {
-//                                        skills[index1][
-//                                        skillName]
-//                                        [index2][
-//                                        miniSkill] = value;
-//                                      });
-                                    },
-                                  ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -317,21 +323,54 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                               ),
                             ],
                           ),
-                          SizedBox(height: 10.0),
+                          SizedBox(height: 15.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                "Certificate",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              Expanded(
+                                child: TextField(
+                                    decoration: InputDecoration(
+                                        hintText: 'Certificate',
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(5),
+                                                bottomLeft: Radius.circular(5)),
+                                            borderSide: BorderSide(
+                                                color: Color(0xff4285f4))),
+                                        contentPadding:
+                                            new EdgeInsets.symmetric(
+                                                vertical: 2.0,
+                                                horizontal: 10.0),
+                                        hintStyle: TextStyle(
+                                            fontWeight: FontWeight.w400),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black))),
                               ),
-                              MaterialButton(
-                                onPressed: () {
-                                  filePicker(context);
-                                },
-                                child: Text("Browse"),
+                              Container(
                                 color: Colors.grey,
+                                width: width * 0.25,
+                                child: TextField(
+                                    enabled: false,
+                                    textAlign: TextAlign.center,
+                                    decoration: InputDecoration(
+                                        hintText: 'Browse',
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(5),
+                                                bottomRight:
+                                                    Radius.circular(5)),
+                                            borderSide: BorderSide(
+                                                color: Color(0xff4285f4))),
+                                        contentPadding:
+                                            new EdgeInsets.symmetric(
+                                                vertical: 2.0,
+                                                horizontal: 10.0),
+                                        hintStyle: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black))),
                               ),
                             ],
                           ),

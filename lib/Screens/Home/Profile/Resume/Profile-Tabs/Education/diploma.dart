@@ -22,13 +22,14 @@ class _DiplomaState extends State<Diploma> {
   double height, width;
   File file;
   bool error = false, loading = false;
-  final format = DateFormat("yyyy-MM-dd");
+  final format = DateFormat("yyyy-MM");
   final _formKey = GlobalKey<FormState>();
   String fileName;
-  String unit = '/100';
+  String unit;
   String institute, stream, board, cgpa, email;
   DateTime from, to;
   StorageUploadTask uploadTask;
+  Map<String, dynamic> education;
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -43,37 +44,40 @@ class _DiplomaState extends State<Diploma> {
   }
 
   void getInfo() async {
-    try {
-      await SharedPreferences.getInstance().then((prefs) async {
-        await Firestore.instance
-            .collection('candidates')
-            .document(prefs.getString('email'))
-            .get()
-            .then((s) {
-          print(s.data['education']['XII']);
-          if (s.data['education']['XII'] != null) {
+    await SharedPreferences.getInstance().then((prefs) async {
+      if (prefs.getString('email') != null) {
+        try {
+          await Firestore.instance
+              .collection('candidates')
+              .document(prefs.getString('email'))
+              .get()
+              .then((s) {
             setState(() {
-              institute = s.data['education']['XII']['institute'];
-              board = s.data['education']['XII']['board'];
-              stream = s.data['education']['XII']['stream'];
-              cgpa = s.data['education']['XII']['cgpa'];
-              unit = s.data['education']['XII']['unit'];
-              from = DateTime.fromMicrosecondsSinceEpoch(
-                  s.data['education']['XII']['start'].microsecondsSinceEpoch);
-              to = DateTime.fromMicrosecondsSinceEpoch(
-                  s.data['education']['XII']['end'].microsecondsSinceEpoch);
-              email = s.data['email'];
-
-              print(institute);
+              if (s.data['education'] == null) {
+                email = s.data['email'];
+                print(email);
+              } else {
+                education = s.data['education']['XII'] ?? {};
+                institute = education['institute'];
+                board = education['board'];
+                stream = education['stream'];
+                cgpa = education['cgpa'];
+                unit = education['unit'];
+                from = DateTime.fromMicrosecondsSinceEpoch(
+                    education['start'].microsecondsSinceEpoch);
+                to = DateTime.fromMicrosecondsSinceEpoch(
+                    education['end'].microsecondsSinceEpoch);
+                email = s.data['email'];
+              }
             });
-          }
-        });
-      });
-    } catch (e) {
-      setState(() {
-        error = true;
-      });
-    }
+          });
+        } catch (e) {
+          setState(() {
+            error = true;
+          });
+        }
+      }
+    });
   }
 
   Future filePicker(BuildContext context) async {
@@ -87,7 +91,7 @@ class _DiplomaState extends State<Diploma> {
         setState(() {
           fileName = p.basename(file.path);
         });
-        _uploadFile(file, fileName);
+        // _uploadFile(file, fileName);
         // setState(() {
         //   x = currentState.uploading;
         // });
@@ -152,7 +156,7 @@ class _DiplomaState extends State<Diploma> {
                         children: <Widget>[
                           SizedBox(height: 30),
                           TextFormField(
-                           initialValue: institute,
+                            initialValue: institute,
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
@@ -212,47 +216,56 @@ class _DiplomaState extends State<Diploma> {
                               ),
                               Container(
                                 width: width * 0.35,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5.0)),
-                                    //color: Colors.white,
-                                    border: Border.all(color: Colors.grey)),
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(
-                                      width * 0.05, 0, 0, 0),
-                                  child: DropdownButton<String>(
-                                    hint: Text(
-                                      "Unit",
-                                      style: TextStyle(fontSize: 13),
+                                child: Stack(
+                                  children: <Widget>[
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: TextFormField(
+                                        enabled: false,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500),
+                                        decoration: x("Unit"),
+                                      ),
                                     ),
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 13),
-                                    icon: Expanded(
-                                      child: Icon(Icons.keyboard_arrow_down),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Container(
+                                          padding:
+                                              EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                          child: DropdownButton<String>(
+                                            //hint: Text("Unit"),
+                                            value: unit ?? '/4',
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 14),
+                                            icon: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 10.0),
+                                              child: Icon(
+                                                  Icons.keyboard_arrow_down),
+                                            ),
+                                            underline: SizedBox(),
+                                            items: <String>['/4', '/10', '/100']
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value,
+                                                child: Text(value),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                unit = value;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    underline: SizedBox(),
-                                    items: <String>['/10', '/100', '/4']
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        unit = value;
-                                      });
-//                                      setState(() {
-//                                        skills[index1][
-//                                        skillName]
-//                                        [index2][
-//                                        miniSkill] = value;
-//                                      });
-                                    },
-                                  ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -266,6 +279,7 @@ class _DiplomaState extends State<Diploma> {
                                 child: DateTimeField(
                                   initialValue: from ?? null,
                                   decoration: InputDecoration(
+                                    
                                       hintText: "From:",
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -292,20 +306,18 @@ class _DiplomaState extends State<Diploma> {
                               Container(
                                 width: width * 0.35,
                                 child: DateTimeField(
-                                    initialValue: to ?? null,
-                                    format: format,
-                                    onShowPicker:
-                                        (context, currentValue) async {
-                                      final date = await showDatePicker(
-                                          context: context,
-                                          firstDate: DateTime(1900),
-                                          initialDate:
-                                              to ?? DateTime.now(),
-                                          lastDate: DateTime(2100));
+                                  initialValue: to ?? null,
+                                  format: format,
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate: to ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
 
-                                      return date;
-                                    },
-                                    decoration:InputDecoration(
+                                    return date;
+                                  },
+                                  decoration: InputDecoration(
                                       hintText: "To:",
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -315,7 +327,8 @@ class _DiplomaState extends State<Diploma> {
                                       hintStyle: TextStyle(
                                           fontWeight: FontWeight.w600),
                                       labelStyle:
-                                          TextStyle(color: Colors.black)),),
+                                          TextStyle(color: Colors.black)),
+                                ),
                               ),
                             ],
                           ),
@@ -361,7 +374,7 @@ class _DiplomaState extends State<Diploma> {
                                             new EdgeInsets.symmetric(
                                                 vertical: 2.0,
                                                 horizontal: 10.0),
-                                        hintStyle: TextStyle(fontSize: 13),
+                                        hintStyle: TextStyle(fontSize: 15 , color: Colors.black , fontWeight: FontWeight.w600),
                                         labelStyle:
                                             TextStyle(color: Colors.black))),
                               ),
