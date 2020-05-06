@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
