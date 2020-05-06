@@ -15,21 +15,21 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NewExperience extends StatefulWidget {
+class NewProject extends StatefulWidget {
 
-  List experiences;
+  List projects;
   int index;
   bool old;
   String email;
-  NewExperience({this.experiences, this.index, this.old, this.email});
+  NewProject({this.projects, this.index, this.old, this.email});
   @override
-  _NewExperienceState createState() => _NewExperienceState();
+  _NewProjectState createState() => _NewProjectState();
 }
 
-class _NewExperienceState extends State<NewExperience> {
+class _NewProjectState extends State<NewProject> {
   double width, height, scale;
-  List experiences;
-  String email, type, certificate, company, designation, domain, industry, fileName;
+  List projects;
+  String email, certificate, Name, University_Company, fileName;
   List information;
   Timestamp from, to;
   int index;
@@ -83,7 +83,7 @@ class _NewExperienceState extends State<NewExperience> {
       });
     });
   }
-  
+
   validateBulletPoint(String value) {
     if(value.length < 80 || value.length > 110)
       return false;
@@ -92,20 +92,17 @@ class _NewExperienceState extends State<NewExperience> {
 
   @override
   void initState() {
-    experiences = widget.experiences;
+    projects = widget.projects;
     index = widget.index;
     if(widget.old == false) {
-      experiences.add({});
+      projects.add({});
     }
-    type = experiences[index]['Type'] ?? 'Internship';
-    certificate = experiences[index]['certificate'];
-    company = experiences[index]['company'] ?? '';
-    designation = experiences[index]['designation'] ?? '';
-    domain = experiences[index]['domain'] ?? 'Software';
-    industry = experiences[index]['industry'] ?? 'Financial';
-    information = experiences[index]['information'] ?? ['', '', ''];
-    from = experiences[index]['from'] ?? Timestamp.now();
-    to = experiences[index]['to'] ?? Timestamp.now();
+    certificate = projects[index]['certificate'];
+    Name = projects[index]['Name'] ?? '';
+    University_Company = projects[index]['University_Company'] ?? '';
+    information = projects[index]['information'] ?? ['', '', ''];
+    from = projects[index]['from'] ?? Timestamp.now();
+    to = projects[index]['to'] ?? Timestamp.now();
     getInfo();
     super.initState();
   }
@@ -126,7 +123,7 @@ class _NewExperienceState extends State<NewExperience> {
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
-                experience,
+                'Projects',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -155,73 +152,43 @@ class _NewExperienceState extends State<NewExperience> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 30),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Experience Type"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Experience Type"),
-                                value: (type.substring(0, 1)).toUpperCase() + type.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Internship Internship', 'Internship']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                     SizedBox(height: 15.0),
                     TextFormField(
-                      initialValue: company,
+                      initialValue: Name,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).nextFocus(),
                       obscureText: false,
-                      decoration: x("Company"),
+                      decoration: x("Project Title"),
                       onChanged: (text) {
-                        setState(() => company = text);
+                        setState(() => Name = text);
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'company cannot be empty';
+                          return 'project title cannot be empty';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 15.0),
+                    TextFormField(
+                      initialValue: University_Company,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
+                      obscureText: false,
+                      decoration: x("Company/University"),
+                      onChanged: (text) {
+                        setState(() => University_Company = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'company/university name cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -302,128 +269,12 @@ class _NewExperienceState extends State<NewExperience> {
                       ],
                     ),
                     SizedBox(height: 15.0),
-                    TextFormField(
-                      initialValue: designation,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Designation"),
-                      onChanged: (text) {
-                        setState(() => designation = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'designation name cannot be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Industry Type"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Industry Type"),
-                                value: industry.substring(0, 1).toUpperCase() + industry.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Financial']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    industry = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Domain"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Domain"),
-                                value: domain.substring(0, 1).toUpperCase() + domain.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Software']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    domain = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: Color(0xff4285f4)
-                        )
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                              color: Color(0xff4285f4)
+                          )
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -541,34 +392,6 @@ class _NewExperienceState extends State<NewExperience> {
                       },
                     ),
                     Text('Character count: ${information[1].length}', style: TextStyle(fontSize: 11,color: (information[1].length < 80 || information[1].length > 110) ? Colors.red : Colors.green),),
-                    SizedBox(height: 15),
-                    Text(
-                      "Bullet Point 3",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    SizedBox(height: 15),
-                    TextFormField(
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13),
-                      decoration: InputDecoration(
-                          hintText: '',
-                          contentPadding: EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ))),
-                      initialValue: information[2],
-                      obscureText: false,
-                      onChanged: (text) {
-                        setState(() => information[2] = text);
-                      },
-                    ),
-                    Text('Character count: ${information[2].length}', style: TextStyle(fontSize: 11,color: (information[2].length < 80 || information[2].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 30.0),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
@@ -624,8 +447,7 @@ class _NewExperienceState extends State<NewExperience> {
                                 if(_formKey.currentState.validate())
                                   if(validateBulletPoint(information[0]))
                                     if(validateBulletPoint(information[1]))
-                                      if(validateBulletPoint(information[2]))
-                                        Navigator.pop(context);
+                                      Navigator.pop(context);
 //                                  setState(() {
 //                                    loading = true;
 //                                  });

@@ -11,17 +11,6 @@ class Experience extends StatelessWidget {
   String userEmail;
   bool error;
 
-  InputDecoration x(String t) {
-    return InputDecoration(
-        hintText: t,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff4285f4))),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        labelStyle: TextStyle(color: Colors.black));
-  }
-
   Future<List> getInfo() async {
     List temp;
     await SharedPreferences.getInstance().then((value) async {
@@ -70,34 +59,26 @@ class Experience extends StatelessWidget {
           preferredSize: Size.fromHeight(55),
         ),
         body: FutureBuilder(
-          future: Firestore.instance
-              .collection('candidates')
-              .document(userEmail)
-              .get(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            return FutureBuilder(
-              future: getInfo(),
-              builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-                if (snapshot.hasData &&
-                    snapshot.connectionState == ConnectionState.done) {
-                  if(snapshot.data.length > 0 && snapshot.data[0].containsKey('error'))
-                    return Center(
-                      child: Text('Error occured, try again later'),
-                    );
-                  else
-                    return Experiences(
-                      experiences: snapshot.data ?? [],
-                    );
-                } else {
-                  if (snapshot.hasError)
-                    return Center(
-                      child: Text('Error occured, try again later'),
-                    );
-                  else
-                    return Loading();
-                }
-              },
-            );
+          future: getInfo(),
+          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+            if (snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
+              if(snapshot.data.length > 0 && snapshot.data[0].containsKey('error'))
+                return Center(
+                  child: Text('Error occured, try again later'),
+                );
+              else
+                return Experiences(
+                  experiences: snapshot.data ?? [],
+                );
+            } else {
+              if (snapshot.hasError)
+                return Center(
+                  child: Text('Error occured, try again later'),
+                );
+              else
+                return Loading();
+            }
           },
         ));
   }
@@ -208,88 +189,101 @@ class _ExperiencesState extends State<Experiences> {
                           info3 = experiences[index]['information'] == null ? '' : experiences[index]['information'][2];
                           return Column(
                             children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(border: Border.all()),
-                                padding: EdgeInsets.all(8),
-                                child: ListTile(
-                                  title: Text(
-                                    experiences[index]['designation'] ??
-                                        'designation',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.w600),
+                              Stack(
+                                children: <Widget>[
+                                  Container(
+                                    decoration: BoxDecoration(border: Border.all()),
+                                    padding: EdgeInsets.all(8),
+                                    child: ListTile(
+                                      title: Text(
+                                        experiences[index]['designation'] ??
+                                            'Designation',
+                                        style:
+                                            TextStyle(fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text('Type: ' +
+                                              (experiences[index]['Type'] ?? '')),
+                                          Text('Company: ' +
+                                              (experiences[index]['company'] ??
+                                                  '')),
+                                          Text('Duration: ' + duration),
+                                          Text('Industry Type: ' +
+                                              (experiences[index]['industry'] ??
+                                                  '')),
+                                          Text('Domain: ' +
+                                              (experiences[index]['domain'] ?? '')),
+                                          Text('Responsibilities: '),
+                                          Text('1: ' +
+                                              info1),
+                                          Text('2: ' +
+                                              info2),
+                                          Text('3: ' +
+                                              info3),
+                                        ],
+                                      ),
+                                      contentPadding: EdgeInsets.only(left: 8),
+                                    ),
                                   ),
-                                  trailing: PopupMenuButton<int>(
-                                    icon: Icon(Icons.more_vert),
-                                    onSelected: (int result) async {
-                                      if (result == 0) {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NewExperience(
-                                                      experiences: experiences,
-                                                      index: index,
-                                                      old: true,
-                                                    )));
-                                      } else if (result == 1) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        //experiences.removeAt(index);
-                                        // TODO call API
-                                      }
-                                    },
-                                    itemBuilder: (BuildContext context) =>
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: PopupMenuButton<int>(
+                                        icon: Icon(Icons.more_vert),
+                                        onSelected: (int result) async {
+                                          if (result == 0) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NewExperience(
+                                                          experiences: experiences,
+                                                          index: index,
+                                                          old: true,
+                                                        )));
+                                          } else if (result == 1) {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            //experiences.removeAt(index);
+                                            // TODO call API
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          }
+                                        },
+                                        itemBuilder: (BuildContext context) =>
                                         <PopupMenuEntry<int>>[
-                                      const PopupMenuItem<int>(
-                                        value: 0,
-                                        child: Text(
-                                          'Edit',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 13),
-                                        ),
+                                          const PopupMenuItem<int>(
+                                            value: 0,
+                                            child: Text(
+                                              'Edit',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13),
+                                            ),
+                                          ),
+                                          const PopupMenuItem<int>(
+                                            value: 1,
+                                            child: Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      const PopupMenuItem<int>(
-                                        value: 1,
-                                        child: Text(
-                                          'Delete',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 13),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  subtitle: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text('Type: ' +
-                                          (experiences[index]['Type'] ?? '')),
-                                      Text('Company: ' +
-                                          (experiences[index]['company'] ??
-                                              '')),
-                                      Text('Duration: ' + duration),
-                                      Text('Industry Type: ' +
-                                          (experiences[index]['industry'] ??
-                                              '')),
-                                      Text('Domain: ' +
-                                          (experiences[index]['domain'] ?? '')),
-                                      Text('Responsibilities: '),
-                                      Text('1: ' +
-                                          info1),
-                                      Text('2: ' +
-                                          info2),
-                                      Text('3: ' +
-                                          info3),
-                                    ],
-                                  ),
-                                  contentPadding: EdgeInsets.only(left: 8),
-                                ),
+                                    ),
+                                  )
+                                ],
                               ),
                               SizedBox(
                                 height: 20,

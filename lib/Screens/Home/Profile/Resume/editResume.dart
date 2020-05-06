@@ -1,7 +1,7 @@
 
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/eduHome.dart';
-import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraC.dart';
-import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/projects.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraCurricular.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/project.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -88,8 +88,8 @@ class _EditResumeState extends State<EditResume> {
               resumeTile(intro, BasicIntro()),
               resumeTile(education, EducationOverview()),
               resumeTile(experience, Experience()),
-              resumeTile(projects, Projects()),
-              resumeTile(extra, ExtraC()),
+              resumeTile(projects, Project()),
+              resumeTile(extra, ExtraCurricular()),
               resumeTile(awards, Awards()),
               resumeTile(skills, Skills()),
             ],

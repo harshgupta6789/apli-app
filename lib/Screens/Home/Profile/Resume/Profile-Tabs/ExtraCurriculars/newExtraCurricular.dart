@@ -15,23 +15,23 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NewExperience extends StatefulWidget {
+class NewExtraCurricular extends StatefulWidget {
 
-  List experiences;
+  List extraCurriculars;
   int index;
   bool old;
   String email;
-  NewExperience({this.experiences, this.index, this.old, this.email});
+  NewExtraCurricular({this.extraCurriculars, this.index, this.old, this.email});
   @override
-  _NewExperienceState createState() => _NewExperienceState();
+  _NewExtraCurricularState createState() => _NewExtraCurricularState();
 }
 
-class _NewExperienceState extends State<NewExperience> {
+class _NewExtraCurricularState extends State<NewExtraCurricular> {
   double width, height, scale;
-  List experiences;
-  String email, type, certificate, company, designation, domain, industry, fileName;
-  List information;
-  Timestamp from, to;
+  List extraCurriculars;
+  String email, certificate, role, organisation, fileName;
+  List info;
+  Timestamp start, end;
   int index;
   File file;
   bool loading = false;
@@ -83,7 +83,7 @@ class _NewExperienceState extends State<NewExperience> {
       });
     });
   }
-  
+
   validateBulletPoint(String value) {
     if(value.length < 80 || value.length > 110)
       return false;
@@ -92,20 +92,17 @@ class _NewExperienceState extends State<NewExperience> {
 
   @override
   void initState() {
-    experiences = widget.experiences;
+    extraCurriculars = widget.extraCurriculars;
     index = widget.index;
     if(widget.old == false) {
-      experiences.add({});
+      extraCurriculars.add({});
     }
-    type = experiences[index]['Type'] ?? 'Internship';
-    certificate = experiences[index]['certificate'];
-    company = experiences[index]['company'] ?? '';
-    designation = experiences[index]['designation'] ?? '';
-    domain = experiences[index]['domain'] ?? 'Software';
-    industry = experiences[index]['industry'] ?? 'Financial';
-    information = experiences[index]['information'] ?? ['', '', ''];
-    from = experiences[index]['from'] ?? Timestamp.now();
-    to = experiences[index]['to'] ?? Timestamp.now();
+    certificate = extraCurriculars[index]['certificate'];
+    role = extraCurriculars[index]['role'] ?? '';
+    organisation = extraCurriculars[index]['organisation'] ?? '';
+    info = extraCurriculars[index]['info'] ?? ['', '', ''];
+    start = extraCurriculars[index]['start'] ?? Timestamp.now();
+    end = extraCurriculars[index]['end'] ?? Timestamp.now();
     getInfo();
     super.initState();
   }
@@ -126,7 +123,7 @@ class _NewExperienceState extends State<NewExperience> {
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
-                experience,
+                extra,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -155,73 +152,43 @@ class _NewExperienceState extends State<NewExperience> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(height: 30),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Experience Type"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Experience Type"),
-                                value: (type.substring(0, 1)).toUpperCase() + type.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Internship Internship', 'Internship']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    type = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
                     SizedBox(height: 15.0),
                     TextFormField(
-                      initialValue: company,
+                      initialValue: role,
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) =>
                           FocusScope.of(context).nextFocus(),
                       obscureText: false,
-                      decoration: x("Company"),
+                      decoration: x("Role"),
                       onChanged: (text) {
-                        setState(() => company = text);
+                        setState(() => role = text);
                       },
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'company cannot be empty';
+                          return 'role cannot be empty';
                         }
                         return null;
                       },
                     ),
                     SizedBox(height: 15.0),
+                    TextFormField(
+                      initialValue: organisation,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
+                      obscureText: false,
+                      decoration: x("Organisation/Committee"),
+                      onChanged: (text) {
+                        setState(() => organisation = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return 'organisation/committee name cannot be empty';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -229,21 +196,21 @@ class _NewExperienceState extends State<NewExperience> {
                           width: width * 0.4,
                           child: DateTimeField(
                               format: format,
-                              initialValue: from == null
+                              initialValue: start == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  from.microsecondsSinceEpoch),
+                                  start.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = from != null
+                                var temp = start != null
                                     ? format
                                     .format(
                                     DateTime.fromMicrosecondsSinceEpoch(
-                                        from.microsecondsSinceEpoch))
+                                        start.microsecondsSinceEpoch))
                                     .toString() ??
                                     "DOB"
                                     : "DOB";
@@ -251,7 +218,7 @@ class _NewExperienceState extends State<NewExperience> {
                               },
                               onChanged: (date) {
                                 setState(() {
-                                  from = (date == null)
+                                  start = (date == null)
                                       ? null
                                       : Timestamp.fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
@@ -266,21 +233,21 @@ class _NewExperienceState extends State<NewExperience> {
                           width: width * 0.4,
                           child: DateTimeField(
                               format: format,
-                              initialValue: to == null
+                              initialValue: end == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  to.microsecondsSinceEpoch),
+                                  end.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = to != null
+                                var temp = end != null
                                     ? format
                                     .format(
                                     DateTime.fromMicrosecondsSinceEpoch(
-                                        to.microsecondsSinceEpoch))
+                                        end.microsecondsSinceEpoch))
                                     .toString() ??
                                     "DOB"
                                     : "DOB";
@@ -288,7 +255,7 @@ class _NewExperienceState extends State<NewExperience> {
                               },
                               onChanged: (date) {
                                 setState(() {
-                                  to = (date == null)
+                                  end = (date == null)
                                       ? null
                                       : Timestamp.fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
@@ -302,128 +269,12 @@ class _NewExperienceState extends State<NewExperience> {
                       ],
                     ),
                     SizedBox(height: 15.0),
-                    TextFormField(
-                      initialValue: designation,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Designation"),
-                      onChanged: (text) {
-                        setState(() => designation = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'designation name cannot be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 15),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Industry Type"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Industry Type"),
-                                value: industry.substring(0, 1).toUpperCase() + industry.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Financial']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    industry = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15),
-                    Stack(
-                      children: <Widget>[
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: TextFormField(
-                            enabled: false,
-                            initialValue: '',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                            decoration: x("Domain"),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(10 * scale, 0, 5 * scale, 0),
-                              child: DropdownButton<String>(
-                                hint: Text("Domain"),
-                                value: domain.substring(0, 1).toUpperCase() + domain.substring(1),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14),
-                                icon: Padding(
-                                  padding: EdgeInsets.only(left: 10.0 * scale),
-                                  child: Icon(Icons.keyboard_arrow_down),
-                                ),
-                                underline: SizedBox(),
-                                items: <String>['Male', 'Female', 'Other', 'Software']
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    domain = value;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: Color(0xff4285f4)
-                        )
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                              color: Color(0xff4285f4)
+                          )
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -508,12 +359,12 @@ class _NewExperienceState extends State<NewExperience> {
                               borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                      initialValue: information[0],
+                      initialValue: info[0],
                       onChanged: (text) {
-                        setState(() => information[0] = text);
+                        setState(() => info[0] = text);
                       },
                     ),
-                    Text('Character count: ${information[0].length}', style: TextStyle(fontSize: 11,color: (information[0].length < 80 || information[0].length > 110) ? Colors.red : Colors.green),),
+                    Text('Character count: ${info[0].length}', style: TextStyle(fontSize: 11,color: (info[0].length < 80 || info[0].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 15),
                     Text(
                       "Bullet Point 2",
@@ -535,40 +386,12 @@ class _NewExperienceState extends State<NewExperience> {
                               borderSide: BorderSide(
                                 color: Colors.grey,
                               ))),
-                      initialValue: information[1],
+                      initialValue: info[1],
                       onChanged: (text) {
-                        setState(() => information[1] = text);
+                        setState(() => info[1] = text);
                       },
                     ),
-                    Text('Character count: ${information[1].length}', style: TextStyle(fontSize: 11,color: (information[1].length < 80 || information[1].length > 110) ? Colors.red : Colors.green),),
-                    SizedBox(height: 15),
-                    Text(
-                      "Bullet Point 3",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    SizedBox(height: 15),
-                    TextFormField(
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13),
-                      decoration: InputDecoration(
-                          hintText: '',
-                          contentPadding: EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ))),
-                      initialValue: information[2],
-                      obscureText: false,
-                      onChanged: (text) {
-                        setState(() => information[2] = text);
-                      },
-                    ),
-                    Text('Character count: ${information[2].length}', style: TextStyle(fontSize: 11,color: (information[2].length < 80 || information[2].length > 110) ? Colors.red : Colors.green),),
+                    Text('Character count: ${info[1].length}', style: TextStyle(fontSize: 11,color: (info[1].length < 80 || info[1].length > 110) ? Colors.red : Colors.green),),
                     SizedBox(height: 30.0),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20.0),
@@ -622,10 +445,9 @@ class _NewExperienceState extends State<NewExperience> {
                               ),
                               onPressed: () async {
                                 if(_formKey.currentState.validate())
-                                  if(validateBulletPoint(information[0]))
-                                    if(validateBulletPoint(information[1]))
-                                      if(validateBulletPoint(information[2]))
-                                        Navigator.pop(context);
+                                  if(validateBulletPoint(info[0]))
+                                    if(validateBulletPoint(info[1]))
+                                      Navigator.pop(context);
 //                                  setState(() {
 //                                    loading = true;
 //                                  });
