@@ -24,6 +24,7 @@ class Resume extends StatefulWidget {
 }
 
 class _ResumeState extends State<Resume> {
+  double height, width;
   bool error = false, loading = false;
   String pdfUrl;
   String email;
@@ -124,6 +125,8 @@ class _ResumeState extends State<Resume> {
 
   @override
   Widget build(BuildContext context) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return email == null
         ? Loading()
         : loading
@@ -155,16 +158,39 @@ class _ResumeState extends State<Resume> {
                                             "Assets/Images/job.png")),
                                   )
                                 : path != null
-                                    ? Container(
-                                        height: 200,
-                                        width: 300,
-                                        child: PdfViewer(
-                                          filePath: path,
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          height: height * 0.6,
+                                          width: width * 0.6,
+                                          child: PdfViewer(
+                                            filePath: path,
+                                          ),
                                         ),
                                       )
-                                    : RaisedButton(
-                                        child: Text("Load pdf"),
-                                        onPressed: loadPdf,
+                                    : Padding(
+                                        padding:
+                                            EdgeInsets.only(left: width * 0.3),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border:
+                                                Border.all(color: basicColor),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: MaterialButton(
+                                              child: Text(
+                                                "Load PDF",
+                                                style: TextStyle(
+                                                    fontSize: 15.0,
+                                                    color: basicColor,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              onPressed: () async {
+                                                loadPdf();
+                                              }),
+                                        ),
                                       ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),

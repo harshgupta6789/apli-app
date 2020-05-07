@@ -346,9 +346,6 @@ class _VideoIntroState extends State<VideoIntro>
                                 );
                                 print(urlFromCamera);
                                 if (urlFromCamera != null) {
-                                  showToast(
-                                      'Recorded Video Will Be Stored In Storage/Apli Folder',
-                                      context);
                                   // videoPicker(urlFromCamera);
                                 }
                                 break;
@@ -392,13 +389,13 @@ class _VideoIntroState extends State<VideoIntro>
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                            '${_bytesTransferred(snapshot)} MB Uploaded...',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            )),
+                        child:
+                            Text('${_bytesTransferred(snapshot)} % Uploaded...',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                )),
                       ),
                     ],
                   );
