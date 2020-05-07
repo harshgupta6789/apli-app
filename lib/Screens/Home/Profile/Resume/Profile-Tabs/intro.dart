@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
@@ -32,17 +33,15 @@ class _BasicIntroState extends State<BasicIntro> {
       email,
       mno = '',
       gender = '',
+      roll_no = '',
       highest_qualification = '',
-      bldg = '',
-      country = '',
-      state = '',
-      postal = '',
-      city = '';
+      postal = '';
   Map<String, dynamic> address, languages;
   Map<String, dynamic> completeIntro;
   List languagesList = [];
   Timestamp dob;
   Map<String, TextEditingController> temp = {};
+  final _APIService = APIService(type: 8);
 
   getPrefs() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -62,14 +61,11 @@ class _BasicIntroState extends State<BasicIntro> {
               mno = snapshot.data['ph_no'].toString();
               dob = snapshot.data['dob'];
               gender = snapshot.data['gender'];
+              roll_no = snapshot.data['roll_no'];
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'' : 'Expert'};
               address = snapshot.data['Address'] ?? {};
-              bldg = address['address'];
-              country = address['country'];
-              state = address['state'];
-              postal = address['postal_code'] == null ? '' : address['postal_code'].toString();
-              city = address['city'];
+              postal = address['postal_code'] ?? '';
               languages.forEach((key, value) {
                 languagesList.add([key, value]);
             });
@@ -328,6 +324,26 @@ class _BasicIntroState extends State<BasicIntro> {
                                 Divider(
                                   thickness: 0.5,
                                   color: Colors.black,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  initialValue: roll_no ?? '',
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context).nextFocus(),
+                                  obscureText: false,
+                                  decoration: x("Roll Number"),
+                                  onChanged: (text) {
+                                    setState(() => roll_no = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'roll number cannot be empty';
+                                    else
+                                      return null;
+                                  },
                                 ),
                                 SizedBox(
                                   height: 20,
@@ -750,14 +766,14 @@ class _BasicIntroState extends State<BasicIntro> {
                                   contentPadding: EdgeInsets.only(left: 0),
                                 ),
                                 TextFormField(
-                                  initialValue: bldg ?? '',
+                                  initialValue: address['address'] ?? '',
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("Street"),
                                   onChanged: (text) {
-                                    setState(() => bldg = text);
+                                    setState(() => address['address'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty)
@@ -770,14 +786,14 @@ class _BasicIntroState extends State<BasicIntro> {
                                   height: 15,
                                 ),
                                 TextFormField(
-                                  initialValue: country ?? '',
+                                  initialValue: address['country'] ?? '',
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("Country"),
                                   onChanged: (text) {
-                                    setState(() => country = text);
+                                    setState(() => address['country'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty)
@@ -790,14 +806,14 @@ class _BasicIntroState extends State<BasicIntro> {
                                   height: 15,
                                 ),
                                 TextFormField(
-                                  initialValue: state ?? '',
+                                  initialValue: address['state'] ?? '',
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("State"),
                                   onChanged: (text) {
-                                    setState(() => state = text);
+                                    setState(() => address['state'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty)
@@ -833,14 +849,14 @@ class _BasicIntroState extends State<BasicIntro> {
                                   height: 15,
                                 ),
                                 TextFormField(
-                                  initialValue: city ?? '',
+                                  initialValue: address['city'] ?? '',
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("City"),
                                   onChanged: (text) {
-                                    setState(() => city = text);
+                                    setState(() => address['city'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty)
@@ -873,8 +889,22 @@ class _BasicIntroState extends State<BasicIntro> {
                                       for(int i = 0; i < languagesList.length; i++) {
                                         languages[languagesList[i][0]] = languagesList[i][1];
                                       }
+                                      Map<String, dynamic> map;
+                                      address['postal_code'] = int.parse(postal);
+                                      map['Address'] = address;
+                                      map['First_name'] = fname;
+                                      map['Last_name'] = lname;
+                                      map['Middle_name'] = mname;
+                                      map['dob'] = dob;
+                                      map['gender'] = gender;
+                                      map['highest_qualification'] = highest_qualification;
+                                      map['languages'] = languages;
+                                      map['ph_no'] = mno;
+                                      map['roll_no'] = roll_no;
                                       if (_image == null) {
                                         // TODO call API
+                                        map['profile_picture'] = profile;
+                                        dynamic result = await _APIService.sendProfileData(map);
                                         showToast('Data Updated Successfully',
                                             context);
                                         Navigator.pop(context);
@@ -897,6 +927,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                           setState(() {
                                             profile = url;
                                           });
+                                          map['profile_picture'] = url;
                                           // TODO call API
                                           showToast('Data Updated Successfully',
                                               context);

@@ -175,7 +175,7 @@ class AuthService {
           result = -2;
         }
       }
-      return -10;
+      return result;
     } catch (e) {
       return null;
     }
