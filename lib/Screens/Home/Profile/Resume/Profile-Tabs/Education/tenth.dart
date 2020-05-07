@@ -15,6 +15,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 double height, width;
 
 class Tenth extends StatefulWidget {
+   final Map<dynamic , dynamic> x;
+
+  const Tenth({Key key, @required this.x}) : super(key: key);
   @override
   _TenthState createState() => _TenthState();
 }

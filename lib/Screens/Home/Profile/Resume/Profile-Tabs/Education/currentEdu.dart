@@ -11,6 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEducation extends StatefulWidget {
+  final Map<dynamic , dynamic> education;
+
+  const CurrentEducation({Key key, @required this.education}) : super(key: key);
   @override
   _CurrentEducationState createState() => _CurrentEducationState();
 }
