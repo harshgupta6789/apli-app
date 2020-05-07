@@ -104,7 +104,6 @@ class _ResumeState extends State<Resume> {
             setState(() {
               pdfUrl = s.data['pdfResume'];
               email = s.data['email'];
-              print(pdfUrl);
             });
           });
         } catch (e) {
@@ -231,7 +230,7 @@ class _ResumeState extends State<Resume> {
                                                     "gs://aplidotai.appspot.com/");
                                                 firebaseUrl = firebaseUrl
                                                     .replaceAll("%40", "@");
-                                                print(firebaseUrl);
+
                                                 var ref = FirebaseStorage
                                                     .instance
                                                     .getReferenceFromUrl(
@@ -240,7 +239,6 @@ class _ResumeState extends State<Resume> {
                                                 await ref.then((reference) {
                                                   downloadFile(reference);
                                                 });
-                                                print(ref);
                                               } else {
                                                 showToast(
                                                     "Please Complete Your Profile First!",

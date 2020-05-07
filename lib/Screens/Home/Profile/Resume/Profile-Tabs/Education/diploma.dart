@@ -14,6 +14,9 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Diploma extends StatefulWidget {
+   final Map<dynamic , dynamic> xii;
+
+  const Diploma({Key key, @required this.xii}) : super(key: key);
   @override
   _DiplomaState createState() => _DiplomaState();
 }
@@ -30,6 +33,7 @@ class _DiplomaState extends State<Diploma> {
   DateTime from, to;
   StorageUploadTask uploadTask;
   Map<String, dynamic> education;
+
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
