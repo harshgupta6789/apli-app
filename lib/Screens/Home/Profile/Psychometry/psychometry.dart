@@ -23,54 +23,60 @@ class _PsychometryState extends State<Psychometry> {
 
   userInit() async {
     await SharedPreferences.getInstance().then((prefs) async {
-      if(!mounted)
+      if (!mounted)
         email = prefs.getString('email');
-      else setState(() {
-        email = prefs.getString('email');
-      });
+      else
+        setState(() {
+          email = prefs.getString('email');
+        });
       try {
         await Firestore.instance
             .collection('candPsychoQues')
             .document('all_ques')
             .get()
             .then((snapshot) async {
-          if(!mounted)
+          if (!mounted)
             questions = snapshot.data;
-          else setState(() {
-            questions = snapshot.data;
-          });
+          else
+            setState(() {
+              questions = snapshot.data;
+            });
           await Firestore.instance
               .collection('candidates')
               .document(email)
               .get()
               .then((snapshot2) {
-            if(!mounted)
+            if (!mounted)
               answeredQuestions = snapshot2.data['psycho_ques'];
-            else setState(() {
-              answeredQuestions = snapshot2.data['psycho_ques'];
-            });
+            else
+              setState(() {
+                answeredQuestions = snapshot2.data['psycho_ques'];
+              });
             if (answeredQuestions == null) {
-              if(!mounted)
+              if (!mounted)
                 _currentState = States.none;
-              else setState(() {
-                _currentState = States.none;
-              });
+              else
+                setState(() {
+                  _currentState = States.none;
+                });
             } else if (answeredQuestions.length < questions.length) {
-              if(!mounted)
+              if (!mounted)
                 _currentState = States.resume;
-              else setState(() {
-                _currentState = States.resume;
-              });
+              else
+                setState(() {
+                  _currentState = States.resume;
+                });
             } else {
-              if(!mounted)
+              if (!mounted)
                 _currentState = States.done;
-              else setState(() {
-                _currentState = States.done;
-              });
+              else
+                setState(() {
+                  _currentState = States.done;
+                });
             }
           });
         });
-      } catch(e) {
+      } catch (e) {
         setState(() {
           error = true;
         });
@@ -86,13 +92,141 @@ class _PsychometryState extends State<Psychometry> {
 
   @override
   Widget build(BuildContext context) {
-    if(error)
-      return Center(child: Text('Error occured, try again later'),);
-    else switch (_currentState) {
-      case States.none:
-        return ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
+    if (error)
+      return Center(
+        child: Text('Error occured, try again later'),
+      );
+    else
+      switch (_currentState) {
+        case States.none:
+          return ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
+                      child: Align(
+                          child: Text(psychometryTestSlogan,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                      child: Align(
+                          child: Text("Instructions to follow",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: basicColor)),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                          child:
+                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                          child:
+                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                          child:
+                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                          child:
+                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Align(
+                          child:
+                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                          alignment: Alignment.center),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                      child: Align(
+                        child: RaisedButton(
+                          color: Colors.white,
+                          elevation: 0,
+                          padding: EdgeInsets.only(left: 22, right: 22),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            side: BorderSide(color: basicColor, width: 1.5),
+                          ),
+                          child: Text(
+                            'Start Test',
+                            style: TextStyle(
+                                color: basicColor, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => PsychometryTest(
+                                          email: email,
+                                          questions: questions,
+                                          answeredQuestions: answeredQuestions,
+                                        )));
+                          },
+                        ),
+                        alignment: Alignment.center,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+          break;
+        case States.resume:
+          return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
               child: Column(
@@ -101,7 +235,7 @@ class _PsychometryState extends State<Psychometry> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
                     child: Align(
-                        child: Text(psychometryTestSlogan,
+                        child: Text("Finish your psychometic test!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,
@@ -110,73 +244,7 @@ class _PsychometryState extends State<Psychometry> {
                         alignment: Alignment.center),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
-                    child: Align(
-                        child: Text("Instructions to follow",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.bold,
-                                color: basicColor)),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                        child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.bold,
-                            )),
-                        alignment: Alignment.center),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                    padding: EdgeInsets.fromLTRB(8.0, 4, 8, 40),
                     child: Align(
                       child: RaisedButton(
                         color: Colors.white,
@@ -187,7 +255,7 @@ class _PsychometryState extends State<Psychometry> {
                           side: BorderSide(color: basicColor, width: 1.5),
                         ),
                         child: Text(
-                          'Start Test',
+                          'Resume Test',
                           style: TextStyle(
                               color: basicColor, fontWeight: FontWeight.bold),
                         ),
@@ -204,158 +272,109 @@ class _PsychometryState extends State<Psychometry> {
                       ),
                       alignment: Alignment.center,
                     ),
-                  )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                    child: Align(
+                        child: Text("Instructions to follow",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                color: basicColor)),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child:
+                            Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child:
+                            Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child:
+                            Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child:
+                            Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                        alignment: Alignment.center),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                        child:
+                            Text("1. Lorem ipsum dolor sit amet, consectetur",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                        alignment: Alignment.center),
+                  ),
                 ],
               ),
             ),
-          ),
-        );
-        break;
-      case States.resume:
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                  child: Align(
-                      child: Text("Finish your psychometic test!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(8.0, 4, 8, 40),
-                  child: Align(
-                    child: RaisedButton(
-                      color: Colors.white,
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 22, right: 22),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        side: BorderSide(color: basicColor, width: 1.5),
-                      ),
-                      child: Text(
-                        'Resume Test',
-                        style: TextStyle(
-                            color: basicColor, fontWeight: FontWeight.bold),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PsychometryTest(
-                                      email: email,
-                                      questions: questions,
-                                      answeredQuestions: answeredQuestions,
-                                    )));
-                      },
-                    ),
-                    alignment: Alignment.center,
+          );
+          break;
+        case States.done:
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
+                    child: Align(
+                        child: Text(
+                            'You have attempted the psychometric\n test! Your answers have been recorded.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        alignment: Alignment.center),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
-                  child: Align(
-                      child: Text("Instructions to follow",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
-                              color: basicColor)),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-        break;
-      case States.done:
-        return SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
-                  child: Align(
-                      child: Text(
-                          'You have attempted the psychometric\n test! Your answers have been recorded.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          )),
-                      alignment: Alignment.center),
-                ),
-              ],
-            ),
-          ),
-        );
-        break;
-      default:
-        return Loading();
-    }
+          );
+          break;
+        default:
+          return Loading();
+      }
   }
 }

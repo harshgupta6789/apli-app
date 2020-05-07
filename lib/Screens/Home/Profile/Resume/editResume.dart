@@ -1,4 +1,3 @@
-
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/eduHome.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraCurricular.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/project.dart';
@@ -50,29 +49,28 @@ class _EditResumeState extends State<EditResume> {
     return Scaffold(
       appBar: PreferredSize(
         child: AppBar(
-          backgroundColor: basicColor,
-          automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.white,
-                ),
-                onPressed: () => Navigator.pop(context)),
-          ),
-          title: Padding(
+            backgroundColor: basicColor,
+            automaticallyImplyLeading: false,
+            leading: Padding(
+              padding: EdgeInsets.only(bottom: 5.0),
+              child: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pop(context)),
+            ),
+            title: Padding(
               padding: EdgeInsets.only(bottom: 10.0),
               child: Text(
-            editResume,
-           style: TextStyle(
+                editResume,
+                style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
                     fontWeight: FontWeight.bold),
-          ),)
-        ),
+              ),
+            )),
         preferredSize: Size.fromHeight(50),
-
       ),
       body: ScrollConfiguration(
         behavior: MyBehavior(),

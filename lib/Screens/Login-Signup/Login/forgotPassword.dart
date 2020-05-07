@@ -47,10 +47,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             try {
               await FirebaseAuth.instance.signOut();
             } catch (e) {}
+            setState(() {
+              loading = true;
+            });
+            showToast('Verified Successfully', context);
+            await Future.delayed(Duration(seconds: 1));
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => UpdatePassword(email: widget.email)));
+            setState(() {
+              loading = false;
+            });
           },
           verificationFailed: (AuthException exceptio) {
             print(exceptio.message);

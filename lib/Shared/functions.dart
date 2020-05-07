@@ -25,8 +25,8 @@ bool validatePassword(String value) {
   }
 }
 
-showToast(String msg, BuildContext context) {
-  Toast.show(msg, context, backgroundColor: Colors.red, duration: 3);
+showToast(String msg, BuildContext context, {int duration}) {
+  Toast.show(msg, context, backgroundColor: Colors.red, duration: duration ?? 3);
 }
 
 InputDecoration x(String t) {

@@ -303,7 +303,8 @@ class _LoginState extends State<Login> {
                                         setState(() {
                                           loading = false;
                                         });
-                                        showToast('Failed, try again later', context);
+                                        showToast(
+                                            'Failed, try again later', context);
                                       }
                                       var net = await Connectivity()
                                           .checkConnectivity();

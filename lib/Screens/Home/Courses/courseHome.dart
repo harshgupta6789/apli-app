@@ -73,15 +73,18 @@ class _CourseMainState extends State<CourseMain> {
                                 physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
                                   return Padding(
-                                    padding: const EdgeInsets.only(bottom: 20, top: 20),
+                                    padding: const EdgeInsets.only(
+                                        bottom: 20, top: 20),
                                     child: InkWell(
                                       onTap: () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => Courses(
-                                                      documentId: snapshot.data
-                                                          .documents[index].documentID,
+                                                      documentId: snapshot
+                                                          .data
+                                                          .documents[index]
+                                                          .documentID,
                                                       email: 'user',
                                                     )));
                                       },
@@ -92,7 +95,8 @@ class _CourseMainState extends State<CourseMain> {
                                             SizedBox(
                                               width: double.infinity,
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(8.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
                                                 child: Image.asset(
                                                   "Assets/Images/course.png",
                                                   fit: BoxFit.cover,
@@ -103,25 +107,30 @@ class _CourseMainState extends State<CourseMain> {
                                               top: height * 0.15,
                                               left: width * 0.1,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(0.0),
+                                                padding:
+                                                    const EdgeInsets.all(0.0),
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
                                                     Text("Trending",
                                                         style: TextStyle(
-                                                            color: Colors.yellow)),
+                                                            color:
+                                                                Colors.yellow)),
                                                     Text("Startup 101",
                                                         style: TextStyle(
                                                           fontSize: 28,
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.w700,
+                                                          fontWeight:
+                                                              FontWeight.w700,
                                                         )),
                                                     Text("By Harvard",
                                                         style: TextStyle(
-                                                            fontWeight: FontWeight.w100,
+                                                            fontWeight:
+                                                                FontWeight.w100,
                                                             fontSize: 18,
-                                                            color: Colors.white)),
+                                                            color:
+                                                                Colors.white)),
                                                   ],
                                                 ),
                                               ),
@@ -134,7 +143,9 @@ class _CourseMainState extends State<CourseMain> {
                                 }),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                       ],
                     ),
                   ),

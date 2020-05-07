@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewProject extends StatefulWidget {
-
   List projects;
   int index;
   bool old;
@@ -68,10 +67,10 @@ class _NewProjectState extends State<NewProject> {
       } else {}
     } catch (e) {
       AwesomeDialog(
-          context: context,
-          dialogType: DialogType.WARNING,
-          tittle: e,
-          body: Text("Error Has Occured"))
+              context: context,
+              dialogType: DialogType.WARNING,
+              tittle: e,
+              body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -85,16 +84,17 @@ class _NewProjectState extends State<NewProject> {
   }
 
   validateBulletPoint(String value) {
-    if(value.length < 80 || value.length > 110)
+    if (value.length < 80 || value.length > 110)
       return false;
-    else return true;
+    else
+      return true;
   }
 
   @override
   void initState() {
     projects = widget.projects;
     index = widget.index;
-    if(widget.old == false) {
+    if (widget.old == false) {
       projects.add({});
     }
     certificate = projects[index]['certificate'];
@@ -107,315 +107,351 @@ class _NewProjectState extends State<NewProject> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    if(width < 360)
+    if (width < 360)
       scale = 0.7;
-    else scale = 1;
-    return loading || email == null ? Loading() : Scaffold(
-        appBar: PreferredSize(
-          child: AppBar(
-            backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                'Projects',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+    else
+      scale = 1;
+    return loading || email == null
+        ? Loading()
+        : Scaffold(
+            appBar: PreferredSize(
+              child: AppBar(
+                backgroundColor: basicColor,
+                automaticallyImplyLeading: false,
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    'Projects',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                leading: Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context)),
+                ),
               ),
+              preferredSize: Size.fromHeight(55),
             ),
-            leading: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context)),
-            ),
-          ),
-          preferredSize: Size.fromHeight(55),
-        ),
-        body: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: width * 0.08 * scale, top: 20, right: width * 0.08 * scale),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 30),
-                    SizedBox(height: 15.0),
-                    TextFormField(
-                      initialValue: Name,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Project Title"),
-                      onChanged: (text) {
-                        setState(() => Name = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'project title cannot be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 15.0),
-                    TextFormField(
-                      initialValue: University_Company,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Company/University"),
-                      onChanged: (text) {
-                        setState(() => University_Company = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return 'company/university name cannot be empty';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(height: 15,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            body: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        left: width * 0.08 * scale,
+                        top: 20,
+                        right: width * 0.08 * scale),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(
-                          width: width * 0.4,
-                          child: DateTimeField(
-                              format: format,
-                              initialValue: from == null
-                                  ? null
-                                  : DateTime.fromMicrosecondsSinceEpoch(
-                                  from.microsecondsSinceEpoch),
-                              onShowPicker: (context, currentValue) async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                var temp = from != null
-                                    ? format
-                                    .format(
-                                    DateTime.fromMicrosecondsSinceEpoch(
-                                        from.microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "DOB"
-                                    : "DOB";
-                                return date;
-                              },
-                              onChanged: (date) {
-                                setState(() {
-                                  from = (date == null)
-                                      ? null
-                                      : Timestamp.fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
-                                });
-                              },
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).nextFocus(),
-                              decoration: x("From")),
+                        SizedBox(height: 30),
+                        SizedBox(height: 15.0),
+                        TextFormField(
+                          initialValue: Name,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          obscureText: false,
+                          decoration: x("Project Title"),
+                          onChanged: (text) {
+                            setState(() => Name = text);
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'project title cannot be empty';
+                            }
+                            return null;
+                          },
                         ),
-                        Container(
-                          width: width * 0.4,
-                          child: DateTimeField(
-                              format: format,
-                              initialValue: to == null
-                                  ? null
-                                  : DateTime.fromMicrosecondsSinceEpoch(
-                                  to.microsecondsSinceEpoch),
-                              onShowPicker: (context, currentValue) async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                var temp = to != null
-                                    ? format
-                                    .format(
-                                    DateTime.fromMicrosecondsSinceEpoch(
-                                        to.microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "DOB"
-                                    : "DOB";
-                                return date;
-                              },
-                              onChanged: (date) {
-                                setState(() {
-                                  to = (date == null)
-                                      ? null
-                                      : Timestamp.fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
-                                });
-                              },
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).nextFocus(),
-                              decoration: x("To")),
+                        SizedBox(height: 15.0),
+                        TextFormField(
+                          initialValue: University_Company,
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          obscureText: false,
+                          decoration: x("Company/University"),
+                          onChanged: (text) {
+                            setState(() => University_Company = text);
+                          },
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'company/university name cannot be empty';
+                            }
+                            return null;
+                          },
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: Color(0xff4285f4)
-                          )
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(left: 5.0),
-                            child: Text(
-                              "Certificate : ",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 14),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Container(
+                              width: width * 0.4,
+                              child: DateTimeField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return 'cannot be empty';
+                                    }
+                                    return null;
+                                  },
+                                  format: format,
+                                  initialValue: from == null
+                                      ? null
+                                      : DateTime.fromMicrosecondsSinceEpoch(
+                                          from.microsecondsSinceEpoch),
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+                                    var temp = from != null
+                                        ? format
+                                                .format(DateTime
+                                                    .fromMicrosecondsSinceEpoch(
+                                                        from.microsecondsSinceEpoch))
+                                                .toString() ??
+                                            "DOB"
+                                        : "DOB";
+                                    return date;
+                                  },
+                                  onChanged: (date) {
+                                    setState(() {
+                                      from = (date == null)
+                                          ? null
+                                          : Timestamp
+                                              .fromMicrosecondsSinceEpoch(
+                                                  date.microsecondsSinceEpoch);
+                                    });
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context).nextFocus(),
+                                  decoration: x("From")),
                             ),
-                          ),
-                          SizedBox(
-                            width: width * 0.3 * scale,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: <Widget>[
-                                SizedBox(
-                                  width: width * 0.15 * scale,
-                                  child: AutoSizeText(fileName ?? '', overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,),
+                            Container(
+                              width: width * 0.4,
+                              child: DateTimeField(
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return 'cannot be empty';
+                                    }
+                                    return null;
+                                  },
+                                  format: format,
+                                  initialValue: to == null
+                                      ? null
+                                      : DateTime.fromMicrosecondsSinceEpoch(
+                                          to.microsecondsSinceEpoch),
+                                  onShowPicker: (context, currentValue) async {
+                                    final date = await showDatePicker(
+                                        context: context,
+                                        firstDate: DateTime(1900),
+                                        initialDate:
+                                            currentValue ?? DateTime.now(),
+                                        lastDate: DateTime(2100));
+                                    var temp = to != null
+                                        ? format
+                                                .format(DateTime
+                                                    .fromMicrosecondsSinceEpoch(
+                                                        to.microsecondsSinceEpoch))
+                                                .toString() ??
+                                            "DOB"
+                                        : "DOB";
+                                    return date;
+                                  },
+                                  onChanged: (date) {
+                                    setState(() {
+                                      to = (date == null)
+                                          ? null
+                                          : Timestamp
+                                              .fromMicrosecondsSinceEpoch(
+                                                  date.microsecondsSinceEpoch);
+                                    });
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context).nextFocus(),
+                                  decoration: x("To")),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Color(0xff4285f4))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(left: 5.0),
+                                child: Text(
+                                  "Certificate : ",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14),
                                 ),
-                                Visibility(
-                                  visible: file != null,
-                                  child: IconButton(
-                                    icon: Icon(Icons.clear),
-                                    onPressed: () {
-                                      setState(() {
-                                        file = null;
-                                        fileName = null;
-                                        certificate = null;
-                                      });
-                                    },
-                                    padding: EdgeInsets.all(0),
+                              ),
+                              SizedBox(
+                                width: width * 0.3 * scale,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: width * 0.15 * scale,
+                                      child: AutoSizeText(
+                                        fileName ?? '',
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                    Visibility(
+                                      visible: file != null,
+                                      child: IconButton(
+                                        icon: Icon(Icons.clear),
+                                        onPressed: () {
+                                          setState(() {
+                                            file = null;
+                                            fileName = null;
+                                            certificate = null;
+                                          });
+                                        },
+                                        padding: EdgeInsets.all(0),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(right: 5),
+                                child: MaterialButton(
+                                  onPressed: () {
+                                    filePicker(context);
+                                  },
+                                  child: Text("Browse"),
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                        Text(
+                          "Responsibilities",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "Only 80 to 110 characters are allowed for each bullet point.",
+                          style: TextStyle(fontSize: 13),
+                        ),
+                        SizedBox(height: 30),
+                        Text(
+                          "Bullet Point 1",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                        SizedBox(height: 15),
+                        TextFormField(
+                          maxLines: 3,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 13),
+                          decoration: InputDecoration(
+                              hintText: '',
+                              contentPadding: EdgeInsets.all(10),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                  ))),
+                          initialValue: information[0],
+                          onChanged: (text) {
+                            setState(() => information[0] = text);
+                          },
+                        ),
+                        Text(
+                          'Character count: ${information[0].length}',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: (information[0].length < 80 ||
+                                      information[0].length > 110)
+                                  ? Colors.red
+                                  : Colors.green),
+                        ),
+                        SizedBox(height: 15),
+                        Text(
+                          "Bullet Point 2",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 15),
+                        ),
+                        SizedBox(height: 15),
+                        TextFormField(
+                          maxLines: 3,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 13),
+                          decoration: InputDecoration(
+                              hintText: '',
+                              contentPadding: EdgeInsets.all(10),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                  ))),
+                          initialValue: information[1],
+                          onChanged: (text) {
+                            setState(() => information[1] = text);
+                          },
+                        ),
+                        Text(
+                          'Character count: ${information[1].length}',
+                          style: TextStyle(
+                              fontSize: 11,
+                              color: (information[1].length < 80 ||
+                                      information[1].length > 110)
+                                  ? Colors.red
+                                  : Colors.green),
+                        ),
+                        SizedBox(height: 30.0),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              RaisedButton(
+                                  color: Colors.transparent,
+                                  elevation: 0,
+                                  padding: EdgeInsets.only(left: 22, right: 22),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    side: BorderSide(
+                                        color: basicColor, width: 1.2),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 5),
-                            child: MaterialButton(
-                              onPressed: () {
-                                filePicker(context);
-                              },
-                              child: Text("Browse"),
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    Text(
-                      "Responsibilities",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Only 80 to 110 characters are allowed for each bullet point.",
-                      style: TextStyle(fontSize: 13),
-                    ),
-                    SizedBox(height: 30),
-                    Text(
-                      "Bullet Point 1",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    SizedBox(height: 15),
-                    TextFormField(
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13),
-                      decoration: InputDecoration(
-                          hintText: '',
-                          contentPadding: EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ))),
-                      initialValue: information[0],
-                      onChanged: (text) {
-                        setState(() => information[0] = text);
-                      },
-                    ),
-                    Text('Character count: ${information[0].length}', style: TextStyle(fontSize: 11,color: (information[0].length < 80 || information[0].length > 110) ? Colors.red : Colors.green),),
-                    SizedBox(height: 15),
-                    Text(
-                      "Bullet Point 2",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15),
-                    ),
-                    SizedBox(height: 15),
-                    TextFormField(
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13),
-                      decoration: InputDecoration(
-                          hintText: '',
-                          contentPadding: EdgeInsets.all(10),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(5),
-                              borderSide: BorderSide(
-                                color: Colors.grey,
-                              ))),
-                      initialValue: information[1],
-                      onChanged: (text) {
-                        setState(() => information[1] = text);
-                      },
-                    ),
-                    Text('Character count: ${information[1].length}', style: TextStyle(fontSize: 11,color: (information[1].length < 80 || information[1].length > 110) ? Colors.red : Colors.green),),
-                    SizedBox(height: 30.0),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          RaisedButton(
-                              color: Colors.transparent,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 22, right: 22),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side:
-                                BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'Delete',
-                                style: TextStyle(color: basicColor),
-                              ),
-                              onPressed: () async {
-                                setState(() {
-                                  loading = true;
-                                });
-                                Navigator.pop(context);
+                                  child: Text(
+                                    'Delete',
+                                    style: TextStyle(color: basicColor),
+                                  ),
+                                  onPressed: () async {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    Navigator.pop(context);
 //                                experiences.removeAt(index);
 //                                await SharedPreferences.getInstance()
 //                                    .then((prefs) async {
@@ -429,57 +465,52 @@ class _NewProjectState extends State<NewProject> {
 //                                    Navigator.pop(context);
 //                                  });
 //                                });
-                              }),
-                          RaisedButton(
-                              color: Colors.transparent,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 22, right: 22),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side:
-                                BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'Save',
-                                style: TextStyle(color: basicColor),
-                              ),
-                              onPressed: () async {
-                                if(_formKey.currentState.validate())
-                                  if(validateBulletPoint(information[0]))
-                                    if(validateBulletPoint(information[1]))
-                                      Navigator.pop(context);
-//                                  setState(() {
-//                                    loading = true;
-//                                  });
-//                                  experiences[index]['Type'] = type;
-//                                  experiences[index]['company'] = company;
-//                                  experiences[index]['designation'] = designation;
-//                                  experiences[index]['domain'] = domain;
-//                                  experiences[index]['from'] = from;
-//                                  experiences[index]['industry'] = industry;
-//                                  experiences[index]['information'] = information;
-//                                  experiences[index]['to'] = to;
-//                                  if(file == null) {
-//                                    // TODO call API
-//                                    Navigator.pop(context);
-//                                  } else {
-//                                    _uploadFile(file, fileName).then((t) {
-//                                      experiences[index]['certificate'] = certificate;
-//                                      // TODO call API
-//                                      Navigator.pop(context);
-//                                    });
-//                                  }
-                              }),
-                        ],
-                      ),
+                                  }),
+                              RaisedButton(
+                                  color: Colors.transparent,
+                                  elevation: 0,
+                                  padding: EdgeInsets.only(left: 22, right: 22),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    side: BorderSide(
+                                        color: basicColor, width: 1.2),
+                                  ),
+                                  child: Text(
+                                    'Save',
+                                    style: TextStyle(color: basicColor),
+                                  ),
+                                  onPressed: () async {
+                                    if (_formKey.currentState.validate()) if (validateBulletPoint(
+                                        information[
+                                            0])) if (validateBulletPoint(
+                                        information[1])){
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      if(file == null) {
+                                        // TODO call API
+                                        showToast('Data updated successfully', context);
+                                        Navigator.pop(context);
+                                      } else {
+                                        _uploadFile(file, fileName).then((f) {
+                                          // TODO call API
+                                          showToast('Data updated successfully', context);
+                                          Navigator.pop(context);
+                                        });
+                                      }
+                                    }
+                                  }),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
                     ),
-                    SizedBox(height: 20,)
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
-        )
-    );
+            ));
   }
 }

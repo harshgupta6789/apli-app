@@ -279,7 +279,6 @@ class _DiplomaState extends State<Diploma> {
                                 child: DateTimeField(
                                   initialValue: from ?? null,
                                   decoration: InputDecoration(
-                                    
                                       hintText: "From:",
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
@@ -374,7 +373,10 @@ class _DiplomaState extends State<Diploma> {
                                             new EdgeInsets.symmetric(
                                                 vertical: 2.0,
                                                 horizontal: 10.0),
-                                        hintStyle: TextStyle(fontSize: 15 , color: Colors.black , fontWeight: FontWeight.w600),
+                                        hintStyle: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600),
                                         labelStyle:
                                             TextStyle(color: Colors.black))),
                               ),

@@ -38,7 +38,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
             userData.add(fname + ' ' + lname);
           userData.add((snapshot.data['profile_picture']));
         });
-      } catch(e) {
+      } catch (e) {
         userData = ['error'];
       }
     });
@@ -65,7 +65,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                         AsyncSnapshot<List<String>> snapshot) {
                       if (snapshot.hasData &&
                           snapshot.connectionState == ConnectionState.done) {
-                        if(snapshot.data[0] == 'error')
+                        if (snapshot.data[0] == 'error')
                           return Text('Error occured, try again later');
                         return Row(
                           children: <Widget>[

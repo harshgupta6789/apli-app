@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -63,8 +62,16 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             try {
               await FirebaseAuth.instance.signOut();
             } catch (e) {}
+            setState(() {
+              loading = true;
+            });
+            showToast('Verified Successfully', context);
+            await Future.delayed(Duration(seconds: 1));
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Register(phoneNo)));
+            setState(() {
+              loading = false;
+            });
           },
           verificationFailed: (AuthException exceptio) {
             print(exceptio.message);

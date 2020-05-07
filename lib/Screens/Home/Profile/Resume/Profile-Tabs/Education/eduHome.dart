@@ -13,7 +13,6 @@ class EducationOverview extends StatefulWidget {
 double height, width;
 
 class _EducationOverviewState extends State<EducationOverview> {
-
   double fontSize = 16;
 
   @override
@@ -215,7 +214,9 @@ class _EducationOverviewState extends State<EducationOverview> {
                 ),
               ),
             ),
-                SizedBox(height: 40,)
+            SizedBox(
+              height: 40,
+            )
           ]),
         )),
         behavior: MyBehavior(),

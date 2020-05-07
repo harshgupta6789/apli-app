@@ -19,11 +19,11 @@ class BasicIntro extends StatefulWidget {
 }
 
 class _BasicIntroState extends State<BasicIntro> {
-  double width, height;
+  double width, height, scale;
   File _image;
   bool loading = false, error = false;
   NetworkImage img;
-  String dropdownValue;
+  String dropdownValue, newLanguage;
   List<String> gendersList = ['male', 'female', 'other'];
   String profile = '',
       fname = '',
@@ -32,14 +32,17 @@ class _BasicIntroState extends State<BasicIntro> {
       email,
       mno = '',
       gender = '',
+      highest_qualification = '',
       bldg = '',
       country = '',
       state = '',
       postal = '',
       city = '';
-  Map<String, dynamic> address;
+  Map<String, dynamic> address, languages;
   Map<String, dynamic> completeIntro;
+  List languagesList = [];
   Timestamp dob;
+  Map<String, TextEditingController> temp = {};
 
   getPrefs() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -59,13 +62,17 @@ class _BasicIntroState extends State<BasicIntro> {
               mno = snapshot.data['ph_no'].toString();
               dob = snapshot.data['dob'];
               gender = snapshot.data['gender'];
+              highest_qualification = snapshot.data['highest_qualification'];
+              languages = snapshot.data['languages'] ?? {'' : 'Expert'};
               address = snapshot.data['Address'] ?? {};
               bldg = address['address'];
               country = address['country'];
               state = address['state'];
-              postal = address['postal_code'].toString();
+              postal = address['postal_code'] == null ? '' : address['postal_code'].toString();
               city = address['city'];
-              print(email);
+              languages.forEach((key, value) {
+                languagesList.add([key, value]);
+            });
             });
           });
         } catch (e) {
@@ -86,17 +93,6 @@ class _BasicIntroState extends State<BasicIntro> {
     });
   }
 
-  InputDecoration x(String t) {
-    return InputDecoration(
-        hintText: t,
-        border: OutlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff4285f4))),
-        contentPadding:
-            new EdgeInsets.symmetric(vertical: 2.0, horizontal: 10.0),
-        hintStyle: TextStyle(fontWeight: FontWeight.w600),
-        labelStyle: TextStyle(color: Colors.black));
-  }
-
   @override
   void initState() {
     getPrefs();
@@ -109,6 +105,10 @@ class _BasicIntroState extends State<BasicIntro> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if (width < 360)
+      scale = 0.7;
+    else
+      scale = 1;
     return email == null
         ? Loading()
         : loading
@@ -179,6 +179,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   decoration: x("First Name"),
                                   onChanged: (text) {
                                     setState(() => fname = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'first name cannot be empty';
+                                    else
+                                      return null;
                                   },
                                 ),
                                 SizedBox(
@@ -252,6 +258,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                                     .microsecondsSinceEpoch);
                                       });
                                     },
+                                    validator: (value) {
+                                      if (value == null)
+                                        return 'DOB cannot be empty';
+                                      else
+                                        return null;
+                                    },
                                     textInputAction: TextInputAction.next,
                                     onFieldSubmitted: (_) =>
                                         FocusScope.of(context).nextFocus(),
@@ -265,10 +277,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                       alignment: Alignment.centerLeft,
                                       child: TextFormField(
                                         enabled: false,
-                                        initialValue: 'Gender',
+                                        initialValue: '',
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500),
-                                        decoration: x("Last Name"),
+                                        decoration: x("Gender"),
                                       ),
                                     ),
                                     Align(
@@ -292,11 +304,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                                   Icons.keyboard_arrow_down),
                                             ),
                                             underline: SizedBox(),
-                                            items: <String>[
-                                              'Male',
-                                              'Female',
-                                              'Other'
-                                            ].map<DropdownMenuItem<String>>(
+                                            items: genders.map<DropdownMenuItem<String>>(
                                                 (String value) {
                                               return DropdownMenuItem<String>(
                                                 value: value,
@@ -312,6 +320,414 @@ class _BasicIntroState extends State<BasicIntro> {
                                         ),
                                       ),
                                     ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Divider(
+                                  thickness: 0.5,
+                                  color: Colors.black,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  initialValue: highest_qualification ?? '',
+                                  textInputAction: TextInputAction.next,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context).nextFocus(),
+                                  obscureText: false,
+                                  decoration: x("Highest Qualification"),
+                                  onChanged: (text) {
+                                    setState(() => highest_qualification = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'highest qualification cannot be empty';
+                                    else
+                                      return null;
+                                  },
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                ListTile(
+                                  leading: Text(
+                                    'Languages',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14),
+                                  ),
+                                  contentPadding: EdgeInsets.only(left: 0),
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemCount: languagesList.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    if(!temp.containsKey(index.toString()))
+                                      temp[index.toString()] =
+                                      new TextEditingController(
+                                          text: languagesList[index][0]);
+                                    return Column(
+                                      children: <Widget>[
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            SizedBox(
+                                              width: width *
+                                                  0.3 *
+                                                  scale,
+                                              child:
+                                              TextFormField(
+                                                controller: temp[
+                                                index.toString()],
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                    FontWeight
+                                                        .w500,
+                                                    fontSize:
+                                                    12),
+                                                decoration: InputDecoration(
+                                                    contentPadding: EdgeInsets.all(10 * scale),
+                                                    border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(5),
+                                                        borderSide: BorderSide(
+                                                          color:
+                                                          Colors.grey,
+                                                        ))),
+                                                onChanged:
+                                                    (value) {
+                                                  setState(() {
+                                                    languagesList[index][0] = value;
+                                                  });
+                                                },
+                                                validator:
+                                                    (value) {
+                                                  if (value
+                                                      .isEmpty)
+                                                    return 'cannot be empty';
+                                                  else
+                                                    return null;
+                                                },
+                                              ),
+                                            ),
+                                            ClipRRect(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(
+                                                  5),
+                                              child: Container(
+                                                color: Colors
+                                                    .grey[300],
+                                                padding: EdgeInsets
+                                                    .fromLTRB(
+                                                    10 *
+                                                        scale,
+                                                    0,
+                                                    5 * scale,
+                                                    0),
+                                                child:
+                                                DropdownButton<
+                                                    String>(
+                                                  value: languagesList[index][1] ==
+                                                      null
+                                                      ? 'Basic'
+                                                      : languagesList[index][1]
+                                                      .substring(0,
+                                                      1)
+                                                      .toUpperCase() +
+                                                      languagesList[index][1]
+                                                          .substring(1),
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .black,
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .w500,
+                                                      fontSize:
+                                                      12),
+                                                  icon: Padding(
+                                                    padding: EdgeInsets.only(
+                                                        left: 10.0 *
+                                                            scale),
+                                                    child: Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down),
+                                                  ),
+                                                  underline:
+                                                  SizedBox(),
+                                                  items: <
+                                                      String>[
+                                                        'Starter',
+                                                    'Basic',
+                                                    'Intermediate',
+                                                    'Expert'
+                                                  ].map<
+                                                      DropdownMenuItem<
+                                                          String>>((String
+                                                  value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value:
+                                                      value,
+                                                      child: Text(
+                                                          value),
+                                                    );
+                                                  }).toList(),
+                                                  onChanged:
+                                                      (value) {
+                                                    setState(
+                                                            () {
+                                                              languagesList[index][1] = value;
+                                                        });
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              padding: EdgeInsets
+                                                  .only(
+                                                  right: 15 *
+                                                      scale),
+                                              child: IconButton(
+                                                icon: Icon(Icons
+                                                    .delete_outline),
+                                                onPressed: () {
+                                                  if (languagesList
+                                                      .length ==
+                                                      1) {
+                                                  } else {
+                                                    languagesList
+                                                        .removeAt(
+                                                        index);
+                                                    for (int i =
+                                                        index;
+                                                    i < languagesList.length;
+                                                    i++) {
+                                                      temp[i.toString()]
+                                                          .text = languagesList[
+                                                      i][0];
+                                                    }
+                                                    temp.remove(index.toString());
+                                                    setState(
+                                                            () {});
+                                                  }
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment
+                                      .spaceBetween,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: width * 0.3 * scale,
+                                      child: InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) =>
+                                                SimpleDialog(
+                                                  title: Text(
+                                                    'Add Language',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight
+                                                            .bold,
+                                                        fontSize: 15),
+                                                  ),
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: width *
+                                                          0.35 *
+                                                          scale,
+                                                      padding: EdgeInsets
+                                                          .fromLTRB(
+                                                          20 *
+                                                              scale,
+                                                          20,
+                                                          20 *
+                                                              scale,
+                                                          20),
+                                                      child:
+                                                      TextField(
+                                                        autofocus:
+                                                        true,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .w500,
+                                                            fontSize:
+                                                            12),
+                                                        decoration: InputDecoration(
+                                                            hintText: 'eg: French, Japanese',
+                                                            contentPadding: EdgeInsets.all(10 * scale),
+                                                            border: OutlineInputBorder(
+                                                                borderRadius: BorderRadius.circular(5),
+                                                                borderSide: BorderSide(
+                                                                  color:
+                                                                  Colors.grey,
+                                                                ))),
+                                                        onChanged:
+                                                            (value) {
+                                                          setState(
+                                                                  () {
+                                                                newLanguage =
+                                                                    value;
+                                                              });
+                                                        },
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      children: <
+                                                          Widget>[
+                                                        FlatButton(
+                                                          child: Text(
+                                                            'CLOSE',
+                                                            style: TextStyle(
+                                                                color:
+                                                                Colors.black),
+                                                          ),
+                                                          onPressed:
+                                                              () {
+                                                            Navigator.of(
+                                                                context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                        FlatButton(
+                                                          child: Text(
+                                                            'ADD',
+                                                            style: TextStyle(
+                                                                color:
+                                                                basicColor),
+                                                          ),
+                                                          onPressed:
+                                                              () {
+                                                            Navigator.of(
+                                                                context)
+                                                                .pop();
+                                                            if(newLanguage != null)
+                                                              setState(() {
+                                                                languagesList.add([newLanguage, 'Basic']);
+                                                                temp = {};
+                                                              });
+                                                          },
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+                                          );
+                                        },
+                                        child: IgnorePointer(
+                                          ignoring: true,
+                                          child: TextFormField(
+                                            decoration:
+                                            InputDecoration(
+                                                hintText:
+                                                'Add new language',
+                                                hintStyle:
+                                                TextStyle(
+                                                    fontSize:
+                                                    12),
+                                                suffixIcon:
+                                                Icon(Icons
+                                                    .add),
+                                                contentPadding:
+                                                EdgeInsets
+                                                    .all(10 *
+                                                    scale),
+                                                border:
+                                                OutlineInputBorder(
+                                                    borderRadius: BorderRadius.circular(
+                                                        5),
+                                                    borderSide:
+                                                    BorderSide(
+                                                      color:
+                                                      Colors.grey,
+                                                    ))),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    ClipRRect(
+                                      borderRadius:
+                                      BorderRadius.circular(
+                                          5),
+                                      child: Container(
+                                        color: Colors.grey[300],
+                                        padding:
+                                        EdgeInsets.fromLTRB(
+                                            10 * scale,
+                                            0,
+                                            5 * scale,
+                                            0),
+                                        child: IgnorePointer(
+                                          ignoring: true,
+                                          child: DropdownButton<
+                                              String>(
+                                            value: 'Proficiency',
+                                            style: TextStyle(
+                                                color:
+                                                Colors.black,
+                                                fontWeight:
+                                                FontWeight
+                                                    .w500,
+                                                fontSize: 13),
+                                            icon: Padding(
+                                              padding:
+                                              EdgeInsets.only(
+                                                  left: 10.0 *
+                                                      scale),
+                                              child: Icon(Icons
+                                                  .keyboard_arrow_down),
+                                            ),
+                                            underline: SizedBox(),
+                                            items: <String>[
+                                              'Proficiency',
+                                            ].map<
+                                                DropdownMenuItem<
+                                                    String>>((String
+                                            value) {
+                                              return DropdownMenuItem<
+                                                  String>(
+                                                value: value,
+                                                child:
+                                                Text(value),
+                                              );
+                                            }).toList(),
+                                            onChanged: (value) {},
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          right: 15 * scale),
+                                      child: IconButton(
+                                        icon: Icon(
+                                            Icons.delete_outline),
+                                        onPressed: () {},
+                                      ),
+                                    )
                                   ],
                                 ),
                                 SizedBox(
@@ -343,6 +759,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   onChanged: (text) {
                                     setState(() => bldg = text);
                                   },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'street cannot be empty';
+                                    else
+                                      return null;
+                                  },
                                 ),
                                 SizedBox(
                                   height: 15,
@@ -356,6 +778,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   decoration: x("Country"),
                                   onChanged: (text) {
                                     setState(() => country = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'country cannot be empty';
+                                    else
+                                      return null;
                                   },
                                 ),
                                 SizedBox(
@@ -371,6 +799,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   onChanged: (text) {
                                     setState(() => state = text);
                                   },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'state cannot be empty';
+                                    else
+                                      return null;
+                                  },
                                 ),
                                 SizedBox(
                                   height: 15,
@@ -378,12 +812,21 @@ class _BasicIntroState extends State<BasicIntro> {
                                 TextFormField(
                                   initialValue: postal ?? '',
                                   textInputAction: TextInputAction.next,
+                                  keyboardType: TextInputType.numberWithOptions(),
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("Postal Code"),
                                   onChanged: (text) {
                                     setState(() => postal = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'postal code cannot be empty';
+                                    else
+                                      if(!(int.tryParse(value) != null))
+                                        return 'invalid postal';
+                                      else return null;
                                   },
                                 ),
                                 SizedBox(
@@ -398,6 +841,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   decoration: x("City"),
                                   onChanged: (text) {
                                     setState(() => city = text);
+                                  },
+                                  validator: (value) {
+                                    if (value.isEmpty)
+                                      return 'city cannot be empty';
+                                    else
+                                      return null;
                                   },
                                 ),
                                 SizedBox(
@@ -416,67 +865,44 @@ class _BasicIntroState extends State<BasicIntro> {
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    if (_image == null) {
-                                      await Firestore.instance
-                                          .collection('candidates')
-                                          .document(email)
-                                          .setData({
-                                        'First_name': fname,
-                                        'Middle_name': mname,
-                                        'Last_name': lname,
-                                        'dob': dob,
-                                        'gender': gender,
-                                        'Address': {
-                                          'address': bldg,
-                                          'country': country,
-                                          'state': state,
-                                          'postal_code': postal,
-                                          'city': city
-                                        }
-                                      }, merge: true).then((v) {
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      languages = {};
+                                      for(int i = 0; i < languagesList.length; i++) {
+                                        languages[languagesList[i][0]] = languagesList[i][1];
+                                      }
+                                      if (_image == null) {
+                                        // TODO call API
                                         showToast('Data Updated Successfully',
                                             context);
                                         Navigator.pop(context);
-                                      });
-                                    } else {
-                                      StorageReference storageReference;
-                                      storageReference = FirebaseStorage
-                                          .instance
-                                          .ref()
-                                          .child("resumePictures/$email");
-                                      StorageUploadTask uploadTask =
-                                          storageReference.putFile(_image);
-                                      final StorageTaskSnapshot downloadUrl =
-                                          (await uploadTask.onComplete);
-                                      await downloadUrl.ref
-                                          .getDownloadURL()
-                                          .then((url) async {
-                                        await Firestore.instance
-                                            .collection('candidates')
-                                            .document(email)
-                                            .setData({
-                                          'profile_picture': url,
-                                          'First_name': fname,
-                                          'Middle_name': mname,
-                                          'Last_name': lname,
-                                          'dob': dob,
-                                          'gender': gender,
-                                          'Address': {
-                                            'address': bldg,
-                                            'country': country,
-                                            'state': state,
-                                            'postal_code': postal,
-                                            'city': city
-                                          }
-                                        }, merge: true).then((v) {
+                                      } else {
+                                        showToast(
+                                            'Uploading profile picture\n might take some time',
+                                            context, duration: 5);
+                                        StorageReference storageReference;
+                                        storageReference = FirebaseStorage
+                                            .instance
+                                            .ref()
+                                            .child("resumePictures/$email");
+                                        StorageUploadTask uploadTask =
+                                            storageReference.putFile(_image);
+                                        final StorageTaskSnapshot downloadUrl =
+                                            (await uploadTask.onComplete);
+                                        await downloadUrl.ref
+                                            .getDownloadURL()
+                                            .then((url) {
+                                          setState(() {
+                                            profile = url;
+                                          });
+                                          // TODO call API
                                           showToast('Data Updated Successfully',
                                               context);
                                           Navigator.pop(context);
                                         });
-                                      });
+                                      }
                                     }
                                   },
                                 ),

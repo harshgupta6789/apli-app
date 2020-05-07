@@ -67,3 +67,68 @@ const String noDetails = "You haven't added any details yet";
 const String otherCourses = 'Other Courses';
 const String twelve = 'Class XII / Diploma';
 const String ten = 'Class X';
+
+const List<String> genders = ['Male', 'Female', 'Others'];
+const List<String> proficiencies = [
+  'Starter',
+  'Basic',
+  'Intermediate',
+  'Expert'
+];
+const List<String> experienceTypes = ['Internship', 'Job'];
+const List<String> domains = ['Software Development', 'Management', 'Sales', 'Marketing'];
+
+const List<String> industryTypes = [
+  'Accommodations',
+  'Accounting',
+  'Advertising',
+  'Aerospace',
+  'Agriculture and Agribusiness',
+  'Air Transportation',
+  'Apparel and Accessories',
+  'Automobile',
+  'Banking',
+  'Beauty and Cosmetics',
+  'Biotechnology',
+  'Chemical',
+  'Communications',
+  'Computer',
+  'Construction',
+  'Consulting',
+  'Consumer Products',
+  'Education',
+  'Electronics',
+  'Employment',
+  'Energy',
+  'Entertainment and Recreation',
+  'Fashion',
+  'Financial Services',
+  'Fine Arts',
+  'Food and Beverage',
+  'Health',
+  'Information Technology',
+  'Insurance',
+  'Journalism and News',
+  'Legal Services',
+  'Manufacturing',
+  'Media and Broadcasting',
+  'Medical Devices and Supply',
+  'Motion Pictures and Video',
+  'Music',
+  'Pharmaceutical',
+  'Public Administration',
+  'Public Relations',
+  'Publishing',
+  'Real Estate',
+  'Retail',
+  'Service',
+  'Sports',
+  'Technology',
+  'Telecommunications',
+  'Tourism',
+  'Transportation',
+  'Travel',
+  'Utilities',
+  'Video Game',
+  'Web Services'
+];

@@ -1,4 +1,3 @@
-
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/newProject.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
@@ -25,7 +24,9 @@ class Project extends StatelessWidget {
         });
       } catch (e) {
         print(e.toString());
-        temp = [{'error' : true}];
+        temp = [
+          {'error': true}
+        ];
       }
     });
     return temp;
@@ -64,7 +65,8 @@ class Project extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
-              if(snapshot.data.length > 0 && snapshot.data[0].containsKey('error'))
+              if (snapshot.data.length > 0 &&
+                  snapshot.data[0].containsKey('error'))
                 return Center(
                   child: Text('Error occured, try again later'),
                 );
@@ -97,7 +99,7 @@ class _ProjectsState extends State<Projects> {
   double width, height;
   bool loading = false;
 
-    List projects;
+  List projects;
 
   @override
   void initState() {
@@ -112,181 +114,190 @@ class _ProjectsState extends State<Projects> {
     return loading
         ? Loading()
         : Container(
-      padding: EdgeInsets.fromLTRB(width * 0.05, 30, width * 0.05, 0),
-      child: ScrollConfiguration(
-        behavior: MyBehavior(),
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                child: RaisedButton(
-                  padding: EdgeInsets.all(0),
-                  color: Colors.transparent,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6.0),
-                    side: BorderSide(color: basicColor, width: 1.5),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NewProject(old: false, projects: projects, index: projects.length,)));
-                  },
-                  child: ListTile(
-                    leading: Text(
-                      'Add New Activity',
-                      style: TextStyle(
-                          color: basicColor, fontWeight: FontWeight.w600),
-                    ),
-                    trailing: Icon(
-                      Icons.add,
-                      color: basicColor,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: ScrollPhysics(),
-                  itemCount: projects.length,
-                  itemBuilder: (BuildContext context1, int index) {
-                    String from = projects[index]['from'] == null
-                        ? null
-                        : DateTime.fromMicrosecondsSinceEpoch(
-                        projects[index]['from']
-                            .microsecondsSinceEpoch)
-                        .month
-                        .toString() +
-                        '-' +
-                        DateTime.fromMicrosecondsSinceEpoch(
-                            projects[index]['from']
-                                .microsecondsSinceEpoch)
-                            .year
-                            .toString();
-                    String to = projects[index]['to'] == null
-                        ? null
-                        : DateTime.fromMicrosecondsSinceEpoch(
-                        projects[index]['to']
-                            .microsecondsSinceEpoch)
-                        .month
-                        .toString() +
-                        '-' +
-                        DateTime.fromMicrosecondsSinceEpoch(
-                            projects[index]['to']
-                                .microsecondsSinceEpoch)
-                            .year
-                            .toString();
-                    String duration = (from ?? '') + ' to ' + (to ?? '');
-                    String info1, info2;
-                    info1 = projects[index]['information'] == null ? '' : projects[index]['information'][0];
-                    info2 = projects[index]['information'] == null ? '' : projects[index]['information'][1];
-                    return Column(
-                      children: <Widget>[
-                        Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(border: Border.all()),
-                              padding: EdgeInsets.all(8),
-                              child: ListTile(
-                                title: Text(
-                                  projects[index]['Name'] ??
-                                      'Project Title',
-                                  style:
-                                  TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.stretch,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text('Company/University: ' +
-                                        (projects[index]['University_Company'] ?? '')),
-                                    Text('Duration: ' + duration),
-                                    Text('Responsibilities: '),
-                                    Text('1: ' +
-                                        info1),
-                                    Text('2: ' +
-                                        info2),
-                                  ],
-                                ),
-                                contentPadding: EdgeInsets.only(left: 8),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: PopupMenuButton<int>(
-                                  icon: Icon(Icons.more_vert),
-                                  onSelected: (int result) async {
-                                    if (result == 0) {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  NewProject(
-                                                    projects: projects,
-                                                    index: index,
-                                                    old: true,
-                                                  )));
-                                    } else if (result == 1) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      //experiences.removeAt(index);
-                                      // TODO call API
-                                      setState(() {
-                                        loading = false;
-                                      });
-                                    }
-                                  },
-                                  itemBuilder: (BuildContext context) =>
-                                  <PopupMenuEntry<int>>[
-                                    const PopupMenuItem<int>(
-                                      value: 0,
-                                      child: Text(
-                                        'Edit',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13),
-                                      ),
-                                    ),
-                                    const PopupMenuItem<int>(
-                                      value: 1,
-                                      child: Text(
-                                        'Delete',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
+            padding: EdgeInsets.fromLTRB(width * 0.05, 30, width * 0.05, 0),
+            child: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
+                      child: RaisedButton(
+                        padding: EdgeInsets.all(0),
+                        color: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
                         ),
-                        SizedBox(
-                          height: 20,
-                        )
-                      ],
-                    );
-                  },
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => NewProject(
+                                        old: false,
+                                        projects: projects,
+                                        index: projects.length,
+                                      )));
+                        },
+                        child: ListTile(
+                          leading: Text(
+                            'Add New Activity',
+                            style: TextStyle(
+                                color: basicColor, fontWeight: FontWeight.w600),
+                          ),
+                          trailing: Icon(
+                            Icons.add,
+                            color: basicColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        itemCount: projects.length,
+                        itemBuilder: (BuildContext context1, int index) {
+                          String from = projects[index]['from'] == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                                          projects[index]['from']
+                                              .microsecondsSinceEpoch)
+                                      .month
+                                      .toString() +
+                                  '-' +
+                                  DateTime.fromMicrosecondsSinceEpoch(
+                                          projects[index]['from']
+                                              .microsecondsSinceEpoch)
+                                      .year
+                                      .toString();
+                          String to = projects[index]['to'] == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                                          projects[index]['to']
+                                              .microsecondsSinceEpoch)
+                                      .month
+                                      .toString() +
+                                  '-' +
+                                  DateTime.fromMicrosecondsSinceEpoch(
+                                          projects[index]['to']
+                                              .microsecondsSinceEpoch)
+                                      .year
+                                      .toString();
+                          String duration = (from ?? '') + ' to ' + ((from != null && to == null) ?  'ongoing' : to ?? '');
+                          String info1, info2;
+                          info1 = projects[index]['information'] == null
+                              ? ''
+                              : projects[index]['information'][0];
+                          info2 = projects[index]['information'] == null
+                              ? ''
+                              : projects[index]['information'][1];
+                          return Column(
+                            children: <Widget>[
+                              Stack(
+                                children: <Widget>[
+                                  Container(
+                                    decoration:
+                                        BoxDecoration(border: Border.all()),
+                                    padding: EdgeInsets.all(8),
+                                    child: ListTile(
+                                      title: Text(
+                                        projects[index]['Name'] ??
+                                            'Project Title',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Text('Company/University: ' +
+                                              (projects[index]
+                                                      ['University_Company'] ??
+                                                  '')),
+                                          Text('Duration: ' + duration),
+                                          Text('Responsibilities: '),
+                                          Text('1: ' + info1),
+                                          Text('2: ' + info2),
+                                        ],
+                                      ),
+                                      contentPadding: EdgeInsets.only(left: 8),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topRight,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: PopupMenuButton<int>(
+                                        icon: Icon(Icons.more_vert),
+                                        onSelected: (int result) async {
+                                          if (result == 0) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NewProject(
+                                                          projects: projects,
+                                                          index: index,
+                                                          old: true,
+                                                        )));
+                                          } else if (result == 1) {
+                                            setState(() {
+                                              loading = true;
+                                            });
+                                            //experiences.removeAt(index);
+                                            // TODO call API
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                          }
+                                        },
+                                        itemBuilder: (BuildContext context) =>
+                                            <PopupMenuEntry<int>>[
+                                          const PopupMenuItem<int>(
+                                            value: 0,
+                                            child: Text(
+                                              'Edit',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13),
+                                            ),
+                                          ),
+                                          const PopupMenuItem<int>(
+                                            value: 1,
+                                            child: Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 20,
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

@@ -89,13 +89,15 @@ class AwardsForm extends StatefulWidget {
 
 class _AwardsFormState extends State<AwardsForm> {
   AsyncSnapshot snapshot;
-  double width, height;
+  double width, height, scale;
   List awards;
   File file;
   String desc, newAwardDescription, email;
   bool loading = false;
   Timestamp newAwardDate;
   Map<String, TextEditingController> temp = {}, temp2 = {};
+  final _formKey = GlobalKey<FormState>();
+  final format = DateFormat("MM-yyyy");
 
   @override
   void initState() {
@@ -117,361 +119,412 @@ class _AwardsFormState extends State<AwardsForm> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if (width < 360)
+      scale = 0.7;
+    else
+      scale = 1;
     return loading
         ? Loading()
         : ScrollConfiguration(
-      behavior: MyBehavior(),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(width * 0.04),
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(25, 5, 25, 5),
-                    child: RaisedButton(
-                      padding: EdgeInsets.all(0),
-                      color: Colors.transparent,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        side: BorderSide(color: basicColor, width: 1.5),
-                      ),
-                      onPressed: () {
-                        newAwardDescription = null;
-                        newAwardDate = null;
-                        showDialog(
-                          context: context,
-                          builder: (_) => SimpleDialog(
-                            title: Text(
-                              'Add New Award',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15),
-                            ),
-                            children: <Widget>[
-                              Container(
-                                width: width,
-                                padding:
-                                EdgeInsets.fromLTRB(20, 20, 20, 20),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    TextField(
-                                      autofocus: true,
-                                      maxLines: 3,
+                  Container(
+                    padding: EdgeInsets.all(width * 0.04 * scale),
+                    child: Form(
+                      key: _formKey,
+                      autovalidate: true,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(25 * scale, 5, 25 * scale, 5),
+                            child: RaisedButton(
+                              padding: EdgeInsets.all(0),
+                              color: Colors.transparent,
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6.0),
+                                side: BorderSide(color: basicColor, width: 1.5),
+                              ),
+                              onPressed: () {
+                                newAwardDescription = null;
+                                newAwardDate = null;
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => SimpleDialog(
+                                    title: Text(
+                                      'Add New Award',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 12),
-                                      decoration: InputDecoration(
-                                          hintText:
-                                          'eg: 1st Prize in Skating',
-                                          contentPadding:
-                                          EdgeInsets.all(10),
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(
-                                                  5),
-                                              borderSide: BorderSide(
-                                                color: Colors.grey,
-                                              ))),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          newAwardDescription = value;
-                                        });
-                                      },
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
                                     ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                      width: width * 0.4,
-                                      child: DateTimeField(
-                                          textAlign: TextAlign.left,
-                                          format: DateFormat("MM-yyyy"),
-                                          onShowPicker: (context,
-                                              currentValue) async {
-                                            final date =
-                                            await showDatePicker(
-                                                context: context,
-                                                firstDate:
-                                                DateTime(1900),
-                                                initialDate:
-                                                DateTime.now(),
-                                                lastDate:
-                                                DateTime(2100));
-
-                                            return date;
-                                          },
-                                          onChanged: (value) {
-                                            setState(() {
-                                              newAwardDate = value == null
-                                                  ? null
-                                                  : Timestamp
-                                                  .fromMicrosecondsSinceEpoch(
-                                                  value
-                                                      .microsecondsSinceEpoch);
-                                            });
-                                          },
-                                          decoration: x("Date")),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  FlatButton(
-                                    child: Text(
-                                      'CLOSE',
-                                      style:
-                                      TextStyle(color: Colors.black),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text(
-                                      'ADD',
-                                      style: TextStyle(color: basicColor),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      if (newAwardDescription != null &&
-                                          newAwardDate != null)
-                                        setState(() {
-                                          awards.add({
-                                            'description':
-                                            newAwardDescription,
-                                            'date': newAwardDate
-                                          });
-                                          print(newAwardDate);
-                                        });
-                                    },
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                      child: ListTile(
-                        leading: Text(
-                          'Add New Award',
-                          style: TextStyle(
-                              color: basicColor,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        trailing: Icon(
-                          Icons.add,
-                          color: basicColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: ScrollPhysics(),
-                      itemCount: awards.length,
-                      itemBuilder: (BuildContext context1, int index) {
-                        if (!temp.containsKey(index.toString())) {
-                          temp[index.toString()] =
-                          new TextEditingController(
-                              text: awards[index]['description']);
-                          temp2[index.toString()] =
-                          new TextEditingController(
-                              text:
-                              DateTime.fromMicrosecondsSinceEpoch(
-                                  awards[index]['date']
-                                      .microsecondsSinceEpoch)
-                                  .toString()
-                                  .substring(0, 7));
-                        }
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 20),
-                          child: Column(
-                            children: <Widget>[
-                              TextFormField(
-                                controller: temp[index.toString()],
-                                maxLines: 3,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 13),
-                                decoration: InputDecoration(
-                                    hintText: 'eg: 1st Prize in Skating',
-                                    contentPadding: EdgeInsets.all(10),
-                                    border: OutlineInputBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(5),
-                                        borderSide: BorderSide(
-                                          color: Colors.grey,
-                                        ))),
-                                onChanged: (value) {
-                                  setState(() {
-                                    awards[index]['description'] = value;
-                                  });
-                                },
-                              ),
-                              SizedBox(
-                                height: 15,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  ClipRRect(
-                                    borderRadius:
-                                    BorderRadius.circular(5),
-                                    child: Container(
-                                      child: SizedBox(
-                                        width: width * 0.4,
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            DateTime date = await showDatePicker(
-                                                context: context,
-                                                firstDate: DateTime(1900),
-                                                initialDate: awards[index]
-                                                ['date'] !=
-                                                    null
-                                                    ? DateTime
-                                                    .fromMicrosecondsSinceEpoch(
-                                                    awards[index][
-                                                    'date']
-                                                        .microsecondsSinceEpoch)
-                                                    : DateTime.now(),
-                                                lastDate: DateTime(2100));
-                                            setState(() {
-                                              setState(() {
-                                                if(date != null) temp2[index.toString()].text = date.toString().substring(0, 7);
-                                                awards[index]
-                                                ['date'] = date ==
-                                                    null
-                                                    ? null
-                                                    : Timestamp
-                                                    .fromMicrosecondsSinceEpoch(
-                                                    date.microsecondsSinceEpoch);
-                                              });
-                                            });
-                                          },
-                                          child: Container(
-                                            width: width * 0.3, color: Colors.transparent,
-                                            child: IgnorePointer(
-                                              child: TextFormField(
-                                                controller: temp2[index.toString()],
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w500,
-                                                    fontSize: 13),
-                                                decoration: InputDecoration(
-                                                    hintText: 'eg: 1st Prize in Skating',
-                                                    contentPadding: EdgeInsets.all(10),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius:
-                                                        BorderRadius.circular(5),
-                                                        borderSide: BorderSide(
-                                                          color: Colors.grey,
-                                                        ))),
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    awards[index]['description'] = value;
-                                                  });
-                                                },
-                                              )
+                                    children: <Widget>[
+                                      Container(
+                                        width: width,
+                                        padding:
+                                            EdgeInsets.fromLTRB(20 * scale, 20, 20 * scale, 20),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            TextFormField(
+                                              autofocus: true,
+                                              maxLines: 3,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 12),
+                                              decoration: InputDecoration(
+                                                  hintText:
+                                                      'eg: 1st Prize in Skating',
+                                                  contentPadding:
+                                                      EdgeInsets.all(10),
+                                                  border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      borderSide: BorderSide(
+                                                        color: Colors.grey,
+                                                      ))),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  newAwardDescription = value;
+                                                });
+                                              },
                                             ),
-                                          ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            SizedBox(
+                                              width: width * 0.4 * scale,
+                                              child: DateTimeField(
+                                                  textAlign: TextAlign.left,
+                                                  format: DateFormat("MM-yyyy"),
+                                                  onShowPicker: (context,
+                                                      currentValue) async {
+                                                    final date =
+                                                        await showDatePicker(
+                                                            context: context,
+                                                            firstDate:
+                                                                DateTime(1900),
+                                                            initialDate:
+                                                                DateTime.now(),
+                                                            lastDate:
+                                                                DateTime(2100));
+
+                                                    return date;
+                                                  },
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      newAwardDate = value ==
+                                                              null
+                                                          ? null
+                                                          : Timestamp
+                                                              .fromMicrosecondsSinceEpoch(
+                                                                  value
+                                                                      .microsecondsSinceEpoch);
+                                                    });
+                                                  },
+                                                  decoration: x("Date")),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          FlatButton(
+                                            child: Text(
+                                              'CLOSE',
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          FlatButton(
+                                            child: Text(
+                                              'ADD',
+                                              style:
+                                                  TextStyle(color: basicColor),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              if (newAwardDescription != null &&
+                                                  newAwardDate != null)
+                                                if(newAwardDescription != '')
+                                                  setState(() {
+                                                    awards.add({
+                                                      'description':
+                                                          newAwardDescription,
+                                                      'date': newAwardDate
+                                                    });
+                                                    print(newAwardDate);
+                                                    print(newAwardDescription);
+                                                  });
+                                            },
+                                          ),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    padding: EdgeInsets.only(right: 15),
-                                    child: IconButton(
-                                      icon: Icon(Icons.delete_outline),
-                                      onPressed: () {
-                                        awards.removeAt(index);
-                                        for (int i = index;
-                                        i < awards.length;
-                                        i++) {
-                                          temp[i.toString()].text =
-                                          awards[i]['description'];
-                                          temp2[i.toString()].text =
-                                          DateTime.fromMicrosecondsSinceEpoch(awards[i]['date'].microsecondsSinceEpoch).toString().substring(0, 7);
-                                        }
-                                        temp.remove(
-                                            awards.length.toString());
-                                        temp2.remove(
-                                            awards.length.toString());
-                                        setState(() {});
-                                      },
-                                    ),
-                                  )
-                                ],
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              if (index == awards.length - 1)
-                                SizedBox()
-                              else
-                                Divider(
-                                  color: Colors.grey,
+                                );
+                              },
+                              child: ListTile(
+                                leading: Text(
+                                  'Add New Award',
+                                  style: TextStyle(
+                                      color: basicColor,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                            ],
+                                trailing: Icon(
+                                  Icons.add,
+                                  color: basicColor,
+                                ),
+                              ),
+                            ),
                           ),
-                        );
-                      }),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  RaisedButton(
-                    color: Colors.transparent,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                      side: BorderSide(color: basicColor, width: 1.5),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          ListView.builder(
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              itemCount: awards.length,
+                              itemBuilder: (BuildContext context1, int index) {
+                                if (!temp.containsKey(index.toString())) {
+                                  temp[index.toString()] =
+                                      new TextEditingController(
+                                          text: awards[index]['description']);
+                                  temp2[index.toString()] =
+                                      new TextEditingController(
+                                          text: DateTime
+                                                  .fromMicrosecondsSinceEpoch(
+                                                      awards[index]['date']
+                                                          .microsecondsSinceEpoch)
+                                              .toString()
+                                              .substring(0, 7));
+                                }
+                                return Container(
+                                  padding: EdgeInsets.only(bottom: 20),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        'Award ' + (index + 1).toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 13),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      TextFormField(
+                                        controller: temp[index.toString()],
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 13),
+                                        decoration: InputDecoration(
+                                            hintText:
+                                                'eg: 1st Prize in Skating',
+                                            contentPadding: EdgeInsets.all(10),
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                borderSide: BorderSide(
+                                                  color: Colors.grey,
+                                                ))),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            awards[index]['description'] =
+                                                value;
+                                          });
+                                        },
+                                        validator: (value) {
+                                          if (value.isEmpty)
+                                            return 'field cannot be empty';
+                                          else
+                                            return null;
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 15,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: <Widget>[
+                                          Container(),
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            child: Container(
+                                              child: SizedBox(
+                                                width: width * 0.2 * scale,
+                                                child: GestureDetector(
+                                                  onTap: () async {
+                                                    DateTime date = await showDatePicker(
+                                                        context: context,
+                                                        firstDate:
+                                                            DateTime(1900),
+                                                        initialDate: awards[index]
+                                                                    ['date'] !=
+                                                                null
+                                                            ? DateTime.fromMicrosecondsSinceEpoch(
+                                                                awards[index]
+                                                                        ['date']
+                                                                    .microsecondsSinceEpoch)
+                                                            : DateTime.now(),
+                                                        lastDate:
+                                                            DateTime(2100));
+                                                    setState(() {
+                                                      if (date != null)
+                                                        temp2[index.toString()]
+                                                                .text =
+                                                            date
+                                                                .toString()
+                                                                .substring(
+                                                                    0, 7);
+                                                      awards[index]
+                                                          ['date'] = date ==
+                                                              null
+                                                          ? null
+                                                          : Timestamp
+                                                              .fromMicrosecondsSinceEpoch(
+                                                                  date.microsecondsSinceEpoch);
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    width: width * 0.3 * scale,
+                                                    color: Colors.transparent,
+                                                    child: IgnorePointer(
+                                                        child: TextFormField(
+                                                      controller: temp2[
+                                                          index.toString()],
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontSize: 13),
+                                                      decoration:
+                                                          InputDecoration(
+                                                            //labelText: 'Date',
+                                                              hintText:
+                                                                  'eg: 1st Prize in Skating',
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .all(10),
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ))),
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          awards[index][
+                                                                  'description'] =
+                                                              value;
+                                                        });
+                                                      },
+                                                    )),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.only(),
+                                            child: IconButton(
+                                              icon: Icon(Icons.delete_outline),
+                                              onPressed: () {
+                                                awards.removeAt(index);
+                                                for (int i = index;
+                                                    i < awards.length;
+                                                    i++) {
+                                                  temp[i.toString()].text =
+                                                      awards[i]['description'];
+                                                  temp2[i.toString()]
+                                                      .text = DateTime
+                                                          .fromMicrosecondsSinceEpoch(
+                                                              awards[i]['date']
+                                                                  .microsecondsSinceEpoch)
+                                                      .toString()
+                                                      .substring(0, 7);
+                                                }
+                                                temp.remove(
+                                                    awards.length.toString());
+                                                temp2.remove(
+                                                    awards.length.toString());
+                                                setState(() {});
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      if (index == awards.length - 1)
+                                        SizedBox()
+                                      else
+                                        Divider(
+                                          color: Colors.grey,
+                                        ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              side: BorderSide(color: basicColor, width: 1.5),
+                            ),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                bool t = true;
+                                for (int i = 0; i < awards.length; i++)
+                                  if (awards[i]['date'] == null) {
+                                    showToast('Date not provided', context);
+                                    t = false;
+                                    break;
+                                  }
+                                if (t) {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  // TODO call API
+                                  showToast(
+                                      'Data Updated Successfully', context);
+                                  Navigator.pop(context);
+                                }
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      ),
                     ),
-                    child: Text(
-                      'Save',
-                      style: TextStyle(color: basicColor),
-                    ),
-                    onPressed: () async {
-                      bool t = true;
-                      for (int i = 0; i < awards.length; i++)
-                        if (awards[i]['date'] == null) {
-                          showToast('Date not provided', context);
-                          t = false;
-                          break;
-                        }
-                      if (t) {
-                        setState(() {
-                          loading = true;
-                        });
-                        await Firestore.instance
-                            .collection('candidates')
-                            .document(email)
-                            .setData({'awards': awards},
-                            merge: true).then((f) {
-                          showToast('Data Updated Successfully', context);
-                          Navigator.pop(context);
-                        });
-                      }
-                    },
                   ),
-                  SizedBox(
-                    height: 30,
-                  )
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

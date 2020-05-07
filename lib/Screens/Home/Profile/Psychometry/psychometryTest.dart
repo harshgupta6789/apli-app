@@ -47,14 +47,15 @@ class _PsychometryTestState extends State<PsychometryTest> {
 
   sortRemainingQuestions() {
     List<List<String>> temp = [];
-    for(int i = 0; i < remainingQuestions.length; i++) {
+    for (int i = 0; i < remainingQuestions.length; i++) {
       temp.add([]);
     }
-    for(int i = 0; i < remainingQuestions.length; i++) {
-      temp[int.parse(remainingQuestions[i][0].substring(1)) - 1] = remainingQuestions[i];
+    for (int i = 0; i < remainingQuestions.length; i++) {
+      temp[int.parse(remainingQuestions[i][0].substring(1)) - 1] =
+          remainingQuestions[i];
     }
     remainingQuestions = temp;
-    setState(() { });
+    setState(() {});
   }
 
   checkCount() {

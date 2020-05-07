@@ -24,7 +24,9 @@ class Experience extends StatelessWidget {
         });
       } catch (e) {
         print(e.toString());
-        temp = [{'error' : true}];
+        temp = [
+          {'error': true}
+        ];
       }
     });
     return temp;
@@ -63,7 +65,8 @@ class Experience extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
-              if(snapshot.data.length > 0 && snapshot.data[0].containsKey('error'))
+              if (snapshot.data.length > 0 &&
+                  snapshot.data[0].containsKey('error'))
                 return Center(
                   child: Text('Error occured, try again later'),
                 );
@@ -131,7 +134,11 @@ class _ExperiencesState extends State<Experiences> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => NewExperience(old: false, experiences: experiences, index: experiences.length,)));
+                                  builder: (context) => NewExperience(
+                                        old: false,
+                                        experiences: experiences,
+                                        index: experiences.length,
+                                      )));
                         },
                         child: ListTile(
                           leading: Text(
@@ -182,24 +189,31 @@ class _ExperiencesState extends State<Experiences> {
                                               .microsecondsSinceEpoch)
                                       .year
                                       .toString();
-                          String duration = (from ?? '') + ' to ' + (to ?? '');
+                          String duration = (from ?? '') + ' to ' + ((from != null && to == null) ?  'ongoing' : to ?? '');
                           String info1, info2, info3;
-                          info1 = experiences[index]['information'] == null ? '' : experiences[index]['information'][0];
-                          info2 = experiences[index]['information'] == null ? '' : experiences[index]['information'][1];
-                          info3 = experiences[index]['information'] == null ? '' : experiences[index]['information'][2];
+                          info1 = experiences[index]['information'] == null
+                              ? ''
+                              : experiences[index]['information'][0];
+                          info2 = experiences[index]['information'] == null
+                              ? ''
+                              : experiences[index]['information'][1];
+                          info3 = experiences[index]['information'] == null
+                              ? ''
+                              : experiences[index]['information'][2];
                           return Column(
                             children: <Widget>[
                               Stack(
                                 children: <Widget>[
                                   Container(
-                                    decoration: BoxDecoration(border: Border.all()),
+                                    decoration:
+                                        BoxDecoration(border: Border.all()),
                                     padding: EdgeInsets.all(8),
                                     child: ListTile(
                                       title: Text(
                                         experiences[index]['designation'] ??
                                             'Designation',
-                                        style:
-                                            TextStyle(fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
                                       ),
                                       subtitle: Column(
                                         crossAxisAlignment:
@@ -209,7 +223,8 @@ class _ExperiencesState extends State<Experiences> {
                                             height: 5,
                                           ),
                                           Text('Type: ' +
-                                              (experiences[index]['Type'] ?? '')),
+                                              (experiences[index]['Type'] ??
+                                                  '')),
                                           Text('Company: ' +
                                               (experiences[index]['company'] ??
                                                   '')),
@@ -218,14 +233,12 @@ class _ExperiencesState extends State<Experiences> {
                                               (experiences[index]['industry'] ??
                                                   '')),
                                           Text('Domain: ' +
-                                              (experiences[index]['domain'] ?? '')),
+                                              (experiences[index]['domain'] ??
+                                                  '')),
                                           Text('Responsibilities: '),
-                                          Text('1: ' +
-                                              info1),
-                                          Text('2: ' +
-                                              info2),
-                                          Text('3: ' +
-                                              info3),
+                                          Text('1: ' + info1),
+                                          Text('2: ' + info2),
+                                          Text('3: ' + info3),
                                         ],
                                       ),
                                       contentPadding: EdgeInsets.only(left: 8),
@@ -244,7 +257,8 @@ class _ExperiencesState extends State<Experiences> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         NewExperience(
-                                                          experiences: experiences,
+                                                          experiences:
+                                                              experiences,
                                                           index: index,
                                                           old: true,
                                                         )));
@@ -260,7 +274,7 @@ class _ExperiencesState extends State<Experiences> {
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>
-                                        <PopupMenuEntry<int>>[
+                                            <PopupMenuEntry<int>>[
                                           const PopupMenuItem<int>(
                                             value: 0,
                                             child: Text(
