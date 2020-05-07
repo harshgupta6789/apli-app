@@ -38,6 +38,7 @@ class _BasicIntroState extends State<BasicIntro> {
       postal = '',
       city = '';
   Map<String, dynamic> address;
+  Map<String, dynamic> completeIntro;
   Timestamp dob;
 
   getPrefs() async {

@@ -346,7 +346,6 @@ class _VideoIntroState extends State<VideoIntro>
                                 );
                                 print(urlFromCamera);
                                 if (urlFromCamera != null) {
-                                  filePicker(context);
                                   showToast(
                                       'Recorded Video Will Be Stored In Storage/Apli Folder',
                                       context);
