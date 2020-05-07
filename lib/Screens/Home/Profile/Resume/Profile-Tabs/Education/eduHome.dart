@@ -66,6 +66,22 @@ class _EducationOverviewState extends State<EducationOverview> {
             details.getDocuments().then((data) {
               setState(() {
                 if (s.data['education'] == null) {
+                  completeEducation['XII'] = {
+                    'board': "",
+                    'certificate': "",
+                    'institute': "",
+                    'score': "",
+                    'score_unit': "",
+                    'specialization': "",
+                  };
+                  completeEducation['X'] = {
+                    'board': "",
+                    'certificate': "",
+                    'institute': "",
+                    'score': "",
+                    'score_unit': "",
+                    'specialization': "",
+                  };
                 } else {
                   completeEducation['XII'] = s.data['education']['XII'] ??
                       {
@@ -75,8 +91,6 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'score': "",
                         'score_unit': "",
                         'specialization': "",
-                        'start': "",
-                        'end': "",
                       };
                   completeEducation['X'] = s.data['education']['X'] ??
                       {
@@ -86,16 +100,16 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'score': "",
                         'score_unit': "",
                         'specialization': "",
-                        'start': "",
-                        'end': "",
                       };
                 }
 
                 email = s.data['email'];
+
                 semToBuild = data.documents[0].data['total_semester'];
                 course = data.documents[0].data['course'];
                 branch = data.documents[0].data['branch'];
                 duration = data.documents[0].data['batch_year'];
+
                 if (s.data['education'] != null) {
                   if (s.data['education'][course] != null) {
                     if (s.data['education'][course]['sem_records'] != null) {
@@ -122,6 +136,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                     }
                   }
                 }
+                print(completeEducation);
               });
             });
           } else {
@@ -129,7 +144,7 @@ class _EducationOverviewState extends State<EducationOverview> {
               email = s.data['email'];
             });
           }
-          print(completeEducation);
+
           print(email);
         });
       });
@@ -217,14 +232,20 @@ class _EducationOverviewState extends State<EducationOverview> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0.0, 20.0, 10.0, 10.0),
                                       child: FlatButton(
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CurrentEducation(
-                                                          education:
-                                                              completeEducation[
-                                                                  course]))),
+                                          onPressed: () {
+                                            print(completeEducation);
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CurrentEducation(
+                                                            sem: semToBuild,
+                                                            course: course,
+                                                            duration: duration,
+                                                            branch: branch,
+                                                            education:
+                                                                completeEducation)));
+                                          },
                                           child: Text(
                                             "Add now",
                                             style: TextStyle(
@@ -272,9 +293,12 @@ class _EducationOverviewState extends State<EducationOverview> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       CurrentEducation(
+                                                          sem: semToBuild,
+                                                          course: course,
+                                                          duration: duration,
+                                                          branch: branch,
                                                           education:
-                                                              completeEducation[
-                                                                  course]))),
+                                                              completeEducation))),
                                           child: Text(
                                             "Add now",
                                             style: TextStyle(
@@ -321,9 +345,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => Diploma(
-                                                        xii: completeEducation[
-                                                            'XII'],
-                                                      ))),
+                                                      xii: completeEducation))),
                                           child: Text(
                                             "Add now",
                                             style: TextStyle(
@@ -370,9 +392,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => Tenth(
-                                                        x: completeEducation[
-                                                            'X'],
-                                                      ))),
+                                                      x: completeEducation))),
                                           child: Text(
                                             "Add now",
                                             style: TextStyle(

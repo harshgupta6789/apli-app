@@ -236,6 +236,8 @@ class _CameraState extends State<Camera> {
     setState(() {
       _isRecording = false;
       isRecordingStopped = true;
+      showToast(
+          'Recorded Video Will Be Stored In Storage/Apli Folder', context);
     });
 
     try {
