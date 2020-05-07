@@ -104,6 +104,7 @@ class _SkillsState extends State<Skills> {
                                     padding: EdgeInsets.fromLTRB(
                                         25 * scale, 5, 25 * scale, 5),
                                     child: RaisedButton(
+
                                       padding: EdgeInsets.all(0),
                                       color: Colors.white,
                                       elevation: 0,
