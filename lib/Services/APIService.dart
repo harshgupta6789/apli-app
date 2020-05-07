@@ -102,7 +102,7 @@ class APIService {
                 body: json.decode('{'
                     '"secret" : "$checkLoginSecret", '
                     '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
+                    '"data" : "${map['projects']}"'
                     '}')
             );
             if(response.statusCode == 200) {
@@ -123,7 +123,7 @@ class APIService {
                 body: json.decode('{'
                     '"secret" : "$checkLoginSecret", '
                     '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
+                    '"data" : "${map['extra_curricular']}"'
                     '}')
             );
             if(response.statusCode == 200) {
@@ -144,7 +144,7 @@ class APIService {
                 body: json.decode('{'
                     '"secret" : "$checkLoginSecret", '
                     '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
+                    '"data" : "${map['skills']}"'
                     '}')
             );
             if(response.statusCode == 200) {
@@ -165,7 +165,7 @@ class APIService {
                 body: json.decode('{'
                     '"secret" : "$checkLoginSecret", '
                     '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
+                    '"data" : "${map['award']}"'
                     '}')
             );
             if(response.statusCode == 200) {

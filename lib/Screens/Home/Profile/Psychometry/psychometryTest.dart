@@ -1,4 +1,5 @@
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,8 +7,9 @@ import 'package:flutter/material.dart';
 
 class PsychometryTest extends StatefulWidget {
   String email;
+  int status;
   Map<String, dynamic> questions, answeredQuestions;
-  PsychometryTest({this.email, this.questions, this.answeredQuestions});
+  PsychometryTest({this.email, this.questions, this.answeredQuestions, this.status});
   @override
   _PsychometryTestState createState() => _PsychometryTestState();
 }
@@ -118,10 +120,13 @@ class _PsychometryTestState extends State<PsychometryTest> {
                           'response': remainingQuestions[j++][2]
                         };
                     }
+                    int temp = decimalToBinary(widget.status);
+                    temp = ((temp ~/ 10) * 10) + 1;
+                    temp = binaryToDecimal(temp);
                     await Firestore.instance
                         .collection('candidates')
                         .document(widget.email)
-                        .setData({'psycho_ques': answeredQuestions},
+                        .setData({'psycho_ques': answeredQuestions, 'profile_status' : temp},
                             merge: true).then((f) {
                       setState(() {
                         loading = false;

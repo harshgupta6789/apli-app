@@ -905,9 +905,18 @@ class _BasicIntroState extends State<BasicIntro> {
                                         // TODO call API
                                         map['profile_picture'] = profile;
                                         dynamic result = await _APIService.sendProfileData(map);
-                                        showToast('Data Updated Successfully',
-                                            context);
-                                        Navigator.pop(context);
+                                        if(result == -1) {
+                                          showToast('Failed', context);
+                                        } else if(result == 0) {
+                                          showToast('Failed', context);
+                                        } else if(result == -2) {
+                                          showToast('Could not connect to server', context);
+                                        } else if(result == 1) {
+                                          showToast('Data Updated Successfully', context);
+                                          Navigator.pop(context);
+                                        } else {
+                                          showToast('Unexpected error occured', context);
+                                        }
                                       } else {
                                         showToast(
                                             'Uploading profile picture\n might take some time',
@@ -923,12 +932,25 @@ class _BasicIntroState extends State<BasicIntro> {
                                             (await uploadTask.onComplete);
                                         await downloadUrl.ref
                                             .getDownloadURL()
-                                            .then((url) {
+                                            .then((url) async {
                                           setState(() {
                                             profile = url;
                                           });
                                           map['profile_picture'] = url;
                                           // TODO call API
+                                          dynamic result = await _APIService.sendProfileData(map);
+                                          if(result == -1) {
+                                            showToast('Failed', context);
+                                          } else if(result == 0) {
+                                            showToast('Failed', context);
+                                          } else if(result == -2) {
+                                            showToast('Could not connect to server', context);
+                                          } else if(result == 1) {
+                                            showToast('Data Updated Successfully', context);
+                                            Navigator.pop(context);
+                                          } else {
+                                            showToast('Unexpected error occured', context);
+                                          }
                                           showToast('Data Updated Successfully',
                                               context);
                                           Navigator.pop(context);

@@ -20,6 +20,7 @@ class _PsychometryState extends State<Psychometry> {
   Map<String, dynamic> questions, answeredQuestions;
   String email;
   bool error = false;
+  int status;
 
   userInit() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -51,6 +52,7 @@ class _PsychometryState extends State<Psychometry> {
             else
               setState(() {
                 answeredQuestions = snapshot2.data['psycho_ques'];
+                status = snapshot2.data['profile_status'] ?? 0;
               });
             if (answeredQuestions == null) {
               if (!mounted)
@@ -213,6 +215,7 @@ class _PsychometryState extends State<Psychometry> {
                                           email: email,
                                           questions: questions,
                                           answeredQuestions: answeredQuestions,
+                                          status: status
                                         )));
                           },
                         ),
@@ -267,6 +270,7 @@ class _PsychometryState extends State<Psychometry> {
                                         email: email,
                                         questions: questions,
                                         answeredQuestions: answeredQuestions,
+                                        status: status
                                       )));
                         },
                       ),

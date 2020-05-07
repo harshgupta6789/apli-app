@@ -2,6 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
+showToast(String msg, BuildContext context, {int duration}) {
+  Toast.show(msg, context,
+      backgroundColor: Colors.red, duration: duration ?? 3);
+}
+
+
+
+
 bool validateEmail(String value) {
   String p =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -25,9 +33,36 @@ bool validatePassword(String value) {
   }
 }
 
-showToast(String msg, BuildContext context, {int duration}) {
-  Toast.show(msg, context, backgroundColor: Colors.red, duration: duration ?? 3);
+
+
+
+int decimalToBinary(int decimal) {
+  int binary = 0, i = 1;
+  while (decimal > 0) {
+    binary = binary + (decimal % 2) * i;
+    decimal = (decimal / 2).floor();
+    i = i * 10;
+  }
+  return binary;
 }
+
+int binaryToDecimal(int binary) {
+  int decimal = 0, n = 0;
+  decimal = int.tryParse(binary.toString(), radix: 2);
+  return decimal;
+}
+
+
+
+
+String getFileNameFromURL(String url) {
+  Pattern pattern = r'[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))';
+  RegExp regExp = new RegExp(pattern);
+  return regExp.stringMatch(url);
+}
+
+
+
 
 InputDecoration x(String t) {
   return InputDecoration(

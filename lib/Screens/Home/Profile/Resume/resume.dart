@@ -7,6 +7,7 @@ import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,6 +17,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import '../../../HomeLoginWrapper.dart';
 import 'editResume.dart';
 
 class Resume extends StatefulWidget {
@@ -25,10 +27,17 @@ class Resume extends StatefulWidget {
 
 class _ResumeState extends State<Resume> {
   double height, width;
+  int status;
   bool error = false, loading = false;
   String pdfUrl;
   String email;
   String path;
+
+  bool checkStatus(int status) {
+    if(status < 384)
+      return false;
+    else return true;
+  }
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
@@ -104,6 +113,7 @@ class _ResumeState extends State<Resume> {
               .then((s) {
             setState(() {
               pdfUrl = s.data['pdfResume'];
+              status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
           });
@@ -131,7 +141,7 @@ class _ResumeState extends State<Resume> {
         ? Loading()
         : loading
             ? Loading()
-            : ScrollConfiguration(
+            : !checkStatus(status) ? noResume() : ScrollConfiguration(
                 behavior: MyBehavior(),
                 child: SingleChildScrollView(
                   child: Padding(
@@ -291,5 +301,44 @@ class _ResumeState extends State<Resume> {
                   ),
                 ),
               );
+  }
+
+  Widget noResume() {
+    return Center(
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset("Assets/Images/job.png"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        text:
+                        "We can help you build your Resume \nBut first build your ",
+                        style: TextStyle(color: Colors.black, fontSize: 18),
+                        children: [
+                          TextSpan(
+                              text: "Profile",
+                              style: TextStyle(color: basicColor),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            EditResume()),
+                                  );
+                                }),
+                        ]),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ));
   }
 }
