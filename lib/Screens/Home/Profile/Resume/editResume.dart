@@ -26,18 +26,18 @@ class _EditResumeState extends State<EditResume> {
           decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.withOpacity(0.4))),
           child: InkWell(
+            splashColor: basicColor,
             onTap: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => x));
             },
             child: ListTile(
+            
                 title: Text(
                   text,
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
-                trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForwardOutline),
-                )),
+                trailing: Icon(EvaIcons.arrowIosForwardOutline)),
           ),
         ));
   }

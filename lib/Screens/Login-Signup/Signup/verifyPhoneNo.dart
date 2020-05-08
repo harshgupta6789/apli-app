@@ -37,7 +37,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
     if (s == null) {
       return false;
     }
-    return double.parse(s, (e) => null) != null;
+    return double.parse(s) != null;
   }
 
   Future<void> verifyPhone() async {

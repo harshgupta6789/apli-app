@@ -1,14 +1,11 @@
 import 'dart:io';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;

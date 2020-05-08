@@ -62,7 +62,9 @@ class _CameraState extends State<Camera> {
 
     try {
       await controller.initialize();
-    } on CameraException catch (e) {}
+    } on CameraException catch (e) {
+      print(e);
+    }
 
     if (mounted) {
       setState(() {});
@@ -141,6 +143,7 @@ class _CameraState extends State<Camera> {
                         isRecordingStopped = false;
                       });
                     } on Exception catch (e) {
+                      print(e);
                       setState(() {
                         isRecordingStopped = false;
                       });
@@ -225,6 +228,7 @@ class _CameraState extends State<Camera> {
 //        .show();
       startTimer();
     } on CameraException catch (e) {
+       print(e);
       return null;
     }
     path = filePath;
@@ -246,6 +250,7 @@ class _CameraState extends State<Camera> {
             'Recorded Video Will Be Stored In Storage/Apli Folder', context);
       });
     } on CameraException catch (e) {
+       print(e);
       return null;
     }
   }

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -10,7 +9,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 double height, width;
 
