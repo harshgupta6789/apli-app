@@ -1,14 +1,11 @@
 import 'dart:io';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
@@ -135,15 +132,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
-                          onChanged: (text) {
-                            setState(() => institute = text);
-                          },
-                          validator: (value) {
-                            // if (!validateEmail(value)) {
-                            //   return 'please enter valid email';
-                            // }
-                            // return null;
-                          },
+                          keyboardType: TextInputType.numberWithOptions(),
+                         
                         ),
                       ),
                     ],
@@ -169,15 +159,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
-                          onChanged: (text) {
-                            setState(() => institute = text);
-                          },
-                          validator: (value) {
-                            // if (!validateEmail(value)) {
-                            //   return 'please enter valid email';
-                            // }
-                            // return null;
-                          },
+                          keyboardType: TextInputType.numberWithOptions(),
+                         
                         ),
                       ),
                     ],
@@ -203,15 +186,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     borderSide:
                                         BorderSide(color: Color(0xff4285f4))),
                                 labelStyle: TextStyle(color: Colors.black)),
-                            onChanged: (text) {
-                              setState(() => institute = text);
-                            },
-                            validator: (value) {
-                              // if (!validateEmail(value)) {
-                              //   return 'please enter valid email';
-                              // }
-                              // return null;
-                            },
+                            keyboardType: TextInputType.numberWithOptions(),
+                           
                           )),
                     ],
                   ),
@@ -221,245 +197,152 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
                   ),
                   SizedBox(height: 20.0),
-                  edu[course] != null
-                      ? ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: semToBuild,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Sem ${index + 1}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    initialValue: edu[course]['sem_records']
-                                                [index] !=
-                                            null
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: semToBuild,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Sem ${index + 1}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
                                             ['semester_score']
                                         : null,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Score"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    initialValue: edu[course]['sem_records']
-                                                [index] !=
-                                            null
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Score"),
+                                keyboardType: TextInputType.numberWithOptions(),
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'Score cannot be empty';
+                                  else
+                                    return null;
+                                },
+                                onChanged: (text) {
+                                  setState(() {
+                                    edu[course]['sem_records'][index]
+                                        ['semester_score'] = text;
+                                  });
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
                                             ['closed_backlog']
                                         : null,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Closed Backlogs"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    initialValue: edu[course]['sem_records']
-                                                [index] !=
-                                            null
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Closed Backlogs"),
+                                keyboardType: TextInputType.numberWithOptions(),
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'Backlogs cannot be empty';
+                                  else
+                                    return null;
+                                },
+                                onChanged: (text) {
+                                  setState(() => edu[course]['sem_records']
+                                      [index]['closed_backlog'] = text);
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
                                             ['live_backlog']
                                         : null,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Live Backlogs"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: 'Certificate',
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(5),
-                                                        bottomLeft:
-                                                            Radius.circular(5)),
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            Color(0xff4285f4))),
-                                                contentPadding:
-                                                    new EdgeInsets.symmetric(
-                                                        vertical: 2.0,
-                                                        horizontal: 10.0),
-                                                hintStyle: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black))),
-                                      ),
-                                      Container(
-                                        color: Colors.grey,
-                                        width: width * 0.25,
-                                        child: TextField(
-                                            enabled: false,
-                                            textAlign: TextAlign.center,
-                                            decoration: InputDecoration(
-                                                hintText: 'Browse',
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(5),
-                                                        bottomRight:
-                                                            Radius.circular(5)),
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            Color(0xff4285f4))),
-                                                contentPadding:
-                                                    new EdgeInsets.symmetric(
-                                                        vertical: 2.0,
-                                                        horizontal: 10.0),
-                                                hintStyle: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black))),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 30.0)
-                                ]);
-                          })
-                      : ListView.builder(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: semToBuild,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Live Backlogs"),
+                                keyboardType: TextInputType.numberWithOptions(),
+                                validator: (value) {
+                                  if (value.isEmpty)
+                                    return 'Backlogs cannot be empty';
+                                  else
+                                    return null;
+                                },
+                                onChanged: (text) {
+                                  setState(() => edu[course]['sem_records']
+                                      [index]['live_backlog'] = text);
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  Text(
-                                    "Sem ${index + 1}",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 20),
+                                  Expanded(
+                                    child: TextField(
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                            hintText: 'Certificate',
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(5),
+                                                    bottomLeft:
+                                                        Radius.circular(5)),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xff4285f4))),
+                                            contentPadding:
+                                                new EdgeInsets.symmetric(
+                                                    vertical: 2.0,
+                                                    horizontal: 10.0),
+                                            hintStyle: TextStyle(
+                                                fontWeight: FontWeight.w400),
+                                            labelStyle: TextStyle(
+                                                color: Colors.black))),
                                   ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Score"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
+                                  Container(
+                                    color: Colors.grey,
+                                    width: width * 0.25,
+                                    child: TextField(
+                                        enabled: false,
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                            hintText: 'Browse',
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(5),
+                                                    bottomRight:
+                                                        Radius.circular(5)),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xff4285f4))),
+                                            contentPadding:
+                                                new EdgeInsets.symmetric(
+                                                    vertical: 2.0,
+                                                    horizontal: 10.0),
+                                            hintStyle: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w600),
+                                            labelStyle: TextStyle(
+                                                color: Colors.black))),
                                   ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Closed Backlogs"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  TextFormField(
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    obscureText: false,
-                                    decoration: x("Live Backlogs"),
-                                    onChanged: (text) {
-                                      setState(() => institute = text);
-                                    },
-                                  ),
-                                  SizedBox(height: 15.0),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: TextField(
-                                            decoration: InputDecoration(
-                                                hintText: 'Certificate',
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(5),
-                                                        bottomLeft:
-                                                            Radius.circular(5)),
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            Color(0xff4285f4))),
-                                                contentPadding:
-                                                    new EdgeInsets.symmetric(
-                                                        vertical: 2.0,
-                                                        horizontal: 10.0),
-                                                hintStyle: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black))),
-                                      ),
-                                      Container(
-                                        color: Colors.grey,
-                                        width: width * 0.25,
-                                        child: TextField(
-                                            enabled: false,
-                                            textAlign: TextAlign.center,
-                                            decoration: InputDecoration(
-                                                hintText: 'Browse',
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(5),
-                                                        bottomRight:
-                                                            Radius.circular(5)),
-                                                    borderSide: BorderSide(
-                                                        color:
-                                                            Color(0xff4285f4))),
-                                                contentPadding:
-                                                    new EdgeInsets.symmetric(
-                                                        vertical: 2.0,
-                                                        horizontal: 10.0),
-                                                hintStyle: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black))),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 30.0)
-                                ]);
-                          }),
+                                ],
+                              ),
+                              SizedBox(height: 30.0)
+                            ]);
+                      }),
                   SizedBox(height: 30.0),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
@@ -494,7 +377,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     color: basicColor,
                                     fontWeight: FontWeight.w600),
                               ),
-                              onPressed: () {}),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate()) {
+                                  
+                                }
+                                print(edu);
+                              }),
                         ),
                       ],
                     ),

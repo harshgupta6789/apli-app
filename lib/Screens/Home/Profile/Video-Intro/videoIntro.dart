@@ -75,7 +75,7 @@ class _VideoIntroState extends State<VideoIntro>
     final dir = Directory(urlFromCamera);
     try {
       dir.deleteSync(recursive: true);
-    } on Exception catch (e) {}
+    } on Exception catch (e) { print(e);}
   }
 
   deleteVideoUrl() async {

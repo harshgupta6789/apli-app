@@ -1,8 +1,5 @@
 import 'dart:convert';
-
 import 'package:apli/Shared/constants.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server.dart';
 import 'package:http/http.dart' as http;
 
 class MailerService {
@@ -36,6 +33,7 @@ class MailerService {
       });
       return result ?? -2;
     } on Exception catch (e) {
+       print(e);
       return null;
     }
   }

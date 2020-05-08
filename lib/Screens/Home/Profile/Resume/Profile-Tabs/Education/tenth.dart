@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -10,7 +9,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 double height, width;
 
@@ -32,7 +30,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
   String institute = '', board = '', cgpa = '', unit, specialization = '';
   DateTime from, to;
   StorageUploadTask uploadTask;
-  Map<String, dynamic> education;
+  Map<dynamic, dynamic> education;
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -47,22 +45,21 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
   }
 
   void init() {
+    education = widget.x;
     if (widget.x['X'] != null)
       setState(() {
         institute = widget.x['X']['institute'] ?? "";
         board = widget.x['X']['board'] ?? "";
         cgpa = widget.x['X']['score'].toString() ?? "";
         specialization = widget.x['X']['specialization'];
-        if (widget.x['X']['start']!=null && widget.x['X']['end'] != null) {
+        if (widget.x['X']['start'] != null && widget.x['X']['end'] != null) {
           from = DateTime.fromMicrosecondsSinceEpoch(
               widget.x['X']['start'].microsecondsSinceEpoch);
           to = DateTime.fromMicrosecondsSinceEpoch(
               widget.x['X']['end'].microsecondsSinceEpoch);
         }
 
-        // if (widget.x['X']['score_unit'] != "") {
-        //   unit = widget.x['X']['score_unit'];
-        // }
+        unit = widget.x['X']['score_unit'];
       });
   }
 
@@ -149,7 +146,13 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                     obscureText: false,
                     decoration: x("Institute Name"),
                     onChanged: (text) {
-                      setState(() => institute = text);
+                      setState(() => education['X']['institute'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Institution cannot be empty';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -162,10 +165,16 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                     obscureText: false,
                     decoration: x("Board"),
                     onChanged: (text) {
-                      setState(() => board = text);
+                      setState(() => education['X']['board'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Board cannot be empty';
+                      else
+                        return null;
                     },
                   ),
-                   SizedBox(
+                  SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -175,7 +184,13 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                     obscureText: false,
                     decoration: x("Specialization"),
                     onChanged: (text) {
-                      setState(() => specialization = text);
+                      setState(() => education['X']['specialization'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Specialization cannot be empty';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -194,7 +209,13 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                           obscureText: false,
                           decoration: x("CGPA"),
                           onChanged: (text) {
-                            setState(() => cgpa = text);
+                            setState(() => education['X']['score'] = text);
+                          },
+                          validator: (value) {
+                            if (value.isEmpty)
+                              return 'CGPA cannot be empty';
+                            else
+                              return null;
                           },
                         ),
                       ),
@@ -218,7 +239,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                   padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                   child: DropdownButton<String>(
                                     //hint: Text("Unit"),
-                                    value: unit ?? '/4',
+                                    value: unit ?? '%',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w400,
@@ -229,7 +250,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                       child: Icon(Icons.keyboard_arrow_down),
                                     ),
                                     underline: SizedBox(),
-                                    items: <String>['/4', '/10', '/100']
+                                    items: <String>['/4', '/10', '%']
                                         .map<DropdownMenuItem<String>>(
                                             (String value) {
                                       return DropdownMenuItem<String>(
@@ -240,6 +261,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                     onChanged: (value) {
                                       setState(() {
                                         unit = value;
+                                        education['X']['score_unit'] = value;
                                       });
                                     },
                                   ),
@@ -275,8 +297,17 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                 firstDate: DateTime(1900),
                                 initialDate: from ?? DateTime.now(),
                                 lastDate: DateTime(2100));
-
+                            Timestamp myTimeStamp = Timestamp.fromDate(date);
+                            setState(() {
+                              education['X']['start'] = myTimeStamp;
+                            });
                             return date;
+                          },
+                          validator: (value) {
+                            if (value == null)
+                              return 'Date \ncannot be empty';
+                            else
+                              return null;
                           },
                           // decoration: x("From")
                         ),
@@ -301,8 +332,17 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                 firstDate: DateTime(1900),
                                 initialDate: to ?? DateTime.now(),
                                 lastDate: DateTime(2100));
-
+                            Timestamp myTimeStamp = Timestamp.fromDate(date);
+                            setState(() {
+                              education['X']['end'] = myTimeStamp;
+                            });
                             return date;
+                          },
+                          validator: (value) {
+                            if (value == null)
+                              return 'Date \ncannot be empty';
+                            else
+                              return null;
                           },
                           // decoration: x("From")
                         ),
@@ -329,27 +369,32 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                     TextStyle(fontWeight: FontWeight.w400),
                                 labelStyle: TextStyle(color: Colors.black))),
                       ),
-                      Container(
-                        color: Colors.grey,
-                        width: width * 0.25,
-                        child: TextField(
-                            enabled: false,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                                hintText: 'Browse',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(5),
-                                        bottomRight: Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                                labelStyle: TextStyle(color: Colors.black))),
+                      InkWell(
+                        onTap:() async{
+                           filePicker(context);
+                        },
+                                              child: Container(
+                          color: Colors.grey,
+                          width: width * 0.25,
+                          child: TextField(
+                              enabled: false,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                  hintText: 'Browse',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(5),
+                                          bottomRight: Radius.circular(5)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xff4285f4))),
+                                  contentPadding: new EdgeInsets.symmetric(
+                                      vertical: 2.0, horizontal: 10.0),
+                                  hintStyle: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                  labelStyle: TextStyle(color: Colors.black))),
+                        ),
                       ),
                     ],
                   ),
@@ -387,7 +432,10 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                                     color: basicColor,
                                     fontWeight: FontWeight.w600),
                               ),
-                              onPressed: () {}),
+                              onPressed: () async {
+                                if (_formKey.currentState.validate())
+                                  print(education);
+                              }),
                         ),
                       ],
                     ),

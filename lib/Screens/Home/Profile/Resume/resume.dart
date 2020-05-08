@@ -17,7 +17,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import '../../../HomeLoginWrapper.dart';
 import 'editResume.dart';
 
 class Resume extends StatefulWidget {
@@ -91,6 +90,7 @@ class _ResumeState extends State<Resume> {
     final StorageFileDownloadTask task = ref.writeToFile(tempFile);
     final int byteCount = (await task.future).totalByteCount;
     var bodyBytes = downloadData.bodyBytes;
+    print(bodyBytes);
     task.future.whenComplete(() {
       showToast("Downloaded", context);
     });

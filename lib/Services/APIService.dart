@@ -14,186 +14,246 @@ class APIService {
     String url;
     await SharedPreferences.getInstance().then((value) async {
       try {
-        switch(type) {
-          case 8: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"email" : "${value.getString('email')}", '
-                    '"secret" : "$checkLoginSecret", '
-                    '"Address" : {'
-                    '"address" : "${map['Address']['address']}",'
-                    '"city" : "${map['Address']['city']}",'
-                    '"country" : "${map['Address']['country']}",'
-                    '"postal_code" : "${map['Address']['postal_code']}",'
-                    '"state" : "${map['Address']['state']}",'
-                    '},'
-                    '"First_name" : "${map['First_name']}",'
-                    '"Last_name" : "${map['Last_name']}",'
-                    '"Middle_name" : "${map['Middle_name']}",'
-                    '"dob" : "${map['dob']}",'
-                    '"gender" : "${map['gender']}",'
-                    '"highest_qualification" : "${map['highest_qualification']}",'
-                    '"languages" : {'
-                    '"address" : "${map['Address']['address']}",'
-                    '},'
-                    '"ph_no" : "${map['ph_no']}",'
-                    '"profile_picture" : "${map['profile_picture']}",'
-                    '"roll_no" : "${map['roll_no']}",'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+        switch (type) {
+          case 8:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"email" : "${value.getString('email')}", '
+                      '"secret" : "$checkLoginSecret", '
+                      '"Address" : {'
+                      '"address" : "${map['Address']['address']}",'
+                      '"city" : "${map['Address']['city']}",'
+                      '"country" : "${map['Address']['country']}",'
+                      '"postal_code" : "${map['Address']['postal_code']}",'
+                      '"state" : "${map['Address']['state']}",'
+                      '},'
+                      '"First_name" : "${map['First_name']}",'
+                      '"Last_name" : "${map['Last_name']}",'
+                      '"Middle_name" : "${map['Middle_name']}",'
+                      '"dob" : "${map['dob']}",'
+                      '"gender" : "${map['gender']}",'
+                      '"highest_qualification" : "${map['highest_qualification']}",'
+                      '"languages" : {'
+                      '"address" : "${map['Address']['address']}",'
+                      '},'
+                      '"ph_no" : "${map['ph_no']}",'
+                      '"profile_picture" : "${map['profile_picture']}",'
+                      '"roll_no" : "${map['roll_no']}",'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 7: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 7:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['experience']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 6: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['experience']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 6:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['experience']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 5: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['projects']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 5:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['projects']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 4: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['extra_curricular']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 4:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['extra_curricular']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 3: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['skills']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 3:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['skills']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          case 2: {
-            http.Response response = await http.post(
-                url,
-                body: json.decode('{'
-                    '"secret" : "$checkLoginSecret", '
-                    '"useremail" : "${value.getString('email')}", '
-                    '"data" : "${map['award']}"'
-                    '}')
-            );
-            if(response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if(decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["success"];
-                if(temp == true) {
-                  result = 1;
-                } else result = -1;
-              } else result = -2;
-            } else result = -2;
-          }
-          break;
+          case 2:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$checkLoginSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['award']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
-          default: {
+          case 1:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"useremail" : "${value.getString('email')}", '
+                      '"secret" : "$checkLoginSecret", '
+                      '"X" : {'
+                      '"board" : "${map['X']['board']}",'
+                      '"certificate" : "${map['X']['certificate']}",'
+                      '"institute" : "${map['X']['institute']}",'
+                      '"score" : "${map['X']['score_unit']}",'
+                      '"score_unit" : "${map['X']['score_unit']}",'
+                      '"specialization" : "${map['X']['specialization']}",'
+                      '"start" : "${map['X']['start']}",'
+                      '"end" : "${map['X']['end']}",'
+                      '},'
+                      '"XII" : {'
+                      '"board" : "${map['XII']['board']}",'
+                      '"certificate" : "${map['XII']['certificate']}",'
+                      '"institute" : "${map['XII']['institute']}",'
+                      '"score" : "${map['XII']['score_unit']}",'
+                      '"score_unit" : "${map['XII']['score_unit']}",'
+                      '"specialization" : "${map['XII']['specialization']}",'
+                      '"start" : "${map['XII']['start']}",'
+                      '"end" : "${map['XII']['end']}",'
+                      '},'
+                      '"${map['course']}" : {'
+                      '"score" : "${map['course']['score']}",'
+                      '"total_closed_backlogs" : "${map['course']['total_closed_backlogs']}",'
+                      '"total_live_backlogs" : "${map['course']['total_live_backlogs']}",'
+                      '"sem_records" : "${map['course']['sem_records']}",'
+                      '},'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+              break;
+            }
 
-          }
-          break;
+          default:
+            {}
+            break;
         }
         return result;
-      } catch(e) {
+      } catch (e) {
         print(e.toString());
         return 0;
       }
     });
   }
 }
-
 
 // NOTE: result =     1 = true
 //       result =    -1 = false

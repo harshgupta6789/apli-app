@@ -2,11 +2,8 @@ import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
-import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../HomeLoginWrapper.dart';
 import 'Psychometry/psychometry.dart';
 import 'Resume/resume.dart';
 
