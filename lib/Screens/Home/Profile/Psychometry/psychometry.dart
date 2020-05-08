@@ -221,7 +221,8 @@ class _PsychometryState extends State<Psychometry> {
                         ),
                         alignment: Alignment.center,
                       ),
-                    )
+                    ),
+                    SizedBox(height: 20,)
                   ],
                 ),
               ),

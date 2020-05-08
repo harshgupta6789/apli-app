@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Shared/functions.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Camera extends StatefulWidget {
   final List<CameraDescription> cameras;
@@ -30,7 +30,6 @@ class _CameraState extends State<Camera> {
         () {
           seconds = seconds + 1;
           if (seconds >= 59 && _isRecording) {
-            print("x");
             stopVideoRecording();
           }
         },
@@ -116,7 +115,6 @@ class _CameraState extends State<Camera> {
                   ),
                   onPressed: () {
                     if (path != null) {
-                      print(path);
                       Navigator.pop(context, path);
                       showToast(
                           'Recorded Video Will Be Stored In Storage/Apli Folder',
@@ -160,37 +158,43 @@ class _CameraState extends State<Camera> {
       color: Colors.black,
       height: 100.0,
       width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(
-              (_isRecording) ? Icons.stop : Icons.videocam,
-              size: 28.0,
-              color: (_isRecording) ? Colors.red : Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 50, right: 50),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(
+                (_isRecording) ? Icons.stop : Icons.videocam,
+                size: 28.0,
+                color: (_isRecording) ? Colors.red : Colors.white,
+              ),
+              onPressed: () {
+                if (_isRecording) {
+                  stopVideoRecording();
+                } else {
+                  startVideoRecording();
+                }
+              },
             ),
-            onPressed: () {
-              if (_isRecording) {
-                stopVideoRecording();
-              } else {
-                startVideoRecording();
-              }
-            },
-          ),
-          Text(
-            minute.toString() + " : " + seconds.toString() ?? "",
-            style: TextStyle(color: Colors.white),
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.crop_rotate,
-              color: Colors.white,
+            Text(
+              '0' + minute.toString() + " : " + ((seconds.toString().length == 1) ? '0' : '')  + seconds.toString() ?? "",
+              style: TextStyle(color: Colors.white),
             ),
-            onPressed: () {
-              _onCameraSwitch();
-            },
-          ),
-        ],
+            Visibility(
+              visible: !_isRecording,
+              child: IconButton(
+                icon: Icon(
+                  Icons.autorenew,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  _onCameraSwitch();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -199,17 +203,6 @@ class _CameraState extends State<Camera> {
     if (!controller.value.isInitialized) {
       return null;
     }
-    setState(() {
-      _isRecording = true;
-    });
-    AwesomeDialog(
-            context: context,
-            dialogType: DialogType.WARNING,
-            tittle: "Note",
-            body: Text("Video Will Be Stopped After 1 Minute"))
-        .show();
-    startTimer();
-
     final String dirPath = 'storage/emulated/0/apli';
     await Directory(dirPath).create(recursive: true);
     final String filePath = '$dirPath/${_timestamp()}.mp4';
@@ -221,6 +214,16 @@ class _CameraState extends State<Camera> {
 
     try {
       await controller.startVideoRecording(filePath);
+      setState(() {
+        _isRecording = true;
+      });
+//    AwesomeDialog(
+//            context: context,
+//            dialogType: DialogType.WARNING,
+//            tittle: "Note",
+//            body: Text("Video Will Be Stopped After 1 Minute"))
+//        .show();
+      startTimer();
     } on CameraException catch (e) {
       return null;
     }
@@ -232,16 +235,16 @@ class _CameraState extends State<Camera> {
     if (!controller.value.isRecordingVideo) {
       return null;
     }
-    stopTimer();
-    setState(() {
-      _isRecording = false;
-      isRecordingStopped = true;
-      showToast(
-          'Recorded Video Will Be Stored In Storage/Apli Folder', context);
-    });
 
     try {
       await controller.stopVideoRecording();
+      stopTimer();
+      setState(() {
+        _isRecording = false;
+        isRecordingStopped = true;
+        showToast(
+            'Recorded Video Will Be Stored In Storage/Apli Folder', context);
+      });
     } on CameraException catch (e) {
       return null;
     }
@@ -266,6 +269,9 @@ class _CameraState extends State<Camera> {
 
   @override
   void initState() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     controller = CameraController(widget.cameras[1], ResolutionPreset.medium);
     controller.initialize().then((_) {
       if (!mounted) {
@@ -287,7 +293,7 @@ class _CameraState extends State<Camera> {
     return Scaffold(
       key: _scaffoldKey,
       extendBody: true,
-      bottomNavigationBar: _buildBottomNavigationBar(),
+      bottomNavigationBar: isRecordingStopped ? SizedBox() : _buildBottomNavigationBar(),
       body: Stack(
         children: <Widget>[_buildCameraPreview(), _options()],
       ),
@@ -296,6 +302,11 @@ class _CameraState extends State<Camera> {
 
   @override
   void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
     controller.dispose();
     _timer.cancel();
     super.dispose();
