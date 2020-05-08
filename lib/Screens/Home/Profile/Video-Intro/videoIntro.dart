@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:apli/Screens/Home/Profile/Video-Intro/cameraScreen.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:camera/camera.dart';
@@ -15,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apli/Shared/functions.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 enum currentState { none, uploading, success, failure }
 
@@ -22,6 +25,8 @@ class VideoIntro extends StatefulWidget {
   @override
   _VideoIntroState createState() => _VideoIntroState();
 }
+
+double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
     with SingleTickerProviderStateMixin {
@@ -38,6 +43,7 @@ class _VideoIntroState extends State<VideoIntro>
   String fetchUrl;
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
+  VideoPlayerController fileVideocontroller;
   // YoutubePlayerController _controller = YoutubePlayerController(
   //   initialVideoId: 'wfd3eGkCatE',
   //   flags: YoutubePlayerFlags(
@@ -85,7 +91,7 @@ class _VideoIntroState extends State<VideoIntro>
     double x = double.parse(res.toStringAsFixed(2)) /
         double.parse(res2.toStringAsFixed(2));
     double round = ((x * 100).roundToDouble()) / 100;
-    return round;
+    return round * 100;
     // return double.parse(res.toStringAsFixed(2)) /
     //     double.parse(res2.toStringAsFixed(2));
   }
@@ -123,15 +129,17 @@ class _VideoIntroState extends State<VideoIntro>
 
   Future<void> _uploadFile(File file, String filename) async {
     print('abd');
-    SharedPreferences.getInstance().then((value) async {
+    await SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
       storageReference =
           FirebaseStorage.instance.ref().child("resumeVideos/${value.getString('email')}");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       final String url = (await downloadUrl.ref.getDownloadURL());
+      print('abd');
       if (uploadTask.isInProgress) {
-      if(mounted)setState(() {
+        print('abd');
+      setState(() {
       x = currentState.uploading;
       });
       }
@@ -147,16 +155,36 @@ class _VideoIntroState extends State<VideoIntro>
   Future filePicker(BuildContext context) async {
     try {
       file = await FilePicker.getFile(type: FileType.video);
-      if (file != null) {
-        fileName = p.basename(file.path);
-        setState(() {
-          fileName = p.basename(file.path);
-        });
-        _uploadFile(file, fileName);
-        setState(() {
-          x = currentState.uploading;
-        });
-      } else {}
+      if(fileVideocontroller != null) {
+        await fileVideocontroller.dispose();
+      }
+      if(file != null) {
+        fileVideocontroller = new VideoPlayerController.file(file)
+          ..initialize().then((value) {
+            if(fileVideocontroller.value.duration.inMinutes > 0) {
+              showToast('Video cannot exceed 1 minute', context, duration: 5);
+            } else {
+              fileName = p.basename(file.path);
+              setState(() {
+                fileName = p.basename(file.path);
+              });
+              _uploadFile(file, fileName);
+              setState(() {
+                x = currentState.uploading;
+              });
+            }
+          });
+      }
+//      if (file != null) {
+//        fileName = p.basename(file.path);
+//        setState(() {
+//          fileName = p.basename(file.path);
+//        });
+//        _uploadFile(file, fileName);
+//        setState(() {
+//          x = currentState.uploading;
+//        });
+//      } else {}
     } catch (e) {
       AwesomeDialog(
               context: context,
@@ -301,6 +329,7 @@ class _VideoIntroState extends State<VideoIntro>
                         ),
                         onPressed: () {
                           filePicker(context);
+//                          getVideo();
                         },
                       ),
                       alignment: Alignment.topLeft,
@@ -538,7 +567,7 @@ class _VideoIntroState extends State<VideoIntro>
                       alignment: Alignment.center,
                     ),
                   ),
-                )
+                ),
               ],
             ),
             SizedBox(
@@ -588,7 +617,24 @@ class _VideoIntroState extends State<VideoIntro>
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: AwsomeVideoPlayer(fetchUrl ?? ""),
+                child: AwsomeVideoPlayer(
+                    fetchUrl ?? "",
+                  playOptions: VideoPlayOptions(
+                    aspectRatio: 1 / 1,
+                    loop: true,
+                    autoplay: false,
+                  ),
+                  videoStyle: VideoStyle(
+                    videoControlBarStyle: VideoControlBarStyle(
+                      fullscreenIcon: SizedBox(),
+                      forwardIcon: SizedBox(),
+                      rewindIcon: SizedBox()
+                    ),
+                    videoTopBarStyle: VideoTopBarStyle(
+                      popIcon: Container()
+                    )
+                  ),
+                ),
               ),
               Icon(
                 Icons.done_outline,
@@ -669,7 +715,17 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if(fileVideocontroller != null)
+      fileVideocontroller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     return email == null
         ? Loading()
         : loading
