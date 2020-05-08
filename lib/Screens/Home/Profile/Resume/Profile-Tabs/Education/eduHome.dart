@@ -71,7 +71,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'certificate': "",
                     'institute': "",
                     'score': "",
-                    'score_unit': "",
+                    'score_unit': "%",
                     'specialization': "",
                   };
                   completeEducation['X'] = {
@@ -79,7 +79,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'certificate': "",
                     'institute': "",
                     'score': "",
-                    'score_unit': "",
+                    'score_unit': "%",
                     'specialization': "",
                   };
                 } else {
@@ -89,7 +89,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'certificate': "",
                         'institute': "",
                         'score': "",
-                        'score_unit': "",
+                        'score_unit': "%",
                         'specialization': "",
                       };
                   completeEducation['X'] = s.data['education']['X'] ??
@@ -98,7 +98,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'certificate': "",
                         'institute': "",
                         'score': "",
-                        'score_unit': "",
+                        'score_unit': "%",
                         'specialization': "",
                       };
                 }
@@ -133,8 +133,48 @@ class _EducationOverviewState extends State<EducationOverview> {
 
                       //print(s.data['education'][course]['sem_records'][0]);
 
+                    } else {
+                      for (int i = 0; i < semToBuild; i++) {
+                        sems[i] = {
+                          'certificate': '',
+                          'closed_backlog': '',
+                          'live_backlog': '',
+                          'semester_score': ''
+                        };
+                      }
+                      completeEducation[course] = {'sem_records': sems};
                     }
+                  } else {
+                    completeEducation[course] = {
+                      'score': '',
+                      'total_closed_backlogs': '',
+                      'total_live_backlogs': '',
+                    };
+                    for (int i = 0; i < semToBuild; i++) {
+                      sems[i] = {
+                        'certificate': '',
+                        'closed_backlog': '',
+                        'live_backlog': '',
+                        'semester_score': ''
+                      };
+                    }
+                    completeEducation[course] = {'sem_records': sems};
                   }
+                } else {
+                  completeEducation[course] = {
+                    'score': '',
+                    'total_closed_backlogs': '',
+                    'total_live_backlogs': '',
+                  };
+                  for (int i = 0; i < semToBuild; i++) {
+                    sems[i] = {
+                      'certificate': '',
+                      'closed_backlog': '',
+                      'live_backlog': '',
+                      'semester_score': ''
+                    };
+                  }
+                  completeEducation[course] = {'sem_records': sems};
                 }
                 print(completeEducation);
               });

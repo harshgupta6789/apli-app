@@ -32,7 +32,7 @@ class _DiplomaState extends State<Diploma> {
   String institute, stream, board, cgpa, email, specialization;
   DateTime from, to;
   StorageUploadTask uploadTask;
-  Map<String, dynamic> education;
+  Map<dynamic, dynamic> education;
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -47,23 +47,22 @@ class _DiplomaState extends State<Diploma> {
   }
 
   void init() {
-    if (widget.xii['X'] != null)
+    if (widget.xii['XII'] != null)
       setState(() {
+        education = widget.xii;
         institute = widget.xii['XII']['institute'] ?? "";
         board = widget.xii['XII']['board'] ?? "";
         cgpa = widget.xii['XII']['score'].toString() ?? "";
         specialization = widget.xii['XII']['specialization'];
         if (widget.xii['XII']['start'] != null &&
-            widget.xii['X']['end'] != null) {
+            widget.xii['XII']['end'] != null) {
           from = DateTime.fromMicrosecondsSinceEpoch(
               widget.xii['XII']['start'].microsecondsSinceEpoch);
           to = DateTime.fromMicrosecondsSinceEpoch(
               widget.xii['XII']['end'].microsecondsSinceEpoch);
         }
 
-        // if (widget.x['X']['score_unit'] != "") {
-        //   unit = widget.x['X']['score_unit'];
-        // }
+        unit = widget.xii['X']['score_unit'];
       });
   }
 
@@ -145,7 +144,13 @@ class _DiplomaState extends State<Diploma> {
                     obscureText: false,
                     decoration: x("Institute Name"),
                     onChanged: (text) {
-                      setState(() => institute = text);
+                      setState(() => education['XII']['institute'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Institution cannot be empty';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -158,7 +163,13 @@ class _DiplomaState extends State<Diploma> {
                     obscureText: false,
                     decoration: x("Stream"),
                     onChanged: (text) {
-                      setState(() => stream = text);
+                      setState(() => education['XII']['stream'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'stream cannot be empty';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -171,7 +182,13 @@ class _DiplomaState extends State<Diploma> {
                     obscureText: false,
                     decoration: x("Specialization"),
                     onChanged: (text) {
-                      setState(() => specialization = text);
+                      setState(() => education['XII']['specialization'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Specialization cannot be empty';
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(
@@ -182,10 +199,16 @@ class _DiplomaState extends State<Diploma> {
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
-                    decoration: x("Board"),
                     onChanged: (text) {
-                      setState(() => board = text);
+                      setState(() => education['XII']['board'] = text);
                     },
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'Board cannot be empty';
+                      else
+                        return null;
+                    },
+                    decoration: x('Board'),
                   ),
                   SizedBox(
                     height: 15,
@@ -203,7 +226,13 @@ class _DiplomaState extends State<Diploma> {
                           obscureText: false,
                           decoration: x("CGPA"),
                           onChanged: (text) {
-                            setState(() => institute = text);
+                            setState(() => education['XII']['score'] = text);
+                          },
+                          validator: (value) {
+                            if (value.isEmpty)
+                              return 'CGPA cannot be empty';
+                            else
+                              return null;
                           },
                         ),
                       ),
@@ -227,7 +256,7 @@ class _DiplomaState extends State<Diploma> {
                                   padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                   child: DropdownButton<String>(
                                     //hint: Text("Unit"),
-                                    value: unit ?? '/4',
+                                    value: unit ?? '%',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.w400,
@@ -238,7 +267,7 @@ class _DiplomaState extends State<Diploma> {
                                       child: Icon(Icons.keyboard_arrow_down),
                                     ),
                                     underline: SizedBox(),
-                                    items: <String>['/4', '/10', '/100']
+                                    items: <String>['/4', '/10', '%']
                                         .map<DropdownMenuItem<String>>(
                                             (String value) {
                                       return DropdownMenuItem<String>(
@@ -249,6 +278,7 @@ class _DiplomaState extends State<Diploma> {
                                     onChanged: (value) {
                                       setState(() {
                                         unit = value;
+                                        education['XII']['score_unit'] = value;
                                       });
                                     },
                                   ),
@@ -284,8 +314,17 @@ class _DiplomaState extends State<Diploma> {
                                 firstDate: DateTime(1900),
                                 initialDate: from ?? DateTime.now(),
                                 lastDate: DateTime(2100));
-
+                            Timestamp myTimeStamp = Timestamp.fromDate(date);
+                            setState(() {
+                              education['XII']['start'] = myTimeStamp;
+                            });
                             return date;
+                          },
+                          validator: (value) {
+                            if (value == null)
+                              return 'Date \ncannot be empty';
+                            else
+                              return null;
                           },
                           // decoration: x("From")
                         ),
@@ -301,7 +340,10 @@ class _DiplomaState extends State<Diploma> {
                                 firstDate: DateTime(1900),
                                 initialDate: to ?? DateTime.now(),
                                 lastDate: DateTime(2100));
-
+                            Timestamp myTimeStamp = Timestamp.fromDate(date);
+                            setState(() {
+                              education['XII']['end'] = myTimeStamp;
+                            });
                             return date;
                           },
                           decoration: InputDecoration(
@@ -313,6 +355,12 @@ class _DiplomaState extends State<Diploma> {
                                   vertical: 2.0, horizontal: 10.0),
                               hintStyle: TextStyle(fontWeight: FontWeight.w600),
                               labelStyle: TextStyle(color: Colors.black)),
+                          validator: (value) {
+                            if (value == null)
+                              return 'Date \ncannot be empty';
+                            else
+                              return null;
+                          },
                         ),
                       ),
                     ],
@@ -337,31 +385,36 @@ class _DiplomaState extends State<Diploma> {
                                     TextStyle(fontWeight: FontWeight.w400),
                                 labelStyle: TextStyle(color: Colors.black))),
                       ),
-                      Container(
-                        color: Colors.grey,
-                        width: width * 0.25,
-                        child: TextField(
-                            enabled: false,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                                hintText: 'Browse',
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(5),
-                                        bottomRight: Radius.circular(5)),
-                                    borderSide:
-                                        BorderSide(color: Color(0xff4285f4))),
-                                contentPadding: new EdgeInsets.symmetric(
-                                    vertical: 2.0, horizontal: 10.0),
-                                hintStyle: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                                labelStyle: TextStyle(color: Colors.black))),
+                      InkWell(
+                        onTap: () async {
+                          filePicker(context);
+                        },
+                        child: Container(
+                          color: Colors.grey,
+                          width: width * 0.25,
+                          child: TextField(
+                              enabled: false,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                  hintText: 'Browse',
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(5),
+                                          bottomRight: Radius.circular(5)),
+                                      borderSide:
+                                          BorderSide(color: Color(0xff4285f4))),
+                                  contentPadding: new EdgeInsets.symmetric(
+                                      vertical: 2.0, horizontal: 10.0),
+                                  hintStyle: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                  labelStyle: TextStyle(color: Colors.black))),
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: height * 0.2),
+                  SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Row(
@@ -394,7 +447,10 @@ class _DiplomaState extends State<Diploma> {
                               'Save',
                               style: TextStyle(color: basicColor),
                             ),
-                            onPressed: () {}),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate())
+                                print(education);
+                            }),
                       ],
                     ),
                   ),
