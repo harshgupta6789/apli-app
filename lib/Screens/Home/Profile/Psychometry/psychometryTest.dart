@@ -19,6 +19,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
 
   Map<String, dynamic> questions, answeredQuestions;
   List<List<String>> remainingQuestions = [];
+  List<String> options = ['Completely Agree', 'Very Much Agree', 'Somewhat Agree', 'Somewhat Disagree', 'Very Much Disagree', 'Completely Disagree'];
 
   bool allDone = false;
   bool loading = false;
@@ -177,7 +178,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                               ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
-                                  itemCount: 6,
+                                  itemCount: options.length,
                                   itemBuilder: (BuildContext context, int i) {
                                     return Padding(
                                       padding: const EdgeInsets.only(top: 5.0),
@@ -199,7 +200,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                                           .withOpacity(0.4))),
                                           child: ListTile(
                                             title: Text(
-                                              '1. Lorem ipsum dolor sit amet, consectetur',
+                                              options[i],
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   color: remainingQuestions[

@@ -76,7 +76,7 @@ class _VideoIntroState extends State<VideoIntro>
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .updateData({'video_resume': 'deleted'});
+        .setData({'video_resume': null}, merge: true);
   }
 
   double _bytesTransferred(StorageTaskSnapshot snapshot) {
@@ -99,8 +99,7 @@ class _VideoIntroState extends State<VideoIntro>
               .document(prefs.getString('email'))
               .get()
               .then((s) {
-            if (s.data['video_resume'] != null &&
-                s.data['video_resume'] != 'deleted') {
+            if (s.data['video_resume'] != null) {
               setState(() {
                 fetchUrl = s.data['video_resume'];
                 email = s.data['email'];
@@ -123,23 +122,26 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   Future<void> _uploadFile(File file, String filename) async {
-    StorageReference storageReference;
-    storageReference =
-        FirebaseStorage.instance.ref().child("resumeVideos/$filename");
-    uploadTask = storageReference.putFile(file);
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
-    if (uploadTask.isInProgress) {
-      setState(() {
-        x = currentState.uploading;
+    print('abd');
+    SharedPreferences.getInstance().then((value) async {
+      StorageReference storageReference;
+      storageReference =
+          FirebaseStorage.instance.ref().child("resumeVideos/${value.getString('email')}");
+      uploadTask = storageReference.putFile(file);
+      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      final String url = (await downloadUrl.ref.getDownloadURL());
+      if (uploadTask.isInProgress) {
+      if(mounted)setState(() {
+      x = currentState.uploading;
       });
-    }
+      }
 
-    if (url != null) {
+      if (url != null) {
       userAddVideoUrl(url);
-    } else if (url == null) {
+      } else if (url == null) {
       x = currentState.failure;
-    }
+      }
+    });
   }
 
   Future filePicker(BuildContext context) async {
@@ -180,18 +182,17 @@ class _VideoIntroState extends State<VideoIntro>
 
   Future videoPicker(String path) async {
     file = File(path);
-    try {
+    print('a');
+    fileName = p.basename(path);
+    if(mounted)setState(() {
       fileName = p.basename(path);
-      setState(() {
-        fileName = p.basename(path);
-      });
-      _uploadFile(file, fileName);
-      setState(() {
-        x = currentState.uploading;
-      });
-    } catch (e) {
-      //AwesomeDialog(context: context, dialogType: DialogType.WARNING).show();
-    }
+    });
+    print(fileName);
+    _uploadFile(file, fileName);
+    print('a');
+    setState(() {
+      x = currentState.uploading;
+    });
   }
 
   Widget uploadVideo() {
@@ -282,7 +283,7 @@ class _VideoIntroState extends State<VideoIntro>
               children: <Widget>[
                 Container(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 35, 5, 8),
+                    padding: EdgeInsets.fromLTRB(8, 35, 5, 8),
                     child: Align(
                       child: RaisedButton(
                         color: Colors.white,
@@ -336,27 +337,202 @@ class _VideoIntroState extends State<VideoIntro>
                                     await [
                                   Permission.storage,
                                 ].request();
-                                break;
-                              case PermissionStatus.granted:
-                                urlFromCamera = await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Camera(cameras: cameras)),
-                                );
-                                print(urlFromCamera);
-                                if (urlFromCamera != null) {
-                                  // videoPicker(urlFromCamera);
+                                if(statuses[Permission.storage] == PermissionStatus.granted) {
+                                  var status2 = await Permission.camera.status;
+                                  switch(status2) {
+                                    case PermissionStatus.undetermined :
+                                      Map<Permission, PermissionStatus> statuses2 =
+                                      await [
+                                        Permission.camera,
+                                      ].request();
+                                      if(statuses2[Permission.camera] == PermissionStatus.granted) {
+                                        var status3 = await Permission.microphone.status;
+                                        switch(status3) {
+                                          case PermissionStatus.undetermined :
+                                            Map<Permission, PermissionStatus> statuses3 =
+                                            await [
+                                              Permission.microphone,
+                                            ].request();
+                                            if(statuses3[Permission.microphone] == PermissionStatus.granted) {
+                                              // TODO
+                                              urlFromCamera = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Camera(cameras: cameras)),
+                                              );
+                                              print(urlFromCamera);
+                                              if (urlFromCamera != null) {
+                                                videoPicker(urlFromCamera);
+                                              }
+                                            } else showToast('Microphone Permission denied', context);
+                                            break;
+                                          case PermissionStatus.granted :
+                                            // TODO
+                                            urlFromCamera = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Camera(cameras: cameras)),
+                                            );
+                                            print(urlFromCamera);
+                                            if (urlFromCamera != null) {
+                                              videoPicker(urlFromCamera);
+                                            }
+                                            break;
+                                          default :
+                                            showToast('Microphone Permission denied', context);
+                                            break;
+                                        }
+                                      } else showToast('Camera Permission denied', context);
+                                      break;
+
+                                    case PermissionStatus.granted :
+                                      var status3 = await Permission.microphone.status;
+                                      switch(status3) {
+                                        case PermissionStatus.undetermined :
+                                          Map<Permission, PermissionStatus> statuses3 =
+                                          await [
+                                            Permission.microphone,
+                                          ].request();
+                                          if(statuses3[Permission.microphone] == PermissionStatus.granted) {
+                                            // TODO
+                                            urlFromCamera = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Camera(cameras: cameras)),
+                                            );
+                                            print(urlFromCamera);
+                                            if (urlFromCamera != null) {
+                                              videoPicker(urlFromCamera);
+                                            }
+                                          } else showToast('Microphone Permission denied', context);
+                                          break;
+                                        case PermissionStatus.granted :
+                                        // TODO
+                                          urlFromCamera = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Camera(cameras: cameras)),
+                                          );
+                                          print(urlFromCamera);
+                                          if (urlFromCamera != null) {
+                                            videoPicker(urlFromCamera);
+                                          }
+                                          break;
+                                        default :
+                                          showToast('Microphone Permission denied', context);
+                                          break;
+                                      }
+                                    break;
+                                    default :
+                                      showToast('Camera Permission Denied', context);
+                                    break;
+                                  }
+                                } else {
+                                  showToast('Storage Permission Denied', context);
                                 }
                                 break;
-                              case PermissionStatus.denied:
+                              case PermissionStatus.granted:
+                                var status2 = await Permission.camera.status;
+                                switch(status2) {
+                                  case PermissionStatus.undetermined :
+                                    Map<Permission, PermissionStatus> statuses2 =
+                                    await [
+                                      Permission.camera,
+                                    ].request();
+                                    if(statuses2[Permission.camera] == PermissionStatus.granted) {
+                                      var status3 = await Permission.camera.status;
+                                      switch(status3) {
+                                        case PermissionStatus.undetermined :
+                                          Map<Permission, PermissionStatus> statuses3 =
+                                          await [
+                                            Permission.microphone,
+                                          ].request();
+                                          if(statuses3[Permission.microphone] == PermissionStatus.granted) {
+                                            // TODO
+                                            urlFromCamera = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Camera(cameras: cameras)),
+                                            );
+                                            print(urlFromCamera);
+                                            if (urlFromCamera != null) {
+                                              videoPicker(urlFromCamera);
+                                            }
+                                          } else showToast('Microphone Permission denied', context);
+                                          break;
+                                        case PermissionStatus.granted :
+                                        // TODO
+                                          urlFromCamera = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Camera(cameras: cameras)),
+                                          );
+                                          print(urlFromCamera);
+                                          if (urlFromCamera != null) {
+                                            videoPicker(urlFromCamera);
+                                          }
+                                          break;
+                                        default :
+                                          showToast('Microphone Permission denied', context);
+                                          break;
+                                      }
+                                    } else showToast('Camera Permission denied', context);
+                                    break;
+                                  case PermissionStatus.granted :
+                                    var status3 = await Permission.microphone.status;
+                                    switch(status3) {
+                                      case PermissionStatus.undetermined :
+                                        Map<Permission, PermissionStatus> statuses3 =
+                                        await [
+                                          Permission.microphone,
+                                        ].request();
+                                        if(statuses3[Permission.microphone] == PermissionStatus.granted) {
+                                          // TODO
+                                          urlFromCamera = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Camera(cameras: cameras)),
+                                          );
+                                          print(urlFromCamera);
+                                          if (urlFromCamera != null) {
+                                            videoPicker(urlFromCamera);
+                                          }
+                                        } else showToast('Microphone Permission denied', context);
+                                        break;
+                                      case PermissionStatus.granted :
+                                      // TODO
+                                        urlFromCamera = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Camera(cameras: cameras)),
+                                        );
+                                        print(urlFromCamera);
+                                        if (urlFromCamera != null) {
+                                          videoPicker(urlFromCamera);
+                                        }
+                                        break;
+                                      default :
+                                        showToast('Microphone Permission denied', context);
+                                        break;
+                                    }
+                                    break;
+                                  default :
+                                    showToast('Camera Permission Denied', context);
+                                    break;
+                                }
                                 break;
-                              case PermissionStatus.restricted:
-                                break;
-                              case PermissionStatus.permanentlyDenied:
+                              default :
+                                showToast('Storage Permission denied', context);
                                 break;
                             }
-
                             // _recordVideo();
                           }),
                       alignment: Alignment.center,
@@ -364,10 +540,12 @@ class _VideoIntroState extends State<VideoIntro>
                   ),
                 )
               ],
+            ),
+            SizedBox(
+              height: 20,
             )
           ],
         );
-
         break;
       case currentState.uploading:
         return Padding(
@@ -408,10 +586,6 @@ class _VideoIntroState extends State<VideoIntro>
         return Align(
           child: Column(
             children: <Widget>[
-              // YoutubePlayer(
-              //   controller: _controller,
-              //   showVideoProgressIndicator: true,
-              // ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AwsomeVideoPlayer(fetchUrl ?? ""),
@@ -423,7 +597,7 @@ class _VideoIntroState extends State<VideoIntro>
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  "Your Resume Has Been Uploaded Succesfully!",
+                  "Your Video Intro Has Been Uploaded Succesfully!",
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -448,9 +622,12 @@ class _VideoIntroState extends State<VideoIntro>
                         desc: "Yes!",
                         btnCancelText: "Cancel",
                         btnCancelOnPress: () {
-                          Navigator.of(context).pop();
+                          //Navigator.of(context).pop();
                         },
                         btnOkOnPress: () async {
+                          setState(() {
+                            loading = true;
+                          });
                           await usergetVideoUrl();
                           if (fetchUrl != null) {
                             var ref = FirebaseStorage.instance
@@ -464,6 +641,9 @@ class _VideoIntroState extends State<VideoIntro>
                                 });
                                 deleteVideoUrl();
                                 usergetVideoUrl();
+                              });
+                              setState(() {
+                                loading = false;
                               });
                             });
                           }
