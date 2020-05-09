@@ -11,15 +11,9 @@ class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
   final int sem;
   final String course, branch, duration;
+  final VoidCallback onButtonPressed;
 
-  const CurrentEducation(
-      {Key key,
-      @required this.education,
-      this.sem,
-      this.course,
-      this.branch,
-      this.duration})
-      : super(key: key);
+  CurrentEducation({@required this.onButtonPressed, this.education, this.sem, this.course, this.branch, this.duration});
   @override
   _CurrentEducationState createState() => _CurrentEducationState();
 }
@@ -371,7 +365,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           ),
                           child: MaterialButton(
                               child: Text(
-                                "Save",
+                                "Next",
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     color: basicColor,
@@ -379,7 +373,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  
+                                  widget.onButtonPressed();
                                 }
                                 print(edu);
                               }),

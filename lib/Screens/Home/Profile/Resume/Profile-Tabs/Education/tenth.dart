@@ -14,8 +14,9 @@ double height, width;
 
 class Tenth extends StatefulWidget {
   final Map<dynamic, dynamic> x;
-
-  const Tenth({Key key, @required this.x}) : super(key: key);
+  final VoidCallback onButtonPressed;
+  final bool popOrOther;
+  const Tenth({Key key, @required this.x, @required this.onButtonPressed, this.popOrOther}) : super(key: key);
   @override
   _TenthState createState() => _TenthState();
 }
@@ -426,7 +427,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                           ),
                           child: MaterialButton(
                               child: Text(
-                                "Save",
+                                widget.popOrOther??widget.popOrOther?"Save":"Next",
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     color: basicColor,
@@ -434,6 +435,7 @@ class _TenthState extends State<Tenth> with SingleTickerProviderStateMixin {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate())
+                                widget.onButtonPressed();
                                   print(education);
                               }),
                         ),

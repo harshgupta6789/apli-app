@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart' as p;
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -7,27 +8,27 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
 
-class Diploma extends StatefulWidget {
-  final Map<dynamic, dynamic> xii;
-  final VoidCallback onButtonPressed;
+double height, width;
 
-  const Diploma({Key key, @required this.xii, @required this.onButtonPressed}) : super(key: key);
+class Other extends StatefulWidget {
+  final Map<dynamic, dynamic> x;
+  final VoidCallback onButtonPressed;
+  final bool popOrOther;
+  const Other({Key key, @required this.x, @required this.onButtonPressed, this.popOrOther}) : super(key: key);
   @override
-  _DiplomaState createState() => _DiplomaState();
+  _OtherState createState() => _OtherState();
 }
 
-class _DiplomaState extends State<Diploma> {
+class _OtherState extends State<Other> with SingleTickerProviderStateMixin {
   double height, width;
   File file;
   bool error = false, loading = false;
   final format = DateFormat("yyyy-MM");
   final _formKey = GlobalKey<FormState>();
-  String fileName;
-  String unit;
-  String institute, stream, board, cgpa, email, specialization;
+  String email, fileName;
+  String institute = '', board = '', cgpa = '', unit, specialization = '';
   DateTime from, to;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -45,22 +46,21 @@ class _DiplomaState extends State<Diploma> {
   }
 
   void init() {
-    if (widget.xii['XII'] != null)
+    education = widget.x;
+    if (widget.x['X'] != null)
       setState(() {
-        education = widget.xii;
-        institute = widget.xii['XII']['institute'] ?? "";
-        board = widget.xii['XII']['board'] ?? "";
-        cgpa = widget.xii['XII']['score'].toString() ?? "";
-        specialization = widget.xii['XII']['specialization'];
-        if (widget.xii['XII']['start'] != null &&
-            widget.xii['XII']['end'] != null) {
+        institute = widget.x['X']['institute'] ?? "";
+        board = widget.x['X']['board'] ?? "";
+        cgpa = widget.x['X']['score'].toString() ?? "";
+        specialization = widget.x['X']['specialization'];
+        if (widget.x['X']['start'] != null && widget.x['X']['end'] != null) {
           from = DateTime.fromMicrosecondsSinceEpoch(
-              widget.xii['XII']['start'].microsecondsSinceEpoch);
+              widget.x['X']['start'].microsecondsSinceEpoch);
           to = DateTime.fromMicrosecondsSinceEpoch(
-              widget.xii['XII']['end'].microsecondsSinceEpoch);
+              widget.x['X']['end'].microsecondsSinceEpoch);
         }
 
-        unit = widget.xii['X']['score_unit'];
+        unit = widget.x['X']['score_unit'];
       });
   }
 
@@ -75,7 +75,7 @@ class _DiplomaState extends State<Diploma> {
         setState(() {
           fileName = p.basename(file.path);
         });
-        // _uploadFile(file, fileName);
+        _uploadFile(file, fileName);
         // setState(() {
         //   x = currentState.uploading;
         // });
@@ -98,9 +98,14 @@ class _DiplomaState extends State<Diploma> {
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+        resizeToAvoidBottomInset: false,
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -108,7 +113,7 @@ class _DiplomaState extends State<Diploma> {
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
-                twelve,
+                ten,
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -136,13 +141,13 @@ class _DiplomaState extends State<Diploma> {
                 children: <Widget>[
                   SizedBox(height: 30),
                   TextFormField(
-                    initialValue: institute,
+                    initialValue: institute ?? null,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Institute Name"),
                     onChanged: (text) {
-                      setState(() => education['XII']['institute'] = text);
+                      setState(() => education['X']['institute'] = text);
                     },
                     validator: (value) {
                       if (value.isEmpty)
@@ -155,17 +160,17 @@ class _DiplomaState extends State<Diploma> {
                     height: 15,
                   ),
                   TextFormField(
-                    initialValue: stream ?? null,
+                    initialValue: board ?? null,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
-                    decoration: x("Stream"),
+                    decoration: x("Board"),
                     onChanged: (text) {
-                      setState(() => education['XII']['specialization'] = text);
+                      setState(() => education['X']['board'] = text);
                     },
                     validator: (value) {
                       if (value.isEmpty)
-                        return 'stream cannot be empty';
+                        return 'Board cannot be empty';
                       else
                         return null;
                     },
@@ -174,20 +179,20 @@ class _DiplomaState extends State<Diploma> {
                     height: 15,
                   ),
                   TextFormField(
-                    initialValue: board ?? null,
+                    initialValue: specialization ?? null,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
+                    decoration: x("Specialization"),
                     onChanged: (text) {
-                      setState(() => education['XII']['board'] = text);
+                      setState(() => education['X']['specialization'] = text);
                     },
                     validator: (value) {
                       if (value.isEmpty)
-                        return 'Board cannot be empty';
+                        return 'Specialization cannot be empty';
                       else
                         return null;
                     },
-                    decoration: x('Board'),
                   ),
                   SizedBox(
                     height: 15,
@@ -205,7 +210,7 @@ class _DiplomaState extends State<Diploma> {
                           obscureText: false,
                           decoration: x("CGPA"),
                           onChanged: (text) {
-                            setState(() => education['XII']['score'] = text);
+                            setState(() => education['X']['score'] = text);
                           },
                           validator: (value) {
                             if (value.isEmpty)
@@ -257,7 +262,7 @@ class _DiplomaState extends State<Diploma> {
                                     onChanged: (value) {
                                       setState(() {
                                         unit = value;
-                                        education['XII']['score_unit'] = value;
+                                        education['X']['score_unit'] = value;
                                       });
                                     },
                                   ),
@@ -295,7 +300,7 @@ class _DiplomaState extends State<Diploma> {
                                 lastDate: DateTime(2100));
                             Timestamp myTimeStamp = Timestamp.fromDate(date);
                             setState(() {
-                              education['XII']['start'] = myTimeStamp;
+                              education['X']['start'] = myTimeStamp;
                             });
                             return date;
                           },
@@ -312,19 +317,6 @@ class _DiplomaState extends State<Diploma> {
                         width: width * 0.35,
                         child: DateTimeField(
                           initialValue: to ?? null,
-                          format: format,
-                          onShowPicker: (context, currentValue) async {
-                            final date = await showDatePicker(
-                                context: context,
-                                firstDate: DateTime(1900),
-                                initialDate: to ?? DateTime.now(),
-                                lastDate: DateTime(2100));
-                            Timestamp myTimeStamp = Timestamp.fromDate(date);
-                            setState(() {
-                              education['XII']['end'] = myTimeStamp;
-                            });
-                            return date;
-                          },
                           decoration: InputDecoration(
                               hintText: "To:",
                               border: OutlineInputBorder(
@@ -334,12 +326,26 @@ class _DiplomaState extends State<Diploma> {
                                   vertical: 2.0, horizontal: 10.0),
                               hintStyle: TextStyle(fontWeight: FontWeight.w600),
                               labelStyle: TextStyle(color: Colors.black)),
+                          format: format,
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate: to ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            Timestamp myTimeStamp = Timestamp.fromDate(date);
+                            setState(() {
+                              education['X']['end'] = myTimeStamp;
+                            });
+                            return date;
+                          },
                           validator: (value) {
                             if (value == null)
                               return 'Date \ncannot be empty';
                             else
                               return null;
                           },
+                          // decoration: x("From")
                         ),
                       ),
                     ],
@@ -365,10 +371,10 @@ class _DiplomaState extends State<Diploma> {
                                 labelStyle: TextStyle(color: Colors.black))),
                       ),
                       InkWell(
-                        onTap: () async {
-                          filePicker(context);
+                        onTap:() async{
+                           filePicker(context);
                         },
-                        child: Container(
+                                              child: Container(
                           color: Colors.grey,
                           width: width * 0.25,
                           child: TextField(
@@ -393,8 +399,8 @@ class _DiplomaState extends State<Diploma> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30),
-                 Padding(
+                  SizedBox(height: 30.0),
+                  Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -421,7 +427,7 @@ class _DiplomaState extends State<Diploma> {
                           ),
                           child: MaterialButton(
                               child: Text(
-                                "Next",
+                                "Save",
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     color: basicColor,

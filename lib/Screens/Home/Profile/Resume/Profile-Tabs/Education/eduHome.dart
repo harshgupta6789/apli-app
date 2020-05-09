@@ -1,9 +1,11 @@
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/currentEdu.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/diploma.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/tenth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,11 +23,16 @@ class _EducationOverviewState extends State<EducationOverview> {
   String email;
   String batchId;
   int semToBuild = 1;
+  bool isUg = false;
   String course, branch, duration;
   String unit;
   String institute, stream, board, cgpa;
   DateTime from, to;
   Map<int, dynamic> sems = {};
+  PageController pageController = PageController(
+    initialPage: 0,
+    keepPage: true,
+  );
   Map<dynamic, dynamic> completeEducation = {
     // 'X': {
     //   'board': "",
@@ -109,6 +116,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                 course = data.documents[0].data['course'];
                 branch = data.documents[0].data['branch'];
                 duration = data.documents[0].data['batch_year'];
+                isUg = data.documents[0].data['is_ug'];
+                print(isUg);
 
                 if (s.data['education'] != null) {
                   if (s.data['education'][course] != null) {
@@ -209,248 +218,75 @@ class _EducationOverviewState extends State<EducationOverview> {
         ? Loading()
         : loading
             ? Loading()
-            : Scaffold(
-                appBar: PreferredSize(
-                  child: AppBar(
-                    backgroundColor: basicColor,
-                    automaticallyImplyLeading: false,
-                    title: Padding(
-                      padding: const EdgeInsets.only(bottom: 10.0),
-                      child: Text(
-                        education,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+            : WillPopScope(
+                          child: Scaffold(
+                  body: PageView(
+                    physics: new NeverScrollableScrollPhysics(),
+                    controller: pageController,
+                    children: <Widget>[
+                      CurrentEducation(
+                        sem: semToBuild,
+                        course: course,
+                        duration: duration,
+                        branch: branch,
+                        education: completeEducation,
+                        onButtonPressed: () {
+                          pageController.animateToPage(
+                            1,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.linear,
+                          );
+                        },
                       ),
-                    ),
-                    leading: Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: IconButton(
-                          icon: Icon(Icons.arrow_back),
-                          onPressed: () => Navigator.pop(context)),
-                    ),
+                      Diploma(
+                        xii: completeEducation,
+                        onButtonPressed: () {
+                          pageController.animateToPage(
+                            2,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.linear,
+                          );
+                        },
+                      ),
+                      Tenth(
+                          x: completeEducation,
+                          popOrOther: true,
+                          onButtonPressed: () {
+                            if (isUg != null && isUg == true) {
+                              pageController.animateToPage(
+                                3,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                            } else {
+                              Navigator.pop(context);
+                            }
+                          }),
+                      Other(
+                          x: completeEducation,
+                          popOrOther: isUg,
+                          onButtonPressed: () {
+                            Navigator.pop(context);
+                          })
+                    ],
                   ),
-                  preferredSize: Size.fromHeight(55),
-                ),
-                body: ScrollConfiguration(
-                  child: SingleChildScrollView(
-                      child: Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        width * 0.05, 40.0, width * 0.05, 0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            clg,
-                            style: TextStyle(
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                0.0, 20.0, 10.0, 20.0),
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 10.0, 10.0),
-                                    child: Text(
-                                      noDetails,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: fontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 20.0, 10.0, 10.0),
-                                      child: FlatButton(
-                                          onPressed: () {
-                                            print(completeEducation);
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CurrentEducation(
-                                                            sem: semToBuild,
-                                                            course: course,
-                                                            duration: duration,
-                                                            branch: branch,
-                                                            education:
-                                                                completeEducation)));
-                                          },
-                                          child: Text(
-                                            "Add now",
-                                            style: TextStyle(
-                                                color: basicColor,
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Text(
-                            otherCourses,
-                            style: TextStyle(
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                0.0, 20.0, 10.0, 20.0),
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 10.0, 10.0),
-                                    child: Text(
-                                      noDetails,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: fontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 20.0, 10.0, 10.0),
-                                      child: FlatButton(
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CurrentEducation(
-                                                          sem: semToBuild,
-                                                          course: course,
-                                                          duration: duration,
-                                                          branch: branch,
-                                                          education:
-                                                              completeEducation))),
-                                          child: Text(
-                                            "Add now",
-                                            style: TextStyle(
-                                                color: basicColor,
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Text(
-                            twelve,
-                            style: TextStyle(
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                0.0, 20.0, 10.0, 20.0),
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 10.0, 10.0),
-                                    child: Text(
-                                      noDetails,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: fontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 20.0, 10.0, 10.0),
-                                      child: FlatButton(
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Diploma(
-                                                      xii: completeEducation))),
-                                          child: Text(
-                                            "Add now",
-                                            style: TextStyle(
-                                                color: basicColor,
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Text(
-                            ten,
-                            style: TextStyle(
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                0.0, 20.0, 10.0, 10.0),
-                            child: Container(
-                              width: width,
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 20.0, 10.0, 10.0),
-                                    child: Text(
-                                      noDetails,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: fontSize,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 20.0, 10.0, 10.0),
-                                      child: FlatButton(
-                                          onPressed: () => Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Tenth(
-                                                      x: completeEducation))),
-                                          child: Text(
-                                            "Add now",
-                                            style: TextStyle(
-                                                color: basicColor,
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold),
-                                          ))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 40,
-                          )
-                        ]),
-                  )),
-                  behavior: MyBehavior(),
-                ),
-              );
+                ), onWillPop: () {
+                    AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.ERROR,
+                        tittle: "Are You Sure?",
+                        desc: "Yes!",
+                        btnCancelText: "Cancel",
+                        btnCancelOnPress: () {
+                          //Navigator.of(context).pop();
+                        },
+                        btnOkOnPress: () async {
+                         Navigator.pop(context);
+                        },
+                        btnOkText: "I Understand!",
+                      ).show();
+          return null;
+                },
+            );
   }
 }

@@ -47,6 +47,7 @@ class _CameraState extends State<Camera> {
         .setData({'video_resume': url}, merge: true).then((onValue) {
       setState(() {
         fetchUrl = url;
+        deleteDirectory();
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => Wrapper(
@@ -61,10 +62,11 @@ class _CameraState extends State<Camera> {
     });
   }
 
-  void deleteDirecotry(String x) {
-    final dir = Directory(urlFromCamera);
+  void deleteDirectory() {
+    final dir = Directory('storage/emulated/0/apli/');
     try {
       dir.deleteSync(recursive: true);
+      setState(() {});
     } on Exception catch (e) {
       print(e);
     }
