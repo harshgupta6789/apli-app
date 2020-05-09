@@ -889,7 +889,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                       for(int i = 0; i < languagesList.length; i++) {
                                         languages[languagesList[i][0]] = languagesList[i][1];
                                       }
-                                      Map<String, dynamic> map;
+                                      Map<String, dynamic> map = {};
                                       address['postal_code'] = int.parse(postal);
                                       map['Address'] = address;
                                       map['First_name'] = fname;
@@ -917,6 +917,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                         } else {
                                           showToast('Unexpected error occured', context);
                                         }
+                                        setState(() {
+                                          loading = false;
+                                        });
                                       } else {
                                         showToast(
                                             'Uploading profile picture\n might take some time',
@@ -951,6 +954,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                           } else {
                                             showToast('Unexpected error occured', context);
                                           }
+                                          setState(() {
+                                            loading = false;
+                                          });
                                           showToast('Data Updated Successfully',
                                               context);
                                           Navigator.pop(context);

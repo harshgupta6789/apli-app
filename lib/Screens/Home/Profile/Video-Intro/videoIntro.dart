@@ -27,9 +27,9 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin  {
+    with SingleTickerProviderStateMixin {
   String email;
-  int status;
+  int Status;
   List<CameraDescription> cameras;
   File file;
   String fileName = '';
@@ -43,29 +43,26 @@ class _VideoIntroState extends State<VideoIntro>
   StorageUploadTask uploadTask;
   VideoPlayerController fileVideocontroller;
 
-  @override
-  bool get wantKeepAlive => false;
-
   camInit() async {
     cameras = await availableCameras();
   }
 
   userAddVideoUrl(String url) async {
-    String temp  = decimalToBinary(status).toString();
+    String temp  = decimalToBinary(Status).toString();
     while(temp.length != 9) {
       temp = '0' + temp;
     }
     temp = temp.substring(0, 7) + '1' + temp.substring(8);
-    status = binaryToDecimal(int.parse(temp));
+    Status = binaryToDecimal(int.parse(temp));
     print(temp);
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .updateData({'video_resume': url, 'profile_status' : status}).then((onValue) {
+        .updateData({'video_resume': url, 'profile_status' : Status}).then((onValue) {
       setState(() {
         fetchUrl = url;
         setState(() {
-          status = binaryToDecimal(int.parse(temp));
+          Status = binaryToDecimal(int.parse(temp));
           x = currentState.success;
         });
       });
@@ -80,19 +77,19 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   deleteVideoUrl() async {
-    String temp = decimalToBinary(status).toString();
+    String temp = decimalToBinary(Status).toString();
     while(temp.length != 9) {
       temp = '0' + temp;
     }
     temp = temp.substring(0, 7) + '0' + temp.substring(8);
     setState(() {
-      status = binaryToDecimal(int.parse(temp));
+      Status = binaryToDecimal(int.parse(temp));
     });
-    print(status);
+    print(Status);
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .setData({'video_resume': null, 'profile_status' : status}, merge: true);
+        .setData({'video_resume': null, 'profile_status' : Status}, merge: true);
   }
 
   double _bytesTransferred(StorageTaskSnapshot snapshot) {
@@ -127,21 +124,18 @@ class _VideoIntroState extends State<VideoIntro>
               .document(prefs.getString('email'))
               .get()
               .then((s) {
-            status = s.data['profile_status'] ?? 0;
-            print(status);
-            setState(() {
-
-            });
             if (s.data['video_resume'] != null) {
               setState(() {
                 fetchUrl = s.data['video_resume'];
                 email = s.data['email'];
                 x = currentState.success;
+                Status = s.data['profile_status'] ?? 0;
               });
             } else {
               setState(() {
                 x = currentState.none;
                 email = s.data['email'];
+                Status = s.data['profile_status'] ?? 0;
               });
             }
           });
@@ -376,7 +370,7 @@ class _VideoIntroState extends State<VideoIntro>
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        Camera(cameras: cameras)),
+                                                        Camera(cameras: cameras, status: Status,)),
                                               );
                                               print(urlFromCamera);
                                               if (urlFromCamera != null) {
@@ -390,7 +384,7 @@ class _VideoIntroState extends State<VideoIntro>
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Camera(cameras: cameras)),
+                                                      Camera(cameras: cameras, status: Status,)),
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
@@ -418,7 +412,7 @@ class _VideoIntroState extends State<VideoIntro>
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Camera(cameras: cameras)),
+                                                      Camera(cameras: cameras, status: Status,)),
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
@@ -432,7 +426,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Camera(cameras: cameras)),
+                                                    Camera(cameras: cameras, status: Status,)),
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
@@ -474,7 +468,7 @@ class _VideoIntroState extends State<VideoIntro>
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Camera(cameras: cameras)),
+                                                      Camera(cameras: cameras, status: Status,)),
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
@@ -488,7 +482,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Camera(cameras: cameras)),
+                                                    Camera(cameras: cameras, status: Status,)),
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
@@ -515,7 +509,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    Camera(cameras: cameras)),
+                                                    Camera(cameras: cameras, status: Status,)),
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
@@ -529,7 +523,7 @@ class _VideoIntroState extends State<VideoIntro>
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  Camera(cameras: cameras)),
+                                                  Camera(cameras: cameras, status: Status,)),
                                         );
                                         print(urlFromCamera);
                                         if (urlFromCamera != null) {

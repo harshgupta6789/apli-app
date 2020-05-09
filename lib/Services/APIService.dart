@@ -17,16 +17,16 @@ class APIService {
         switch (type) {
           case 8:
             {
-              http.Response response = await http.post(url,
+              http.Response response = await http.post(basic_infoURL,
                   body: json.decode('{'
                       '"email" : "${value.getString('email')}", '
-                      '"secret" : "$checkLoginSecret", '
+                      '"secret" : "$passHashSecret", '
                       '"Address" : {'
-                      '"address" : "${map['Address']['address']}",'
-                      '"city" : "${map['Address']['city']}",'
-                      '"country" : "${map['Address']['country']}",'
-                      '"postal_code" : "${map['Address']['postal_code']}",'
-                      '"state" : "${map['Address']['state']}",'
+                        '"address" : "${map['Address']['address']}",'
+                        '"city" : "${map['Address']['city']}",'
+                        '"country" : "${map['Address']['country']}",'
+                        '"postal_code" : "${map['Address']['postal_code']}",'
+                        '"state" : "${map['Address']['state']}"'
                       '},'
                       '"First_name" : "${map['First_name']}",'
                       '"Last_name" : "${map['Last_name']}",'
@@ -34,16 +34,14 @@ class APIService {
                       '"dob" : "${map['dob']}",'
                       '"gender" : "${map['gender']}",'
                       '"highest_qualification" : "${map['highest_qualification']}",'
-                      '"languages" : {'
-                      '"address" : "${map['Address']['address']}",'
-                      '},'
+                      '"languages" : {"zczvzv" : "cczxcc"},'
                       '"ph_no" : "${map['ph_no']}",'
                       '"profile_picture" : "${map['profile_picture']}",'
-                      '"roll_no" : "${map['roll_no']}",'
+                      '"roll_no" : "${map['roll_no']}"'
                       '}'));
               if (response.statusCode == 200) {
                 var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
+                if (decodedData["secret"] == passHashSecret) {
                   bool temp = decodedData["success"];
                   if (temp == true) {
                     result = 1;
@@ -57,144 +55,6 @@ class APIService {
             break;
 
           case 7:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['experience']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 6:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['experience']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 5:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['projects']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 4:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['extra_curricular']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 3:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['skills']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 2:
-            {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$checkLoginSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['award']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == checkLoginSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
-            }
-            break;
-
-          case 1:
             {
               http.Response response = await http.post(url,
                   body: json.decode('{'
@@ -241,6 +101,122 @@ class APIService {
                 result = -2;
               break;
             }
+
+          case 6:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$passHashSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['experience']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == passHashSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
+
+          case 5:
+            {
+              http.Response response = await http.post(projectsURL,
+                  body: json.decode('{'
+                      '"secret" : "$passHashSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['projects']}"'
+                      '}'));
+              print(response.statusCode);
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == passHashSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
+
+          case 4:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$passHashSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['extra_curricular']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == passHashSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
+
+          case 3:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$passHashSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['skills']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == passHashSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
+
+          case 2:
+            {
+              http.Response response = await http.post(url,
+                  body: json.decode('{'
+                      '"secret" : "$passHashSecret", '
+                      '"useremail" : "${value.getString('email')}", '
+                      '"data" : "${map['award']}"'
+                      '}'));
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == passHashSecret) {
+                  bool temp = decodedData["success"];
+                  if (temp == true) {
+                    result = 1;
+                  } else
+                    result = -1;
+                } else
+                  result = -2;
+              } else
+                result = -2;
+            }
+            break;
 
           default:
             {}

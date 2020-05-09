@@ -14,8 +14,9 @@ enum currentState { none, uploading, success, failure }
 
 class Camera extends StatefulWidget {
   final List<CameraDescription> cameras;
+  final int status;
 
-  const Camera({Key key, @required this.cameras}) : super(key: key);
+  const Camera({Key key, @required this.cameras, @required this.status}) : super(key: key);
 
   @override
   _CameraState createState() => _CameraState();
@@ -39,21 +40,29 @@ class _CameraState extends State<Camera> {
   String fetchUrl;
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
+  int Status;
 
   userAddVideoUrl(String url) async {
+    String temp  = decimalToBinary(Status).toString();
+    while(temp.length != 9) {
+      temp = '0' + temp;
+    }
+    temp = temp.substring(0, 7) + '1' + temp.substring(8);
+    Status = binaryToDecimal(int.parse(temp));
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .setData({'video_resume': url}, merge: true).then((onValue) {
+        .setData({'video_resume': url, 'profile_status' : Status}, merge: true).then((onValue) {
       setState(() {
         fetchUrl = url;
         deleteDirectory();
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder: (context) => Wrapper(
-                      currentTab: 3,
-                    )),
-            (Route<dynamic> route) => false);
+        Navigator.pop(context);
+//        Navigator.of(context).pushAndRemoveUntil(
+//            MaterialPageRoute(
+//                builder: (context) => Wrapper(
+//                      currentTab: 3,
+//                    )),
+//            (Route<dynamic> route) => false);
         //deleteDirecotry(urlFromCamera);
         setState(() {
           x = currentState.success;
@@ -238,11 +247,6 @@ class _CameraState extends State<Camera> {
                               onPressed: () {
                                 if (path != null) {
                                   videoPicker(path);
-                                  // Navigator.pop(context, path);
-                                  // showToast(
-                                  //     'Recorded Video Will Be Stored In Storage/Apli Folder',
-                                  //     context);
-
                                 }
                               }),
                         ),
@@ -423,8 +427,6 @@ class _CameraState extends State<Camera> {
       setState(() {
         _isRecording = false;
         isRecordingStopped = true;
-        showToast(
-            'Recorded Video Will Be Stored In Storage/Apli Folder', context);
       });
     } on CameraException catch (e) {
       print(e);
@@ -460,6 +462,7 @@ class _CameraState extends State<Camera> {
 
   @override
   void initState() {
+    Status = widget.status;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);

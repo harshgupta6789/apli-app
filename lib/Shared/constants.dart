@@ -17,6 +17,9 @@ const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
 const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 
+const String basic_infoURL = "https://dev.apli.ai/candidate/api/basic_info";
+const String projectsURL = "https://dev.apli.ai/candidate/api/projects";
+
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';
 

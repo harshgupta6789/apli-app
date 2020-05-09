@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apli/Services/APIService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
@@ -37,6 +38,7 @@ class _NewProjectState extends State<NewProject> {
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   StorageUploadTask uploadTask;
+  final _APIService = APIService(type: 5);
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -487,10 +489,28 @@ class _NewProjectState extends State<NewProject> {
                                       setState(() {
                                         loading = true;
                                       });
+                                      Map<String, dynamic> map = {};
+                                      projects[index] = {'Name' : Name, 'University_Company' : University_Company, 'from' : from, 'to' : to, 'certificate' : certificate, 'bullet_point1' : information[0], 'bullet_point2' : information[1]};
+                                      map['projects'] = projects;
+                                      print(map);
                                       if(file == null) {
                                         // TODO call API
-                                        showToast('Data updated successfully', context);
-                                        Navigator.pop(context);
+                                        dynamic result = await _APIService.sendProfileData(map);
+                                        if(result == -1) {
+                                          showToast('Failed', context);
+                                        } else if(result == 0) {
+                                          showToast('Failed', context);
+                                        } else if(result == -2) {
+                                          showToast('Could not connect to server', context);
+                                        } else if(result == 1) {
+                                          showToast('Data Updated Successfully', context);
+                                          Navigator.pop(context);
+                                        } else {
+                                          showToast('Unexpected error occured', context);
+                                        }
+                                        setState(() {
+                                          loading = false;
+                                        });
                                       } else {
                                         _uploadFile(file, fileName).then((f) {
                                           // TODO call API
