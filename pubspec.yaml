@@ -61,6 +61,7 @@ dependencies:
   youtube_player_flutter: ^6.1.1
   pdf_viewer_plugin: ^1.0.0+2
   esys_flutter_share: ^1.0.2
+  dio: ^3.0.9
 
 
 dev_dependencies:

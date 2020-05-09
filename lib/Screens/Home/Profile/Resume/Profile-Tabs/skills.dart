@@ -1,3 +1,4 @@
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
@@ -15,7 +16,7 @@ class _SkillsState extends State<Skills> {
   double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
-
+  final _APIService = APIService(type:3);
   List skills;
   Map<String, TextEditingController> temp = {};
   final _formKey = GlobalKey<FormState>();
@@ -705,14 +706,20 @@ class _SkillsState extends State<Skills> {
                                     ),
                                     onPressed: () async {
                                       if (_formKey.currentState.validate()) {
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        // TODO call API
-                                        showToast('Data Updated Successfully',
-                                            context);
-                                        Navigator.pop(context);
+                                        // setState(() {
+                                        //   loading = true;
+                                        // });
+                                        // // TODO call API
+                                        // showToast('Data Updated Successfully',
+                                        //     context);
+                                        // Navigator.pop(context);
+                                         dynamic result =
+                                            await _APIService.sendProfileData(
+                                                skills[0]);
+                                       
+                                      
                                       }
+
                                     },
                                   ),
                                   SizedBox(

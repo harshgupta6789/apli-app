@@ -61,14 +61,14 @@ class _BasicIntroState extends State<BasicIntro> {
               mno = snapshot.data['ph_no'].toString();
               dob = snapshot.data['dob'];
               gender = snapshot.data['gender'];
-              roll_no = snapshot.data['roll_no'];
+              roll_no = snapshot.data['roll_no'].toString();
               highest_qualification = snapshot.data['highest_qualification'];
-              languages = snapshot.data['languages'] ?? {'' : 'Expert'};
+              languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
-              postal = address['postal_code'] ?? '';
+              postal = address['postal_code'].toString() ?? '';
               languages.forEach((key, value) {
                 languagesList.add([key, value]);
-            });
+              });
             });
           });
         } catch (e) {
@@ -300,8 +300,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                                   Icons.keyboard_arrow_down),
                                             ),
                                             underline: SizedBox(),
-                                            items: genders.map<DropdownMenuItem<String>>(
-                                                (String value) {
+                                            items: genders
+                                                .map<DropdownMenuItem<String>>(
+                                                    (String value) {
                                               return DropdownMenuItem<String>(
                                                 value: value,
                                                 child: Text(value),
@@ -356,7 +357,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   obscureText: false,
                                   decoration: x("Highest Qualification"),
                                   onChanged: (text) {
-                                    setState(() => highest_qualification = text);
+                                    setState(
+                                        () => highest_qualification = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty)
@@ -378,177 +380,158 @@ class _BasicIntroState extends State<BasicIntro> {
                                   contentPadding: EdgeInsets.only(left: 0),
                                 ),
                                 ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: ScrollPhysics(),
-                                  itemCount: languagesList.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    if(!temp.containsKey(index.toString()))
-                                      temp[index.toString()] =
-                                      new TextEditingController(
-                                          text: languagesList[index][0]);
-                                    return Column(
-                                      children: <Widget>[
-                                        Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment
-                                              .spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: width *
-                                                  0.3 *
-                                                  scale,
-                                              child:
-                                              TextFormField(
-                                                controller: temp[
-                                                index.toString()],
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                    FontWeight
-                                                        .w500,
-                                                    fontSize:
-                                                    12),
-                                                decoration: InputDecoration(
-                                                    contentPadding: EdgeInsets.all(10 * scale),
-                                                    border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(5),
-                                                        borderSide: BorderSide(
-                                                          color:
-                                                          Colors.grey,
-                                                        ))),
-                                                onChanged:
-                                                    (value) {
-                                                  setState(() {
-                                                    languagesList[index][0] = value;
-                                                  });
-                                                },
-                                                validator:
-                                                    (value) {
-                                                  if (value
-                                                      .isEmpty)
-                                                    return 'cannot be empty';
-                                                  else
-                                                    return null;
-                                                },
-                                              ),
-                                            ),
-                                            ClipRRect(
-                                              borderRadius:
-                                              BorderRadius
-                                                  .circular(
-                                                  5),
-                                              child: Container(
-                                                color: Colors
-                                                    .grey[300],
-                                                padding: EdgeInsets
-                                                    .fromLTRB(
-                                                    10 *
-                                                        scale,
-                                                    0,
-                                                    5 * scale,
-                                                    0),
-                                                child:
-                                                DropdownButton<
-                                                    String>(
-                                                  value: languagesList[index][1] ==
-                                                      null
-                                                      ? 'Basic'
-                                                      : languagesList[index][1]
-                                                      .substring(0,
-                                                      1)
-                                                      .toUpperCase() +
-                                                      languagesList[index][1]
-                                                          .substring(1),
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    itemCount: languagesList.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      if (!temp.containsKey(index.toString()))
+                                        temp[index.toString()] =
+                                            new TextEditingController(
+                                                text: languagesList[index][0]);
+                                      return Column(
+                                        children: <Widget>[
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              SizedBox(
+                                                width: width * 0.3 * scale,
+                                                child: TextFormField(
+                                                  controller:
+                                                      temp[index.toString()],
                                                   style: TextStyle(
-                                                      color: Colors
-                                                          .black,
                                                       fontWeight:
-                                                      FontWeight
-                                                          .w500,
-                                                      fontSize:
-                                                      12),
-                                                  icon: Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 10.0 *
-                                                            scale),
-                                                    child: Icon(
-                                                        Icons
-                                                            .keyboard_arrow_down),
-                                                  ),
-                                                  underline:
-                                                  SizedBox(),
-                                                  items: <
-                                                      String>[
-                                                        'Starter',
-                                                    'Basic',
-                                                    'Intermediate',
-                                                    'Expert'
-                                                  ].map<
-                                                      DropdownMenuItem<
-                                                          String>>((String
-                                                  value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value:
-                                                      value,
-                                                      child: Text(
-                                                          value),
-                                                    );
-                                                  }).toList(),
-                                                  onChanged:
-                                                      (value) {
-                                                    setState(
-                                                            () {
-                                                              languagesList[index][1] = value;
-                                                        });
+                                                          FontWeight.w500,
+                                                      fontSize: 12),
+                                                  decoration: InputDecoration(
+                                                      contentPadding:
+                                                          EdgeInsets.all(
+                                                              10 * scale),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color:
+                                                                    Colors.grey,
+                                                              ))),
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      languagesList[index][0] =
+                                                          value;
+                                                    });
+                                                  },
+                                                  validator: (value) {
+                                                    if (value.isEmpty)
+                                                      return 'cannot be empty';
+                                                    else
+                                                      return null;
                                                   },
                                                 ),
                                               ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets
-                                                  .only(
-                                                  right: 15 *
-                                                      scale),
-                                              child: IconButton(
-                                                icon: Icon(Icons
-                                                    .delete_outline),
-                                                onPressed: () {
-                                                  if (languagesList
-                                                      .length ==
-                                                      1) {
-                                                  } else {
-                                                    languagesList
-                                                        .removeAt(
-                                                        index);
-                                                    for (int i =
-                                                        index;
-                                                    i < languagesList.length;
-                                                    i++) {
-                                                      temp[i.toString()]
-                                                          .text = languagesList[
-                                                      i][0];
-                                                    }
-                                                    temp.remove(index.toString());
-                                                    setState(
-                                                            () {});
-                                                  }
-                                                },
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                child: Container(
+                                                  color: Colors.grey[300],
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10 * scale,
+                                                      0,
+                                                      5 * scale,
+                                                      0),
+                                                  child: DropdownButton<String>(
+                                                    value: languagesList[index]
+                                                                [1] ==
+                                                            null
+                                                        ? 'Basic'
+                                                        : languagesList[index]
+                                                                    [1]
+                                                                .substring(0, 1)
+                                                                .toUpperCase() +
+                                                            languagesList[index]
+                                                                    [1]
+                                                                .substring(1),
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 12),
+                                                    icon: Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10.0 * scale),
+                                                      child: Icon(Icons
+                                                          .keyboard_arrow_down),
+                                                    ),
+                                                    underline: SizedBox(),
+                                                    items: <String>[
+                                                      'Starter',
+                                                      'Basic',
+                                                      'Intermediate',
+                                                      'Expert'
+                                                    ].map<
+                                                            DropdownMenuItem<
+                                                                String>>(
+                                                        (String value) {
+                                                      return DropdownMenuItem<
+                                                          String>(
+                                                        value: value,
+                                                        child: Text(value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        languagesList[index]
+                                                            [1] = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                ),
+                                              Container(
+                                                padding: EdgeInsets.only(
+                                                    right: 15 * scale),
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                      Icons.delete_outline),
+                                                  onPressed: () {
+                                                    if (languagesList.length ==
+                                                        1) {
+                                                    } else {
+                                                      languagesList
+                                                          .removeAt(index);
+                                                      for (int i = index;
+                                                          i <
+                                                              languagesList
+                                                                  .length;
+                                                          i++) {
+                                                        temp[i.toString()]
+                                                                .text =
+                                                            languagesList[i][0];
+                                                      }
+                                                      temp.remove(
+                                                          index.toString());
+                                                      setState(() {});
+                                                    }
+                                                  },
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                        ],
+                                      );
+                                    }),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment
-                                      .spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     SizedBox(
                                       width: width * 0.3 * scale,
@@ -556,178 +539,142 @@ class _BasicIntroState extends State<BasicIntro> {
                                         onTap: () {
                                           showDialog(
                                             context: context,
-                                            builder: (_) =>
-                                                SimpleDialog(
-                                                  title: Text(
-                                                    'Add Language',
+                                            builder: (_) => SimpleDialog(
+                                              title: Text(
+                                                'Add Language',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),
+                                              ),
+                                              children: <Widget>[
+                                                Container(
+                                                  width: width * 0.35 * scale,
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      20 * scale,
+                                                      20,
+                                                      20 * scale,
+                                                      20),
+                                                  child: TextField(
+                                                    autofocus: true,
                                                     style: TextStyle(
                                                         fontWeight:
-                                                        FontWeight
-                                                            .bold,
-                                                        fontSize: 15),
-                                                  ),
-                                                  children: <Widget>[
-                                                    Container(
-                                                      width: width *
-                                                          0.35 *
-                                                          scale,
-                                                      padding: EdgeInsets
-                                                          .fromLTRB(
-                                                          20 *
-                                                              scale,
-                                                          20,
-                                                          20 *
-                                                              scale,
-                                                          20),
-                                                      child:
-                                                      TextField(
-                                                        autofocus:
-                                                        true,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                            FontWeight
-                                                                .w500,
-                                                            fontSize:
-                                                            12),
-                                                        decoration: InputDecoration(
-                                                            hintText: 'eg: French, Japanese',
-                                                            contentPadding: EdgeInsets.all(10 * scale),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(5),
-                                                                borderSide: BorderSide(
-                                                                  color:
-                                                                  Colors.grey,
+                                                            FontWeight.w500,
+                                                        fontSize: 12),
+                                                    decoration: InputDecoration(
+                                                        hintText:
+                                                            'eg: French, Japanese',
+                                                        contentPadding:
+                                                            EdgeInsets.all(
+                                                                10 * scale),
+                                                        border:
+                                                            OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                borderSide:
+                                                                    BorderSide(
+                                                                  color: Colors
+                                                                      .grey,
                                                                 ))),
-                                                        onChanged:
-                                                            (value) {
-                                                          setState(
-                                                                  () {
-                                                                newLanguage =
-                                                                    value;
-                                                              });
-                                                        },
-                                                      ),
-                                                    ),
-                                                    Row(
-                                                      mainAxisAlignment:
+                                                    onChanged: (value) {
+                                                      setState(() {
+                                                        newLanguage = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceBetween,
-                                                      children: <
-                                                          Widget>[
-                                                        FlatButton(
-                                                          child: Text(
-                                                            'CLOSE',
-                                                            style: TextStyle(
-                                                                color:
+                                                  children: <Widget>[
+                                                    FlatButton(
+                                                      child: Text(
+                                                        'CLOSE',
+                                                        style: TextStyle(
+                                                            color:
                                                                 Colors.black),
-                                                          ),
-                                                          onPressed:
-                                                              () {
-                                                            Navigator.of(
-                                                                context)
-                                                                .pop();
-                                                          },
-                                                        ),
-                                                        FlatButton(
-                                                          child: Text(
-                                                            'ADD',
-                                                            style: TextStyle(
-                                                                color:
-                                                                basicColor),
-                                                          ),
-                                                          onPressed:
-                                                              () {
-                                                            Navigator.of(
-                                                                context)
-                                                                .pop();
-                                                            if(newLanguage != null)
-                                                              setState(() {
-                                                                languagesList.add([newLanguage, 'Basic']);
-                                                                temp = {};
-                                                              });
-                                                          },
-                                                        ),
-                                                      ],
-                                                    )
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    ),
+                                                    FlatButton(
+                                                      child: Text(
+                                                        'ADD',
+                                                        style: TextStyle(
+                                                            color: basicColor),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        if (newLanguage != null)
+                                                          setState(() {
+                                                            languagesList.add([
+                                                              newLanguage,
+                                                              'Basic'
+                                                            ]);
+                                                            temp = {};
+                                                          });
+                                                      },
+                                                    ),
                                                   ],
-                                                ),
+                                                )
+                                              ],
+                                            ),
                                           );
                                         },
                                         child: IgnorePointer(
                                           ignoring: true,
                                           child: TextFormField(
-                                            decoration:
-                                            InputDecoration(
-                                                hintText:
-                                                'Add new language',
+                                            decoration: InputDecoration(
+                                                hintText: 'Add new language',
                                                 hintStyle:
-                                                TextStyle(
-                                                    fontSize:
-                                                    12),
-                                                suffixIcon:
-                                                Icon(Icons
-                                                    .add),
+                                                    TextStyle(fontSize: 12),
+                                                suffixIcon: Icon(Icons.add),
                                                 contentPadding:
-                                                EdgeInsets
-                                                    .all(10 *
-                                                    scale),
-                                                border:
-                                                OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(
-                                                        5),
-                                                    borderSide:
-                                                    BorderSide(
-                                                      color:
-                                                      Colors.grey,
+                                                    EdgeInsets.all(10 * scale),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                    borderSide: BorderSide(
+                                                      color: Colors.grey,
                                                     ))),
                                           ),
                                         ),
                                       ),
                                     ),
                                     ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(
-                                          5),
+                                      borderRadius: BorderRadius.circular(5),
                                       child: Container(
                                         color: Colors.grey[300],
-                                        padding:
-                                        EdgeInsets.fromLTRB(
-                                            10 * scale,
-                                            0,
-                                            5 * scale,
-                                            0),
+                                        padding: EdgeInsets.fromLTRB(
+                                            10 * scale, 0, 5 * scale, 0),
                                         child: IgnorePointer(
                                           ignoring: true,
-                                          child: DropdownButton<
-                                              String>(
+                                          child: DropdownButton<String>(
                                             value: 'Proficiency',
                                             style: TextStyle(
-                                                color:
-                                                Colors.black,
-                                                fontWeight:
-                                                FontWeight
-                                                    .w500,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500,
                                                 fontSize: 13),
                                             icon: Padding(
-                                              padding:
-                                              EdgeInsets.only(
-                                                  left: 10.0 *
-                                                      scale),
-                                              child: Icon(Icons
-                                                  .keyboard_arrow_down),
+                                              padding: EdgeInsets.only(
+                                                  left: 10.0 * scale),
+                                              child: Icon(
+                                                  Icons.keyboard_arrow_down),
                                             ),
                                             underline: SizedBox(),
                                             items: <String>[
                                               'Proficiency',
-                                            ].map<
-                                                DropdownMenuItem<
-                                                    String>>((String
-                                            value) {
-                                              return DropdownMenuItem<
-                                                  String>(
+                                            ].map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                              return DropdownMenuItem<String>(
                                                 value: value,
-                                                child:
-                                                Text(value),
+                                                child: Text(value),
                                               );
                                             }).toList(),
                                             onChanged: (value) {},
@@ -736,11 +683,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                       ),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.only(
-                                          right: 15 * scale),
+                                      padding:
+                                          EdgeInsets.only(right: 15 * scale),
                                       child: IconButton(
-                                        icon: Icon(
-                                            Icons.delete_outline),
+                                        icon: Icon(Icons.delete_outline),
                                         onPressed: () {},
                                       ),
                                     )
@@ -828,7 +774,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                 TextFormField(
                                   initialValue: postal ?? '',
                                   textInputAction: TextInputAction.next,
-                                  keyboardType: TextInputType.numberWithOptions(),
+                                  keyboardType:
+                                      TextInputType.numberWithOptions(),
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
@@ -839,10 +786,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                   validator: (value) {
                                     if (value.isEmpty)
                                       return 'postal code cannot be empty';
+                                    else if (!(int.tryParse(value) != null))
+                                      return 'invalid postal';
                                     else
-                                      if(!(int.tryParse(value) != null))
-                                        return 'invalid postal';
-                                      else return null;
+                                      return null;
                                   },
                                 ),
                                 SizedBox(
@@ -886,36 +833,48 @@ class _BasicIntroState extends State<BasicIntro> {
                                         loading = true;
                                       });
                                       languages = {};
-                                      for(int i = 0; i < languagesList.length; i++) {
-                                        languages[languagesList[i][0]] = languagesList[i][1];
+                                      for (int i = 0;
+                                          i < languagesList.length;
+                                          i++) {
+                                        languages[languagesList[i][0]] =
+                                            languagesList[i][1];
                                       }
-                                      Map<String, dynamic> map = {};
-                                      address['postal_code'] = int.parse(postal);
+                                      Map<dynamic, dynamic> map = {};
+                                      address['postal_code'] =
+                                          int.parse(postal);
                                       map['Address'] = address;
                                       map['First_name'] = fname;
                                       map['Last_name'] = lname;
                                       map['Middle_name'] = mname;
                                       map['dob'] = dob;
                                       map['gender'] = gender;
-                                      map['highest_qualification'] = highest_qualification;
+                                      map['highest_qualification'] =
+                                          highest_qualification;
                                       map['languages'] = languages;
                                       map['ph_no'] = mno;
                                       map['roll_no'] = roll_no;
                                       if (_image == null) {
-                                        // TODO call API
                                         map['profile_picture'] = profile;
-                                        dynamic result = await _APIService.sendProfileData(map);
-                                        if(result == -1) {
+                                        print(map);
+
+                                        dynamic result =
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == -1) {
                                           showToast('Failed', context);
-                                        } else if(result == 0) {
+                                        } else if (result == 0) {
                                           showToast('Failed', context);
-                                        } else if(result == -2) {
-                                          showToast('Could not connect to server', context);
-                                        } else if(result == 1) {
-                                          showToast('Data Updated Successfully', context);
+                                        } else if (result == -2) {
+                                          showToast(
+                                              'Could not connect to server',
+                                              context);
+                                        } else if (result == 1) {
+                                          showToast('Data Updated Successfully',
+                                              context);
                                           Navigator.pop(context);
                                         } else {
-                                          showToast('Unexpected error occured', context);
+                                          showToast('Unexpected error occured',
+                                              context);
                                         }
                                         setState(() {
                                           loading = false;
@@ -923,7 +882,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                       } else {
                                         showToast(
                                             'Uploading profile picture\n might take some time',
-                                            context, duration: 5);
+                                            context,
+                                            duration: 5);
                                         StorageReference storageReference;
                                         storageReference = FirebaseStorage
                                             .instance
@@ -941,18 +901,26 @@ class _BasicIntroState extends State<BasicIntro> {
                                           });
                                           map['profile_picture'] = url;
                                           // TODO call API
-                                          dynamic result = await _APIService.sendProfileData(map);
-                                          if(result == -1) {
+                                          dynamic result =
+                                              await _APIService.sendProfileData(
+                                                  map);
+                                          if (result == -1) {
                                             showToast('Failed', context);
-                                          } else if(result == 0) {
+                                          } else if (result == 0) {
                                             showToast('Failed', context);
-                                          } else if(result == -2) {
-                                            showToast('Could not connect to server', context);
-                                          } else if(result == 1) {
-                                            showToast('Data Updated Successfully', context);
+                                          } else if (result == -2) {
+                                            showToast(
+                                                'Could not connect to server',
+                                                context);
+                                          } else if (result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
                                             Navigator.pop(context);
                                           } else {
-                                            showToast('Unexpected error occured', context);
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
                                           }
                                           setState(() {
                                             loading = false;

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
@@ -17,6 +18,7 @@ class Awards extends StatefulWidget {
 
 class _AwardsState extends State<Awards> {
   String userEmail;
+ 
 
   void fetchInfo() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -98,6 +100,7 @@ class _AwardsFormState extends State<AwardsForm> {
   Map<String, TextEditingController> temp = {}, temp2 = {};
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("MM-yyyy");
+   final _APIService = APIService(type:2);
 
   @override
   void initState() {
@@ -496,22 +499,26 @@ class _AwardsFormState extends State<AwardsForm> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                bool t = true;
-                                for (int i = 0; i < awards.length; i++)
-                                  if (awards[i]['date'] == null) {
-                                    showToast('Date not provided', context);
-                                    t = false;
-                                    break;
-                                  }
-                                if (t) {
-                                  setState(() {
-                                    loading = true;
-                                  });
-                                  // TODO call API
-                                  showToast(
-                                      'Data Updated Successfully', context);
-                                  Navigator.pop(context);
-                                }
+                                // bool t = true;
+                                // for (int i = 0; i < awards.length; i++)
+                                //   if (awards[i]['date'] == null) {
+                                //     showToast('Date not provided', context);
+                                //     t = false;
+                                //     break;
+                                //   }
+                                // if (t) {
+                                //   setState(() {
+                                //     loading = true;
+                                //   });
+                                  
+                                //   showToast(
+                                //       'Data Updated Successfully', context);
+                                //   Navigator.pop(context);
+                                // }
+                                dynamic result =
+                                            await _APIService.sendProfileData(
+                                                awards[0]);
+                                                // TEST THE API
                               }
                             },
                           ),

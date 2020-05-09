@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:apli/Shared/constants.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +10,7 @@ class APIService {
 
   APIService({this.type});
 
-  Future sendProfileData(Map<String, dynamic> map) async {
+  Future sendProfileData(Map<dynamic, dynamic> map) async {
     dynamic result;
     String url;
     await SharedPreferences.getInstance().then((value) async {
@@ -17,40 +18,30 @@ class APIService {
         switch (type) {
           case 8:
             {
-              http.Response response = await http.post(basic_infoURL,
-                  body: json.decode('{'
-                      '"email" : "${value.getString('email')}", '
-                      '"secret" : "$passHashSecret", '
-                      '"Address" : {'
-                        '"address" : "${map['Address']['address']}",'
-                        '"city" : "${map['Address']['city']}",'
-                        '"country" : "${map['Address']['country']}",'
-                        '"postal_code" : "${map['Address']['postal_code']}",'
-                        '"state" : "${map['Address']['state']}"'
-                      '},'
-                      '"First_name" : "${map['First_name']}",'
-                      '"Last_name" : "${map['Last_name']}",'
-                      '"Middle_name" : "${map['Middle_name']}",'
-                      '"dob" : "${map['dob']}",'
-                      '"gender" : "${map['gender']}",'
-                      '"highest_qualification" : "${map['highest_qualification']}",'
-                      '"languages" : {"zczvzv" : "cczxcc"},'
-                      '"ph_no" : "${map['ph_no']}",'
-                      '"profile_picture" : "${map['profile_picture']}",'
-                      '"roll_no" : "${map['roll_no']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == passHashSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
+              Response response = await Dio()
+                  .post('https://dev.apli.ai/candidate/api/basic_info', data: {
+                "email": "${value.getString('email')}",
+                "secret": "$passHashSecret",
+                "Address": {
+                  "address": "${map['Address']['address']}",
+                  "city": "${map['Address']['city']}",
+                  "country": "${map['Address']['country']}",
+                  "postal_code": "${map['Address']['postal_code']}",
+                  "state": "${map['Address']['state']}",
+                },
+                "First_name": "${map['First_name']}",
+                "Last_name": "${map['Last_name']}",
+                "Middle_name": "${map['Middle_name']}",
+                "dob": "${map['dob']}",
+                "gender": "${map['gender']}",
+                "highest_qualification": "${map['highest_qualification']}",
+                "languages": map['languages'],
+                "ph_no": "${map['ph_no']}",
+                "profile_picture": "${map['profile_picture']}",
+                "roll_no": "${map['roll_no']}",
+              });
+              print(response.statusCode);
+              print(response.data);
             }
             break;
 
@@ -104,24 +95,58 @@ class APIService {
 
           case 6:
             {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$passHashSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['experience']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == passHashSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
+              Response response = await Dio()
+                  .post('https://dev.apli.ai/candidate/api/experience', data: {
+                "secret": "$passHashSecret",
+                "useremail": "${value.getString('email')}",
+                "data": [
+                  {
+                    'Type': "Job",
+                    'company': "x",
+                    'from': "y",
+                    'to': "z",
+                    'designation': "d",
+                    'industry': "d",
+                    'domain': "d",
+                    'certificate': "d",
+                    'bullet_point1': "d",
+                    'bullet_point2': "d",
+                    'bullet_point3': "",
+                  },
+                  {
+                    'Type': "Job",
+                    'company': "x",
+                    'from': "y",
+                    'to': "z",
+                    'designation': "d",
+                    'industry': "d",
+                    'domain': "d",
+                    'certificate': "d",
+                    'bullet_point1': "d",
+                    'bullet_point2': "d",
+                    'bullet_point3': "",
+                  },
+                ],
+                //   http.Response response = await http.post(url,
+                //       body: json.decode('{'
+                //           '"secret" : "$passHashSecret", '
+                //           '"useremail" : "${value.getString('email')}", '
+                //           '"data" : "${map['experience']}"'
+                //           '}'));
+                //   if (response.statusCode == 200) {
+                //     var decodedData = jsonDecode(response.body);
+                //     if (decodedData["secret"] == passHashSecret) {
+                //       bool temp = decodedData["success"];
+                //       if (temp == true) {
+                //         result = 1;
+                //       } else
+                //         result = -1;
+                //     } else
+                //       result = -2;
+                //   } else
+                //     result = -2;
+                // }
+              });
             }
             break;
 
@@ -174,47 +199,58 @@ class APIService {
 
           case 3:
             {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$passHashSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['skills']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == passHashSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
+              Response response = await Dio()
+                  .post('https://dev.apli.ai/candidate/api/skills', data: {
+                "secret": "$passHashSecret",
+                "useremail": "${value.getString('email')}",
+                "data": [{}, {}],
+              });
+              print(response.statusCode);
+              print(response.data);
+              // http.Response response = await http.post(url,
+              //     body: json.decode('{'
+              //         '"secret" : "$passHashSecret", '
+              //         '"useremail" : "${value.getString('email')}", '
+              //         '"data" : "${map['skills']}"'
+              //         '}'));
+              // if (response.statusCode == 200) {
+              //   var decodedData = jsonDecode(response.body);
+              //   if (decodedData["secret"] == passHashSecret) {
+              //     bool temp = decodedData["success"];
+              //     if (temp == true) {
+              //       result = 1;
+              //     } else
+              //       result = -1;
+              //   } else
+              //     result = -2;
+              // } else
+              //   result = -2;
             }
             break;
 
           case 2:
             {
-              http.Response response = await http.post(url,
-                  body: json.decode('{'
-                      '"secret" : "$passHashSecret", '
-                      '"useremail" : "${value.getString('email')}", '
-                      '"data" : "${map['award']}"'
-                      '}'));
-              if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.body);
-                if (decodedData["secret"] == passHashSecret) {
-                  bool temp = decodedData["success"];
-                  if (temp == true) {
-                    result = 1;
-                  } else
-                    result = -1;
-                } else
-                  result = -2;
-              } else
-                result = -2;
+              Response response = await Dio()
+                  .post("https://dev.apli.ai/candidate/api/awards", data: {
+                "secret": "$passHashSecret",
+                "useremail": "${value.getString('email')}",
+                "data": [{
+                  'description':"K",
+                  'date':"hello"
+                }]
+              });
+              // if (response.statusCode == 200) {
+              //   var decodedData = jsonDecode(response.body);
+              //   if (decodedData["secret"] == passHashSecret) {
+              //     bool temp = decodedData["success"];
+              //     if (temp == true) {
+              //       result = 1;
+              //     } else
+              //       result = -1;
+              //   } else
+              //     result = -2;
+              // } else
+              //   result = -2;
             }
             break;
 
