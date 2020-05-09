@@ -78,23 +78,27 @@ class _EducationOverviewState extends State<EducationOverview> {
                 course = data.documents[0].data['course'];
                 branch = data.documents[0].data['branch'];
                 duration = data.documents[0].data['batch_year'];
-                isUg = data.documents[0].data['is_ug'];
+                isUg = data.documents[0].data['is_ug'] ?? false;
                 if (s.data['education'] == null) {
                   completeEducation['XII'] = {
                     'board': "",
                     'certificate': null,
                     'institute': "",
-                    'score': "",
+                    'score': 0,
                     'score_unit': "%",
                     'specialization': "",
+                    'start' : Timestamp.now(),
+                    'end' : Timestamp.now()
                   };
                   completeEducation['X'] = {
                     'board': "",
                     'certificate': null,
                     'institute': "",
-                    'score': "",
+                    'score': 0,
                     'score_unit': "%",
                     'specialization': "",
+                    'start' : Timestamp.now(),
+                    'end' : Timestamp.now()
                   };
                 } else {
                   completeEducation['XII'] = s.data['education']['XII'] ??
@@ -102,22 +106,25 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'board': "",
                         'certificate': null,
                         'institute': "",
-                        'score': "",
+                        'score': 0,
                         'score_unit': "%",
                         'specialization': "",
+                        'start' : Timestamp.now(),
+                        'end' : Timestamp.now()
                       };
                   completeEducation['X'] = s.data['education']['X'] ??
                       {
                         'board': "",
                         'certificate': null,
                         'institute': "",
-                        'score': "",
+                        'score': 0,
                         'score_unit': "%",
                         'specialization': "",
+                        'start' : Timestamp.now(),
+                        'end' : Timestamp.now()
                       };
                   completeEducation[course] = s.data['education'][course] ?? {};
                 }
-                print(isUg);
 
                 if (s.data['education'] != null) {
                   if (s.data['education'][course] != null) {
@@ -139,48 +146,48 @@ class _EducationOverviewState extends State<EducationOverview> {
                     } else {
                       for (int i = 0; i < semToBuild; i++) {
                         sems[i] = {
-                          'certificate': '',
-                          'closed_backlog': '',
-                          'live_backlog': '',
-                          'semester_score': ''
+                          'certificate': null,
+                          'closed_backlog': 0,
+                          'live_backlog': 0,
+                          'semester_score': 0
                         };
                       }
                       completeEducation[course] = {
-                        'score': '',
-                        'total_closed_backlogs': '',
-                        'total_live_backlogs': '',
+                        'score': 0,
+                        'total_closed_backlogs': 0,
+                        'total_live_backlogs': 0,
                         'sem_records' : sems,
                       };
                     }
                   } else {
                     for (int i = 0; i < semToBuild; i++) {
                       sems[i] = {
-                        'certificate': '',
-                        'closed_backlog': '',
-                        'live_backlog': '',
-                        'semester_score': ''
+                        'certificate': null,
+                        'closed_backlog': 0,
+                        'live_backlog': 0,
+                        'semester_score': 0
                       };
                     }
                     completeEducation[course] = {
-                      'score': '',
-                      'total_closed_backlogs': '',
-                      'total_live_backlogs': '',
+                      'score': 0,
+                      'total_closed_backlogs': 0,
+                      'total_live_backlogs': 0,
                       'sem_records' : sems,
                     };
                   }
                 } else {
                   for (int i = 0; i < semToBuild; i++) {
                     sems[i] = {
-                      'certificate': '',
-                      'closed_backlog': '',
-                      'live_backlog': '',
-                      'semester_score': ''
+                      'certificate': null,
+                      'closed_backlog': 0,
+                      'live_backlog': 0,
+                      'semester_score': 0
                     };
                   }
                   completeEducation[course] = {
-                    'score': '',
-                    'total_closed_backlogs': '',
-                    'total_live_backlogs': '',
+                    'score': 0,
+                    'total_closed_backlogs': 0,
+                    'total_live_backlogs': 0,
                     'sem_records' : sems,
                   };
                   print(completeEducation[course]['sem_records']);
@@ -230,6 +237,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         duration: duration,
                         branch: branch,
                         education: completeEducation,
+                        isUg: isUg,
                         onButtonPressed: () {
                           pageController.animateToPage(
                             1,
@@ -240,34 +248,13 @@ class _EducationOverviewState extends State<EducationOverview> {
                       ),
                       Diploma(
                         xii: completeEducation,
-                        onButtonPressed: () {
-                          pageController.animateToPage(
-                            2,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.linear,
-                          );
-                        },
                       ),
                       Tenth(
                           x: completeEducation,
-                          popOrOther: true,
-                          onButtonPressed: () {
-                            if (isUg != null && isUg == true) {
-                              pageController.animateToPage(
-                                3,
-                                duration: Duration(milliseconds: 300),
-                                curve: Curves.linear,
-                              );
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          }),
+                          ),
                       Other(
                           x: completeEducation,
-                          popOrOther: isUg,
-                          onButtonPressed: () {
-                            Navigator.pop(context);
-                          })
+                          )
                     ],
                   ),
                 ), onWillPop: () {

@@ -65,7 +65,7 @@ class _BasicIntroState extends State<BasicIntro> {
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
-              postal = address['postal_code'].toString() ?? '';
+              postal = address['postal_code'] == null ? null : address['postal_code'].toString();
               languages.forEach((key, value) {
                 languagesList.add([key, value]);
               });

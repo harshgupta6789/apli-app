@@ -108,7 +108,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                         Duration(milliseconds: 300),
                                     borderRadius: BorderRadius.circular(5),
                                     fieldHeight: 50,
-                                    fieldWidth: 40,
+                                    fieldWidth: width * 0.1,
                                     onChanged: (value) {
                                       setState(() {
                                         this.smsOTP = value;

@@ -9,9 +9,11 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Services/auth.dart';
+import '../../HomeLoginWrapper.dart';
 
 double height, width;
 
@@ -152,11 +154,13 @@ class _LoginState extends State<Login> {
                             padding: EdgeInsets.only(
                               top: height * 0.02,
                               left: width * 0.1,
+                              right: width * 0.1
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     Checkbox(
                                         value: rememberMe,
@@ -168,27 +172,21 @@ class _LoginState extends State<Login> {
                                     Text(rememberMeText),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: width * 0.2),
-                                  child: Container(
-                                    width: width * 0.3,
-                                    height: height * 0.1,
-                                    child: FlatButton(
-                                        splashColor: Colors.white,
-                                        child: Text(
-                                          forgot,
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w600,
-                                              color: basicColor),
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            forgotPassword = true;
-                                          });
-                                        }),
-                                  ),
-                                ),
+                                FlatButton(
+                                    splashColor: Colors.white,
+                                    child: Text(
+                                      'Forgot\nPassword',
+                                      style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w600,
+                                          color: basicColor),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        forgotPassword = true;
+                                      });
+                                    }),
                               ],
                             ),
                           ),
@@ -319,35 +317,38 @@ class _LoginState extends State<Login> {
                                   }),
                             )),
                         Padding(
-                            padding: EdgeInsets.only(
-                                top: height * 0.05,
-                                left: width * 0.1,
-                                right: width * 0.1),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(forgotPassword
+                          padding: EdgeInsets.only(
+                              top: height * 0.05,
+                              left: width * 0.1,
+                              right: width * 0.1),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text:
+                                forgotPassword
                                     ? 'Remember Password?'
-                                    : signup),
-                                FlatButton(
-                                    onPressed: () {
-                                      forgotPassword
-                                          ? setState(() {
-                                              forgotPassword = false;
-                                            })
-                                          : Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      VerifyPhoneNo()),
-                                            );
-                                    },
-                                    child: Text(
-                                      forgotPassword ? 'Login' : "Signup here",
+                                    : signup,
+                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                children: [
+                                  TextSpan(
+                                      text: forgotPassword ? 'Login' : "Signup here",
                                       style: TextStyle(color: basicColor),
-                                    ))
-                              ],
-                            )),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          forgotPassword
+                                              ? setState(() {
+                                            forgotPassword = false;
+                                          })
+                                              : Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    VerifyPhoneNo()),
+                                          );
+                                        }),
+                                ]),
+                          ),
+                        ),
                         SizedBox(
                           height: 10,
                         ),
