@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:apli/Screens/Home/Profile/Video-Intro/cameraScreen.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:camera/camera.dart';
@@ -16,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
 enum currentState { none, uploading, success, failure }
@@ -29,9 +27,9 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin  {
   String email;
-  String fileType = 'video';
+  int status;
   List<CameraDescription> cameras;
   File file;
   String fileName = '';
@@ -44,27 +42,31 @@ class _VideoIntroState extends State<VideoIntro>
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
   VideoPlayerController fileVideocontroller;
-  // YoutubePlayerController _controller = YoutubePlayerController(
-  //   initialVideoId: 'wfd3eGkCatE',
-  //   flags: YoutubePlayerFlags(
-  //     autoPlay: true,
-  //     mute: true,
-  //   ),
-  // );
+
+  @override
+  bool get wantKeepAlive => true;
 
   camInit() async {
     cameras = await availableCameras();
   }
 
   userAddVideoUrl(String url) async {
+    String temp  = decimalToBinary(status).toString();
+    while(temp.length != 9) {
+      temp = '0' + temp;
+    }
+    temp = temp.substring(0, 7) + '1' + temp.substring(8);
+    status = binaryToDecimal(int.parse(temp));
+    print(temp);
     Firestore.instance
         .collection('candidates')
         .document(email)
         .updateData({'video_resume': url}).then((onValue) {
       setState(() {
         fetchUrl = url;
-        //deleteDirecotry(urlFromCamera);
+        deleteDirecotry(urlFromCamera);
         setState(() {
+          status = binaryToDecimal(int.tryParse(temp));
           x = currentState.success;
         });
       });
@@ -79,10 +81,18 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   deleteVideoUrl() async {
+    String temp = decimalToBinary(status).toString();
+    while(temp.length != 9) {
+      temp = '0' + temp;
+    }
+    temp = temp.substring(0, 7) + '0' + temp.substring(8);
+    setState(() {
+      status = binaryToDecimal(int.parse(temp));
+    });
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .setData({'video_resume': null}, merge: true);
+        .setData({'video_resume': null, 'profile_status' : status}, merge: true);
   }
 
   double _bytesTransferred(StorageTaskSnapshot snapshot) {
@@ -117,6 +127,11 @@ class _VideoIntroState extends State<VideoIntro>
               .document(prefs.getString('email'))
               .get()
               .then((s) {
+            status = s.data['profile_status'] ?? 0;
+            print(status);
+            setState(() {
+
+            });
             if (s.data['video_resume'] != null) {
               setState(() {
                 fetchUrl = s.data['video_resume'];
@@ -140,7 +155,6 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   Future<void> _uploadFile(File file, String filename) async {
-    print('abd');
     await SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
       storageReference =
@@ -187,16 +201,6 @@ class _VideoIntroState extends State<VideoIntro>
             }
           });
       }
-//      if (file != null) {
-//        fileName = p.basename(file.path);
-//        setState(() {
-//          fileName = p.basename(file.path);
-//        });
-//        _uploadFile(file, fileName);
-//        setState(() {
-//          x = currentState.uploading;
-//        });
-//      } else {}
     } catch (e) {
       AwesomeDialog(
               context: context,
@@ -206,21 +210,6 @@ class _VideoIntroState extends State<VideoIntro>
           .show();
     }
   }
-
-  // void _recordVideo() async {
-  //   ImagePicker.pickVideo(source: ImageSource.camera)
-  //       .then((File recordedVideo) {
-  //     if (recordedVideo != null && recordedVideo.path != null) {
-  //       GallerySaver.saveVideo(recordedVideo.path).then((onValue) {
-  //         if (onValue == true) {
-  //           filePicker(context);
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
-
-
 
   Widget uploadVideo() {
     switch (x) {
@@ -576,8 +565,7 @@ class _VideoIntroState extends State<VideoIntro>
         );
         break;
       case currentState.uploading:
-        return Padding(
-          padding: EdgeInsets.only(top: 150, left: 50, right: 50),
+        return Center(
           child: StreamBuilder<StorageTaskEvent>(
               stream: uploadTask.events,
               builder:
@@ -590,7 +578,7 @@ class _VideoIntroState extends State<VideoIntro>
                       Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: CircularProgressIndicator(
-                          value: _bytesTransferred(snapshot),
+                          value: _bytesTransferred(snapshot) / 100,
                         ),
                       ),
                       Padding(

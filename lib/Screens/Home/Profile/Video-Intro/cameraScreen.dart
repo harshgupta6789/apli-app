@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:apli/Screens/HomeLoginWrapper.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/functions.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,11 +44,9 @@ class _CameraState extends State<Camera> {
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .updateData({'video_resume': url}).then((onValue) {
+        .setData({'video_resume': url}, merge: true).then((onValue) {
       setState(() {
         fetchUrl = url;
-
-        print(fetchUrl);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => Wrapper(
@@ -103,7 +99,7 @@ class _CameraState extends State<Camera> {
       StorageReference storageReference;
       storageReference = FirebaseStorage.instance
           .ref()
-          .child("resumeVideos/$filename}");
+          .child("resumeVideos/${value.getString('email')}");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       final String url = (await downloadUrl.ref.getDownloadURL());
