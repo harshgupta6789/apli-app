@@ -96,6 +96,18 @@ class _VideoIntroState extends State<VideoIntro>
     //     double.parse(res2.toStringAsFixed(2));
   }
 
+   double _bytesProgress(StorageTaskSnapshot snapshot) {
+    double res = (snapshot.bytesTransferred / 1024.0) / 1000;
+    double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
+    double x = double.parse(res.toStringAsFixed(2)) /
+        double.parse(res2.toStringAsFixed(2));
+    x = x * 100;
+    double round = ((x * 100).roundToDouble()) / 100;
+    return round;
+    // return double.parse(res.toStringAsFixed(2)) /
+    //     double.parse(res2.toStringAsFixed(2));
+  }
+
   usergetVideoUrl() async {
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
@@ -208,20 +220,7 @@ class _VideoIntroState extends State<VideoIntro>
   //   });
   // }
 
-  Future videoPicker(String path) async {
-    file = File(path);
-    print('a');
-    fileName = p.basename(path);
-    if(mounted)setState(() {
-      fileName = p.basename(path);
-    });
-    print(fileName);
-    _uploadFile(file, fileName);
-    print('a');
-    setState(() {
-      x = currentState.uploading;
-    });
-  }
+
 
   Widget uploadVideo() {
     switch (x) {
@@ -392,7 +391,7 @@ class _VideoIntroState extends State<VideoIntro>
                                               );
                                               print(urlFromCamera);
                                               if (urlFromCamera != null) {
-                                                videoPicker(urlFromCamera);
+                                              
                                               }
                                             } else showToast('Microphone Permission denied', context);
                                             break;
@@ -406,7 +405,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
-                                              videoPicker(urlFromCamera);
+                                             
                                             }
                                             break;
                                           default :
@@ -434,7 +433,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
-                                              videoPicker(urlFromCamera);
+                                             
                                             }
                                           } else showToast('Microphone Permission denied', context);
                                           break;
@@ -448,7 +447,7 @@ class _VideoIntroState extends State<VideoIntro>
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
-                                            videoPicker(urlFromCamera);
+                                          
                                           }
                                           break;
                                         default :
@@ -490,7 +489,7 @@ class _VideoIntroState extends State<VideoIntro>
                                             );
                                             print(urlFromCamera);
                                             if (urlFromCamera != null) {
-                                              videoPicker(urlFromCamera);
+                                             
                                             }
                                           } else showToast('Microphone Permission denied', context);
                                           break;
@@ -504,7 +503,7 @@ class _VideoIntroState extends State<VideoIntro>
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
-                                            videoPicker(urlFromCamera);
+                                         
                                           }
                                           break;
                                         default :
@@ -531,7 +530,7 @@ class _VideoIntroState extends State<VideoIntro>
                                           );
                                           print(urlFromCamera);
                                           if (urlFromCamera != null) {
-                                            videoPicker(urlFromCamera);
+                                           
                                           }
                                         } else showToast('Microphone Permission denied', context);
                                         break;
@@ -545,7 +544,7 @@ class _VideoIntroState extends State<VideoIntro>
                                         );
                                         print(urlFromCamera);
                                         if (urlFromCamera != null) {
-                                          videoPicker(urlFromCamera);
+                                         
                                         }
                                         break;
                                       default :
@@ -597,7 +596,7 @@ class _VideoIntroState extends State<VideoIntro>
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child:
-                            Text('${_bytesTransferred(snapshot)} % Uploaded...',
+                            Text('${_bytesProgress(snapshot)} % Uploaded...',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 18,
