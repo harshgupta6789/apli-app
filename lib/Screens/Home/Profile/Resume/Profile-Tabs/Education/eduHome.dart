@@ -72,10 +72,17 @@ class _EducationOverviewState extends State<EducationOverview> {
                 .limit(1);
             details.getDocuments().then((data) {
               setState(() {
+                email = s.data['email'];
+
+                semToBuild = data.documents[0].data['total_semester'];
+                course = data.documents[0].data['course'];
+                branch = data.documents[0].data['branch'];
+                duration = data.documents[0].data['batch_year'];
+                isUg = data.documents[0].data['is_ug'];
                 if (s.data['education'] == null) {
                   completeEducation['XII'] = {
                     'board': "",
-                    'certificate': "",
+                    'certificate': null,
                     'institute': "",
                     'score': "",
                     'score_unit': "%",
@@ -83,7 +90,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                   };
                   completeEducation['X'] = {
                     'board': "",
-                    'certificate': "",
+                    'certificate': null,
                     'institute': "",
                     'score': "",
                     'score_unit': "%",
@@ -93,7 +100,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                   completeEducation['XII'] = s.data['education']['XII'] ??
                       {
                         'board': "",
-                        'certificate': "",
+                        'certificate': null,
                         'institute': "",
                         'score': "",
                         'score_unit': "%",
@@ -102,21 +109,14 @@ class _EducationOverviewState extends State<EducationOverview> {
                   completeEducation['X'] = s.data['education']['X'] ??
                       {
                         'board': "",
-                        'certificate': "",
+                        'certificate': null,
                         'institute': "",
                         'score': "",
                         'score_unit': "%",
                         'specialization': "",
                       };
+                  completeEducation[course] = s.data['education'][course] ?? {};
                 }
-
-                email = s.data['email'];
-
-                semToBuild = data.documents[0].data['total_semester'];
-                course = data.documents[0].data['course'];
-                branch = data.documents[0].data['branch'];
-                duration = data.documents[0].data['batch_year'];
-                isUg = data.documents[0].data['is_ug'];
                 print(isUg);
 
                 if (s.data['education'] != null) {
@@ -125,22 +125,16 @@ class _EducationOverviewState extends State<EducationOverview> {
                       for (int i = 0; i < semToBuild; i++) {
                         sems[i] = {
                           'certificate': s.data['education'][course]
-                                  ['sem_records'][i]['certificate']
-                              .toString(),
+                                  ['sem_records'][i]['certificate'],
                           'closed_backlog': s.data['education'][course]
-                                  ['sem_records'][i]['closed_backlog']
-                              .toString(),
+                                  ['sem_records'][i]['closed_backlog'],
                           'live_backlog': s.data['education'][course]
-                                  ['sem_records'][i]['live_backlog']
-                              .toString(),
+                                  ['sem_records'][i]['live_backlog'],
                           'semester_score': s.data['education'][course]
                                   ['sem_records'][i]['semester_score']
-                              .toString()
                         };
                       }
-                      completeEducation[course] = {'sem_records': sems};
-
-                      //print(s.data['education'][course]['sem_records'][0]);
+                      completeEducation[course]['sem_records'] =  sems;
 
                     } else {
                       for (int i = 0; i < semToBuild; i++) {
@@ -151,14 +145,14 @@ class _EducationOverviewState extends State<EducationOverview> {
                           'semester_score': ''
                         };
                       }
-                      completeEducation[course] = {'sem_records': sems};
+                      completeEducation[course] = {
+                        'score': '',
+                        'total_closed_backlogs': '',
+                        'total_live_backlogs': '',
+                        'sem_records' : sems,
+                      };
                     }
                   } else {
-                    completeEducation[course] = {
-                      'score': '',
-                      'total_closed_backlogs': '',
-                      'total_live_backlogs': '',
-                    };
                     for (int i = 0; i < semToBuild; i++) {
                       sems[i] = {
                         'certificate': '',
@@ -167,14 +161,14 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'semester_score': ''
                       };
                     }
-                    completeEducation[course] = {'sem_records': sems};
+                    completeEducation[course] = {
+                      'score': '',
+                      'total_closed_backlogs': '',
+                      'total_live_backlogs': '',
+                      'sem_records' : sems,
+                    };
                   }
                 } else {
-                  completeEducation[course] = {
-                    'score': '',
-                    'total_closed_backlogs': '',
-                    'total_live_backlogs': '',
-                  };
                   for (int i = 0; i < semToBuild; i++) {
                     sems[i] = {
                       'certificate': '',
@@ -183,7 +177,13 @@ class _EducationOverviewState extends State<EducationOverview> {
                       'semester_score': ''
                     };
                   }
-                  completeEducation[course] = {'sem_records': sems};
+                  completeEducation[course] = {
+                    'score': '',
+                    'total_closed_backlogs': '',
+                    'total_live_backlogs': '',
+                    'sem_records' : sems,
+                  };
+                  print(completeEducation[course]['sem_records']);
                 }
                 print(completeEducation);
               });
@@ -273,7 +273,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                 ), onWillPop: () {
                     AwesomeDialog(
                         context: context,
-                        dialogType: DialogType.ERROR,
+                        dialogType: DialogType.WARNING,
                         tittle: "Are You Sure?",
                         desc: "Yes!",
                         btnCancelText: "Cancel",

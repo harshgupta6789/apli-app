@@ -20,6 +20,7 @@ class Diploma extends StatefulWidget {
 }
 
 class _DiplomaState extends State<Diploma> {
+
   double height, width;
   File file;
   bool error = false, loading = false;

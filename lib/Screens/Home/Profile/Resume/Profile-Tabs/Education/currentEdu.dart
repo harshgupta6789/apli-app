@@ -1,11 +1,14 @@
 import 'dart:io';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/diploma.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 
 class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
@@ -20,14 +23,14 @@ class CurrentEducation extends StatefulWidget {
 
 class _CurrentEducationState extends State<CurrentEducation> {
   double height, width, scale;
-  File file;
+  List<File> currentFiles = [];
+  List<String> currentFileNames = [];
   bool loading = false, error = false;
   String institute = '', email;
   final format = DateFormat("yyyy-MM");
   final _formKey = GlobalKey<FormState>();
   String userEmail;
   String batchId;
-  double heightOfContainer = 90;
   String course, branch, duration;
   int semToBuild = 1;
   Map<dynamic, dynamic> edu = {};
@@ -39,18 +42,31 @@ class _CurrentEducationState extends State<CurrentEducation> {
       duration = widget.duration;
       semToBuild = widget.sem;
       edu = widget.education;
+      for(int i = 0; i < widget.sem; i++) {
+        currentFiles.add(null);
+        currentFileNames.add(null);
+      }
     });
   }
 
-  Future filePicker(BuildContext context) async {
+  Future filePicker(BuildContext context, int index) async {
     try {
-      file = await FilePicker.getFile(type: FileType.custom);
+      File file = await FilePicker.getFile(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'pdf', 'doc', 'png'],
+      );
+      if (file != null) {
+        setState(() {
+          currentFiles[index] = file;
+          currentFileNames[index] = p.basename(file.path);
+        });
+      } else {}
     } catch (e) {
       AwesomeDialog(
-              context: context,
-              dialogType: DialogType.WARNING,
-              tittle: e,
-              body: Text("Error Has Occured"))
+          context: context,
+          dialogType: DialogType.WARNING,
+          tittle: e,
+          body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -67,9 +83,9 @@ class _CurrentEducationState extends State<CurrentEducation> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     if (width < 360)
-      scale = semToBuild.toDouble() + 1;
+      scale = 0.7;
     else
-      scale = semToBuild.toDouble();
+      scale = 1;
     return Scaffold(
         appBar: PreferredSize(
           child: AppBar(
@@ -100,7 +116,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
             key: _formKey,
             child: Padding(
               padding: EdgeInsets.only(
-                  left: width * 0.1, top: 20, right: width * 0.1),
+                  left: width * 0.05, top: 20, right: width * 0.05),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +132,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           )),
                       Container(
-                        width: width * 0.6,
+                        width: width * 0.7,
                         child: TextFormField(
                           enabled: false,
                           initialValue: course,
@@ -127,7 +143,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
                           keyboardType: TextInputType.numberWithOptions(),
-                         
+
                         ),
                       ),
                     ],
@@ -143,7 +159,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           )),
                       Container(
-                        width: width * 0.6,
+                        width: width * 0.7,
                         child: TextFormField(
                           enabled: false,
                           initialValue: branch,
@@ -154,7 +170,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
                           keyboardType: TextInputType.numberWithOptions(),
-                         
+
                         ),
                       ),
                     ],
@@ -170,7 +186,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 fontWeight: FontWeight.w600, fontSize: 18),
                           )),
                       Container(
-                          width: width * 0.6,
+                          width: width * 0.7,
                           child: TextFormField(
                             enabled: false,
                             initialValue: duration,
@@ -181,7 +197,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         BorderSide(color: Color(0xff4285f4))),
                                 labelStyle: TextStyle(color: Colors.black)),
                             keyboardType: TextInputType.numberWithOptions(),
-                           
+
                           )),
                     ],
                   ),
@@ -210,7 +226,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['semester_score']
+                                            ['semester_score'].toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -218,16 +234,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 obscureText: false,
                                 decoration: x("Score"),
                                 keyboardType: TextInputType.numberWithOptions(),
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return 'Score cannot be empty';
-                                  else
-                                    return null;
-                                },
                                 onChanged: (text) {
                                   setState(() {
                                     edu[course]['sem_records'][index]
-                                        ['semester_score'] = text;
+                                        ['semester_score'] = int.parse(text);
                                   });
                                 },
                               ),
@@ -236,7 +246,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['closed_backlog']
+                                            ['closed_backlog'].toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -244,15 +254,9 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 obscureText: false,
                                 decoration: x("Closed Backlogs"),
                                 keyboardType: TextInputType.numberWithOptions(),
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return 'Backlogs cannot be empty';
-                                  else
-                                    return null;
-                                },
                                 onChanged: (text) {
                                   setState(() => edu[course]['sem_records']
-                                      [index]['closed_backlog'] = text);
+                                      [index]['closed_backlog'] = int.parse(text));
                                 },
                               ),
                               SizedBox(height: 15.0),
@@ -260,7 +264,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['live_backlog']
+                                            ['live_backlog'].toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -268,71 +272,69 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 obscureText: false,
                                 decoration: x("Live Backlogs"),
                                 keyboardType: TextInputType.numberWithOptions(),
-                                validator: (value) {
-                                  if (value.isEmpty)
-                                    return 'Backlogs cannot be empty';
-                                  else
-                                    return null;
-                                },
                                 onChanged: (text) {
                                   setState(() => edu[course]['sem_records']
-                                      [index]['live_backlog'] = text);
+                                      [index]['live_backlog'] = int.parse(text));
                                 },
                               ),
                               SizedBox(height: 15.0),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Expanded(
-                                    child: TextField(
-                                        enabled: false,
-                                        decoration: InputDecoration(
-                                            hintText: 'Certificate',
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(5),
-                                                    bottomLeft:
-                                                        Radius.circular(5)),
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            contentPadding:
-                                                new EdgeInsets.symmetric(
-                                                    vertical: 2.0,
-                                                    horizontal: 10.0),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.w400),
-                                            labelStyle: TextStyle(
-                                                color: Colors.black))),
-                                  ),
-                                  Container(
-                                    color: Colors.grey,
-                                    width: width * 0.25,
-                                    child: TextField(
-                                        enabled: false,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                            hintText: 'Browse',
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(
-                                                    topRight:
-                                                        Radius.circular(5),
-                                                    bottomRight:
-                                                        Radius.circular(5)),
-                                                borderSide: BorderSide(
-                                                    color: Color(0xff4285f4))),
-                                            contentPadding:
-                                                new EdgeInsets.symmetric(
-                                                    vertical: 2.0,
-                                                    horizontal: 10.0),
-                                            hintStyle: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w600),
-                                            labelStyle: TextStyle(
-                                                color: Colors.black))),
-                                  ),
-                                ],
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(color: Color(0xff4285f4))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.0),
+                                      child: Text(
+                                        "Certificate : ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.3 * scale,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          SizedBox(
+                                            width: width * 0.15 * scale,
+                                            child: AutoSizeText(
+                                              currentFileNames[index] ?? '',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          ),
+                                          Visibility(
+                                            visible: currentFiles[index] != null,
+                                            child: IconButton(
+                                              icon: Icon(Icons.clear),
+                                              onPressed: () {
+                                                setState(() {
+                                                  currentFiles[index] = null;
+                                                  currentFileNames[index] = null;
+                                                });
+                                              },
+                                              padding: EdgeInsets.all(0),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: MaterialButton(
+                                        onPressed: () {
+                                          filePicker(context, index);
+                                        },
+                                        child: Text("Browse"),
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               SizedBox(height: 30.0)
                             ]);
@@ -373,7 +375,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                               ),
                               onPressed: () async {
                                 if (_formKey.currentState.validate()) {
-                                  widget.onButtonPressed();
+                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma()));
                                 }
                                 print(edu);
                               }),
