@@ -27,7 +27,7 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin  {
   String email;
   int status;
   List<CameraDescription> cameras;
@@ -42,6 +42,9 @@ class _VideoIntroState extends State<VideoIntro>
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
   VideoPlayerController fileVideocontroller;
+
+  @override
+  bool get wantKeepAlive => false;
 
   camInit() async {
     cameras = await availableCameras();
