@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/diploma.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
@@ -6,17 +7,20 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
   final int sem;
+  final bool isUg;
   final String course, branch, duration;
   final VoidCallback onButtonPressed;
 
-  CurrentEducation({@required this.onButtonPressed, this.education, this.sem, this.course, this.branch, this.duration});
+  CurrentEducation({@required this.onButtonPressed, this.education, this.sem, this.course, this.branch, this.duration, this.isUg});
   @override
   _CurrentEducationState createState() => _CurrentEducationState();
 }
@@ -34,6 +38,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
   String course, branch, duration;
   int semToBuild = 1;
   Map<dynamic, dynamic> edu = {};
+  StorageUploadTask uploadTask;
+  int temp = 0;
 
   void init() {
     setState(() {
@@ -113,7 +119,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
         body: ScrollConfiguration(
           child: SingleChildScrollView(
               child: Form(
-            key: _formKey,
+                key: _formKey,
             child: Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: 20, right: width * 0.05),
@@ -202,6 +208,26 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     ],
                   ),
                   SizedBox(height: 30.0),
+                  TextFormField(
+                    initialValue: edu[course]['score']!= null
+                        ? edu[course]['score'].toString()
+                        : null,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) =>
+                        FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Average Score"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['score'] = int.parse(text));
+                    },
+                    keyboardType: TextInputType.numberWithOptions(),
+                    validator: (value) {
+                      if (value.isEmpty)
+                        return 'score cannot be empty';
+                      else return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
                   Text(
                     "Semester Scores",
                     style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
@@ -339,49 +365,122 @@ class _CurrentEducationState extends State<CurrentEducation> {
                               SizedBox(height: 30.0)
                             ]);
                       }),
+                  TextFormField(
+                    initialValue: edu[course]['total_closed_backlogs']!= null
+                        ? edu[course]['total_closed_backlogs'].toString()
+                        : null,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    onFieldSubmitted: (_) =>
+                        FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Total Closed Backlog"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['total_closed_backlogs'] = int.parse(text));
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Field name cannot be empty';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 15,),
+                  TextFormField(
+                    initialValue: edu[course]['total_live_backlogs']!= null
+                        ? edu[course]['total_live_backlogs'].toString()
+                        : null,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    onFieldSubmitted: (_) =>
+                        FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Total Live Backlog"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['total_live_backlogs'] = int.parse(text));
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Field cannot be empty';
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(height: 30.0),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: MaterialButton(
-                              child: Text(
-                                "Delete",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
+                        Visibility(
+                          visible: false,
+                          child: RaisedButton(
+                              color: Colors.transparent,
+                              elevation: 0,
+                              padding: EdgeInsets.only(left: 22, right: 22),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                side: BorderSide(
+                                    color: basicColor, width: 1.2),
                               ),
-                              onPressed: () {}),
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: basicColor),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: MaterialButton(
                               child: Text(
-                                "Next",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    color: basicColor,
-                                    fontWeight: FontWeight.w600),
+                                'Delete',
+                                style: TextStyle(color: basicColor),
                               ),
-                              onPressed: () async {
-                                if (_formKey.currentState.validate()) {
-                                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma()));
-                                }
-                                print(edu);
+                              onPressed: () {
+
                               }),
                         ),
+                        RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(
+                                  color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              'Next',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () async {
+                              if(_formKey.currentState.validate()) {
+//                                print(edu);
+//                                await SharedPreferences.getInstance().then((value) async {
+//                                  for(int i = 0; i < currentFiles.length; i++) {
+//                                    if(currentFiles[i] != null) {
+//                                      StorageReference storageReference;
+//                                      storageReference =
+//                                          FirebaseStorage.instance.ref().child("candidate_resumes/${value.getString('email')}-${Random().nextInt(999999999).toString()}");
+//                                      uploadTask = storageReference.putFile(currentFiles[i]);
+//                                      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+//                                      await downloadUrl.ref.getDownloadURL().then((url) {
+//                                        print(edu[course]['sem_records'][i]['semester_score'].runtimeType);
+//                                        edu[course]['sem_records'][i]['semester_score'] = url;
+//                                        print(edu[course]['sem_records'][i]['certificate']);
+//                                        setState(() {
+//                                          temp = temp + 1;
+//                                        });
+//                                      });
+//                                    } else setState(() {
+//                                      temp = temp + 1;
+//                                    });
+//                                  }
+//                                });
+//                                while(true) {
+//                                  if(temp == currentFiles.length) {
+//                                    break;
+//                                  }
+//                                }
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma(xii: edu, allFiles: [[currentFiles]], isUg: widget.isUg,)));
+                              }
+                              }),
                       ],
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),

@@ -360,7 +360,7 @@ class _AllNotificationsState extends State<AllNotifications> {
   double width, height;
   List<List<String>> myNotifications;
   List<List<String>> items;
-  int count = 8;
+  int count = 15;
 
   @override
   Widget build(BuildContext context) {

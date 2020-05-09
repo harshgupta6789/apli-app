@@ -33,9 +33,10 @@ class _ResumeState extends State<Resume> {
   String path;
 
   bool checkStatus(int status) {
-    if(status < 384)
+    if (status < 384)
       return false;
-    else return true;
+    else
+      return true;
   }
 
   Future<String> get _localPath async {
@@ -116,6 +117,8 @@ class _ResumeState extends State<Resume> {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
+            if(checkStatus(status))
+              loadPdf();
           });
         } catch (e) {
           setState(() {
@@ -129,7 +132,6 @@ class _ResumeState extends State<Resume> {
   @override
   void initState() {
     getInfo();
-    //loadPdf();
     super.initState();
   }
 
@@ -141,204 +143,202 @@ class _ResumeState extends State<Resume> {
         ? Loading()
         : loading
             ? Loading()
-            : !checkStatus(status) ? noResume() : ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-                    child: Column(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text(resumeSlogan,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              )),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            pdfUrl == null
-                                ? Expanded(
-                                    child: Padding(
-                                        padding: EdgeInsets.only(left: 30.0),
-                                        child: Image.asset(
-                                            "Assets/Images/job.png")),
-                                  )
-                                : path != null
-                                    ? Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          height: height * 0.6,
-                                          width: width * 0.6,
-                                          child: PdfViewer(
-                                            filePath: path,
+            : !checkStatus(status)
+                ? noResume()
+                : path == null
+                    ? Loading()
+                    : ScrollConfiguration(
+                        behavior: MyBehavior(),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Text(resumeSlogan,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ),
+                                SizedBox(
+                                  height: height * 0.05,
+                                ),
+                                Container(
+                                  height: height * 0.5,
+                                  width: width * 0.8,
+                                  child: Stack(
+                                    children: <Widget>[
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: PdfViewer(
+                                          filePath: path,
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(8, width * 0.3, 8, 8),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                      EvaIcons.editOutline),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              EditResume()),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: IconButton(
+                                                    icon: Icon(
+                                                        EvaIcons.shareOutline),
+                                                    onPressed: () async {
+                                                      if (pdfUrl != null) {
+                                                        var request =
+                                                            await HttpClient()
+                                                                .getUrl(
+                                                                    Uri.parse(
+                                                                        pdfUrl));
+                                                        var response =
+                                                            await request
+                                                                .close();
+                                                        Uint8List bytes =
+                                                            await consolidateHttpClientResponseBytes(
+                                                                response);
+                                                        await Share.file(
+                                                            'My Resume',
+                                                            'resume.pdf',
+                                                            bytes,
+                                                            'application/pdf');
+                                                      } else {
+                                                        showToast(
+                                                            "Please Complete Your Profile First!",
+                                                            context);
+                                                      }
+                                                    }),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: IconButton(
+                                                    icon: Icon(EvaIcons
+                                                        .downloadOutline),
+                                                    onPressed: () async {
+                                                      var status =
+                                                          await Permission
+                                                              .storage.status;
+                                                      switch (status) {
+                                                        case PermissionStatus
+                                                            .undetermined:
+                                                          Map<Permission,
+                                                                  PermissionStatus>
+                                                              statuses = await [
+                                                            Permission.storage,
+                                                          ].request();
+                                                          break;
+                                                        case PermissionStatus
+                                                            .granted:
+                                                          if (pdfUrl != null) {
+                                                            String firebaseUrl =
+                                                                pdfUrl.replaceAll(
+                                                                    "https://storage.googleapis.com/aplidotai.appspot.com/",
+                                                                    "gs://aplidotai.appspot.com/");
+                                                            firebaseUrl =
+                                                                firebaseUrl
+                                                                    .replaceAll(
+                                                                        "%40",
+                                                                        "@");
+
+                                                            var ref = FirebaseStorage
+                                                                .instance
+                                                                .getReferenceFromUrl(
+                                                                    firebaseUrl);
+
+                                                            await ref.then(
+                                                                (reference) {
+                                                              downloadFile(
+                                                                  reference);
+                                                            });
+                                                          } else {
+                                                            showToast(
+                                                                "Please Complete Your Profile First!",
+                                                                context);
+                                                          }
+                                                          break;
+                                                        case PermissionStatus
+                                                            .denied:
+                                                          break;
+                                                        case PermissionStatus
+                                                            .restricted:
+                                                          break;
+                                                        case PermissionStatus
+                                                            .permanentlyDenied:
+                                                          break;
+                                                      }
+                                                    }),
+                                              )
+                                            ],
                                           ),
                                         ),
                                       )
-                                    : Padding(
-                                        padding:
-                                            EdgeInsets.only(left: width * 0.3),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border:
-                                                Border.all(color: basicColor),
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: MaterialButton(
-                                              child: Text(
-                                                "Load PDF",
-                                                style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    color: basicColor,
-                                                    fontWeight:
-                                                        FontWeight.w600),
-                                              ),
-                                              onPressed: () async {
-                                                loadPdf();
-                                              }),
-                                        ),
-                                      ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: IconButton(
-                                      icon: Icon(EvaIcons.editOutline),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EditResume()),
-                                        );
-                                      },
-                                    ),
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: IconButton(
-                                        icon: Icon(EvaIcons.shareOutline),
-                                        onPressed: () async {
-                                          if (pdfUrl != null) {
-                                            var request = await HttpClient()
-                                                .getUrl(Uri.parse(pdfUrl));
-                                            var response =
-                                                await request.close();
-                                            Uint8List bytes =
-                                                await consolidateHttpClientResponseBytes(
-                                                    response);
-                                            await Share.file(
-                                                'My Resume',
-                                                'resume.pdf',
-                                                bytes,
-                                                'application/pdf');
-                                          } else {
-                                            showToast(
-                                                "Please Complete Your Profile First!",
-                                                context);
-                                          }
-                                        }),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: IconButton(
-                                        icon: Icon(EvaIcons.downloadOutline),
-                                        onPressed: () async {
-                                          var status =
-                                              await Permission.storage.status;
-                                          switch (status) {
-                                            case PermissionStatus.undetermined:
-                                              Map<Permission, PermissionStatus>
-                                                  statuses = await [
-                                                Permission.storage,
-                                              ].request();
-                                              break;
-                                            case PermissionStatus.granted:
-                                              if (pdfUrl != null) {
-                                                String firebaseUrl = pdfUrl.replaceAll(
-                                                    "https://storage.googleapis.com/aplidotai.appspot.com/",
-                                                    "gs://aplidotai.appspot.com/");
-                                                firebaseUrl = firebaseUrl
-                                                    .replaceAll("%40", "@");
-
-                                                var ref = FirebaseStorage
-                                                    .instance
-                                                    .getReferenceFromUrl(
-                                                        firebaseUrl);
-
-                                                await ref.then((reference) {
-                                                  downloadFile(reference);
-                                                });
-                                              } else {
-                                                showToast(
-                                                    "Please Complete Your Profile First!",
-                                                    context);
-                                              }
-                                              break;
-                                            case PermissionStatus.denied:
-                                              break;
-                                            case PermissionStatus.restricted:
-                                              break;
-                                            case PermissionStatus
-                                                .permanentlyDenied:
-                                              break;
-                                          }
-                                        }),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+                      );
   }
 
   Widget noResume() {
     return Center(
         child: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image.asset("Assets/Images/job.png"),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                        text:
+      behavior: MyBehavior(),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset("Assets/Images/job.png"),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                    text:
                         "We can help you build your Resume \nBut first build your ",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                        children: [
-                          TextSpan(
-                              text: "Profile",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditResume()),
-                                  );
-                                }),
-                        ]),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ));
+                    style: TextStyle(color: Colors.black, fontSize: 18),
+                    children: [
+                      TextSpan(
+                          text: "Profile",
+                          style: TextStyle(color: basicColor),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => EditResume()),
+                              );
+                            }),
+                    ]),
+              ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
