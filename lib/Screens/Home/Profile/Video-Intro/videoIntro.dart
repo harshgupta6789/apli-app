@@ -27,7 +27,7 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin  {
+    with SingleTickerProviderStateMixin {
   String email;
   int status;
   List<CameraDescription> cameras;
@@ -42,9 +42,6 @@ class _VideoIntroState extends State<VideoIntro>
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
   VideoPlayerController fileVideocontroller;
-
-  @override
-  bool get wantKeepAlive => true;
 
   camInit() async {
     cameras = await availableCameras();
@@ -61,12 +58,11 @@ class _VideoIntroState extends State<VideoIntro>
     Firestore.instance
         .collection('candidates')
         .document(email)
-        .updateData({'video_resume': url}).then((onValue) {
+        .updateData({'video_resume': url, 'profile_status' : status}).then((onValue) {
       setState(() {
         fetchUrl = url;
-        deleteDirecotry(urlFromCamera);
         setState(() {
-          status = binaryToDecimal(int.tryParse(temp));
+          status = binaryToDecimal(int.parse(temp));
           x = currentState.success;
         });
       });
@@ -89,6 +85,7 @@ class _VideoIntroState extends State<VideoIntro>
     setState(() {
       status = binaryToDecimal(int.parse(temp));
     });
+    print(status);
     Firestore.instance
         .collection('candidates')
         .document(email)
