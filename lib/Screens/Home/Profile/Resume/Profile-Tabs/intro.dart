@@ -878,7 +878,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                           .toString();
                                       formattedDate =
                                           formattedDate + " 00:00:00+0000";
-                                      print(formattedDate);
                                       languages = {};
                                       for (int i = 0;
                                           i < languagesList.length;
@@ -902,7 +901,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                       map['roll_no'] = roll_no;
                                       if (_image == null) {
                                         map['profile_picture'] = profile;
-                                        //print(map);
 
                                         dynamic result =
                                             await _APIService.sendProfileData(

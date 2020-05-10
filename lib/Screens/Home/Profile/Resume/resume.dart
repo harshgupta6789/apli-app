@@ -35,6 +35,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
   String email;
   String path;
   PDFDocument doc;
+  bool downloading = false;
 
   bool checkStatus(int status) {
     if (status < 384)
@@ -258,7 +259,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                     const EdgeInsets.all(4.0),
                                                 child: IconButton(
                                                     icon: Icon(EvaIcons
-                                                        .downloadOutline),
+                                                        .downloadOutline, color: Colors.black,),
                                                     onPressed: () async {
                                                       var status =
                                                           await Permission
