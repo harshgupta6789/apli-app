@@ -24,6 +24,7 @@ class _BasicIntroState extends State<BasicIntro> {
   File _image;
   bool loading = false, error = false;
   NetworkImage img;
+  final format = DateFormat("yyyy-MM-dd");
   String dropdownValue, newLanguage;
   List<String> gendersList = ['male', 'female', 'other'];
   String profile = '',
@@ -106,7 +107,6 @@ class _BasicIntroState extends State<BasicIntro> {
     super.initState();
   }
 
-  final format = DateFormat("dd-MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -870,9 +870,15 @@ class _BasicIntroState extends State<BasicIntro> {
                                   ),
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
-                                      // setState(() {
-                                      //   loading = true;
-                                      // });
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      String formattedDate = format
+                                          .format(dob.toDate())
+                                          .toString();
+                                      formattedDate =
+                                          formattedDate + " 00:00:00+0000";
+                                      print(formattedDate);
                                       languages = {};
                                       for (int i = 0;
                                           i < languagesList.length;
@@ -887,7 +893,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                       map['First_name'] = fname;
                                       map['Last_name'] = lname;
                                       map['Middle_name'] = mname;
-                                      map['dob'] = dob.toString();
+                                      map['dob'] = formattedDate;
                                       map['gender'] = gender;
                                       map['highest_qualification'] =
                                           highest_qualification;
@@ -896,82 +902,81 @@ class _BasicIntroState extends State<BasicIntro> {
                                       map['roll_no'] = roll_no;
                                       if (_image == null) {
                                         map['profile_picture'] = profile;
-                                        print(map);
+                                        //print(map);
 
                                         dynamic result =
                                             await _APIService.sendProfileData(
                                                 map);
-                                        //print(result);
-                                        // if (result == -1) {
-                                        //   showToast('Failed', context);
-                                        // } else if (result == 0) {
-                                        //   showToast('Failed', context);
-                                        // } else if (result == -2) {
-                                        //   showToast(
-                                        //       'Could not connect to server',
-                                        //       context);
-                                        // } else if (result == 1) {
-                                        //   showToast('Data Updated Successfully',
-                                        //       context);
-                                        //   Navigator.pop(context);
-                                        // } else {
-                                        //   showToast('Unexpected error occured',
-                                        //       context);
-                                        // }
-                                        // setState(() {
-                                        //   loading = false;
-                                        // });
-                                        // } else {
-                                        //   showToast(
-                                        //       'Uploading profile picture\n might take some time',
-                                        //       context,
-                                        //       duration: 5);
-                                        //   StorageReference storageReference;
-                                        //   storageReference = FirebaseStorage
-                                        //       .instance
-                                        //       .ref()
-                                        //       .child("resumePictures/$email");
-                                        //   StorageUploadTask uploadTask =
-                                        //       storageReference.putFile(_image);
-                                        //   final StorageTaskSnapshot downloadUrl =
-                                        //       (await uploadTask.onComplete);
-                                        //   await downloadUrl.ref
-                                        //       .getDownloadURL()
-                                        //       .then((url) async {
-                                        //     setState(() {
-                                        //       profile = url;
-                                        //     });
-                                        //     map['profile_picture'] = url;
-                                        //     // TODO call API
-                                        //     dynamic result =
-                                        //         await _APIService.sendProfileData(
-                                        //             map);
-                                        //     if (result == -1) {
-                                        //       showToast('Failed', context);
-                                        //     } else if (result == 0) {
-                                        //       showToast('Failed', context);
-                                        //     } else if (result == -2) {
-                                        //       showToast(
-                                        //           'Could not connect to server',
-                                        //           context);
-                                        //     } else if (result == 1) {
-                                        //       showToast(
-                                        //           'Data Updated Successfully',
-                                        //           context);
-                                        //       Navigator.pop(context);
-                                        //     } else {
-                                        //       showToast(
-                                        //           'Unexpected error occured',
-                                        //           context);
-                                        //     }
-                                        //     setState(() {
-                                        //       loading = false;
-                                        //     });
-                                        //     showToast('Data Updated Successfully',
-                                        //         context);
-                                        //     Navigator.pop(context);
-                                        //   });
-                                        // }
+                                        print(result);
+                                        if (result == -1) {
+                                          showToast('Failed', context);
+                                        } else if (result == 0) {
+                                          showToast('Failed', context);
+                                        } else if (result == -2) {
+                                          showToast(
+                                              'Could not connect to server',
+                                              context);
+                                        } else if (result == 1) {
+                                          showToast('Data Updated Successfully',
+                                              context);
+                                          Navigator.pop(context);
+                                        } else {
+                                          showToast('Unexpected error occured',
+                                              context);
+                                        }
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                      } else {
+                                        showToast(
+                                            'Uploading profile picture\n might take some time',
+                                            context,
+                                            duration: 5);
+                                        StorageReference storageReference;
+                                        storageReference = FirebaseStorage
+                                            .instance
+                                            .ref()
+                                            .child("resumePictures/$email");
+                                        StorageUploadTask uploadTask =
+                                            storageReference.putFile(_image);
+                                        final StorageTaskSnapshot downloadUrl =
+                                            (await uploadTask.onComplete);
+                                        await downloadUrl.ref
+                                            .getDownloadURL()
+                                            .then((url) async {
+                                          setState(() {
+                                            profile = url;
+                                          });
+                                          map['profile_picture'] = url;
+                                          // TODO call API
+                                          dynamic result =
+                                              await _APIService.sendProfileData(
+                                                  map);
+                                          if (result == -1) {
+                                            showToast('Failed', context);
+                                          } else if (result == 0) {
+                                            showToast('Failed', context);
+                                          } else if (result == -2) {
+                                            showToast(
+                                                'Could not connect to server',
+                                                context);
+                                          } else if (result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
+                                            Navigator.pop(context);
+                                          } else {
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
+                                          }
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          showToast('Data Updated Successfully',
+                                              context);
+                                          Navigator.pop(context);
+                                        });
                                       }
                                     }
                                   },

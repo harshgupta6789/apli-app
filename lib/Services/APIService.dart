@@ -35,13 +35,24 @@ class APIService {
                 "dob": "${map['dob']}",
                 "gender": "${map['gender']}",
                 "highest_qualification": "${map['highest_qualification']}",
-                "languages": {"c0" : "ffff"},
-                "ph_no": 99999,
+                "languages": map['languages'],
+                "ph_no": "999999",
                 "profile_picture": "${map['profile_picture']}",
                 "roll_no": "${map['roll_no']}",
               });
-              print(response.statusCode);
               print(response.data);
+              print(response.statusCode);
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.data);
+                bool temp = decodedData["success"];
+                if (temp == true) {
+                  result = 1;
+                  print(result);
+                } else
+                  result = -1;
+              } else
+                result = -2;
+              break;
             }
             break;
 
