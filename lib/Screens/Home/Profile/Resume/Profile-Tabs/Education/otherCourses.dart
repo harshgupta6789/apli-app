@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
@@ -26,7 +27,6 @@ class Other extends StatefulWidget {
 }
 
 class _OtherState extends State<Other> {
-
   double height, width, scale;
   File file;
   List allFiles;
@@ -35,11 +35,11 @@ class _OtherState extends State<Other> {
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
-  String institute,board, cgpa, email, fos;
+  String institute, board, cgpa, email, fos;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
-
+  final _APIService = APIService(type: 7);
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
     storageReference =
@@ -57,15 +57,15 @@ class _OtherState extends State<Other> {
       setState(() {
         allFiles = widget.allFiles;
         education = widget.oth;
-        institute =widget.oth['other-education']['institute'] ?? "";
-        board =widget.oth['other-education']['board'] ?? "";
-        cgpa =widget.oth['other-education']['score'].toString() ?? "";
-        fos =widget.oth['other-education']['specialization'];
-        start =widget.oth['other-education']['start'] ?? Timestamp.now();
-        end =widget.oth['other-education']['end'] ?? Timestamp.now();
-        unit =widget.oth['other-education']['score_unit'];
+        institute = widget.oth['other-education']['institute'] ?? "";
+        board = widget.oth['other-education']['board'] ?? "";
+        cgpa = widget.oth['other-education']['score'].toString() ?? "";
+        fos = widget.oth['other-education']['specialization'];
+        start = widget.oth['other-education']['start'] ?? Timestamp.now();
+        end = widget.oth['other-education']['end'] ?? Timestamp.now();
+        unit = widget.oth['other-education']['score_unit'];
       });
-      print(education);
+    print(education);
   }
 
   Future filePicker(BuildContext context) async {
@@ -82,10 +82,10 @@ class _OtherState extends State<Other> {
       } else {}
     } catch (e) {
       AwesomeDialog(
-          context: context,
-          dialogType: DialogType.WARNING,
-          tittle: e,
-          body: Text("Error Has Occured"))
+              context: context,
+              dialogType: DialogType.WARNING,
+              tittle: e,
+              body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -142,13 +142,16 @@ class _OtherState extends State<Other> {
                   children: <Widget>[
                     SizedBox(height: 30),
                     TextFormField(
-                      initialValue: education['other-education']['institute'] ?? '',
+                      initialValue:
+                          education['other-education']['institute'] ?? '',
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       decoration: x("Institute Name"),
                       onChanged: (text) {
-                        setState(() => education['other-education']['institute'] = text);
+                        setState(() =>
+                            education['other-education']['institute'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -163,10 +166,12 @@ class _OtherState extends State<Other> {
                     TextFormField(
                       initialValue: education['other-education']['board'] ?? '',
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       onChanged: (text) {
-                        setState(() => education['other-education']['board'] = text);
+                        setState(
+                            () => education['other-education']['board'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -176,16 +181,19 @@ class _OtherState extends State<Other> {
                       },
                       decoration: x('Board/University'),
                     ),
-                      SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextFormField(
-                      initialValue: education['other-education']['specialization'] ?? '',
+                      initialValue:
+                          education['other-education']['specialization'] ?? '',
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       onChanged: (text) {
-                        setState(() => education['other-education']['specialization'] = text);
+                        setState(() => education['other-education']
+                            ['specialization'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -199,12 +207,15 @@ class _OtherState extends State<Other> {
                       height: 15,
                     ),
                     TextFormField(
-                      initialValue: education['other-education']['specialization'] ?? '',
+                      initialValue:
+                          education['other-education']['specialization'] ?? '',
                       textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      onFieldSubmitted: (_) =>
+                          FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       onChanged: (text) {
-                        setState(() => education['other-education']['specialization'] = text);
+                        setState(() => education['other-education']
+                            ['specialization'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -224,7 +235,11 @@ class _OtherState extends State<Other> {
                         Container(
                           width: width * 0.35,
                           child: TextFormField(
-                            initialValue: education['other-education']['score'] == null ? '' : education['other-education']['score'].toString(),
+                            initialValue:
+                                education['other-education']['score'] == null
+                                    ? ''
+                                    : education['other-education']['score']
+                                        .toString(),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.numberWithOptions(),
                             onFieldSubmitted: (_) =>
@@ -232,7 +247,8 @@ class _OtherState extends State<Other> {
                             obscureText: false,
                             decoration: x("Score"),
                             onChanged: (text) {
-                              setState(() => education['other-education']['score'] = int.tryParse(text));
+                              setState(() => education['other-education']
+                                  ['score'] = int.tryParse(text));
                             },
                             validator: (value) {
                               if (value.isEmpty)
@@ -262,28 +278,31 @@ class _OtherState extends State<Other> {
                                     padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                     child: DropdownButton<String>(
                                       //hint: Text("Unit"),
-                                      value: education['other-education']['score_unit'] ?? '%',
+                                      value: education['other-education']
+                                              ['score_unit'] ??
+                                          '%',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w400,
                                           fontSize: 14),
                                       icon: Padding(
                                         padding:
-                                        const EdgeInsets.only(left: 10.0),
+                                            const EdgeInsets.only(left: 10.0),
                                         child: Icon(Icons.keyboard_arrow_down),
                                       ),
                                       underline: SizedBox(),
                                       items: <String>['/4', '/10', '%']
                                           .map<DropdownMenuItem<String>>(
                                               (String value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          education['other-education']['score_unit'] = value;
+                                          education['other-education']
+                                              ['score_unit'] = value;
                                         });
                                       },
                                     ),
@@ -313,21 +332,20 @@ class _OtherState extends State<Other> {
                               initialValue: start == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  start.microsecondsSinceEpoch),
+                                      start.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
-                                    initialDate:
-                                    currentValue ?? DateTime.now(),
+                                    initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
                                 var temp = start != null
                                     ? format
-                                    .format(DateTime
-                                    .fromMicrosecondsSinceEpoch(
-                                    start.microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "From"
+                                            .format(DateTime
+                                                .fromMicrosecondsSinceEpoch(start
+                                                    .microsecondsSinceEpoch))
+                                            .toString() ??
+                                        "From"
                                     : "From";
                                 return date;
                               },
@@ -335,14 +353,14 @@ class _OtherState extends State<Other> {
                                 setState(() {
                                   start = (date == null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
-                                  education['other-education']['start'] = (date == null)
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
+                                  education['other-education']
+                                      ['start'] = (date ==
+                                          null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
                                 });
                               },
                               textInputAction: TextInputAction.next,
@@ -363,21 +381,20 @@ class _OtherState extends State<Other> {
                               initialValue: end == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  end.microsecondsSinceEpoch),
+                                      end.microsecondsSinceEpoch),
                               onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
-                                    initialDate:
-                                    currentValue ?? DateTime.now(),
+                                    initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
                                 var temp = end != null
                                     ? format
-                                    .format(DateTime
-                                    .fromMicrosecondsSinceEpoch(
-                                    end.microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "End"
+                                            .format(DateTime
+                                                .fromMicrosecondsSinceEpoch(
+                                                    end.microsecondsSinceEpoch))
+                                            .toString() ??
+                                        "End"
                                     : "End";
                                 return date;
                               },
@@ -385,14 +402,13 @@ class _OtherState extends State<Other> {
                                 setState(() {
                                   end = (date == null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
-                                  education['other-education']['end'] = (date == null)
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
+                                  education['other-education']['end'] = (date ==
+                                          null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
                                 });
                               },
                               textInputAction: TextInputAction.next,
@@ -415,8 +431,7 @@ class _OtherState extends State<Other> {
                             child: Text(
                               "Certificate : ",
                               style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14),
+                                  fontWeight: FontWeight.w500, fontSize: 14),
                             ),
                           ),
                           SizedBox(
@@ -475,16 +490,14 @@ class _OtherState extends State<Other> {
                                 padding: EdgeInsets.only(left: 22, right: 22),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  side: BorderSide(
-                                      color: basicColor, width: 1.2),
+                                  side:
+                                      BorderSide(color: basicColor, width: 1.2),
                                 ),
                                 child: Text(
                                   'Delete',
                                   style: TextStyle(color: basicColor),
                                 ),
-                                onPressed: () {
-
-                                }),
+                                onPressed: () {}),
                           ),
                           RaisedButton(
                               color: Colors.transparent,
@@ -492,17 +505,18 @@ class _OtherState extends State<Other> {
                               padding: EdgeInsets.only(left: 22, right: 22),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(
-                                    color: basicColor, width: 1.2),
+                                side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
                                 'Save',
                                 style: TextStyle(color: basicColor),
                               ),
                               onPressed: () async {
-                                if(_formKey.currentState.validate()) {
-                                  allFiles.add(file);
-                                  // TODO call API
+                                if (_formKey.currentState.validate()) {
+                                  // allFiles.add(file);
+                                  dynamic result =
+                                      await _APIService.sendProfileData(
+                                          education);
                                 }
                               }),
                         ],

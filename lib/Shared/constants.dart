@@ -19,6 +19,11 @@ const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 
 const String basic_infoURL = "https://dev.apli.ai/candidate/api/basic_info";
 const String projectsURL = "https://dev.apli.ai/candidate/api/projects";
+const String expURL = "https://dev.apli.ai/candidate/api/experience";
+const String awardsURL = "https://dev.apli.ai/candidate/api/awards";
+const String skillsURL = "https://dev.apli.ai/candidate/api/skills";
+const String educationURL = "https://dev.apli.ai/candidate/api/education";
+const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
 
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';

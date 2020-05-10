@@ -12,6 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'diploma.dart';
+
 
 class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
@@ -550,7 +552,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                uploadAll();
+                                //uploadAll();
 //                                print(edu);
 //                                await SharedPreferences.getInstance().then((value) async {
 //                                  for(int i = 0; i < currentFiles.length; i++) {
@@ -578,7 +580,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
 //                                    break;
 //                                  }
 //                                }
-                                //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma(xii: edu, allFiles: [[currentFiles]], isUg: widget.isUg,)));
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma(xii: edu, allFiles: [[currentFiles]], isUg: widget.isUg,)));
                               }
                             }),
                       ],
