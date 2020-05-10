@@ -1,5 +1,7 @@
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/newExperience.dart';
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -100,6 +102,8 @@ class _ExperiencesState extends State<Experiences> {
   bool loading = false;
 
   List experiences;
+
+  final _APIService = APIService(type: 6);
 
   @override
   void initState() {
@@ -270,8 +274,38 @@ class _ExperiencesState extends State<Experiences> {
                                             setState(() {
                                               loading = true;
                                             });
-                                            //experiences.removeAt(index);
+                                            experiences.removeAt(index);
+                                            Map<String, dynamic> map = {};
+                                            map['experience'] = experiences;
+                                            for(int i = 0; i < experiences.length; i ++) {
+                                              if(map['experience'][i]['from'] != null) {
+                                                map['experiences'][i]['from'] = apiDateFormat.format(map['experiences'][i]['from']) + " 00:00:00+0000";
+                                              }
+                                              if(map['experience'][i]['to'] != null) {
+                                                map['experiences'][i]['to'] = apiDateFormat.format(map['experiences'][i]['to']) + " 00:00:00+0000";
+                                              }
+                                            }
                                             // TODO call API
+                                            dynamic result =
+                                            await _APIService.sendProfileData(
+                                                map);
+                                            if (result == -1) {
+                                              showToast('Failed', context);
+                                            } else if (result == 0) {
+                                              showToast('Failed', context);
+                                            } else if (result == -2) {
+                                              showToast(
+                                                  'Could not connect to server',
+                                                  context);
+                                            } else if (result == 1) {
+                                              showToast(
+                                                  'Data Updated Successfully',
+                                                  context);
+                                            } else {
+                                              showToast(
+                                                  'Unexpected error occured',
+                                                  context);
+                                            }
                                             setState(() {
                                               loading = false;
                                             });

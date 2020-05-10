@@ -1,4 +1,7 @@
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 // ---------------Colors---------------------
 
@@ -75,6 +78,8 @@ const String noDetails = "You haven't added any details yet";
 const String otherCourses = 'Other Courses';
 const String twelve = 'Class XII / Diploma';
 const String ten = 'Class X';
+
+final apiDateFormat = DateFormat("yyyy-MM-dd");
 
 const List<String> genders = ['Male', 'Female', 'Others'];
 const List<String> proficiencies = [

@@ -68,10 +68,10 @@ class _BasicIntroState extends State<BasicIntro> {
               mname = snapshot.data['Middle_name'];
               lname = snapshot.data['Last_name'];
               email = snapshot.data['email'];
-              mno = snapshot.data['ph_no'].toString();
+              mno = snapshot.data['ph_no'] == null ? null : snapshot.data['ph_no'].toString();
               dob = snapshot.data['dob'];
-              gender = snapshot.data['gender'];
-              roll_no = snapshot.data['roll_no'].toString();
+              gender = snapshot.data['gender'] ?? 'Male';
+              roll_no = snapshot.data['gender'] == null ? null : snapshot.data['roll_no'].toString();
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
@@ -922,9 +922,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                           showToast('Unexpected error occured',
                                               context);
                                         }
-                                        setState(() {
-                                          loading = false;
-                                        });
                                       } else {
                                         showToast(
                                             'Uploading profile picture\n might take some time',
@@ -968,14 +965,11 @@ class _BasicIntroState extends State<BasicIntro> {
                                                 'Unexpected error occured',
                                                 context);
                                           }
-                                          setState(() {
-                                            loading = false;
-                                          });
-                                          showToast('Data Updated Successfully',
-                                              context);
-                                          Navigator.pop(context);
                                         });
                                       }
+                                      setState(() {
+                                        loading = false;
+                                      });
                                     }
                                   },
                                 ),

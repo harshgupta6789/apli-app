@@ -44,21 +44,23 @@ class _NewExperienceState extends State<NewExperience> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
+  final _APIService = APIService(type: 6);
   StorageUploadTask uploadTask;
-    final _APIService = APIService(type: 6);
 
   Future<void> _uploadFile(File file, String filename) async {
-    StorageReference storageReference;
-    storageReference =
-        FirebaseStorage.instance.ref().child("documents/$filename");
-    uploadTask = storageReference.putFile(file);
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    await downloadUrl.ref.getDownloadURL().then((url) {
-      if (url != null) {
-        setState(() {
-          certificate = url;
-        });
-      } else if (url == null) {}
+    await SharedPreferences.getInstance().then((value) async {
+      StorageReference storageReference;
+      storageReference =
+          FirebaseStorage.instance.ref().child("documents/${value.getString('email')}/$filename");
+      uploadTask = storageReference.putFile(file);
+      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      await downloadUrl.ref.getDownloadURL().then((url) {
+        if (url != null) {
+          setState(() {
+            certificate = url;
+          });
+        } else if (url == null) {}
+      });
     });
   }
 
@@ -688,33 +690,67 @@ class _NewExperienceState extends State<NewExperience> {
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    // if (_formKey.currentState.validate()) if (validateBulletPoint(
-                                    //     information[
-                                    //         0])) if (validateBulletPoint(
-                                    //     information[
-                                    //         1])) if (validateBulletPoint(
-                                    //     information[2])) {
-                                        dynamic result =
-                                            await _APIService.sendProfileData(
-                                                experiences[0]);
-                                        //print(result);
-                                      // setState(() {
-                                      //   loading = true;
-                                      // });
-                                      // if (file == null) {
-                                      //   // TODO call API
-                                      //   showToast('Data updated successfully',
-                                      //       context);
-                                      //   Navigator.pop(context);
-                                      // } else {
-                                      //   _uploadFile(file, fileName).then((f) {
-                                      //     // TODO call API
-                                      //     showToast('Data updated successfully',
-                                      //         context);
-                                      //     Navigator.pop(context);
-                                      //   });
-                                      // }
-                                    //}
+                                    if (_formKey.currentState.validate()) if (validateBulletPoint(
+                                        information[
+                                            0])) if (validateBulletPoint(
+                                        information[
+                                            1])) if (validateBulletPoint(
+                                        information[2])) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      if (file == null) {
+                                        // TODO call API
+                                        showToast('Data updated successfully',
+                                            context);
+                                        Navigator.pop(context);
+                                      } else {
+                                        _uploadFile(file, fileName).then((f) async {
+                                          // TODO call API
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          experiences[index]['certificate'] = certificate;
+                                          Map<String, dynamic> map = {};
+                                          map['experience'] = experiences;
+                                          for(int i = 0; i < experiences.length; i ++) {
+                                            if(map['experience'][i]['from'] != null) {
+                                              map['experiences'][i]['from'] = apiDateFormat.format(map['experiences'][i]['from']) + " 00:00:00+0000";
+                                            }
+                                            if(map['experience'][i]['to'] != null) {
+                                              map['experiences'][i]['to'] = apiDateFormat.format(map['experiences'][i]['to']) + " 00:00:00+0000";
+                                            }
+                                          }
+                                          // TODO call API
+                                          dynamic result =
+                                              await _APIService.sendProfileData(
+                                              map);
+                                          if (result == -1) {
+                                            showToast('Failed', context);
+                                          } else if (result == 0) {
+                                            showToast('Failed', context);
+                                          } else if (result == -2) {
+                                            showToast(
+                                                'Could not connect to server',
+                                                context);
+                                          } else if (result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
+                                          } else {
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
+                                          }
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          showToast('Data updated successfully',
+                                              context);
+                                          Navigator.pop(context);
+                                        });
+                                      }
+                                    }
 //                                  setState(() {
 //                                    loading = true;
 //                                  });

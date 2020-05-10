@@ -1,10 +1,11 @@
+import 'package:apli/Shared/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
 showToast(String msg, BuildContext context, {int duration}) {
   Toast.show(msg, context,
-      backgroundColor: Colors.red, duration: duration ?? 3);
+      backgroundColor: basicColor, duration: duration ?? 3);
 }
 
 
