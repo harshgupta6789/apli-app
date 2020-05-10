@@ -281,45 +281,50 @@ class _CameraState extends State<Camera> {
           );
           break;
         case currentState.uploading:
-          return Container(
-            color: Colors.black,
-            height: height,
-            width: width,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  StreamBuilder<StorageTaskEvent>(
-                      stream: uploadTask.events,
-                      builder: (context,
-                          AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                        if (asyncSnapshot.hasData) {
-                          final StorageTaskEvent event = asyncSnapshot.data;
-                          final StorageTaskSnapshot snapshot = event.snapshot;
-                          return Column(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: CircularProgressIndicator(
-                                  value: _bytesTransferred(snapshot),
+          return WillPopScope(
+            onWillPop: () {
+              return null;
+            },
+            child: Container(
+              color: Colors.black,
+              height: height,
+              width: width,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    StreamBuilder<StorageTaskEvent>(
+                        stream: uploadTask.events,
+                        builder: (context,
+                            AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                          if (asyncSnapshot.hasData) {
+                            final StorageTaskEvent event = asyncSnapshot.data;
+                            final StorageTaskSnapshot snapshot = event.snapshot;
+                            return Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: CircularProgressIndicator(
+                                    value: _bytesTransferred(snapshot),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    '${_bytesProgress(snapshot)} % Uploaded...',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              ),
-                            ],
-                          );
-                        }
-                        return Align(child: Text("Uploading Your Resume!..."));
-                      }),
-                ]),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      '${_bytesProgress(snapshot)} % Uploaded...',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                ),
+                              ],
+                            );
+                          }
+                          return Align(child: Text("Uploading Your Resume!..."));
+                        }),
+                  ]),
+            ),
           );
           break;
         case currentState.success:

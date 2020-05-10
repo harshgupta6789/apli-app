@@ -42,6 +42,15 @@ class _BasicIntroState extends State<BasicIntro> {
   Timestamp dob;
   Map<String, TextEditingController> temp = {};
   final _APIService = APIService(type: 8);
+  final fnameFocus = FocusNode();
+  final dobFocus = FocusNode();
+  final roll_noFocus = FocusNode();
+  final hqFocus = FocusNode();
+  final streetFocus = FocusNode();
+  final countryFocus = FocusNode();
+  final stateFocus = FocusNode();
+  final postalFocus = FocusNode();
+  final cityFocus = FocusNode();
 
   getPrefs() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -168,6 +177,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: fname ?? '',
+                                  focusNode: fnameFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -177,10 +187,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => fname = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(fnameFocus);
                                       return 'first name cannot be empty';
-                                    else
+                                    } else {
                                       return null;
+                                    }
                                   },
                                 ),
                                 SizedBox(
@@ -223,6 +235,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 DateTimeField(
                                     format: format,
+                                    focusNode: dobFocus,
                                     initialValue: dob == null
                                         ? null
                                         : DateTime.fromMicrosecondsSinceEpoch(
@@ -255,9 +268,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                       });
                                     },
                                     validator: (value) {
-                                      if (value == null)
+                                      if (value == null) {
+                                        FocusScope.of(context).requestFocus(dobFocus);
                                         return 'DOB cannot be empty';
-                                      else
+                                      } else
                                         return null;
                                     },
                                     textInputAction: TextInputAction.next,
@@ -331,6 +345,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: roll_no ?? '',
+                                  focusNode: roll_noFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -340,9 +355,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => roll_no = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(roll_noFocus);
                                       return 'roll number cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -351,6 +367,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: highest_qualification ?? '',
+                                  focusNode: hqFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -361,9 +378,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                         () => highest_qualification = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(hqFocus);
                                       return 'highest qualification cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -713,6 +731,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: address['address'] ?? '',
+                                  focusNode: streetFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -722,9 +741,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => address['address'] = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(streetFocus);
                                       return 'street cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -733,6 +753,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: address['country'] ?? '',
+                                  focusNode: countryFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -742,9 +763,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => address['country'] = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(countryFocus);
                                       return 'country cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -753,6 +775,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: address['state'] ?? '',
+                                  focusNode: stateFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -762,9 +785,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => address['state'] = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(stateFocus);
                                       return 'state cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -773,6 +797,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: postal ?? '',
+                                  focusNode: postalFocus,
                                   textInputAction: TextInputAction.next,
                                   keyboardType:
                                       TextInputType.numberWithOptions(),
@@ -784,11 +809,13 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => postal = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(postalFocus);
                                       return 'postal code cannot be empty';
-                                    else if (!(int.tryParse(value) != null))
+                                    } else if (!(int.tryParse(value) != null)) {
+                                      FocusScope.of(context).requestFocus(postalFocus);
                                       return 'invalid postal';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -797,6 +824,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 ),
                                 TextFormField(
                                   initialValue: address['city'] ?? '',
+                                  focusNode: cityFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
@@ -806,9 +834,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     setState(() => address['city'] = text);
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
+                                    if (value.isEmpty) {
+                                      FocusScope.of(context).requestFocus(cityFocus);
                                       return 'city cannot be empty';
-                                    else
+                                    } else
                                       return null;
                                   },
                                 ),

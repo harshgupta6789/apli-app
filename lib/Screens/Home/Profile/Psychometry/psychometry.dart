@@ -15,7 +15,11 @@ class Psychometry extends StatefulWidget {
 
 enum States { none, resume, done }
 
-class _PsychometryState extends State<Psychometry> {
+class _PsychometryState extends State<Psychometry> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   States _currentState;
   Map<String, dynamic> questions, answeredQuestions;
   String email;

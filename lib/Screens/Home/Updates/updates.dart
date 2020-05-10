@@ -14,7 +14,11 @@ class Updates extends StatefulWidget {
 
 double width, height;
 
-class _UpdatesState extends State<Updates> {
+class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   List filters = [], chosenTypes = [];
   List typesList = [
     'New Jobs',

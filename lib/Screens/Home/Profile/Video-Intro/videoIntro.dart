@@ -27,7 +27,11 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   String email;
   int Status;
   List<CameraDescription> cameras;
@@ -630,7 +634,7 @@ class _VideoIntroState extends State<VideoIntro>
               ),
               Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.red),
+                  border: Border.all(color: basicColor),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: MaterialButton(
@@ -638,7 +642,7 @@ class _VideoIntroState extends State<VideoIntro>
                       "Delete & Re-Upload",
                       style: TextStyle(
                           fontSize: 18.0,
-                          color: Colors.red,
+                          color: basicColor,
                           fontWeight: FontWeight.w600),
                     ),
                     onPressed: () {

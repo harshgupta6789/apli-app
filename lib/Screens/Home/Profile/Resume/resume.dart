@@ -24,7 +24,11 @@ class Resume extends StatefulWidget {
   _ResumeState createState() => _ResumeState();
 }
 
-class _ResumeState extends State<Resume> {
+class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   double height, width;
   int status;
   bool error = false, loading = false;
@@ -83,7 +87,8 @@ class _ResumeState extends State<Resume> {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
     final Directory systemTempDir = Directory.systemTemp;
-    final File tempFile = File('storage/emulated/0/resume.pdf');
+    String tempPath = 'storage/emulated/0/Download/resume' + DateTime.now().toString() + '.pdf';
+    final File tempFile = File(tempPath);
     if (tempFile.existsSync()) {
       await tempFile.delete();
     }
