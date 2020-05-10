@@ -64,10 +64,10 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                   ),
                   tabs: [
                     Tab(
-                      text: resume,
+                      text: videoIntro,
                     ),
                     Tab(
-                      text: videoIntro,
+                      text: resume,
                     ),
                     Tab(text: psychTest)
                   ],
@@ -166,8 +166,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 //                  )),
 //            ),
 //          )),
-          Resume(),
           VideoIntro(),
+          Resume(),
           Psychometry(),
         ], controller: _tabController));
   }

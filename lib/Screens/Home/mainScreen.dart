@@ -50,9 +50,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       desc: msg ?? "This is Body",
       btnOkIcon: Icons.check_circle,
       btnCancelText: "Cancel",
-      btnCancelOnPress: () {
-        Navigator.of(context).pop();
-      },
       btnOkText: "Take Me!",
       btnOkColor: Colors.green.shade900,
       btnOkOnPress: onOkPress,
@@ -75,7 +72,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             switch (message['data']['type']) {
               case 'Job':
                 {
-                  Navigator.pop(context);
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => Wrapper(
@@ -91,12 +87,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 break;
               case 'Alert':
                 {
-                  Navigator.of(context).pop();
                 }
                 break;
               default:
                 {
-                  Navigator.of(context).pop();
                 }
                 break;
             }

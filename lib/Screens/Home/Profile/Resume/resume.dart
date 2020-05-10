@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf_viewer_plugin/pdf_viewer_plugin.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -18,6 +17,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'editResume.dart';
+import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
 
 class Resume extends StatefulWidget {
   @override
@@ -34,6 +34,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
   String pdfUrl;
   String email;
   String path;
+  PDFDocument doc;
 
   bool checkStatus(int status) {
     if (status < 384)
@@ -72,10 +73,11 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
     return responseJson;
   }
 
-  void loadPdf() async {
-    await writeCounter(await fetchPost());
-    await existsFile();
-    path = (await _localFile).path;
+  void loadPdf(String url) async {
+    doc = await PDFDocument.fromURL(url);
+//    await writeCounter(await fetchPost());
+//    await existsFile();
+//    path = (await _localFile).path;
 
     if (!mounted) return;
 
@@ -123,9 +125,10 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
-            if (checkStatus(status)) loadPdf();
+            if (checkStatus(status)) loadPdf(s.data['pdfResume']);
           });
         } catch (e) {
+          print(e.toString());
           setState(() {
             error = true;
           });
@@ -150,7 +153,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
             ? Loading()
             : !checkStatus(status)
                 ? noResume()
-                : path == null
+                : doc == null
                     ? Loading()
                     : ScrollConfiguration(
                         behavior: MyBehavior(),
@@ -174,13 +177,27 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                 Container(
                                   height: height * 0.5,
                                   width: width * 0.8,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.black,
+                                      width: 1
+                                    )
+                                  ),
                                   child: Stack(
                                     children: <Widget>[
                                       Align(
                                         alignment: Alignment.topCenter,
-                                        child: PdfViewer(
-                                          filePath: path,
-                                        ),
+                                        child: Stack(
+                                          children: <Widget>[
+                                            PDFViewer(
+                                              document: doc,
+                                              showIndicator: false,
+                                              showPicker: false,
+                                              tooltip: PDFViewerTooltip(last: null, jump: null, previous: null),
+                                            ),
+                                            Align(alignment: Alignment.bottomCenter,child: Container(width: width * 0.8, height: 50, color: Colors.white,))
+                                          ],
+                                        )
                                       ),
                                       Align(
                                         alignment: Alignment.bottomRight,
@@ -303,6 +320,9 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                     ],
                                   ),
                                 ),
+                                SizedBox(
+                                  height: height * 0.15,
+                                )
                               ],
                             ),
                           ),

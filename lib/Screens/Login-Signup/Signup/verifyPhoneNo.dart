@@ -109,19 +109,21 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                 child: Column(children: [
                                   PinCodeTextField(
                                     length: 6,
-                                    activeFillColor: basicColor,
-                                    activeColor: basicColor,
-                                    inactiveFillColor: Colors.black,
-                                    selectedColor: basicColor,
-                                    inactiveColor: Colors.black,
+                                    pinTheme: PinTheme(
+                                      activeFillColor: basicColor,
+                                      activeColor: basicColor,
+                                      inactiveFillColor: Colors.black,
+                                      selectedColor: basicColor,
+                                      inactiveColor: Colors.black,
+                                      shape: PinCodeFieldShape.box,
+                                      borderRadius: BorderRadius.circular(5),
+                                      fieldHeight: 50,
+                                      fieldWidth: width * 0.1,
+                                    ),
                                     obsecureText: false,
                                     animationType: AnimationType.fade,
-                                    shape: PinCodeFieldShape.box,
                                     animationDuration:
                                         Duration(milliseconds: 300),
-                                    borderRadius: BorderRadius.circular(5),
-                                    fieldHeight: 50,
-                                    fieldWidth: width * 0.1,
                                     onChanged: (value) {
                                       setState(() {
                                         this.smsOTP = value;

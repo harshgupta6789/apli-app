@@ -27,9 +27,7 @@ class VideoIntro extends StatefulWidget {
 double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+    with SingleTickerProviderStateMixin {
 
   String email;
   int Status;
@@ -652,7 +650,7 @@ class _VideoIntroState extends State<VideoIntro>
                   fetchUrl ?? "",
                   playOptions: VideoPlayOptions(
                     aspectRatio: 1 / 1,
-                    loop: true,
+                    loop: false,
                     autoplay: false,
                   ),
                   videoStyle: VideoStyle(
