@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apli/Services/APIService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
@@ -44,6 +45,7 @@ class _NewExperienceState extends State<NewExperience> {
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   StorageUploadTask uploadTask;
+    final _APIService = APIService(type: 6);
 
   Future<void> _uploadFile(File file, String filename) async {
     StorageReference storageReference;
@@ -686,29 +688,33 @@ class _NewExperienceState extends State<NewExperience> {
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if (_formKey.currentState.validate()) if (validateBulletPoint(
-                                        information[
-                                            0])) if (validateBulletPoint(
-                                        information[
-                                            1])) if (validateBulletPoint(
-                                        information[2])) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      if (file == null) {
-                                        // TODO call API
-                                        showToast('Data updated successfully',
-                                            context);
-                                        Navigator.pop(context);
-                                      } else {
-                                        _uploadFile(file, fileName).then((f) {
-                                          // TODO call API
-                                          showToast('Data updated successfully',
-                                              context);
-                                          Navigator.pop(context);
-                                        });
-                                      }
-                                    }
+                                    // if (_formKey.currentState.validate()) if (validateBulletPoint(
+                                    //     information[
+                                    //         0])) if (validateBulletPoint(
+                                    //     information[
+                                    //         1])) if (validateBulletPoint(
+                                    //     information[2])) {
+                                        dynamic result =
+                                            await _APIService.sendProfileData(
+                                                experiences[0]);
+                                        //print(result);
+                                      // setState(() {
+                                      //   loading = true;
+                                      // });
+                                      // if (file == null) {
+                                      //   // TODO call API
+                                      //   showToast('Data updated successfully',
+                                      //       context);
+                                      //   Navigator.pop(context);
+                                      // } else {
+                                      //   _uploadFile(file, fileName).then((f) {
+                                      //     // TODO call API
+                                      //     showToast('Data updated successfully',
+                                      //         context);
+                                      //     Navigator.pop(context);
+                                      //   });
+                                      // }
+                                    //}
 //                                  setState(() {
 //                                    loading = true;
 //                                  });
