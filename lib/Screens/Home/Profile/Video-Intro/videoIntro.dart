@@ -293,6 +293,7 @@ class _VideoIntroState extends State<VideoIntro>
                   alignment: Alignment.centerLeft),
             ),
             Row(
+
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
