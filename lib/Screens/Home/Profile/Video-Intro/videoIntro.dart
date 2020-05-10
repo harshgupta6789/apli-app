@@ -238,59 +238,59 @@ class _VideoIntroState extends State<VideoIntro>
                   alignment: Alignment.center),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
               child: Align(
-                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                      textAlign: TextAlign.center,
+                  child:
+                  Text("1. Lorem ipsum dolor sit amet, consectetur",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
-                  alignment: Alignment.center),
+                  alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
               child: Align(
-                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                      textAlign: TextAlign.center,
+                  child:
+                  Text("2. Lorem ipsum dolor sit amet, ",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
-                  alignment: Alignment.center),
+                  alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
               child: Align(
-                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                      textAlign: TextAlign.center,
+                  child:
+                  Text("3. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
-                  alignment: Alignment.center),
+                  alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
               child: Align(
-                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                      textAlign: TextAlign.center,
+                  child:
+                  Text("4. Lorem ipsum dolor sit amet, consectetur",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
-                  alignment: Alignment.center),
+                  alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
               child: Align(
-                  child: Text("1. Lorem ipsum dolor sit amet, consectetur",
-                      textAlign: TextAlign.center,
+                  child:
+                  Text("5. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
                       )),
-                  alignment: Alignment.center),
+                  alignment: Alignment.centerLeft),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

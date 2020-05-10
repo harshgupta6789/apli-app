@@ -14,6 +14,7 @@ class Psychometry extends StatefulWidget {
 }
 
 enum States { none, resume, done }
+double width, height;
 
 class _PsychometryState extends State<Psychometry>
     with AutomaticKeepAliveClientMixin {
@@ -98,6 +99,8 @@ class _PsychometryState extends State<Psychometry>
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
     if (error)
       return Center(
         child: Text('Error occured, try again later'),
@@ -136,64 +139,59 @@ class _PsychometryState extends State<Psychometry>
                           alignment: Alignment.center),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
                               Text("1. Lorem ipsum dolor sit amet, consectetur",
-                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
-                          alignment: Alignment.center),
+                          alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Lorem ipsum dolor sit amet, consectetur",
-                                  textAlign: TextAlign.center,
+                              Text("2. Lorem ipsum dolor sit amet, ",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
-                          alignment: Alignment.center),
+                          alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Lorem ipsum dolor sit amet, consectetur",
-                                  textAlign: TextAlign.center,
+                              Text("3. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
-                          alignment: Alignment.center),
+                          alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Lorem ipsum dolor sit amet, consectetur",
-                                  textAlign: TextAlign.center,
+                              Text("4. Lorem ipsum dolor sit amet, consectetur",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
-                          alignment: Alignment.center),
+                          alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Lorem ipsum dolor sit amet, consectetur",
-                                  textAlign: TextAlign.center,
+                              Text("5. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
-                          alignment: Alignment.center),
+                          alignment: Alignment.centerLeft),
                     ),
                     Padding(
                       padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
