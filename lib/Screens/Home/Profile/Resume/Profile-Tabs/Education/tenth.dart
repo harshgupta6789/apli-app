@@ -492,6 +492,7 @@ class _TenthState extends State<Tenth> {
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     allFiles.add(file);
+                                    print(widget.isUg);
                                     if (widget.isUg)
                                       Navigator.pushReplacement(
                                           context,
@@ -501,14 +502,7 @@ class _TenthState extends State<Tenth> {
                                                     allFiles: allFiles,
                                                   )));
                                     else {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Other(
-                                                    x: education,
-                                                    allFiles: allFiles,
-                                                  )));
-//
+                                      Navigator.pop(context);
                                     }
                                   }
                                 }),
