@@ -189,7 +189,11 @@ class _ProjectsState extends State<Projects> {
                                               .microsecondsSinceEpoch)
                                       .year
                                       .toString();
-                          String duration = (from ?? '') + ' to ' + ((from != null && to == null) ?  'ongoing' : to ?? '');
+                          String duration = (from ?? '') +
+                              ' to ' +
+                              ((from != null && to == null)
+                                  ? 'ongoing'
+                                  : to ?? '');
                           String info1, info2;
                           info1 = projects[index]['information'] == null
                               ? ''

@@ -20,7 +20,14 @@ class CurrentEducation extends StatefulWidget {
   final String course, branch, duration;
   final VoidCallback onButtonPressed;
 
-  CurrentEducation({@required this.onButtonPressed, this.education, this.sem, this.course, this.branch, this.duration, this.isUg});
+  CurrentEducation(
+      {@required this.onButtonPressed,
+      this.education,
+      this.sem,
+      this.course,
+      this.branch,
+      this.duration,
+      this.isUg});
   @override
   _CurrentEducationState createState() => _CurrentEducationState();
 }
@@ -48,7 +55,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
       duration = widget.duration;
       semToBuild = widget.sem;
       edu = widget.education;
-      for(int i = 0; i < widget.sem; i++) {
+      for (int i = 0; i < widget.sem; i++) {
         currentFiles.add(null);
         currentFileNames.add(null);
       }
@@ -69,10 +76,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
       } else {}
     } catch (e) {
       AwesomeDialog(
-          context: context,
-          dialogType: DialogType.WARNING,
-          tittle: e,
-          body: Text("Error Has Occured"))
+              context: context,
+              dialogType: DialogType.WARNING,
+              tittle: e,
+              body: Text("Error Has Occured"))
           .show();
     }
   }
@@ -119,7 +126,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
         body: ScrollConfiguration(
           child: SingleChildScrollView(
               child: Form(
-                key: _formKey,
+            key: _formKey,
             child: Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: 20, right: width * 0.05),
@@ -149,7 +156,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
                           keyboardType: TextInputType.numberWithOptions(),
-
                         ),
                       ),
                     ],
@@ -176,7 +182,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       BorderSide(color: Color(0xff4285f4))),
                               labelStyle: TextStyle(color: Colors.black)),
                           keyboardType: TextInputType.numberWithOptions(),
-
                         ),
                       ),
                     ],
@@ -203,18 +208,16 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         BorderSide(color: Color(0xff4285f4))),
                                 labelStyle: TextStyle(color: Colors.black)),
                             keyboardType: TextInputType.numberWithOptions(),
-
                           )),
                     ],
                   ),
                   SizedBox(height: 30.0),
                   TextFormField(
-                    initialValue: edu[course]['score']!= null
+                    initialValue: edu[course]['score'] != null
                         ? edu[course]['score'].toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).nextFocus(),
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Average Score"),
                     onChanged: (text) {
@@ -224,7 +227,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     validator: (value) {
                       if (value.isEmpty)
                         return 'score cannot be empty';
-                      else return null;
+                      else
+                        return null;
                     },
                   ),
                   SizedBox(height: 20.0),
@@ -252,7 +256,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['semester_score'].toString()
+                                                ['semester_score']
+                                            .toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -272,7 +277,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['closed_backlog'].toString()
+                                                ['closed_backlog']
+                                            .toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -282,7 +288,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 keyboardType: TextInputType.numberWithOptions(),
                                 onChanged: (text) {
                                   setState(() => edu[course]['sem_records']
-                                      [index]['closed_backlog'] = int.parse(text));
+                                          [index]['closed_backlog'] =
+                                      int.parse(text));
                                 },
                               ),
                               SizedBox(height: 15.0),
@@ -290,7 +297,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 initialValue:
                                     edu[course]['sem_records'][index] != null
                                         ? edu[course]['sem_records'][index]
-                                            ['live_backlog'].toString()
+                                                ['live_backlog']
+                                            .toString()
                                         : null,
                                 textInputAction: TextInputAction.next,
                                 onFieldSubmitted: (_) =>
@@ -300,16 +308,19 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 keyboardType: TextInputType.numberWithOptions(),
                                 onChanged: (text) {
                                   setState(() => edu[course]['sem_records']
-                                      [index]['live_backlog'] = int.parse(text));
+                                          [index]['live_backlog'] =
+                                      int.parse(text));
                                 },
                               ),
                               SizedBox(height: 15.0),
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: Color(0xff4285f4))),
+                                    border:
+                                        Border.all(color: Color(0xff4285f4))),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Padding(
                                       padding: EdgeInsets.only(left: 5.0),
@@ -323,7 +334,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                     SizedBox(
                                       width: width * 0.3 * scale,
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: <Widget>[
                                           SizedBox(
                                             width: width * 0.15 * scale,
@@ -334,13 +346,15 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                             ),
                                           ),
                                           Visibility(
-                                            visible: currentFiles[index] != null,
+                                            visible:
+                                                currentFiles[index] != null,
                                             child: IconButton(
                                               icon: Icon(Icons.clear),
                                               onPressed: () {
                                                 setState(() {
                                                   currentFiles[index] = null;
-                                                  currentFileNames[index] = null;
+                                                  currentFileNames[index] =
+                                                      null;
                                                 });
                                               },
                                               padding: EdgeInsets.all(0),
@@ -366,17 +380,17 @@ class _CurrentEducationState extends State<CurrentEducation> {
                             ]);
                       }),
                   TextFormField(
-                    initialValue: edu[course]['total_closed_backlogs']!= null
+                    initialValue: edu[course]['total_closed_backlogs'] != null
                         ? edu[course]['total_closed_backlogs'].toString()
                         : null,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.numberWithOptions(),
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).nextFocus(),
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Closed Backlog"),
                     onChanged: (text) {
-                      setState(() => edu[course]['total_closed_backlogs'] = int.parse(text));
+                      setState(() => edu[course]['total_closed_backlogs'] =
+                          int.parse(text));
                     },
                     validator: (value) {
                       if (value.isEmpty) {
@@ -385,19 +399,21 @@ class _CurrentEducationState extends State<CurrentEducation> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 15,),
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextFormField(
-                    initialValue: edu[course]['total_live_backlogs']!= null
+                    initialValue: edu[course]['total_live_backlogs'] != null
                         ? edu[course]['total_live_backlogs'].toString()
                         : null,
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.numberWithOptions(),
-                    onFieldSubmitted: (_) =>
-                        FocusScope.of(context).nextFocus(),
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Live Backlog"),
                     onChanged: (text) {
-                      setState(() => edu[course]['total_live_backlogs'] = int.parse(text));
+                      setState(() =>
+                          edu[course]['total_live_backlogs'] = int.parse(text));
                     },
                     validator: (value) {
                       if (value.isEmpty) {
@@ -420,16 +436,13 @@ class _CurrentEducationState extends State<CurrentEducation> {
                               padding: EdgeInsets.only(left: 22, right: 22),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(
-                                    color: basicColor, width: 1.2),
+                                side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
                                 'Delete',
                                 style: TextStyle(color: basicColor),
                               ),
-                              onPressed: () {
-
-                              }),
+                              onPressed: () {}),
                         ),
                         RaisedButton(
                             color: Colors.transparent,
@@ -437,15 +450,14 @@ class _CurrentEducationState extends State<CurrentEducation> {
                             padding: EdgeInsets.only(left: 22, right: 22),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.0),
-                              side: BorderSide(
-                                  color: basicColor, width: 1.2),
+                              side: BorderSide(color: basicColor, width: 1.2),
                             ),
                             child: Text(
                               'Next',
                               style: TextStyle(color: basicColor),
                             ),
                             onPressed: () async {
-                              if(_formKey.currentState.validate()) {
+                              if (_formKey.currentState.validate()) {
 //                                print(edu);
 //                                await SharedPreferences.getInstance().then((value) async {
 //                                  for(int i = 0; i < currentFiles.length; i++) {
@@ -473,9 +485,18 @@ class _CurrentEducationState extends State<CurrentEducation> {
 //                                    break;
 //                                  }
 //                                }
-                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma(xii: edu, allFiles: [[currentFiles]], isUg: widget.isUg,)));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Diploma(
+                                              xii: edu,
+                                              allFiles: [
+                                                [currentFiles]
+                                              ],
+                                              isUg: widget.isUg,
+                                            )));
                               }
-                              }),
+                            }),
                       ],
                     ),
                   ),

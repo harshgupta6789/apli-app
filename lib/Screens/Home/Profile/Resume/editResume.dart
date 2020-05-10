@@ -32,7 +32,6 @@ class _EditResumeState extends State<EditResume> {
                   context, MaterialPageRoute(builder: (context) => x));
             },
             child: ListTile(
-            
                 title: Text(
                   text,
                   style: TextStyle(fontWeight: FontWeight.w600),

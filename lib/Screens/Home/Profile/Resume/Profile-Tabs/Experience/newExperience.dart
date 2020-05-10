@@ -199,8 +199,9 @@ class _NewExperienceState extends State<NewExperience> {
                                       child: Icon(Icons.keyboard_arrow_down),
                                     ),
                                     underline: SizedBox(),
-                                    items: experienceTypes.map<DropdownMenuItem<String>>(
-                                        (String value) {
+                                    items: experienceTypes
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
@@ -243,11 +244,12 @@ class _NewExperienceState extends State<NewExperience> {
                             Container(
                               width: width * 0.4,
                               child: DateTimeField(
-                                validator: (value) {
-                                  if(value == null)
-                                    return 'cannot be empty';
-                                  else return null;
-                                },
+                                  validator: (value) {
+                                    if (value == null)
+                                      return 'cannot be empty';
+                                    else
+                                      return null;
+                                  },
                                   format: format,
                                   initialValue: from == null
                                       ? null
@@ -288,9 +290,10 @@ class _NewExperienceState extends State<NewExperience> {
                               width: width * 0.4,
                               child: DateTimeField(
                                   validator: (value) {
-                                    if(value == null)
+                                    if (value == null)
                                       return 'cannot be empty';
-                                    else return null;
+                                    else
+                                      return null;
                                   },
                                   format: format,
                                   initialValue: to == null
@@ -382,11 +385,18 @@ class _NewExperienceState extends State<NewExperience> {
                                       child: Icon(Icons.keyboard_arrow_down),
                                     ),
                                     underline: SizedBox(),
-                                    items: industryTypes.map<DropdownMenuItem<String>>(
-                                        (String value) {
+                                    items: industryTypes
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
-                                        child: Text(value, style: TextStyle(fontSize: (width < 400) ? (width < 350) ? 10 : 11 : 14),),
+                                        child: Text(
+                                          value,
+                                          style: TextStyle(
+                                              fontSize: (width < 400)
+                                                  ? (width < 350) ? 10 : 11
+                                                  : 14),
+                                        ),
                                       );
                                     }).toList(),
                                     onChanged: (value) {
@@ -434,8 +444,9 @@ class _NewExperienceState extends State<NewExperience> {
                                       child: Icon(Icons.keyboard_arrow_down),
                                     ),
                                     underline: SizedBox(),
-                                    items: domains.map<DropdownMenuItem<String>>(
-                                        (String value) {
+                                    items: domains
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
@@ -680,18 +691,20 @@ class _NewExperienceState extends State<NewExperience> {
                                             0])) if (validateBulletPoint(
                                         information[
                                             1])) if (validateBulletPoint(
-                                        information[2])){
+                                        information[2])) {
                                       setState(() {
                                         loading = true;
                                       });
-                                      if(file == null) {
+                                      if (file == null) {
                                         // TODO call API
-                                        showToast('Data updated successfully', context);
+                                        showToast('Data updated successfully',
+                                            context);
                                         Navigator.pop(context);
                                       } else {
                                         _uploadFile(file, fileName).then((f) {
                                           // TODO call API
-                                          showToast('Data updated successfully', context);
+                                          showToast('Data updated successfully',
+                                              context);
                                           Navigator.pop(context);
                                         });
                                       }

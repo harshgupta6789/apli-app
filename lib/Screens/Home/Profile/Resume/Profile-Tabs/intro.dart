@@ -74,7 +74,9 @@ class _BasicIntroState extends State<BasicIntro> {
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
-              postal = address['postal_code'] == null ? null : address['postal_code'].toString();
+              postal = address['postal_code'] == null
+                  ? null
+                  : address['postal_code'].toString();
               languages.forEach((key, value) {
                 languagesList.add([key, value]);
               });
@@ -188,7 +190,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(fnameFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(fnameFocus);
                                       return 'first name cannot be empty';
                                     } else {
                                       return null;
@@ -269,7 +272,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                     },
                                     validator: (value) {
                                       if (value == null) {
-                                        FocusScope.of(context).requestFocus(dobFocus);
+                                        FocusScope.of(context)
+                                            .requestFocus(dobFocus);
                                         return 'DOB cannot be empty';
                                       } else
                                         return null;
@@ -356,7 +360,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(roll_noFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(roll_noFocus);
                                       return 'roll number cannot be empty';
                                     } else
                                       return null;
@@ -379,7 +384,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(hqFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(hqFocus);
                                       return 'highest qualification cannot be empty';
                                     } else
                                       return null;
@@ -742,7 +748,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(streetFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(streetFocus);
                                       return 'street cannot be empty';
                                     } else
                                       return null;
@@ -764,7 +771,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(countryFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(countryFocus);
                                       return 'country cannot be empty';
                                     } else
                                       return null;
@@ -786,7 +794,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(stateFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(stateFocus);
                                       return 'state cannot be empty';
                                     } else
                                       return null;
@@ -810,10 +819,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(postalFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(postalFocus);
                                       return 'postal code cannot be empty';
                                     } else if (!(int.tryParse(value) != null)) {
-                                      FocusScope.of(context).requestFocus(postalFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(postalFocus);
                                       return 'invalid postal';
                                     } else
                                       return null;
@@ -835,7 +846,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(cityFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(cityFocus);
                                       return 'city cannot be empty';
                                     } else
                                       return null;

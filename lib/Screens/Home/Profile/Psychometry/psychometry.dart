@@ -15,8 +15,8 @@ class Psychometry extends StatefulWidget {
 
 enum States { none, resume, done }
 
-class _PsychometryState extends State<Psychometry> with AutomaticKeepAliveClientMixin {
-
+class _PsychometryState extends State<Psychometry>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -216,17 +216,18 @@ class _PsychometryState extends State<Psychometry> with AutomaticKeepAliveClient
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PsychometryTest(
-                                          email: email,
-                                          questions: questions,
-                                          answeredQuestions: answeredQuestions,
-                                          status: status
-                                        )));
+                                        email: email,
+                                        questions: questions,
+                                        answeredQuestions: answeredQuestions,
+                                        status: status)));
                           },
                         ),
                         alignment: Alignment.center,
                       ),
                     ),
-                    SizedBox(height: 20,)
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),
@@ -272,11 +273,10 @@ class _PsychometryState extends State<Psychometry> with AutomaticKeepAliveClient
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PsychometryTest(
-                                        email: email,
-                                        questions: questions,
-                                        answeredQuestions: answeredQuestions,
-                                        status: status
-                                      )));
+                                      email: email,
+                                      questions: questions,
+                                      answeredQuestions: answeredQuestions,
+                                      status: status)));
                         },
                       ),
                       alignment: Alignment.center,

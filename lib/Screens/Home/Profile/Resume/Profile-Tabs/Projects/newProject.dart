@@ -485,28 +485,43 @@ class _NewProjectState extends State<NewProject> {
                                     if (_formKey.currentState.validate()) if (validateBulletPoint(
                                         information[
                                             0])) if (validateBulletPoint(
-                                        information[1])){
+                                        information[1])) {
                                       setState(() {
                                         loading = true;
                                       });
                                       Map<String, dynamic> map = {};
-                                      projects[index] = {'Name' : Name, 'University_Company' : University_Company, 'from' : from, 'to' : to, 'certificate' : certificate, 'bullet_point1' : information[0], 'bullet_point2' : information[1]};
+                                      projects[index] = {
+                                        'Name': Name,
+                                        'University_Company':
+                                            University_Company,
+                                        'from': from,
+                                        'to': to,
+                                        'certificate': certificate,
+                                        'bullet_point1': information[0],
+                                        'bullet_point2': information[1]
+                                      };
                                       map['projects'] = projects;
                                       print(map);
-                                      if(file == null) {
+                                      if (file == null) {
                                         // TODO call API
-                                        dynamic result = await _APIService.sendProfileData(map);
-                                        if(result == -1) {
+                                        dynamic result =
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == -1) {
                                           showToast('Failed', context);
-                                        } else if(result == 0) {
+                                        } else if (result == 0) {
                                           showToast('Failed', context);
-                                        } else if(result == -2) {
-                                          showToast('Could not connect to server', context);
-                                        } else if(result == 1) {
-                                          showToast('Data Updated Successfully', context);
+                                        } else if (result == -2) {
+                                          showToast(
+                                              'Could not connect to server',
+                                              context);
+                                        } else if (result == 1) {
+                                          showToast('Data Updated Successfully',
+                                              context);
                                           Navigator.pop(context);
                                         } else {
-                                          showToast('Unexpected error occured', context);
+                                          showToast('Unexpected error occured',
+                                              context);
                                         }
                                         setState(() {
                                           loading = false;
@@ -514,7 +529,8 @@ class _NewProjectState extends State<NewProject> {
                                       } else {
                                         _uploadFile(file, fileName).then((f) {
                                           // TODO call API
-                                          showToast('Data updated successfully', context);
+                                          showToast('Data updated successfully',
+                                              context);
                                           Navigator.pop(context);
                                         });
                                       }

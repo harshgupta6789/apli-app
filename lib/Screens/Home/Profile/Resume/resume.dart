@@ -25,7 +25,6 @@ class Resume extends StatefulWidget {
 }
 
 class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
 
@@ -87,7 +86,9 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
     final Directory systemTempDir = Directory.systemTemp;
-    String tempPath = 'storage/emulated/0/Download/resume' + DateTime.now().toString() + '.pdf';
+    String tempPath = 'storage/emulated/0/Download/resume' +
+        DateTime.now().toString() +
+        '.pdf';
     final File tempFile = File(tempPath);
     if (tempFile.existsSync()) {
       await tempFile.delete();
@@ -122,8 +123,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
-            if(checkStatus(status))
-              loadPdf();
+            if (checkStatus(status)) loadPdf();
           });
         } catch (e) {
           setState(() {
@@ -185,7 +185,8 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                       Align(
                                         alignment: Alignment.bottomRight,
                                         child: Padding(
-                                          padding: EdgeInsets.fromLTRB(8, width * 0.3, 8, 8),
+                                          padding: EdgeInsets.fromLTRB(
+                                              8, width * 0.3, 8, 8),
                                           child: Column(
                                             children: <Widget>[
                                               Padding(

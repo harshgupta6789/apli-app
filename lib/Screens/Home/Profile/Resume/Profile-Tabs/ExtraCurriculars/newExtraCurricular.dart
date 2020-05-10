@@ -203,9 +203,10 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                               width: width * 0.4,
                               child: DateTimeField(
                                   validator: (value) {
-                                    if(value == null)
+                                    if (value == null)
                                       return 'cannot be empty';
-                                    else return null;
+                                    else
+                                      return null;
                                   },
                                   format: format,
                                   initialValue: start == null
@@ -248,9 +249,10 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                               width: width * 0.4,
                               child: DateTimeField(
                                   validator: (value) {
-                                    if(value == null)
+                                    if (value == null)
                                       return 'cannot be empty';
-                                    else return null;
+                                    else
+                                      return null;
                                   },
                                   format: format,
                                   initialValue: end == null
@@ -486,18 +488,20 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                       setState(() {
                                         loading = true;
                                       });
-                                      if(file == null) {
+                                      if (file == null) {
                                         // TODO call API
-                                        showToast('Data updated successfully', context);
+                                        showToast('Data updated successfully',
+                                            context);
                                         Navigator.pop(context);
                                       } else {
                                         _uploadFile(file, fileName).then((f) {
                                           // TODO call API
-                                          showToast('Data updated successfully', context);
+                                          showToast('Data updated successfully',
+                                              context);
                                           Navigator.pop(context);
                                         });
                                       }
-                                            }
+                                    }
 //                                  setState(() {
 //                                    loading = true;
 //                                  });

@@ -16,7 +16,7 @@ class _SkillsState extends State<Skills> {
   double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
-  final _APIService = APIService(type:3);
+  final _APIService = APIService(type: 3);
   List skills;
   Map<String, TextEditingController> temp = {};
   final _formKey = GlobalKey<FormState>();
@@ -105,7 +105,6 @@ class _SkillsState extends State<Skills> {
                                     padding: EdgeInsets.fromLTRB(
                                         25 * scale, 5, 25 * scale, 5),
                                     child: RaisedButton(
-
                                       padding: EdgeInsets.all(0),
                                       color: Colors.white,
                                       elevation: 0,
@@ -713,13 +712,10 @@ class _SkillsState extends State<Skills> {
                                         // showToast('Data Updated Successfully',
                                         //     context);
                                         // Navigator.pop(context);
-                                         dynamic result =
+                                        dynamic result =
                                             await _APIService.sendProfileData(
                                                 skills[0]);
-                                       
-                                      
                                       }
-
                                     },
                                   ),
                                   SizedBox(
