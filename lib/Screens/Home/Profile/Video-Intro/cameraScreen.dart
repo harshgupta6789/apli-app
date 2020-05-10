@@ -16,7 +16,8 @@ class Camera extends StatefulWidget {
   final List<CameraDescription> cameras;
   final int status;
 
-  const Camera({Key key, @required this.cameras, @required this.status}) : super(key: key);
+  const Camera({Key key, @required this.cameras, @required this.status})
+      : super(key: key);
 
   @override
   _CameraState createState() => _CameraState();
@@ -43,16 +44,15 @@ class _CameraState extends State<Camera> {
   int Status;
 
   userAddVideoUrl(String url) async {
-    String temp  = decimalToBinary(Status).toString();
-    while(temp.length != 9) {
+    String temp = decimalToBinary(Status).toString();
+    while (temp.length != 9) {
       temp = '0' + temp;
     }
     temp = temp.substring(0, 7) + '1' + temp.substring(8);
     Status = binaryToDecimal(int.parse(temp));
-    Firestore.instance
-        .collection('candidates')
-        .document(email)
-        .setData({'video_resume': url, 'profile_status' : Status}, merge: true).then((onValue) {
+    Firestore.instance.collection('candidates').document(email).setData(
+        {'video_resume': url, 'profile_status': Status},
+        merge: true).then((onValue) {
       setState(() {
         fetchUrl = url;
         deleteDirectory();
@@ -321,7 +321,8 @@ class _CameraState extends State<Camera> {
                               ],
                             );
                           }
-                          return Align(child: Text("Uploading Your Resume!..."));
+                          return Align(
+                              child: Text("Uploading Your Resume!..."));
                         }),
                   ]),
             ),

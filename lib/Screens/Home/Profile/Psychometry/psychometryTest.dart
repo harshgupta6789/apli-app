@@ -9,7 +9,8 @@ class PsychometryTest extends StatefulWidget {
   String email;
   int status;
   Map<String, dynamic> questions, answeredQuestions;
-  PsychometryTest({this.email, this.questions, this.answeredQuestions, this.status});
+  PsychometryTest(
+      {this.email, this.questions, this.answeredQuestions, this.status});
   @override
   _PsychometryTestState createState() => _PsychometryTestState();
 }
@@ -19,7 +20,14 @@ class _PsychometryTestState extends State<PsychometryTest> {
 
   Map<String, dynamic> questions, answeredQuestions;
   List<List<String>> remainingQuestions = [];
-  List<String> options = ['Completely Agree', 'Very Much Agree', 'Somewhat Agree', 'Somewhat Disagree', 'Very Much Disagree', 'Completely Disagree'];
+  List<String> options = [
+    'Completely Agree',
+    'Very Much Agree',
+    'Somewhat Agree',
+    'Somewhat Disagree',
+    'Very Much Disagree',
+    'Completely Disagree'
+  ];
 
   bool allDone = false;
   bool loading = false;
@@ -127,8 +135,10 @@ class _PsychometryTestState extends State<PsychometryTest> {
                     await Firestore.instance
                         .collection('candidates')
                         .document(widget.email)
-                        .setData({'psycho_ques': answeredQuestions, 'profile_status' : temp},
-                            merge: true).then((f) {
+                        .setData({
+                      'psycho_ques': answeredQuestions,
+                      'profile_status': temp
+                    }, merge: true).then((f) {
                       setState(() {
                         loading = false;
                       });
@@ -320,7 +330,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to leave the test',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

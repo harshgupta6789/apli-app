@@ -189,7 +189,11 @@ class _ExperiencesState extends State<Experiences> {
                                               .microsecondsSinceEpoch)
                                       .year
                                       .toString();
-                          String duration = (from ?? '') + ' to ' + ((from != null && to == null) ?  'ongoing' : to ?? '');
+                          String duration = (from ?? '') +
+                              ' to ' +
+                              ((from != null && to == null)
+                                  ? 'ongoing'
+                                  : to ?? '');
                           String info1, info2, info3;
                           info1 = experiences[index]['information'] == null
                               ? ''

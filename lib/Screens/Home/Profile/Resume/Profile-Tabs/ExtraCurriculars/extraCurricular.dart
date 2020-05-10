@@ -190,7 +190,11 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                               .microsecondsSinceEpoch)
                                       .year
                                       .toString();
-                          String duration = (start ?? '') + ' to ' + ((start != null && end == null) ?  'ongoing' : end ?? '');
+                          String duration = (start ?? '') +
+                              ' to ' +
+                              ((start != null && end == null)
+                                  ? 'ongoing'
+                                  : end ?? '');
                           String info1, info2;
                           info1 = extraCurriculars[index]['info'] == null
                               ? ''

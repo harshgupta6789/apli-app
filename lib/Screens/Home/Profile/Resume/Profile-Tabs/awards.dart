@@ -18,7 +18,6 @@ class Awards extends StatefulWidget {
 
 class _AwardsState extends State<Awards> {
   String userEmail;
- 
 
   void fetchInfo() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -100,7 +99,7 @@ class _AwardsFormState extends State<AwardsForm> {
   Map<String, TextEditingController> temp = {}, temp2 = {};
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("MM-yyyy");
-   final _APIService = APIService(type:2);
+  final _APIService = APIService(type: 2);
 
   @override
   void initState() {
@@ -141,7 +140,8 @@ class _AwardsFormState extends State<AwardsForm> {
                       child: Column(
                         children: <Widget>[
                           Padding(
-                            padding: EdgeInsets.fromLTRB(25 * scale, 5, 25 * scale, 5),
+                            padding: EdgeInsets.fromLTRB(
+                                25 * scale, 5, 25 * scale, 5),
                             child: RaisedButton(
                               padding: EdgeInsets.all(0),
                               color: Colors.transparent,
@@ -165,8 +165,8 @@ class _AwardsFormState extends State<AwardsForm> {
                                     children: <Widget>[
                                       Container(
                                         width: width,
-                                        padding:
-                                            EdgeInsets.fromLTRB(20 * scale, 20, 20 * scale, 20),
+                                        padding: EdgeInsets.fromLTRB(
+                                            20 * scale, 20, 20 * scale, 20),
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -256,17 +256,18 @@ class _AwardsFormState extends State<AwardsForm> {
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                               if (newAwardDescription != null &&
-                                                  newAwardDate != null)
-                                                if(newAwardDescription != '')
-                                                  setState(() {
-                                                    awards.add({
-                                                      'description':
-                                                          newAwardDescription,
-                                                      'date': newAwardDate
-                                                    });
-                                                    print(newAwardDate);
-                                                    print(newAwardDescription);
+                                                  newAwardDate !=
+                                                      null) if (newAwardDescription !=
+                                                  '')
+                                                setState(() {
+                                                  awards.add({
+                                                    'description':
+                                                        newAwardDescription,
+                                                    'date': newAwardDate
                                                   });
+                                                  print(newAwardDate);
+                                                  print(newAwardDescription);
+                                                });
                                             },
                                           ),
                                         ],
@@ -412,7 +413,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                                           fontSize: 13),
                                                       decoration:
                                                           InputDecoration(
-                                                            //labelText: 'Date',
+                                                              //labelText: 'Date',
                                                               hintText:
                                                                   'eg: 1st Prize in Skating',
                                                               contentPadding:
@@ -510,15 +511,15 @@ class _AwardsFormState extends State<AwardsForm> {
                                 //   setState(() {
                                 //     loading = true;
                                 //   });
-                                  
+
                                 //   showToast(
                                 //       'Data Updated Successfully', context);
                                 //   Navigator.pop(context);
                                 // }
                                 dynamic result =
-                                            await _APIService.sendProfileData(
-                                                awards[0]);
-                                                // TEST THE API
+                                    await _APIService.sendProfileData(
+                                        awards[0]);
+                                // TEST THE API
                               }
                             },
                           ),

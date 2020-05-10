@@ -580,7 +580,16 @@ class _CurrentEducationState extends State<CurrentEducation> {
 //                                    break;
 //                                  }
 //                                }
-                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Diploma(xii: edu, allFiles: [[currentFiles]], isUg: widget.isUg,)));
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Diploma(
+                                              xii: edu,
+                                              allFiles: [
+                                                [currentFiles]
+                                              ],
+                                              isUg: widget.isUg,
+                                            )));
                               }
                             }),
                       ],

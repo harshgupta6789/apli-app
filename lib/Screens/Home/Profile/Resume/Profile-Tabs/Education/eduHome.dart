@@ -277,22 +277,41 @@ class _EducationOverviewState extends State<EducationOverview> {
                   ),
                 ),
                 onWillPop: () {
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.WARNING,
-                    tittle: "Are You Sure?",
-                    desc: "Yes!",
-                    btnCancelText: "Cancel",
-                    btnCancelOnPress: () {
-                      //Navigator.of(context).pop();
-                    },
-                    btnOkOnPress: () async {
-                      Navigator.pop(context);
-                    },
-                    btnOkText: "I Understand!",
-                  ).show();
-                  return null;
+                  _onWillPop();
+                  return;
                 },
               );
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text(
+              'Leaving the form midway will not save your data! You will have to fill the form again from start. Are you sure you want to go back?',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                  Navigator.pop(context);
+                },
+                child: new Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text(
+                  'No',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 }

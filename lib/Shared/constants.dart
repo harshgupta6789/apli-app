@@ -56,11 +56,11 @@ const String resume = "Resume";
 const String editResume = "Edit Resume";
 const String videoIntro = "Video Intro";
 const String resumeSlogan =
-    "Keep your resume upto date with latest \n skills for all jobs that you apply for";
+    "Keep your resume upto date with latest skills for all jobs that you apply for";
 const String videoIntroSlogan =
-    "Give a short introduction of yourself  for\n your recruiters to see";
+    "Give a short introduction of yourself  for your recruiters to see";
 const String psychometryTestSlogan =
-    "This is a psychometry test to help the\nrecruiters understand your personality";
+    "This is a psychometry test to help the recruiters understand your personality";
 const String intro = 'Intro';
 const String extra = 'Exta-Curriculars';
 const String projects = 'Projects';
