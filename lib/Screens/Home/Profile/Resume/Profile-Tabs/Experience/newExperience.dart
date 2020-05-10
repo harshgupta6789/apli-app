@@ -701,9 +701,45 @@ class _NewExperienceState extends State<NewExperience> {
                                       });
                                       if (file == null) {
                                         // TODO call API
-                                        showToast('Data updated successfully',
-                                            context);
-                                        Navigator.pop(context);
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        experiences[index]['certificate'] = certificate;
+                                        Map<String, dynamic> map = {};
+                                        map['experience'] = experiences;
+                                        for(int i = 0; i < experiences.length; i ++) {
+                                          if(map['experience'][i]['from'] != null) {
+                                            map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
+                                          }
+                                          if(map['experience'][i]['to'] != null) {
+                                            map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
+                                          }
+                                        }
+                                        // TODO call API
+                                        dynamic result =
+                                        await _APIService.sendProfileData(
+                                            map);
+                                        if (result == -1) {
+                                          showToast('Failed', context);
+                                        } else if (result == 0) {
+                                          showToast('Failed', context);
+                                        } else if (result == -2) {
+                                          showToast(
+                                              'Could not connect to server',
+                                              context);
+                                        } else if (result == 1) {
+                                          showToast(
+                                              'Data Updated Successfully',
+                                              context);
+                                          Navigator.pop(context);
+                                        } else {
+                                          showToast(
+                                              'Unexpected error occured',
+                                              context);
+                                        }
+                                        setState(() {
+                                          loading = false;
+                                        });
                                       } else {
                                         _uploadFile(file, fileName).then((f) async {
                                           // TODO call API
@@ -715,10 +751,10 @@ class _NewExperienceState extends State<NewExperience> {
                                           map['experience'] = experiences;
                                           for(int i = 0; i < experiences.length; i ++) {
                                             if(map['experience'][i]['from'] != null) {
-                                              map['experiences'][i]['from'] = apiDateFormat.format(map['experiences'][i]['from']) + " 00:00:00+0000";
+                                              map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
                                             }
                                             if(map['experience'][i]['to'] != null) {
-                                              map['experiences'][i]['to'] = apiDateFormat.format(map['experiences'][i]['to']) + " 00:00:00+0000";
+                                              map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
                                             }
                                           }
                                           // TODO call API
@@ -737,6 +773,7 @@ class _NewExperienceState extends State<NewExperience> {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
+                                            Navigator.pop(context);
                                           } else {
                                             showToast(
                                                 'Unexpected error occured',
@@ -745,33 +782,9 @@ class _NewExperienceState extends State<NewExperience> {
                                           setState(() {
                                             loading = false;
                                           });
-                                          showToast('Data updated successfully',
-                                              context);
-                                          Navigator.pop(context);
                                         });
                                       }
                                     }
-//                                  setState(() {
-//                                    loading = true;
-//                                  });
-//                                  experiences[index]['Type'] = type;
-//                                  experiences[index]['company'] = company;
-//                                  experiences[index]['designation'] = designation;
-//                                  experiences[index]['domain'] = domain;
-//                                  experiences[index]['from'] = from;
-//                                  experiences[index]['industry'] = industry;
-//                                  experiences[index]['information'] = information;
-//                                  experiences[index]['to'] = to;
-//                                  if(file == null) {
-//                                    // TODO call API
-//                                    Navigator.pop(context);
-//                                  } else {
-//                                    _uploadFile(file, fileName).then((t) {
-//                                      experiences[index]['certificate'] = certificate;
-//                                      // TODO call API
-//                                      Navigator.pop(context);
-//                                    });
-//                                  }
                                   }),
                             ],
                           ),

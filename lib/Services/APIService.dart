@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
@@ -60,57 +59,39 @@ class APIService {
                 'education': eduToPass
               });
               if (response.statusCode == 200) {
-                var decodedData = jsonDecode(response.data);
-
-                bool temp = decodedData["success"];
+                var temp = response.data['success'];
                 if (temp == true) {
                   result = 1;
+                  print(result);
                 } else
                   result = -1;
               } else
-                result = -2;
+        result = -2;
               break;
             }
 
           case 6:
-            {
-              // List x = [
-              //   {
-              //     'Name': "ojas",
-              //     'University_Company': "ff",
-              //     'from': "2020-05-01 00:00:00+0000",
-              //     'to': "2020-05-01 00:00:00+0000",
-              //     'certificate': "fff",
-              //     'bullet_point1': "fff",
-              //     'bullet_point2': "fff"
-              //   }
-              // ];
-              // String y = jsonEncode(x);
-              // print(y);
 
               String expToPass = jsonEncode(map['experience']);
+              print(expToPass);
 
               Response response = await Dio().post(projectsURL, data: {
                 "secret": "$passHashSecret",
                 "email": "${value.getString('email')}",
                 "data": expToPass
               });
-              print(response.data);
-              // if (response.statusCode == 200) {
-              //   var decodedData = jsonDecode(response.data);
-
-              //   bool temp = decodedData["success"];
-              //   if (temp == true) {
-              //     result = 1;
-              //   } else
-              //     result = -1;
-              // } else
-              //   result = -2;
-            }
+              if (response.statusCode == 200) {
+                var temp = response.data['success'];
+                if (temp == true) {
+                  result = 1;
+                  print(result);
+                } else
+                  result = -1;
+              } else
+                result = -2;
             break;
 
           case 5:
-            {
               String projectsToPass = jsonEncode(map['projects']);
               Response response = await Dio().post(projectsURL, data: {
                 "secret": "$passHashSecret",
@@ -128,11 +109,10 @@ class APIService {
               //     result = -1;
               // } else
               //   result = -2;
-            }
+
             break;
 
           case 4:
-            {
               String extraCToPass = jsonEncode(map['extraC']);
               print(extraCToPass);
               Response response = await Dio().post(projectsURL, data: {
@@ -153,11 +133,11 @@ class APIService {
               //     result = -2;
               // } else
               //   result = -2;
-            }
+
             break;
 
           case 3:
-            {
+
               // SKILL DOCUMENTATION IS WRONG REFER BELOW//
               // List x = [
               //   {
@@ -196,11 +176,10 @@ class APIService {
               //     result = -2;
               // } else
               //   result = -2;
-            }
+
             break;
 
           case 2:
-            {
               String awardsToPass = jsonEncode(map['awards']);
               print(awardsToPass);
               Response response = await Dio().post(awardsURL, data: {
@@ -222,7 +201,7 @@ class APIService {
               //     result = -2;
               // } else
               //   result = -2;
-            }
+
             break;
 
           default:
@@ -230,7 +209,7 @@ class APIService {
             break;
         }
       });
-
+      print(result);
       return result;
     } catch (e) {
       print(e.toString());

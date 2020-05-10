@@ -274,17 +274,20 @@ class _ExperiencesState extends State<Experiences> {
                                             setState(() {
                                               loading = true;
                                             });
-                                            experiences.removeAt(index);
                                             Map<String, dynamic> map = {};
-                                            map['experience'] = experiences;
-                                            for(int i = 0; i < experiences.length; i ++) {
+                                            map['experience'] = List.from(experiences);
+                                            map['experience'].removeAt(index);
+                                            print(experiences[1]['from']);
+                                            print(map['experience'].length);
+                                            for(int i = 0; i < map['experience'].length; i ++) {
                                               if(map['experience'][i]['from'] != null) {
-                                                map['experiences'][i]['from'] = apiDateFormat.format(map['experiences'][i]['from']) + " 00:00:00+0000";
+                                                map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
                                               }
                                               if(map['experience'][i]['to'] != null) {
-                                                map['experiences'][i]['to'] = apiDateFormat.format(map['experiences'][i]['to']) + " 00:00:00+0000";
+                                                map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
                                               }
                                             }
+                                            print(experiences[0]['from']);
                                             // TODO call API
                                             dynamic result =
                                             await _APIService.sendProfileData(
@@ -298,6 +301,9 @@ class _ExperiencesState extends State<Experiences> {
                                                   'Could not connect to server',
                                                   context);
                                             } else if (result == 1) {
+                                              setState(() {
+                                                experiences.removeAt(index);
+                                              });
                                               showToast(
                                                   'Data Updated Successfully',
                                                   context);
