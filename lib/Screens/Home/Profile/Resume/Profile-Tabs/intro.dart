@@ -74,7 +74,9 @@ class _BasicIntroState extends State<BasicIntro> {
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
-              postal = address['postal_code'] == null ? null : address['postal_code'].toString();
+              postal = address['postal_code'] == null
+                  ? null
+                  : address['postal_code'].toString();
               languages.forEach((key, value) {
                 languagesList.add([key, value]);
               });
@@ -188,7 +190,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(fnameFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(fnameFocus);
                                       return 'first name cannot be empty';
                                     } else {
                                       return null;
@@ -269,7 +272,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                     },
                                     validator: (value) {
                                       if (value == null) {
-                                        FocusScope.of(context).requestFocus(dobFocus);
+                                        FocusScope.of(context)
+                                            .requestFocus(dobFocus);
                                         return 'DOB cannot be empty';
                                       } else
                                         return null;
@@ -356,7 +360,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(roll_noFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(roll_noFocus);
                                       return 'roll number cannot be empty';
                                     } else
                                       return null;
@@ -379,7 +384,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(hqFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(hqFocus);
                                       return 'highest qualification cannot be empty';
                                     } else
                                       return null;
@@ -742,7 +748,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(streetFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(streetFocus);
                                       return 'street cannot be empty';
                                     } else
                                       return null;
@@ -764,7 +771,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(countryFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(countryFocus);
                                       return 'country cannot be empty';
                                     } else
                                       return null;
@@ -786,7 +794,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(stateFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(stateFocus);
                                       return 'state cannot be empty';
                                     } else
                                       return null;
@@ -810,10 +819,12 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(postalFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(postalFocus);
                                       return 'postal code cannot be empty';
                                     } else if (!(int.tryParse(value) != null)) {
-                                      FocusScope.of(context).requestFocus(postalFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(postalFocus);
                                       return 'invalid postal';
                                     } else
                                       return null;
@@ -835,7 +846,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      FocusScope.of(context).requestFocus(cityFocus);
+                                      FocusScope.of(context)
+                                          .requestFocus(cityFocus);
                                       return 'city cannot be empty';
                                     } else
                                       return null;
@@ -858,9 +870,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                   ),
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
-                                      setState(() {
-                                        loading = true;
-                                      });
+                                      // setState(() {
+                                      //   loading = true;
+                                      // });
                                       languages = {};
                                       for (int i = 0;
                                           i < languagesList.length;
@@ -875,7 +887,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                       map['First_name'] = fname;
                                       map['Last_name'] = lname;
                                       map['Middle_name'] = mname;
-                                      map['dob'] = dob;
+                                      map['dob'] = dob.toString();
                                       map['gender'] = gender;
                                       map['highest_qualification'] =
                                           highest_qualification;
@@ -889,75 +901,77 @@ class _BasicIntroState extends State<BasicIntro> {
                                         dynamic result =
                                             await _APIService.sendProfileData(
                                                 map);
-                                        if (result == -1) {
-                                          showToast('Failed', context);
-                                        } else if (result == 0) {
-                                          showToast('Failed', context);
-                                        } else if (result == -2) {
-                                          showToast(
-                                              'Could not connect to server',
-                                              context);
-                                        } else if (result == 1) {
-                                          showToast('Data Updated Successfully',
-                                              context);
-                                          Navigator.pop(context);
-                                        } else {
-                                          showToast('Unexpected error occured',
-                                              context);
-                                        }
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                      } else {
-                                        showToast(
-                                            'Uploading profile picture\n might take some time',
-                                            context,
-                                            duration: 5);
-                                        StorageReference storageReference;
-                                        storageReference = FirebaseStorage
-                                            .instance
-                                            .ref()
-                                            .child("resumePictures/$email");
-                                        StorageUploadTask uploadTask =
-                                            storageReference.putFile(_image);
-                                        final StorageTaskSnapshot downloadUrl =
-                                            (await uploadTask.onComplete);
-                                        await downloadUrl.ref
-                                            .getDownloadURL()
-                                            .then((url) async {
-                                          setState(() {
-                                            profile = url;
-                                          });
-                                          map['profile_picture'] = url;
-                                          // TODO call API
-                                          dynamic result =
-                                              await _APIService.sendProfileData(
-                                                  map);
-                                          if (result == -1) {
-                                            showToast('Failed', context);
-                                          } else if (result == 0) {
-                                            showToast('Failed', context);
-                                          } else if (result == -2) {
-                                            showToast(
-                                                'Could not connect to server',
-                                                context);
-                                          } else if (result == 1) {
-                                            showToast(
-                                                'Data Updated Successfully',
-                                                context);
-                                            Navigator.pop(context);
-                                          } else {
-                                            showToast(
-                                                'Unexpected error occured',
-                                                context);
-                                          }
-                                          setState(() {
-                                            loading = false;
-                                          });
-                                          showToast('Data Updated Successfully',
-                                              context);
-                                          Navigator.pop(context);
-                                        });
+                                        //print(result);
+                                        // if (result == -1) {
+                                        //   showToast('Failed', context);
+                                        // } else if (result == 0) {
+                                        //   showToast('Failed', context);
+                                        // } else if (result == -2) {
+                                        //   showToast(
+                                        //       'Could not connect to server',
+                                        //       context);
+                                        // } else if (result == 1) {
+                                        //   showToast('Data Updated Successfully',
+                                        //       context);
+                                        //   Navigator.pop(context);
+                                        // } else {
+                                        //   showToast('Unexpected error occured',
+                                        //       context);
+                                        // }
+                                        // setState(() {
+                                        //   loading = false;
+                                        // });
+                                        // } else {
+                                        //   showToast(
+                                        //       'Uploading profile picture\n might take some time',
+                                        //       context,
+                                        //       duration: 5);
+                                        //   StorageReference storageReference;
+                                        //   storageReference = FirebaseStorage
+                                        //       .instance
+                                        //       .ref()
+                                        //       .child("resumePictures/$email");
+                                        //   StorageUploadTask uploadTask =
+                                        //       storageReference.putFile(_image);
+                                        //   final StorageTaskSnapshot downloadUrl =
+                                        //       (await uploadTask.onComplete);
+                                        //   await downloadUrl.ref
+                                        //       .getDownloadURL()
+                                        //       .then((url) async {
+                                        //     setState(() {
+                                        //       profile = url;
+                                        //     });
+                                        //     map['profile_picture'] = url;
+                                        //     // TODO call API
+                                        //     dynamic result =
+                                        //         await _APIService.sendProfileData(
+                                        //             map);
+                                        //     if (result == -1) {
+                                        //       showToast('Failed', context);
+                                        //     } else if (result == 0) {
+                                        //       showToast('Failed', context);
+                                        //     } else if (result == -2) {
+                                        //       showToast(
+                                        //           'Could not connect to server',
+                                        //           context);
+                                        //     } else if (result == 1) {
+                                        //       showToast(
+                                        //           'Data Updated Successfully',
+                                        //           context);
+                                        //       Navigator.pop(context);
+                                        //     } else {
+                                        //       showToast(
+                                        //           'Unexpected error occured',
+                                        //           context);
+                                        //     }
+                                        //     setState(() {
+                                        //       loading = false;
+                                        //     });
+                                        //     showToast('Data Updated Successfully',
+                                        //         context);
+                                        //     Navigator.pop(context);
+                                        //   });
+                                        // }
                                       }
                                     }
                                   },

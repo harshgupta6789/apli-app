@@ -87,8 +87,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'score': 0,
                     'score_unit': "%",
                     'specialization': "",
-                    'start' : Timestamp.now(),
-                    'end' : Timestamp.now()
+                    'start': Timestamp.now(),
+                    'end': Timestamp.now()
                   };
                   completeEducation['X'] = {
                     'board': "",
@@ -97,8 +97,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'score': 0,
                     'score_unit': "%",
                     'specialization': "",
-                    'start' : Timestamp.now(),
-                    'end' : Timestamp.now()
+                    'start': Timestamp.now(),
+                    'end': Timestamp.now()
                   };
                 } else {
                   completeEducation['XII'] = s.data['education']['XII'] ??
@@ -109,8 +109,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'score': 0,
                         'score_unit': "%",
                         'specialization': "",
-                        'start' : Timestamp.now(),
-                        'end' : Timestamp.now()
+                        'start': Timestamp.now(),
+                        'end': Timestamp.now()
                       };
                   completeEducation['X'] = s.data['education']['X'] ??
                       {
@@ -120,29 +120,47 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'score': 0,
                         'score_unit': "%",
                         'specialization': "",
-                        'start' : Timestamp.now(),
-                        'end' : Timestamp.now()
+                        'start': Timestamp.now(),
+                        'end': Timestamp.now()
                       };
                   completeEducation[course] = s.data['education'][course] ?? {};
                 }
 
                 if (s.data['education'] != null) {
+                  print(isUg);
+                  if (isUg == false) {
+                    if (s.data['education']['other-education'] != null) {
+                      completeEducation['education']['other-education'] =
+                          s.data['education']['other-education'];
+                    } else {
+                     Map temp  = {
+                        'institute': "",
+                        'specialization': "",
+                        'board': "",
+                        'score': "",
+                        'score_unit': "%",
+                        'start': Timestamp.now(),
+                        'end': Timestamp.now(),
+                        'certificate': null,
+                      };
+                      completeEducation['other-education'] = temp;
+                    }
+                  }
                   if (s.data['education'][course] != null) {
                     if (s.data['education'][course]['sem_records'] != null) {
                       for (int i = 0; i < semToBuild; i++) {
                         sems[i] = {
                           'certificate': s.data['education'][course]
-                                  ['sem_records'][i]['certificate'],
+                              ['sem_records'][i]['certificate'],
                           'closed_backlog': s.data['education'][course]
-                                  ['sem_records'][i]['closed_backlog'],
+                              ['sem_records'][i]['closed_backlog'],
                           'live_backlog': s.data['education'][course]
-                                  ['sem_records'][i]['live_backlog'],
+                              ['sem_records'][i]['live_backlog'],
                           'semester_score': s.data['education'][course]
-                                  ['sem_records'][i]['semester_score']
+                              ['sem_records'][i]['semester_score']
                         };
                       }
-                      completeEducation[course]['sem_records'] =  sems;
-
+                      completeEducation[course]['sem_records'] = sems;
                     } else {
                       for (int i = 0; i < semToBuild; i++) {
                         sems[i] = {
@@ -156,7 +174,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         'score': 0,
                         'total_closed_backlogs': 0,
                         'total_live_backlogs': 0,
-                        'sem_records' : sems,
+                        'sem_records': sems,
                       };
                     }
                   } else {
@@ -172,7 +190,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                       'score': 0,
                       'total_closed_backlogs': 0,
                       'total_live_backlogs': 0,
-                      'sem_records' : sems,
+                      'sem_records': sems,
                     };
                   }
                 } else {
@@ -188,11 +206,11 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'score': 0,
                     'total_closed_backlogs': 0,
                     'total_live_backlogs': 0,
-                    'sem_records' : sems,
+                    'sem_records': sems,
                   };
                   print(completeEducation[course]['sem_records']);
                 }
-                print(completeEducation);
+                print(completeEducation['other-education']);
               });
             });
           } else {
@@ -226,7 +244,7 @@ class _EducationOverviewState extends State<EducationOverview> {
         : loading
             ? Loading()
             : WillPopScope(
-                          child: Scaffold(
+                child: Scaffold(
                   body: PageView(
                     physics: new NeverScrollableScrollPhysics(),
                     controller: pageController,
@@ -250,30 +268,31 @@ class _EducationOverviewState extends State<EducationOverview> {
                         xii: completeEducation,
                       ),
                       Tenth(
-                          x: completeEducation,
-                          ),
+                        x: completeEducation,
+                      ),
                       Other(
-                          x: completeEducation,
-                          )
+                        oth: completeEducation,
+                      )
                     ],
                   ),
-                ), onWillPop: () {
-                    AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.WARNING,
-                        tittle: "Are You Sure?",
-                        desc: "Yes!",
-                        btnCancelText: "Cancel",
-                        btnCancelOnPress: () {
-                          //Navigator.of(context).pop();
-                        },
-                        btnOkOnPress: () async {
-                         Navigator.pop(context);
-                        },
-                        btnOkText: "I Understand!",
-                      ).show();
-          return null;
+                ),
+                onWillPop: () {
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.WARNING,
+                    tittle: "Are You Sure?",
+                    desc: "Yes!",
+                    btnCancelText: "Cancel",
+                    btnCancelOnPress: () {
+                      //Navigator.of(context).pop();
+                    },
+                    btnOkOnPress: () async {
+                      Navigator.pop(context);
+                    },
+                    btnOkText: "I Understand!",
+                  ).show();
+                  return null;
                 },
-            );
+              );
   }
 }

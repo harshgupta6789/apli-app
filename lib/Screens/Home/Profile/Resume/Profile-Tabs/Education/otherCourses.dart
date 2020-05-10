@@ -17,10 +17,10 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Other extends StatefulWidget {
-  final Map<dynamic, dynamic> x;
+  final Map<dynamic, dynamic> oth;
   final List allFiles;
 
-  const Other({Key key, @required this.x, this.allFiles}) : super(key: key);
+  const Other({Key key, @required this.oth, this.allFiles}) : super(key: key);
   @override
   _OtherState createState() => _OtherState();
 }
@@ -35,7 +35,7 @@ class _OtherState extends State<Other> {
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
-  String institute, stream, board, cgpa, email, specialization;
+  String institute,board, cgpa, email, fos;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -53,18 +53,19 @@ class _OtherState extends State<Other> {
   }
 
   void init() {
-    if (widget.x['X'] != null)
+    if (widget.oth['other-education'] != null)
       setState(() {
         allFiles = widget.allFiles;
-        education = widget.x;
-        institute = widget.x['X']['institute'] ?? "";
-        board = widget.x['X']['board'] ?? "";
-        cgpa = widget.x['X']['score'].toString() ?? "";
-        specialization = widget.x['X']['specialization'];
-        start = widget.x['X']['start'] ?? Timestamp.now();
-        end = widget.x['X']['end'] ?? Timestamp.now();
-        unit = widget.x['X']['score_unit'];
+        education = widget.oth;
+        institute =widget.oth['other-education']['institute'] ?? "";
+        board =widget.oth['other-education']['board'] ?? "";
+        cgpa =widget.oth['other-education']['score'].toString() ?? "";
+        fos =widget.oth['other-education']['specialization'];
+        start =widget.oth['other-education']['start'] ?? Timestamp.now();
+        end =widget.oth['other-education']['end'] ?? Timestamp.now();
+        unit =widget.oth['other-education']['score_unit'];
       });
+      print(education);
   }
 
   Future filePicker(BuildContext context) async {
@@ -141,13 +142,13 @@ class _OtherState extends State<Other> {
                   children: <Widget>[
                     SizedBox(height: 30),
                     TextFormField(
-                      initialValue: education['X']['institute'] ?? '',
+                      initialValue: education['other-education']['institute'] ?? '',
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       decoration: x("Institute Name"),
                       onChanged: (text) {
-                        setState(() => education['X']['institute'] = text);
+                        setState(() => education['other-education']['institute'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -160,31 +161,12 @@ class _OtherState extends State<Other> {
                       height: 15,
                     ),
                     TextFormField(
-                      initialValue: education['X']['specialization'] ?? '',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Stream"),
-                      onChanged: (text) {
-                        setState(() => education['X']['specialization'] = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'stream cannot be empty';
-                        else
-                          return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      initialValue: education['X']['board'] ?? '',
+                      initialValue: education['other-education']['board'] ?? '',
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                       obscureText: false,
                       onChanged: (text) {
-                        setState(() => education['X']['board'] = text);
+                        setState(() => education['other-education']['board'] = text);
                       },
                       validator: (value) {
                         if (value.isEmpty)
@@ -192,7 +174,45 @@ class _OtherState extends State<Other> {
                         else
                           return null;
                       },
-                      decoration: x('Board'),
+                      decoration: x('Board/University'),
+                    ),
+                      SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      initialValue: education['other-education']['specialization'] ?? '',
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      obscureText: false,
+                      onChanged: (text) {
+                        setState(() => education['other-education']['specialization'] = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty)
+                          return 'Field Of Study cannot be empty';
+                        else
+                          return null;
+                      },
+                      decoration: x('Field Of Study'),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextFormField(
+                      initialValue: education['other-education']['specialization'] ?? '',
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                      obscureText: false,
+                      onChanged: (text) {
+                        setState(() => education['other-education']['specialization'] = text);
+                      },
+                      validator: (value) {
+                        if (value.isEmpty)
+                          return 'Degree cannot be empty';
+                        else
+                          return null;
+                      },
+                      decoration: x('Degree'),
                     ),
                     SizedBox(
                       height: 15,
@@ -204,7 +224,7 @@ class _OtherState extends State<Other> {
                         Container(
                           width: width * 0.35,
                           child: TextFormField(
-                            initialValue: education['X']['score'] == null ? '' : education['X']['score'].toString(),
+                            initialValue: education['other-education']['score'] == null ? '' : education['other-education']['score'].toString(),
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.numberWithOptions(),
                             onFieldSubmitted: (_) =>
@@ -212,7 +232,7 @@ class _OtherState extends State<Other> {
                             obscureText: false,
                             decoration: x("Score"),
                             onChanged: (text) {
-                              setState(() => education['X']['score'] = int.tryParse(text));
+                              setState(() => education['other-education']['score'] = int.tryParse(text));
                             },
                             validator: (value) {
                               if (value.isEmpty)
@@ -242,7 +262,7 @@ class _OtherState extends State<Other> {
                                     padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                     child: DropdownButton<String>(
                                       //hint: Text("Unit"),
-                                      value: education['X']['score_unit'] ?? '%',
+                                      value: education['other-education']['score_unit'] ?? '%',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w400,
@@ -263,7 +283,7 @@ class _OtherState extends State<Other> {
                                           }).toList(),
                                       onChanged: (value) {
                                         setState(() {
-                                          education['X']['score_unit'] = value;
+                                          education['other-education']['score_unit'] = value;
                                         });
                                       },
                                     ),
@@ -307,8 +327,8 @@ class _OtherState extends State<Other> {
                                     .fromMicrosecondsSinceEpoch(
                                     start.microsecondsSinceEpoch))
                                     .toString() ??
-                                    "DOB"
-                                    : "DOB";
+                                    "From"
+                                    : "From";
                                 return date;
                               },
                               onChanged: (date) {
@@ -318,7 +338,7 @@ class _OtherState extends State<Other> {
                                       : Timestamp
                                       .fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
-                                  education['X']['start'] = (date == null)
+                                  education['other-education']['start'] = (date == null)
                                       ? null
                                       : Timestamp
                                       .fromMicrosecondsSinceEpoch(
@@ -357,8 +377,8 @@ class _OtherState extends State<Other> {
                                     .fromMicrosecondsSinceEpoch(
                                     end.microsecondsSinceEpoch))
                                     .toString() ??
-                                    "DOB"
-                                    : "DOB";
+                                    "End"
+                                    : "End";
                                 return date;
                               },
                               onChanged: (date) {
@@ -368,7 +388,7 @@ class _OtherState extends State<Other> {
                                       : Timestamp
                                       .fromMicrosecondsSinceEpoch(
                                       date.microsecondsSinceEpoch);
-                                  education['X']['end'] = (date == null)
+                                  education['other-education']['end'] = (date == null)
                                       ? null
                                       : Timestamp
                                       .fromMicrosecondsSinceEpoch(

@@ -27,7 +27,7 @@ class APIService {
                   "city": "${map['Address']['city']}",
                   "country": "${map['Address']['country']}",
                   "postal_code": "${map['Address']['postal_code']}",
-                  "state": "${map['Address']['state']}",
+                  "state": "${map['Address']['state']}"
                 },
                 "First_name": "${map['First_name']}",
                 "Last_name": "${map['Last_name']}",
@@ -35,8 +35,8 @@ class APIService {
                 "dob": "${map['dob']}",
                 "gender": "${map['gender']}",
                 "highest_qualification": "${map['highest_qualification']}",
-                "languages": map['languages'],
-                "ph_no": "${map['ph_no']}",
+                "languages": {"c0" : "ffff"},
+                "ph_no": 99999,
                 "profile_picture": "${map['profile_picture']}",
                 "roll_no": "${map['roll_no']}",
               });
@@ -234,10 +234,9 @@ class APIService {
                   .post("https://dev.apli.ai/candidate/api/awards", data: {
                 "secret": "$passHashSecret",
                 "useremail": "${value.getString('email')}",
-                "data": [{
-                  'description':"K",
-                  'date':"hello"
-                }]
+                "data": [
+                  {'description': "K", 'date': "hello"}
+                ]
               });
               // if (response.statusCode == 200) {
               //   var decodedData = jsonDecode(response.body);
