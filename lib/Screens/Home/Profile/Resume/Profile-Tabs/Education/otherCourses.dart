@@ -491,6 +491,7 @@ class _OtherState extends State<Other> {
                                   if (_formKey.currentState.validate()) {
                                     allFiles.add(file);
                                     // TODO call API
+                                    Navigator.pop(context);
                                   }
                                 }),
                           ],
@@ -523,7 +524,7 @@ class _OtherState extends State<Other> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to go back',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

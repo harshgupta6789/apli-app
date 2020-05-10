@@ -330,7 +330,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to leave the test',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

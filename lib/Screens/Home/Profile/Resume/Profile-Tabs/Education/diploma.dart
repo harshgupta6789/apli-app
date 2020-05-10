@@ -531,7 +531,7 @@ class _DiplomaState extends State<Diploma> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to go back',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

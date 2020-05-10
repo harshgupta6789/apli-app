@@ -686,42 +686,91 @@ class _VideoIntroState extends State<VideoIntro>
                           color: basicColor,
                           fontWeight: FontWeight.w600),
                     ),
-                    onPressed: () {
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.ERROR,
-                        tittle: "Are You Sure?",
-                        desc: "Yes!",
-                        btnCancelText: "Cancel",
-                        btnCancelOnPress: () {
-                          //Navigator.of(context).pop();
-                        },
-                        btnOkOnPress: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          await usergetVideoUrl();
-                          if (fetchUrl != null) {
-                            var ref = FirebaseStorage.instance
-                                .getReferenceFromUrl(fetchUrl);
-
-                            await ref.then((reference) {
-                              reference.delete().then((x) {
-                                setState(() {
-                                  x = currentState.none;
-                                  fetchUrl = null;
-                                });
-                                deleteVideoUrl();
-                                usergetVideoUrl();
-                              });
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (context) => new AlertDialog(
+                        title: new Text(
+                          'Are you sure you want to delete your Video Intro?',
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
                               setState(() {
-                                loading = false;
+                                loading = true;
                               });
-                            });
-                          }
-                        },
-                        btnOkText: "Delete",
-                      ).show();
+                              await usergetVideoUrl();
+                              if (fetchUrl != null) {
+                                var ref = FirebaseStorage.instance
+                                    .getReferenceFromUrl(fetchUrl);
+
+                                await ref.then((reference) {
+                                  reference.delete().then((x) {
+                                    setState(() {
+                                      x = currentState.none;
+                                      fetchUrl = null;
+                                    });
+                                    deleteVideoUrl();
+                                    usergetVideoUrl();
+                                  });
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                });
+                              }
+                            },
+                            child: new Text(
+                              'Yes',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: new Text(
+                              'No',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                      );
+//                      AwesomeDialog(
+//                        context: context,
+//                        dialogType: DialogType.ERROR,
+//                        tittle: "Are You Sure?",
+//                        desc: "Yes!",
+//                        btnCancelText: "Cancel",
+//                        btnCancelOnPress: () {
+//                          //Navigator.of(context).pop();
+//                        },
+//                        btnOkOnPress: () async {
+//                          setState(() {
+//                            loading = true;
+//                          });
+//                          await usergetVideoUrl();
+//                          if (fetchUrl != null) {
+//                            var ref = FirebaseStorage.instance
+//                                .getReferenceFromUrl(fetchUrl);
+//
+//                            await ref.then((reference) {
+//                              reference.delete().then((x) {
+//                                setState(() {
+//                                  x = currentState.none;
+//                                  fetchUrl = null;
+//                                });
+//                                deleteVideoUrl();
+//                                usergetVideoUrl();
+//                              });
+//                              setState(() {
+//                                loading = false;
+//                              });
+//                            });
+//                          }
+//                        },
+//                        btnOkText: "Delete",
+//                      ).show();
                     }),
               ),
             ],

@@ -279,7 +279,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to go back',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

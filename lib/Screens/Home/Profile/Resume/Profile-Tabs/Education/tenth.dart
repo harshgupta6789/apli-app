@@ -536,7 +536,7 @@ class _TenthState extends State<Tenth> {
                   Navigator.pop(context);
                 },
                 child: new Text(
-                  'Yes, I want to go back',
+                  'Yes',
                   style: TextStyle(color: Colors.black),
                 ),
               ),
