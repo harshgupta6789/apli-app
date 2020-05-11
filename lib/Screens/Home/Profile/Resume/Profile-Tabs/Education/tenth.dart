@@ -103,6 +103,22 @@ class _TenthState extends State<Tenth> {
     }
   }
 
+  void callApi() async {
+    dynamic result = await _APIService.sendProfileData(education);
+    if (result == -1) {
+      showToast('Failed', context);
+    } else if (result == 0) {
+      showToast('Failed', context);
+    } else if (result == -2) {
+      showToast('Could not connect to server', context);
+    } else if (result == 1) {
+      showToast('Data Updated Successfully', context);
+      Navigator.pop(context);
+    } else {
+      showToast('Unexpected error occured', context);
+    }
+  }
+
   @override
   void initState() {
     init();
@@ -518,6 +534,19 @@ class _TenthState extends State<Tenth> {
                                     ),
                                     onPressed: () async {
                                       if (_formKey.currentState.validate()) {
+                                        String formattedTo, formattedFrom;
+
+                                        formattedFrom =
+                                            format.format(start.toDate());
+                                        formattedFrom =
+                                            formattedFrom + " 00:00:00+0000";
+                                        education['X']['start'] = formattedFrom;
+
+                                        formattedTo =
+                                            format.format(end.toDate());
+                                        formattedTo =
+                                            formattedTo + " 00:00:00+0000";
+                                        education['X']['end'] = formattedTo;
                                         allFiles.add(file);
                                         if (widget.isUg != true) {
                                           Navigator.pushReplacement(
@@ -558,64 +587,42 @@ class _TenthState extends State<Tenth> {
                                                                   .courseEdu]
                                                               ["sem_records"][j]
                                                           ['certificate'] = url;
+                                                      if (allFiles[1] == null &&
+                                                          allFiles[2] == null) {
+                                                        callApi();
+                                                      }
                                                     });
                                                   });
                                                 }
                                               }
-                                            } else {
-                                              if (i == 1) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
+                                            } else if (i == 1) {
+                                              ex = p.basename(allFiles[i].path);
 
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["XII"]
-                                                        ["certificate"] = url;
-                                                  });
-                                                  //print(education);
+                                              _uploadFile(allFiles[i],
+                                                      "Certificate 10th", i, ex)
+                                                  .then((url) {
+                                                setState(() {
+                                                  education["XII"]
+                                                      ["certificate"] = url;
+                                                  if (allFiles[2] == null) {
+                                                    callApi();
+                                                  }
                                                 });
-                                              } else if (i == 2) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["X"]
-                                                        ["certificate"] = url;
-                                                  });
+
+                                                //print(education);
+                                              });
+                                            } else if (i == 2) {
+                                              ex = p.basename(allFiles[i].path);
+                                              _uploadFile(allFiles[i],
+                                                      "Certificate 10th", i, ex)
+                                                  .then((url) {
+                                                setState(() {
+                                                  education["X"]
+                                                      ["certificate"] = url;
+                                                  print(education);
+                                                  callApi();
                                                 });
-                                                // dynamic result =
-                                                //     await _APIService
-                                                //         .sendProfileData(
-                                                //             education);
-                                                // if (result == -1) {
-                                                //   showToast('Failed', context);
-                                                // } else if (result == 0) {
-                                                //   showToast('Failed', context);
-                                                // } else if (result == -2) {
-                                                //   showToast(
-                                                //       'Could not connect to server',
-                                                //       context);
-                                                // } else if (result == 1) {
-                                                //   showToast(
-                                                //       'Data Updated Successfully',
-                                                //       context);
-                                                //   Navigator.pop(context);
-                                                // } else {
-                                                //   showToast(
-                                                //       'Unexpected error occured',
-                                                //       context);
-                                                // }
-                                              }
+                                              });
                                             }
                                           } else {
                                             if (i == 2) {

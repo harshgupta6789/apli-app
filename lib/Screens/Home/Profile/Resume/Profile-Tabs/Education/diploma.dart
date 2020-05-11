@@ -21,7 +21,8 @@ class Diploma extends StatefulWidget {
   final bool isUg;
   final String courseEdu;
 
-  const Diploma({Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu})
+  const Diploma(
+      {Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu})
       : super(key: key);
   @override
   _DiplomaState createState() => _DiplomaState();
@@ -43,16 +44,18 @@ class _DiplomaState extends State<Diploma> {
 
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {
-    StorageReference storageReference;
-    storageReference =
-        FirebaseStorage.instance.ref().child("documents/${value.getString("email")}/$filename");
-    uploadTask = storageReference.putFile(file);
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
+      StorageReference storageReference;
+      storageReference = FirebaseStorage.instance
+          .ref()
+          .child("documents/${value.getString("email")}/$filename");
+      uploadTask = storageReference.putFile(file);
+      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      final String url = (await downloadUrl.ref.getDownloadURL());
 
-    if (url != null) {
-    } else if (url == null) {}
-  });}
+      if (url != null) {
+      } else if (url == null) {}
+    });
+  }
 
   void init() {
     if (widget.xii['XII'] != null)
@@ -331,13 +334,12 @@ class _DiplomaState extends State<Diploma> {
                                 },
                                 onChanged: (date) {
                                   setState(() {
-                                     String formatted;
+                                    String formatted;
                                     if (date != null) {
                                       formatted = format.format(date);
                                       formatted = formatted + " 00:00:00+0000";
                                       education['XII']['start'] = formatted;
                                     }
-                                  
                                   });
                                 },
                                 textInputAction: TextInputAction.next,
@@ -382,7 +384,7 @@ class _DiplomaState extends State<Diploma> {
                                     if (date != null) {
                                       formatted = format.format(date);
                                       formatted = formatted + " 00:00:00+0000";
-                                       education['XII']['end'] = formatted;
+                                      education['XII']['end'] = formatted;
                                     }
                                   });
                                 },
@@ -489,8 +491,23 @@ class _DiplomaState extends State<Diploma> {
                                 ),
                                 onPressed: () {
                                   if (_formKey.currentState.validate()) {
+                                    String formattedTo, formattedFrom;
+                                    setState(() {
+                                      formattedFrom =
+                                          format.format(start.toDate());
+                                      formattedFrom =
+                                          formattedFrom + " 00:00:00+0000";
+                                      education['XII']['start'] = formattedFrom;
+
+                                      formattedTo = format.format(end.toDate());
+                                      formattedTo =
+                                          formattedTo + " 00:00:00+0000";
+                                      education['XII']['end'] = formattedTo;
+                                    });
+
                                     print(education);
                                     allFiles.add(file);
+
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
