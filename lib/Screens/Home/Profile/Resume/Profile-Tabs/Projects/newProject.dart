@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/project.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -453,6 +454,7 @@ class _NewProjectState extends State<NewProject> {
                                     setState(() {
                                       loading = true;
                                     });
+
                                     Navigator.pop(context);
 //                                experiences.removeAt(index);
 //                                await SharedPreferences.getInstance()
@@ -484,54 +486,64 @@ class _NewProjectState extends State<NewProject> {
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) if (validateBulletPoint(
                                         information[
-                                            0])) if (validateBulletPoint(
-                                        information[1])) {
+                                        0])) if (validateBulletPoint(
+                                        information[
+                                        1])) {
                                       setState(() {
                                         loading = true;
                                       });
-                                      Map<String, dynamic> map = {};
-                                      projects[index] = {
-                                        'Name': Name,
-                                        'University_Company':
-                                            University_Company,
-                                        'from': from,
-                                        'to': to,
-                                        'certificate': certificate,
-                                        'bullet_point1': information[0],
-                                        'bullet_point2': information[1]
-                                      };
-                                      map['projects'] = projects;
-                                      print(map);
                                       if (file == null) {
                                         // TODO call API
+                                        projects[index]['Name'] = Name;
+                                        projects[index]['University_Company'] = University_Company;
+                                        projects[index]['from'] = from;
+                                        projects[index]['to'] = to;
+                                        projects[index]['certificate'] = certificate;
+                                        projects[index]['info'] = information;
+                                        Map<String, dynamic> map = {};
+                                        map['project'] = List.from(projects);
+                                        map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
-                                                map);
-                                        if (result == -1) {
-                                          showToast('Failed', context);
-                                        } else if (result == 0) {
-                                          showToast('Failed', context);
-                                        } else if (result == -2) {
+                                        await _APIService.sendProfileData(
+                                            map);
+                                        if(result == 1) {
                                           showToast(
-                                              'Could not connect to server',
+                                              'Data Updated Successfully',
                                               context);
-                                        } else if (result == 1) {
-                                          showToast('Data Updated Successfully',
-                                              context);
-                                          Navigator.pop(context);
                                         } else {
-                                          showToast('Unexpected error occured',
+                                          showToast(
+                                              'Unexpected error occured',
                                               context);
                                         }
-                                        setState(() {
-                                          loading = false;
-                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
                                       } else {
-                                        _uploadFile(file, fileName).then((f) {
+                                        showToast('Uploading certificate will take some time', context);
+                                        _uploadFile(file, fileName).then((f) async {
                                           // TODO call API
-                                          showToast('Data updated successfully',
-                                              context);
+                                          projects[index]['Name'] = Name;
+                                          projects[index]['University_Company'] = University_Company;
+                                          projects[index]['from'] = from;
+                                          projects[index]['to'] = to;
+                                          projects[index]['certificate'] = certificate;
+                                          projects[index]['info'] = information;
+                                          Map<String, dynamic> map = {};
+                                          map['project'] = List.from(projects);
+                                          map['index'] = -1;
+                                          dynamic result =
+                                          await _APIService.sendProfileData(
+                                              map);
+                                          if(result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
+                                          } else {
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
+                                          }
                                           Navigator.pop(context);
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
                                         });
                                       }
                                     }

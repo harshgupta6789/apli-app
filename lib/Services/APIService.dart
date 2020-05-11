@@ -110,6 +110,7 @@ class APIService {
             break;
 
           case 5:
+            print(map);
             if(map['index'] != -1) {
               map['project'].removeAt(map['index']);
             }
@@ -150,12 +151,13 @@ class APIService {
             if(map['index'] != -1) {
               map['extra_curricular'].removeAt(map['index']);
             }
+            print(map['extra_curricular'][0]['info'][0]);
             for (int i = 0; i < map['extra_curricular'].length; i++) {
               map['extra_curricular'][i]['bullet_point1'] = map['extra_curricular'][i]['info'][0];
               map['extra_curricular'][i]['bullet_point2'] = map['extra_curricular'][i]['info'][1];
               if (map['extra_curricular'][i]['start'] != null) {
                 map['extra_curricular'][i]['start'] = apiDateFormat
-                    .format(map['project'][i]['start'].toDate()) +
+                    .format(map['extra_curricular'][i]['start'].toDate()) +
                     " 00:00:00+0000";
               }
               if (map['extra_curricular'][i]['end'] != null) {

@@ -1,5 +1,7 @@
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/newProject.dart';
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -100,6 +102,8 @@ class _ProjectsState extends State<Projects> {
   bool loading = false;
 
   List projects;
+
+  final _APIService = APIService(type: 5);
 
   @override
   void initState() {
@@ -257,11 +261,23 @@ class _ProjectsState extends State<Projects> {
                                             setState(() {
                                               loading = true;
                                             });
-                                            //experiences.removeAt(index);
+                                            Map<String, dynamic> map = {};
+                                            map['project'] = List.from(projects);
+                                            map['index'] = index;
                                             // TODO call API
-                                            setState(() {
-                                              loading = false;
-                                            });
+                                            dynamic result =
+                                            await _APIService.sendProfileData(
+                                                map);
+                                            if(result == 1) {
+                                              showToast(
+                                                  'Data Updated Successfully',
+                                                  context);
+                                            } else {
+                                              showToast(
+                                                  'Unexpected error occured',
+                                                  context);
+                                            }
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>

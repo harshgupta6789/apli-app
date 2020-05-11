@@ -702,9 +702,6 @@ class _NewExperienceState extends State<NewExperience> {
                                       });
                                       if (file == null) {
                                         // TODO call API
-                                        setState(() {
-                                          loading = true;
-                                        });
                                         experiences[index]['Type'] = type;
                                         experiences[index]['company'] = company;
                                         experiences[index]['from'] = from;
@@ -734,10 +731,7 @@ class _NewExperienceState extends State<NewExperience> {
                                       } else {
                                         showToast('Uploading certificate will take some time', context);
                                         _uploadFile(file, fileName).then((f) async {
-                                          // TODO call API
-                                          setState(() {
-                                            loading = true;
-                                          });
+                                          // TODO call API\
                                           experiences[index]['Type'] = type;
                                           experiences[index]['company'] = company;
                                           experiences[index]['from'] = from;

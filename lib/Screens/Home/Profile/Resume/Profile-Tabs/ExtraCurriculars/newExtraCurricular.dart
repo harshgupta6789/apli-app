@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraCurricular.dart';
+import 'package:apli/Services/APIService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
@@ -36,6 +38,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
+  final _APIService = APIService(type: 4);
   StorageUploadTask uploadTask;
 
   Future<void> _uploadFile(File file, String filename) async {
@@ -100,7 +103,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
     certificate = extraCurriculars[index]['certificate'];
     role = extraCurriculars[index]['role'] ?? '';
     organisation = extraCurriculars[index]['organisation'] ?? '';
-    info = extraCurriculars[index]['info'] ?? ['', '', ''];
+    info = extraCurriculars[index]['info'] ?? ['', ''];
     start = extraCurriculars[index]['start'] ?? Timestamp.now();
     end = extraCurriculars[index]['end'] ?? Timestamp.now();
     getInfo();
@@ -483,46 +486,67 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) if (validateBulletPoint(
                                         info[
-                                            0])) if (validateBulletPoint(
-                                        info[1])) {
+                                        0])) if (validateBulletPoint(
+                                        info[
+                                        1])) {
                                       setState(() {
                                         loading = true;
                                       });
                                       if (file == null) {
                                         // TODO call API
-                                        showToast('Data updated successfully',
-                                            context);
-                                        Navigator.pop(context);
-                                      } else {
-                                        _uploadFile(file, fileName).then((f) {
-                                          // TODO call API
-                                          showToast('Data updated successfully',
+                                        extraCurriculars[index]['role'] = role;
+                                        extraCurriculars[index]['organisation'] = organisation;
+                                        extraCurriculars[index]['start'] = start;
+                                        extraCurriculars[index]['end'] = end;
+                                        extraCurriculars[index]['certificate'] = certificate;
+                                        extraCurriculars[index]['info'] = info;
+                                        Map<String, dynamic> map = {};
+                                        map['extra_curricular'] = List.from(extraCurriculars);
+                                        map['index'] = -1;
+                                        dynamic result =
+                                        await _APIService.sendProfileData(
+                                            map);
+                                        if(result == 1) {
+                                          showToast(
+                                              'Data Updated Successfully',
                                               context);
+                                        } else {
+                                          showToast(
+                                              'Unexpected error occured',
+                                              context);
+                                        }
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
+                                      } else {
+                                        showToast('Uploading certificate will take some time', context);
+                                        _uploadFile(file, fileName).then((f) async {
+                                          // TODO call API
+                                          extraCurriculars[index]['role'] = role;
+                                          extraCurriculars[index]['organisation'] = organisation;
+                                          extraCurriculars[index]['start'] = start;
+                                          extraCurriculars[index]['end'] = end;
+                                          extraCurriculars[index]['certificate'] = certificate;
+                                          extraCurriculars[index]['info'] = info;
+                                          Map<String, dynamic> map = {};
+                                          map['extra_curricular'] = List.from(extraCurriculars);
+                                          map['index'] = -1;
+                                          dynamic result =
+                                          await _APIService.sendProfileData(
+                                              map);
+                                          if(result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
+                                          } else {
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
+                                          }
                                           Navigator.pop(context);
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
                                         });
                                       }
                                     }
-//                                  setState(() {
-//                                    loading = true;
-//                                  });
-//                                  experiences[index]['Type'] = type;
-//                                  experiences[index]['company'] = company;
-//                                  experiences[index]['designation'] = designation;
-//                                  experiences[index]['domain'] = domain;
-//                                  experiences[index]['from'] = from;
-//                                  experiences[index]['industry'] = industry;
-//                                  experiences[index]['information'] = information;
-//                                  experiences[index]['to'] = to;
-//                                  if(file == null) {
-//                                    // TODO call API
-//                                    Navigator.pop(context);
-//                                  } else {
-//                                    _uploadFile(file, fileName).then((t) {
-//                                      experiences[index]['certificate'] = certificate;
-//                                      // TODO call API
-//                                      Navigator.pop(context);
-//                                    });
-//                                  }
                                   }),
                             ],
                           ),
