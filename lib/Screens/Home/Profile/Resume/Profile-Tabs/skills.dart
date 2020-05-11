@@ -16,7 +16,7 @@ class _SkillsState extends State<Skills> {
   double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
-  final _APIService = APIService(type: 3);
+  final _APIService = APIService(type: 2);
   List skills;
   Map<String, TextEditingController> temp = {};
   final _formKey = GlobalKey<FormState>();
@@ -705,16 +705,25 @@ class _SkillsState extends State<Skills> {
                                     ),
                                     onPressed: () async {
                                       if (_formKey.currentState.validate()) {
-                                        // setState(() {
-                                        //   loading = true;
-                                        // });
-                                        // // TODO call API
-                                        // showToast('Data Updated Successfully',
-                                        //     context);
-                                        // Navigator.pop(context);
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        Map<String, dynamic> map = {};
+                                        map['skill'] = List.from(skills);
+                                        map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
-                                                skills[0]);
+                                        await _APIService.sendProfileData(
+                                            map);
+                                        if(result == 1) {
+                                          showToast(
+                                              'Data Updated Successfully',
+                                              context);
+                                        } else {
+                                          showToast(
+                                              'Unexpected error occured',
+                                              context);
+                                        }
+                                        Navigator.pop(context);
                                       }
                                     },
                                   ),

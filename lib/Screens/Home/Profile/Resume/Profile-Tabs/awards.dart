@@ -99,13 +99,14 @@ class _AwardsFormState extends State<AwardsForm> {
   Map<String, TextEditingController> temp = {}, temp2 = {};
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("MM-yyyy");
-  final _APIService = APIService(type: 2);
+  final _APIService = APIService(type: 3);
 
   @override
   void initState() {
     email = widget.email;
     snapshot = widget.snapshot;
-    awards = snapshot.data['awards'] ?? [];
+    awards = snapshot.data['award'] ?? [];
+    print(awards);
     super.initState();
   }
 
@@ -500,26 +501,25 @@ class _AwardsFormState extends State<AwardsForm> {
                             ),
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
-                                // bool t = true;
-                                // for (int i = 0; i < awards.length; i++)
-                                //   if (awards[i]['date'] == null) {
-                                //     showToast('Date not provided', context);
-                                //     t = false;
-                                //     break;
-                                //   }
-                                // if (t) {
-                                //   setState(() {
-                                //     loading = true;
-                                //   });
-
-                                //   showToast(
-                                //       'Data Updated Successfully', context);
-                                //   Navigator.pop(context);
-                                // }
+                                setState(() {
+                                  loading = true;
+                                });
+                                Map<String, dynamic> map = {};
+                                map['award'] = List.from(awards);
+                                map['index'] = -1;
                                 dynamic result =
-                                    await _APIService.sendProfileData(
-                                        awards[0]);
-                                // TEST THE API
+                                await _APIService.sendProfileData(
+                                    map);
+                                if(result == 1) {
+                                  showToast(
+                                      'Data Updated Successfully',
+                                      context);
+                                } else {
+                                  showToast(
+                                      'Unexpected error occured',
+                                      context);
+                                }
+                                Navigator.pop(context);
                               }
                             },
                           ),

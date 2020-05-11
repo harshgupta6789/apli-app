@@ -655,27 +655,35 @@ class _NewExperienceState extends State<NewExperience> {
                                         color: basicColor, width: 1.2),
                                   ),
                                   child: Text(
-                                    'Delete',
+                                    widget.old == false ? 'Cancel': 'Delete',
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    Navigator.pop(context);
-//                                experiences.removeAt(index);
-//                                await SharedPreferences.getInstance()
-//                                    .then((prefs) async {
-//                                  await Firestore.instance
-//                                      .collection('candidates')
-//                                      .document(
-//                                      prefs.getString('email'))
-//                                      .setData({
-//                                    'experience': experiences
-//                                  }, merge: true).then((f) {
-//                                    Navigator.pop(context);
-//                                  });
-//                                });
+                                    if(widget.old == false)
+                                      Navigator.pop(context);
+                                    else {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      Map<String, dynamic> map = {};
+                                      map['experience'] = List.from(experiences);
+                                      map['index'] = index;
+                                      // TODO call API
+                                      dynamic result =
+                                      await _APIService.sendProfileData(
+                                          map);
+                                      if(result == 1) {
+                                        showToast(
+                                            'Data Updated Successfully',
+                                            context);
+                                      } else {
+                                        showToast(
+                                            'Unexpected error occured',
+                                            context);
+                                      }
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
+                                    }
                                   }),
                               RaisedButton(
                                   color: Colors.transparent,
