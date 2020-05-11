@@ -276,34 +276,12 @@ class _ExperiencesState extends State<Experiences> {
                                             });
                                             Map<String, dynamic> map = {};
                                             map['experience'] = List.from(experiences);
-                                            map['experience'].removeAt(index);
-                                            print(experiences[1]['from']);
-                                            print(map['experience'].length);
-                                            for(int i = 0; i < map['experience'].length; i ++) {
-                                              if(map['experience'][i]['from'] != null) {
-                                                map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
-                                              }
-                                              if(map['experience'][i]['to'] != null) {
-                                                map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
-                                              }
-                                            }
-                                            print(experiences[0]['from']);
+                                            map['index'] = index;
                                             // TODO call API
                                             dynamic result =
                                             await _APIService.sendProfileData(
                                                 map);
-                                            if (result == -1) {
-                                              showToast('Failed', context);
-                                            } else if (result == 0) {
-                                              showToast('Failed', context);
-                                            } else if (result == -2) {
-                                              showToast(
-                                                  'Could not connect to server',
-                                                  context);
-                                            } else if (result == 1) {
-                                              setState(() {
-                                                experiences.removeAt(index);
-                                              });
+                                            if(result == 1) {
                                               showToast(
                                                   'Data Updated Successfully',
                                                   context);
@@ -312,9 +290,7 @@ class _ExperiencesState extends State<Experiences> {
                                                   'Unexpected error occured',
                                                   context);
                                             }
-                                            setState(() {
-                                              loading = false;
-                                            });
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>

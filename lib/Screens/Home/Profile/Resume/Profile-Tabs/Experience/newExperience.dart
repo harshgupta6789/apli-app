@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/experience.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -704,84 +705,65 @@ class _NewExperienceState extends State<NewExperience> {
                                         setState(() {
                                           loading = true;
                                         });
+                                        experiences[index]['Type'] = type;
+                                        experiences[index]['company'] = company;
+                                        experiences[index]['from'] = from;
+                                        experiences[index]['to'] = to;
+                                        experiences[index]['designation'] = designation;
+                                        experiences[index]['industry'] = industry;
+                                        experiences[index]['domain'] = domain;
                                         experiences[index]['certificate'] = certificate;
+                                        experiences[index]['information'] = information;
                                         Map<String, dynamic> map = {};
-                                        map['experience'] = experiences;
-                                        for(int i = 0; i < experiences.length; i ++) {
-                                          if(map['experience'][i]['from'] != null) {
-                                            map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
-                                          }
-                                          if(map['experience'][i]['to'] != null) {
-                                            map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
-                                          }
-                                        }
-                                        // TODO call API
+                                        map['experience'] = List.from(experiences);
+                                        map['index'] = -1;
                                         dynamic result =
                                         await _APIService.sendProfileData(
                                             map);
-                                        if (result == -1) {
-                                          showToast('Failed', context);
-                                        } else if (result == 0) {
-                                          showToast('Failed', context);
-                                        } else if (result == -2) {
-                                          showToast(
-                                              'Could not connect to server',
-                                              context);
-                                        } else if (result == 1) {
+                                        if(result == 1) {
                                           showToast(
                                               'Data Updated Successfully',
                                               context);
-                                          Navigator.pop(context);
                                         } else {
                                           showToast(
                                               'Unexpected error occured',
                                               context);
                                         }
-                                        setState(() {
-                                          loading = false;
-                                        });
+                                        Navigator.pop(context);
+                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
                                       } else {
+                                        showToast('Uploading certificate will take some time', context);
                                         _uploadFile(file, fileName).then((f) async {
                                           // TODO call API
                                           setState(() {
                                             loading = true;
                                           });
+                                          experiences[index]['Type'] = type;
+                                          experiences[index]['company'] = company;
+                                          experiences[index]['from'] = from;
+                                          experiences[index]['to'] = to;
+                                          experiences[index]['designation'] = designation;
+                                          experiences[index]['industry'] = industry;
+                                          experiences[index]['domain'] = domain;
                                           experiences[index]['certificate'] = certificate;
+                                          experiences[index]['information'] = information;
                                           Map<String, dynamic> map = {};
-                                          map['experience'] = experiences;
-                                          for(int i = 0; i < experiences.length; i ++) {
-                                            if(map['experience'][i]['from'] != null) {
-                                              map['experience'][i]['from'] = apiDateFormat.format(map['experience'][i]['from'].toDate()) + " 00:00:00+0000";
-                                            }
-                                            if(map['experience'][i]['to'] != null) {
-                                              map['experience'][i]['to'] = apiDateFormat.format(map['experience'][i]['to'].toDate()) + " 00:00:00+0000";
-                                            }
-                                          }
-                                          // TODO call API
+                                          map['experience'] = List.from(experiences);
+                                          map['index'] = -1;
                                           dynamic result =
-                                              await _APIService.sendProfileData(
+                                          await _APIService.sendProfileData(
                                               map);
-                                          if (result == -1) {
-                                            showToast('Failed', context);
-                                          } else if (result == 0) {
-                                            showToast('Failed', context);
-                                          } else if (result == -2) {
-                                            showToast(
-                                                'Could not connect to server',
-                                                context);
-                                          } else if (result == 1) {
+                                          if(result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
-                                            Navigator.pop(context);
                                           } else {
                                             showToast(
                                                 'Unexpected error occured',
                                                 context);
                                           }
-                                          setState(() {
-                                            loading = false;
-                                          });
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
                                         });
                                       }
                                     }
