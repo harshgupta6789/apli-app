@@ -13,13 +13,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Diploma extends StatefulWidget {
   final Map<dynamic, dynamic> xii;
   final List allFiles;
   final bool isUg;
+  final String courseEdu;
 
-  const Diploma({Key key, @required this.xii, this.allFiles, this.isUg})
+  const Diploma({Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu})
       : super(key: key);
   @override
   _DiplomaState createState() => _DiplomaState();
@@ -30,7 +32,7 @@ class _DiplomaState extends State<Diploma> {
   File file;
   List allFiles;
   bool error = false, loading = false;
-  final format = DateFormat("yyyy-MM");
+  final format = DateFormat("yyyy-MM-dd");
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
@@ -40,16 +42,17 @@ class _DiplomaState extends State<Diploma> {
   Map<dynamic, dynamic> education;
 
   Future<void> _uploadFile(File file, String filename) async {
+    await SharedPreferences.getInstance().then((value) async {
     StorageReference storageReference;
     storageReference =
-        FirebaseStorage.instance.ref().child("documents/$filename");
+        FirebaseStorage.instance.ref().child("documents/${value.getString("email")}/$filename");
     uploadTask = storageReference.putFile(file);
     final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
     final String url = (await downloadUrl.ref.getDownloadURL());
 
     if (url != null) {
     } else if (url == null) {}
-  }
+  });}
 
   void init() {
     if (widget.xii['XII'] != null)
@@ -300,7 +303,7 @@ class _DiplomaState extends State<Diploma> {
                             child: DateTimeField(
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'cannot be empty';
+                                    return 'Date cannot be empty';
                                   }
                                   return null;
                                 },
@@ -328,14 +331,13 @@ class _DiplomaState extends State<Diploma> {
                                 },
                                 onChanged: (date) {
                                   setState(() {
-                                    start = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
-                                    education['XII']['start'] = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
+                                     String formatted;
+                                    if (date != null) {
+                                      formatted = format.format(date);
+                                      formatted = formatted + " 00:00:00+0000";
+                                      education['XII']['start'] = formatted;
+                                    }
+                                  
                                   });
                                 },
                                 textInputAction: TextInputAction.next,
@@ -348,7 +350,7 @@ class _DiplomaState extends State<Diploma> {
                             child: DateTimeField(
                                 validator: (value) {
                                   if (value == null) {
-                                    return 'cannot be empty';
+                                    return 'Date cannot be empty';
                                   }
                                   return null;
                                 },
@@ -376,14 +378,12 @@ class _DiplomaState extends State<Diploma> {
                                 },
                                 onChanged: (date) {
                                   setState(() {
-                                    end = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
-                                    education['XII']['end'] = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
+                                    String formatted;
+                                    if (date != null) {
+                                      formatted = format.format(date);
+                                      formatted = formatted + " 00:00:00+0000";
+                                       education['XII']['end'] = formatted;
+                                    }
                                   });
                                 },
                                 textInputAction: TextInputAction.next,
@@ -496,6 +496,7 @@ class _DiplomaState extends State<Diploma> {
                                         MaterialPageRoute(
                                             builder: (context) => Tenth(
                                                   x: education,
+                                                  courseEdu: widget.courseEdu,
                                                   allFiles: allFiles,
                                                   isUg: widget.isUg,
                                                 )));

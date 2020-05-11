@@ -20,8 +20,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Other extends StatefulWidget {
   final Map<dynamic, dynamic> oth;
   final List allFiles;
+  final courseEdu;
 
-  const Other({Key key, @required this.oth, this.allFiles}) : super(key: key);
+  const Other({Key key, @required this.oth, this.allFiles, this.courseEdu}) : super(key: key);
   @override
   _OtherState createState() => _OtherState();
 }
@@ -40,16 +41,24 @@ class _OtherState extends State<Other> {
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
   final _APIService = APIService(type: 7);
-  Future<void> _uploadFile(File file, String filename) async {
-    StorageReference storageReference;
-    storageReference =
-        FirebaseStorage.instance.ref().child("documents/$filename");
-    uploadTask = storageReference.putFile(file);
-    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    final String url = (await downloadUrl.ref.getDownloadURL());
 
-    if (url != null) {
-    } else if (url == null) {}
+  Future<String> _uploadFile(
+      File file, String filename, int index, String extension) async {
+    String url;
+    await SharedPreferences.getInstance().then((value) async {
+      StorageReference storageReference;
+      storageReference = FirebaseStorage.instance
+          .ref()
+          .child("documents/${value.getString("email")}/$filename$extension");
+      uploadTask = storageReference.putFile(file);
+      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+      url = (await downloadUrl.ref.getDownloadURL());
+      if (url != null) {
+        print(url);
+        setState(() {});
+      } else if (url == null) {}
+    });
+    return url;
   }
 
   void init() {
@@ -633,10 +642,141 @@ class _OtherState extends State<Other> {
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                    allFiles.add(file);
-                                    // TODO call API
-                                    Navigator.pop(context);
-                                  }
+                                        allFiles.add(file);
+
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        for (int i = 0;
+                                            i < allFiles.length;
+                                            i++) {
+                                          if (allFiles[i] != null) {
+                                            showToast(
+                                                'Uploading Documents\n might take some time',
+                                                context,
+                                                duration: 5);
+                                            String ex;
+
+                                            if (i == 0) {
+                                              for (int j = 0;
+                                                  j < allFiles[0][0].length;
+                                                  j++) {
+                                                if ((allFiles[0][0][j]) !=
+                                                    null) {
+                                                  ex = p.extension(p.basename(
+                                                      allFiles[0][0][j].path));
+
+                                                  _uploadFile(allFiles[0][0][j],
+                                                          "Sem $j", i, ex)
+                                                      .then((url) {
+                                                    setState(() {
+                                                      education[widget
+                                                                  .courseEdu]
+                                                              ["sem_records"][j]
+                                                          ['certificate'] = url;
+                                                    });
+                                                  });
+                                                }
+                                              }
+                                            } else {
+                                              if (i == 1) {
+                                                ex = p
+                                                    .basename(allFiles[i].path);
+
+                                                _uploadFile(
+                                                        allFiles[i],
+                                                        "Certificate 10th",
+                                                        i,
+                                                        ex)
+                                                    .then((url) {
+                                                  setState(() {
+                                                    education["XII"]
+                                                        ["certificate"] = url;
+                                                  });
+                                                  //print(education);
+                                                });
+                                              } else if (i == 2) {
+                                                ex = p
+                                                    .basename(allFiles[i].path);
+                                                _uploadFile(
+                                                        allFiles[i],
+                                                        "Certificate 10th",
+                                                        i,
+                                                        ex)
+                                                    .then((url) {
+                                                  setState(() {
+                                                    education["X"]
+                                                        ["certificate"] = url;
+                                                  });
+                                                });
+                                                // dynamic result =
+                                                //     await _APIService
+                                                //         .sendProfileData(
+                                                //             education);
+                                                // if (result == -1) {
+                                                //   showToast('Failed', context);
+                                                // } else if (result == 0) {
+                                                //   showToast('Failed', context);
+                                                // } else if (result == -2) {
+                                                //   showToast(
+                                                //       'Could not connect to server',
+                                                //       context);
+                                                // } else if (result == 1) {
+                                                //   showToast(
+                                                //       'Data Updated Successfully',
+                                                //       context);
+                                                //   Navigator.pop(context);
+                                                // } else {
+                                                //   showToast(
+                                                //       'Unexpected error occured',
+                                                //       context);
+                                                // }
+                                              }
+                                            }
+                                          } else {
+                                            if (i == 2) {
+                                               showToast(
+                                                'Uploading Documents\n might take some time',
+                                                context,
+                                                duration: 5);
+                                              dynamic result = await _APIService
+                                                  .sendProfileData(education);
+                                              if (result == -1) {
+                                                showToast('Failed', context);
+                                              } else if (result == 0) {
+                                                showToast('Failed', context);
+                                              } else if (result == -2) {
+                                                showToast(
+                                                    'Could not connect to server',
+                                                    context);
+                                              } else if (result == 1) {
+                                                showToast(
+                                                    'Data Updated Successfully',
+                                                    context);
+                                                Navigator.pop(context);
+                                              } else {
+                                                showToast(
+                                                    'Unexpected error occured',
+                                                    context);
+                                              }
+                                            }
+                                          }
+                                        }
+
+                                        // allFiles.add(file);
+                                        // print(widget.isUg);
+                                        // if (widget.isUg!=true)
+                                        //   Navigator.pushReplacement(
+                                        //       context,
+                                        //       MaterialPageRoute(
+                                        //           builder: (context) => Other(
+                                        //                 oth: education,
+                                        //                 allFiles: allFiles,
+                                        //               )));
+                                        // else {
+                                        //   Navigator.pop(context);
+                                        // }
+                                      }
                                 }),
                           ],
                         ),
