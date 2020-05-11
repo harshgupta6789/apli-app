@@ -447,28 +447,35 @@ class _NewProjectState extends State<NewProject> {
                                         color: basicColor, width: 1.2),
                                   ),
                                   child: Text(
-                                    'Delete',
+                                    widget.old == false ? 'Cancel': 'Delete',
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-
-                                    Navigator.pop(context);
-//                                experiences.removeAt(index);
-//                                await SharedPreferences.getInstance()
-//                                    .then((prefs) async {
-//                                  await Firestore.instance
-//                                      .collection('candidates')
-//                                      .document(
-//                                      prefs.getString('email'))
-//                                      .setData({
-//                                    'experience': experiences
-//                                  }, merge: true).then((f) {
-//                                    Navigator.pop(context);
-//                                  });
-//                                });
+                                    if(widget.old == false)
+                                      Navigator.pop(context);
+                                    else {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      Map<String, dynamic> map = {};
+                                      map['project'] = List.from(projects);
+                                      map['index'] = index;
+                                      // TODO call API
+                                      dynamic result =
+                                      await _APIService.sendProfileData(
+                                          map);
+                                      if(result == 1) {
+                                        showToast(
+                                            'Data Updated Successfully',
+                                            context);
+                                      } else {
+                                        showToast(
+                                            'Unexpected error occured',
+                                            context);
+                                      }
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
+                                    }
                                   }),
                               RaisedButton(
                                   color: Colors.transparent,
@@ -499,7 +506,7 @@ class _NewProjectState extends State<NewProject> {
                                         projects[index]['from'] = from;
                                         projects[index]['to'] = to;
                                         projects[index]['certificate'] = certificate;
-                                        projects[index]['info'] = information;
+                                        projects[index]['information'] = information;
                                         Map<String, dynamic> map = {};
                                         map['project'] = List.from(projects);
                                         map['index'] = -1;
@@ -526,7 +533,7 @@ class _NewProjectState extends State<NewProject> {
                                           projects[index]['from'] = from;
                                           projects[index]['to'] = to;
                                           projects[index]['certificate'] = certificate;
-                                          projects[index]['info'] = information;
+                                          projects[index]['information'] = information;
                                           Map<String, dynamic> map = {};
                                           map['project'] = List.from(projects);
                                           map['index'] = -1;
