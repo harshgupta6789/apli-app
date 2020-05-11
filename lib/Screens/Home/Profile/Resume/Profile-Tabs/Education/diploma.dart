@@ -37,7 +37,7 @@ class _DiplomaState extends State<Diploma> {
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
-  String institute, stream, board, cgpa, email, specialization;
+  String institute, stream, board, cgpa, email, specialization , certificate;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -69,6 +69,7 @@ class _DiplomaState extends State<Diploma> {
         start = widget.xii['XII']['start'] ?? Timestamp.now();
         end = widget.xii['XII']['end'] ?? Timestamp.now();
         unit = widget.xii['X']['score_unit'];
+        certificate = widget.xii['XII']['certificate'];
       });
   }
 
@@ -419,7 +420,7 @@ class _DiplomaState extends State<Diploma> {
                                   SizedBox(
                                     width: width * 0.15 * scale,
                                     child: AutoSizeText(
-                                      fileName ?? '',
+                                      certificate ?? '',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
                                     ),

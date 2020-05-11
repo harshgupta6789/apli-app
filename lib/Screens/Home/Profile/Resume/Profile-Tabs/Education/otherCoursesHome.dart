@@ -12,8 +12,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OtherCoursesHome extends StatefulWidget {
   final Map education;
   final String courseEdu;
+  final List allFiles;
 
-  const OtherCoursesHome({Key key, this.education, this.courseEdu})
+  const OtherCoursesHome(
+      {Key key, this.education, this.courseEdu, this.allFiles})
       : super(key: key);
   @override
   _OtherCoursesHomeState createState() => _OtherCoursesHomeState();
@@ -23,7 +25,8 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
   double width, height;
   bool loading = false;
   Map temp = {};
-  List experiences;
+  List otherCourses = [];
+  List nameOfOtherCourses = [];
 
   void init() {
     setState(() {
@@ -31,8 +34,12 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
       temp.remove("X");
       temp.remove("XII");
       temp.remove(widget.courseEdu);
-      print(temp.keys);
-      print(temp);
+      print(temp.keys.toList());
+      nameOfOtherCourses = temp.keys.toList();
+      temp.forEach((k, v) {
+        otherCourses.add(v);
+      });
+      print(otherCourses);
     });
   }
 
@@ -40,6 +47,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
 
   @override
   void initState() {
+    init();
     super.initState();
   }
 
@@ -55,7 +63,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(
-                experience,
+                "Other Courses",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 24,
@@ -89,14 +97,14 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                         side: BorderSide(color: basicColor, width: 1.5),
                       ),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => NewExperience(
-                                      old: false,
-                                      experiences: experiences,
-                                      index: experiences.length,
-                                    )));
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => NewExperience(
+                        //               old: false,
+                        //               otherCourses: otherCourses,
+                        //               index: otherCourses.length,
+                        //             )));
                       },
                       child: ListTile(
                         leading: Text(
@@ -119,31 +127,31 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
-                      itemCount: experiences.length,
+                      itemCount: otherCourses.length,
                       itemBuilder: (BuildContext context1, int index) {
-                        String from = experiences[index]['from'] == null
+                        String from = otherCourses[index]['start'] == null
                             ? null
                             : DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['from']
+                                        otherCourses[index]['start']
                                             .microsecondsSinceEpoch)
                                     .month
                                     .toString() +
                                 '-' +
                                 DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['from']
+                                        otherCourses[index]['start']
                                             .microsecondsSinceEpoch)
                                     .year
                                     .toString();
-                        String to = experiences[index]['to'] == null
+                        String to = otherCourses[index]['end'] == null
                             ? null
                             : DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['to']
+                                        otherCourses[index]['end']
                                             .microsecondsSinceEpoch)
                                     .month
                                     .toString() +
                                 '-' +
                                 DateTime.fromMicrosecondsSinceEpoch(
-                                        experiences[index]['to']
+                                        otherCourses[index]['end']
                                             .microsecondsSinceEpoch)
                                     .year
                                     .toString();
@@ -152,16 +160,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                             ((from != null && to == null)
                                 ? 'ongoing'
                                 : to ?? '');
-                        String info1, info2, info3;
-                        info1 = experiences[index]['information'] == null
-                            ? ''
-                            : experiences[index]['information'][0];
-                        info2 = experiences[index]['information'] == null
-                            ? ''
-                            : experiences[index]['information'][1];
-                        info3 = experiences[index]['information'] == null
-                            ? ''
-                            : experiences[index]['information'][2];
+
                         return Column(
                           children: <Widget>[
                             Stack(
@@ -172,7 +171,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                   padding: EdgeInsets.all(8),
                                   child: ListTile(
                                     title: Text(
-                                      experiences[index]['designation'] ??
+                                      otherCourses[index]['institute'] ??
                                           'Designation',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
@@ -184,22 +183,20 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text('Type: ' +
-                                            (experiences[index]['Type'] ?? '')),
-                                        Text('Company: ' +
-                                            (experiences[index]['company'] ??
+                                        Text('specialization: ' +
+                                            (otherCourses[index]
+                                                    ['specialization'] ??
+                                                '')),
+                                        Text('board: ' +
+                                            (otherCourses[index]['board'] ??
                                                 '')),
                                         Text('Duration: ' + duration),
-                                        Text('Industry Type: ' +
-                                            (experiences[index]['industry'] ??
-                                                '')),
-                                        Text('Domain: ' +
-                                            (experiences[index]['domain'] ??
-                                                '')),
-                                        Text('Responsibilities: '),
-                                        Text('1: ' + info1),
-                                        Text('2: ' + info2),
-                                        Text('3: ' + info3),
+                                        // Text('Industry Type: ' +
+                                        //     (otherCourses[index]['industry'] ??
+                                        //         '')),
+                                        // Text('Domain: ' +
+                                        //     (otherCourses[index]['domain'] ??
+                                        //         '')),
                                       ],
                                     ),
                                     contentPadding: EdgeInsets.only(left: 8),
@@ -222,31 +219,31 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                                         oth: widget.education,
                                                       )));
                                         } else if (result == 1) {
-                                          setState(() {
-                                            loading = true;
-                                          });
-                                          Map<String, dynamic> map = {};
-                                          map['experience'] =
-                                              List.from(experiences);
-                                          map['index'] = index;
-                                          // TODO call API
-                                          dynamic result =
-                                              await _APIService.sendProfileData(
-                                                  map);
-                                          if (result == 1) {
-                                            showToast(
-                                                'Data Updated Successfully',
-                                                context);
-                                          } else {
-                                            showToast(
-                                                'Unexpected error occured',
-                                                context);
-                                          }
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      OtherCoursesHome()));
+                                          // setState(() {
+                                          //   loading = true;
+                                          // });
+                                          // Map<String, dynamic> map = {};
+                                          // map['experience'] =
+                                          //     List.from(otherCourses);
+                                          // map['index'] = index;
+                                          // // TODO call API
+                                          // dynamic result =
+                                          //     await _APIService.sendProfileData(
+                                          //         map);
+                                          // if (result == 1) {
+                                          //   showToast(
+                                          //       'Data Updated Successfully',
+                                          //       context);
+                                          // } else {
+                                          //   showToast(
+                                          //       'Unexpected error occured',
+                                          //       context);
+                                          // }
+                                          // Navigator.pushReplacement(
+                                          //     context,
+                                          //     MaterialPageRoute(
+                                          //         builder: (context) =>
+                                          //             OtherCoursesHome()));
                                         }
                                       },
                                       itemBuilder: (BuildContext context) =>
@@ -282,7 +279,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                         );
                       },
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

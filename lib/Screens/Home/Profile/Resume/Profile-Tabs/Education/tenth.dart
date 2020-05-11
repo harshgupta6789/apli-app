@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
+import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCoursesHome.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
@@ -40,7 +41,7 @@ class _TenthState extends State<Tenth> {
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
-  String institute, stream, board, cgpa, email, specialization;
+  String institute, stream, board, cgpa, email, specialization, certificate;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -78,6 +79,7 @@ class _TenthState extends State<Tenth> {
         start = widget.x['X']['start'] ?? Timestamp.now();
         end = widget.x['X']['end'] ?? Timestamp.now();
         unit = widget.x['X']['score_unit'];
+        certificate = widget.x['X']['certificate'];
       });
   }
 
@@ -459,7 +461,7 @@ class _TenthState extends State<Tenth> {
                                       SizedBox(
                                         width: width * 0.15 * scale,
                                         child: AutoSizeText(
-                                          fileName ?? '',
+                                          certificate ?? '',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                         ),
@@ -552,103 +554,124 @@ class _TenthState extends State<Tenth> {
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => Other(
-                                                        oth: education,
+                                                  builder: (context) =>
+                                                      OtherCoursesHome(
+                                                        education: education,
                                                         allFiles: allFiles,
+                                                        courseEdu:
+                                                            widget.courseEdu,
                                                       )));
-                                        }
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        for (int i = 0;
-                                            i < allFiles.length;
-                                            i++) {
-                                          if (allFiles[i] != null) {
-                                            showToast(
-                                                'Uploading Documents\n might take some time',
-                                                context,
-                                                duration: 5);
-                                            String ex;
-
-                                            if (i == 0) {
-                                              for (int j = 0;
-                                                  j < allFiles[0][0].length;
-                                                  j++) {
-                                                if ((allFiles[0][0][j]) !=
-                                                    null) {
-                                                  ex = p.extension(p.basename(
-                                                      allFiles[0][0][j].path));
-
-                                                  _uploadFile(allFiles[0][0][j],
-                                                          "Sem $j", i, ex)
-                                                      .then((url) {
-                                                    setState(() {
-                                                      education[widget
-                                                                  .courseEdu]
-                                                              ["sem_records"][j]
-                                                          ['certificate'] = url;
-                                                      if (allFiles[1] == null &&
-                                                          allFiles[2] == null) {
-                                                        callApi();
-                                                      }
-                                                    });
-                                                  });
-                                                }
-                                              }
-                                            } else if (i == 1) {
-                                              ex = p.basename(allFiles[i].path);
-
-                                              _uploadFile(allFiles[i],
-                                                      "Certificate 10th", i, ex)
-                                                  .then((url) {
-                                                setState(() {
-                                                  education["XII"]
-                                                      ["certificate"] = url;
-                                                  if (allFiles[2] == null) {
-                                                    callApi();
-                                                  }
-                                                });
-
-                                                //print(education);
-                                              });
-                                            } else if (i == 2) {
-                                              ex = p.basename(allFiles[i].path);
-                                              _uploadFile(allFiles[i],
-                                                      "Certificate 10th", i, ex)
-                                                  .then((url) {
-                                                setState(() {
-                                                  education["X"]
-                                                      ["certificate"] = url;
-                                                  print(education);
-                                                  callApi();
-                                                });
-                                              });
-                                            }
-                                          } else {
-                                            if (i == 2) {
+                                        } else {
+                                          setState(() {
+                                            loading = true;
+                                          });
+                                          for (int i = 0;
+                                              i < allFiles.length;
+                                              i++) {
+                                            if (allFiles[i] != null) {
                                               showToast(
                                                   'Uploading Documents\n might take some time',
                                                   context,
                                                   duration: 5);
-                                              dynamic result = await _APIService
-                                                  .sendProfileData(education);
-                                              if (result == -1) {
-                                                showToast('Failed', context);
-                                              } else if (result == 0) {
-                                                showToast('Failed', context);
-                                              } else if (result == -2) {
+                                              String ex;
+
+                                              if (i == 0) {
+                                                for (int j = 0;
+                                                    j < allFiles[0][0].length;
+                                                    j++) {
+                                                  if ((allFiles[0][0][j]) !=
+                                                      null) {
+                                                    ex = p.extension(p.basename(
+                                                        allFiles[0][0][j]
+                                                            .path));
+
+                                                    _uploadFile(
+                                                            allFiles[0][0][j],
+                                                            "Sem $j",
+                                                            i,
+                                                            ex)
+                                                        .then((url) {
+                                                      setState(() {
+                                                        education[widget
+                                                                    .courseEdu][
+                                                                "sem_records"][j]
+                                                            [
+                                                            'certificate'] = url;
+                                                        if (allFiles[1] ==
+                                                                null &&
+                                                            allFiles[2] ==
+                                                                null) {
+                                                          callApi();
+                                                        }
+                                                      });
+                                                    });
+                                                  }
+                                                }
+                                              } else if (i == 1) {
+                                                ex = p
+                                                    .basename(allFiles[i].path);
+
+                                                _uploadFile(
+                                                        allFiles[i],
+                                                        "Certificate 10th",
+                                                        i,
+                                                        ex)
+                                                    .then((url) {
+                                                  setState(() {
+                                                    education["XII"]
+                                                        ["certificate"] = url;
+                                                    if (allFiles[2] == null) {
+                                                      callApi();
+                                                    }
+                                                  });
+
+                                                  //print(education);
+                                                });
+                                              } else if (i == 2) {
+                                                ex = p
+                                                    .basename(allFiles[i].path);
+                                                _uploadFile(
+                                                        allFiles[i],
+                                                        "Certificate 10th",
+                                                        i,
+                                                        ex)
+                                                    .then((url) {
+                                                  setState(() {
+                                                    education["X"]
+                                                        ["certificate"] = url;
+                                                    print(education);
+                                                    callApi();
+                                                  });
+                                                });
+                                              }
+                                            } else {
+                                              if (i == 2) {
                                                 showToast(
-                                                    'Could not connect to server',
-                                                    context);
-                                              } else if (result == 1) {
-                                                showToast(
-                                                    'Data Updated Successfully',
-                                                    context);
-                                                Navigator.pop(context);
-                                              } else {
-                                                showToast(
-                                                    'Unexpected error occured',
-                                                    context);
+                                                    'Uploading Documents\n might take some time',
+                                                    context,
+                                                    duration: 5);
+                                                dynamic result =
+                                                    await _APIService
+                                                        .sendProfileData(
+                                                            education);
+                                                if (result == -1) {
+                                                  showToast('Failed', context);
+                                                } else if (result == 0) {
+                                                  showToast('Failed', context);
+                                                } else if (result == -2) {
+                                                  showToast(
+                                                      'Could not connect to server',
+                                                      context);
+                                                } else if (result == 1) {
+                                                  showToast(
+                                                      'Data Updated Successfully',
+                                                      context);
+                                                  Navigator.pop(context);
+                                                } else {
+                                                  showToast(
+                                                      'Unexpected error occured',
+                                                      context);
+                                                }
                                               }
                                             }
                                           }

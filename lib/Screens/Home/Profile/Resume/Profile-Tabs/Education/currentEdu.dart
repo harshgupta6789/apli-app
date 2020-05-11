@@ -431,7 +431,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                 SizedBox(
                                                   width: width * 0.3 * scale,
                                                   child: AutoSizeText(
-                                                    currentFiles[index] != null
+                                                    edu[course]['sem_records']
+                                                                    [index][
+                                                                'certificate'] ??
+                                                            currentFiles[
+                                                                    index] !=
+                                                                null
                                                         ? p.basename(
                                                                 currentFiles[
                                                                         index]
@@ -582,11 +587,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         sems.add(x);
                                       }
                                       print(sems);
-                                   
-                                      edu[course]['sem_records'] = sems;
-                                     
 
-                                     print(edu);
+                                      edu[course]['sem_records'] = sems;
+
+                                      print(edu);
                                       //uploadAll();
 //                                print(edu);
 //                                await SharedPreferences.getInstance().then((value) async {
