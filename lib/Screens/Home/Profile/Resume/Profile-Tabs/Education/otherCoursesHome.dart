@@ -97,14 +97,17 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                         side: BorderSide(color: basicColor, width: 1.5),
                       ),
                       onPressed: () {
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => NewExperience(
-                        //               old: false,
-                        //               otherCourses: otherCourses,
-                        //               index: otherCourses.length,
-                        //             )));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Other(
+                                      old: false,
+                                      oth: widget.education,
+                                      otherCourses : otherCourses,
+                                      nameofOtherCourses: nameOfOtherCourses,
+                                      index: otherCourses.length,
+                                      allFiles: widget.allFiles,
+                                    )));
                       },
                       child: ListTile(
                         leading: Text(

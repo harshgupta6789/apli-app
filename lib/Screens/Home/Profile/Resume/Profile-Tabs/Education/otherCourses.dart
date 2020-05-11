@@ -19,10 +19,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Other extends StatefulWidget {
   final Map<dynamic, dynamic> oth;
-  final List allFiles;
-  final courseEdu;
+  final List allFiles, otherCourses, nameofOtherCourses;
+  final String courseEdu;
+  final bool old;
+  final int index;
 
-  const Other({Key key, @required this.oth, this.allFiles, this.courseEdu}) : super(key: key);
+  const Other(
+      {Key key,
+      @required this.oth,
+      this.allFiles,
+      this.courseEdu,
+      this.old,
+      this.otherCourses,
+      this.nameofOtherCourses,
+      this.index})
+      : super(key: key);
   @override
   _OtherState createState() => _OtherState();
 }
@@ -36,10 +47,12 @@ class _OtherState extends State<Other> {
   final _formKey = GlobalKey<FormState>();
   String fileName;
   String unit;
+  List otherCourses;
   String institute, board, cgpa, email, fos;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
+  int index;
   final _APIService = APIService(type: 7);
 
   Future<String> _uploadFile(
@@ -61,19 +74,39 @@ class _OtherState extends State<Other> {
     return url;
   }
 
+  void callApi() async {
+    dynamic result = await _APIService.sendProfileData(education);
+    if (result == -1) {
+      showToast('Failed', context);
+    } else if (result == 0) {
+      showToast('Failed', context);
+    } else if (result == -2) {
+      showToast('Could not connect to server', context);
+    } else if (result == 1) {
+      showToast('Data Updated Successfully', context);
+      Navigator.pop(context);
+    } else {
+      showToast('Unexpected error occured', context);
+    }
+  }
+
   void init() {
-    if (widget.oth['other-education'] != null)
-      setState(() {
-        allFiles = widget.allFiles;
-        education = widget.oth;
-        institute = widget.oth['other-education']['institute'] ?? "";
-        board = widget.oth['other-education']['board'] ?? "";
-        cgpa = widget.oth['other-education']['score'].toString() ?? "";
-        fos = widget.oth['other-education']['specialization'];
-        start = widget.oth['other-education']['start'] ?? Timestamp.now();
-        end = widget.oth['other-education']['end'] ?? Timestamp.now();
-        unit = widget.oth['other-education']['score_unit'];
-      });
+    index = widget.index;
+    otherCourses = widget.otherCourses;
+    if (widget.old == false) {
+      otherCourses.add({});
+    }
+    setState(() {
+      allFiles = widget.allFiles;
+      education = widget.oth;
+      institute = widget.otherCourses[index]['institute'] ?? "";
+      board = widget.otherCourses[index]['board'] ?? "";
+      cgpa = widget.otherCourses[index]['cgpa'].toString() ?? "";
+      fos = widget.otherCourses[index]['specialization'];
+      start = widget.otherCourses[index]['start'] ?? Timestamp.now();
+      end = widget.otherCourses[index]['end'] ?? Timestamp.now();
+      unit = widget.otherCourses[index]['cgpa_unit'];
+    });
     print(education);
   }
 
@@ -142,248 +175,83 @@ class _OtherState extends State<Other> {
             ),
             preferredSize: Size.fromHeight(55),
           ),
-        body: ScrollConfiguration(
-          behavior: MyBehavior(),
-          child: SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: EdgeInsets.only(
-                    left: width * 0.1, top: 20, right: width * 0.1),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(height: 30),
-                    TextFormField(
-                      initialValue:
-                          education['other-education']['institute'] ?? '',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      decoration: x("Institute Name"),
-                      onChanged: (text) {
-                        setState(() =>
-                            education['other-education']['institute'] = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'Institution cannot be empty';
-                        else
-                          return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      initialValue: education['other-education']['board'] ?? '',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      onChanged: (text) {
-                        setState(
-                            () => education['other-education']['board'] = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'Board cannot be empty';
-                        else
-                          return null;
-                      },
-                      decoration: x('Board/University'),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      initialValue:
-                          education['other-education']['specialization'] ?? '',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      onChanged: (text) {
-                        setState(() => education['other-education']
-                            ['specialization'] = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'Field Of Study cannot be empty';
-                        else
-                          return null;
-                      },
-                      decoration: x('Field Of Study'),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      initialValue:
-                          education['other-education']['specialization'] ?? '',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (_) =>
-                          FocusScope.of(context).nextFocus(),
-                      obscureText: false,
-                      onChanged: (text) {
-                        setState(() => education['other-education']
-                            ['specialization'] = text);
-                      },
-                      validator: (value) {
-                        if (value.isEmpty)
-                          return 'Degree cannot be empty';
-                        else
-                          return null;
-                      },
-                      decoration: x('Degree'),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: width * 0.35,
-                          child: TextFormField(
-                            initialValue:
-                                education['other-education']['score'] == null
-                                    ? ''
-                                    : education['other-education']['score']
-                                        .toString(),
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.numberWithOptions(),
-                            onFieldSubmitted: (_) =>
-                                FocusScope.of(context).nextFocus(),
-                            obscureText: false,
-                            decoration: x("Score"),
-                            onChanged: (text) {
-                              setState(() => education['other-education']
-                                  ['score'] = int.tryParse(text));
-                            },
-                            validator: (value) {
-                              if (value.isEmpty)
-                                return 'score cannot be empty';
-                              else
-                                return null;
-                            },
-                          ),
-                        ),
-                        Container(
-                          width: width * 0.35,
-                          child: Stack(
-                            children: <Widget>[
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: TextFormField(
-                                  enabled: false,
-                                  style: TextStyle(fontWeight: FontWeight.w500),
-                                  decoration: x("Unit"),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: Container(
-                                    padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                                    child: DropdownButton<String>(
-                                      //hint: Text("Unit"),
-                                      value: education['other-education']
-                                              ['score_unit'] ??
-                                          '%',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 14),
-                                      icon: Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 10.0),
-                                        child: Icon(Icons.keyboard_arrow_down),
-                                      ),
-                                      underline: SizedBox(),
-                                      items: <String>['/4', '/10', '%']
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          education['other-education']
-                                              ['score_unit'] = value;
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 15.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Container(
-                          width: width * 0.35,
-                          child: DateTimeField(
-                              validator: (value) {
-                                if (value == null) {
-                                  return 'cannot be empty';
-                                }
-                                return null;
-                              },
-                              format: format,
-                              initialValue: start == null
-                                  ? null
-                                  : DateTime.fromMicrosecondsSinceEpoch(
-                                      start.microsecondsSinceEpoch),
-                              onShowPicker: (context, currentValue) async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    firstDate: DateTime(1900),
-                                    initialDate: currentValue ?? DateTime.now(),
-                                    lastDate: DateTime(2100));
-                                var temp = start != null
-                                    ? format
-                                            .format(DateTime
-                                                .fromMicrosecondsSinceEpoch(start
-                                                    .microsecondsSinceEpoch))
-                                            .toString() ??
-                                        "From"
-                                    : "From";
-                                return date;
-                              },
-                              onChanged: (date) {
-                                setState(() {
-                                  start = (date == null)
-                                      ? null
-                                      : Timestamp.fromMicrosecondsSinceEpoch(
-                                          date.microsecondsSinceEpoch);
-                                  education['other-education']
-                                      ['start'] = (date ==
-                                          null)
-                                      ? null
-                                      : Timestamp.fromMicrosecondsSinceEpoch(
-                                          date.microsecondsSinceEpoch);
-                                });
-                              },
+          body: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: width * 0.1, top: 20, right: width * 0.1),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 30),
+                      TextFormField(
+                        initialValue: institute ?? '',
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).nextFocus(),
+                        obscureText: false,
+                        decoration: x("Institute Name"),
+                        onChanged: (text) {
+                          setState(() => institute = text);
+                        },
+                        validator: (value) {
+                          if (value.isEmpty)
+                            return 'Institution cannot be empty';
+                          else
+                            return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        initialValue: board ?? '',
+                        textInputAction: TextInputAction.next,
+                        onFieldSubmitted: (_) =>
+                            FocusScope.of(context).nextFocus(),
+                        obscureText: false,
+                        onChanged: (text) {
+                          setState(() => board = text);
+                        },
+                        validator: (value) {
+                          if (value.isEmpty)
+                            return 'Board cannot be empty';
+                          else
+                            return null;
+                        },
+                        decoration: x('Board/University'),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: width * 0.35,
+                            child: TextFormField(
+                              initialValue: cgpa == null ? '' : cgpa.toString(),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.numberWithOptions(),
                               onFieldSubmitted: (_) =>
                                   FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: x("Score"),
-              
+                              onChanged: (text) {
+                                // setState(() => education['other-education']
+                                //     ['cgpa'] = int.tryParse(text));
+                              },
+                              validator: (value) {
+                                if (value.isEmpty)
+                                  return 'cgpa cannot be empty';
+                                else
+                                  return null;
+                              },
                             ),
                           ),
                           Container(
@@ -407,8 +275,7 @@ class _OtherState extends State<Other> {
                                       padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                       child: DropdownButton<String>(
                                         //hint: Text("Unit"),
-                                        value:
-                                            education['X']['score_unit'] ?? '%',
+                                        value: unit ?? '%',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -429,10 +296,10 @@ class _OtherState extends State<Other> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                          setState(() {
-                                            education['X']['score_unit'] =
-                                                value;
-                                          });
+                                          // setState(() {
+                                          //   education['other-education']
+                                          //       ['cgpa_unit'] = value;
+                                          // });
                                         },
                                       ),
                                     ),
@@ -443,6 +310,7 @@ class _OtherState extends State<Other> {
                           ),
                         ],
                       ),
+                      SizedBox(height: 15.0),
                       SizedBox(height: 15.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -485,7 +353,7 @@ class _OtherState extends State<Other> {
                                         ? null
                                         : Timestamp.fromMicrosecondsSinceEpoch(
                                             date.microsecondsSinceEpoch);
-                                    education['X']['start'] = (date == null)
+                                    start = (date == null)
                                         ? null
                                         : Timestamp.fromMicrosecondsSinceEpoch(
                                             date.microsecondsSinceEpoch);
@@ -533,7 +401,7 @@ class _OtherState extends State<Other> {
                                         ? null
                                         : Timestamp.fromMicrosecondsSinceEpoch(
                                             date.microsecondsSinceEpoch);
-                                    education['X']['end'] = (date == null)
+                                    end = (date == null)
                                         ? null
                                         : Timestamp.fromMicrosecondsSinceEpoch(
                                             date.microsecondsSinceEpoch);
@@ -642,141 +510,137 @@ class _OtherState extends State<Other> {
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                        allFiles.add(file);
+                                    String formattedTo, formattedFrom;
+                                    allFiles.add(file);
 
-                                        setState(() {
-                                          loading = true;
-                                        });
-                                        for (int i = 0;
-                                            i < allFiles.length;
-                                            i++) {
-                                          if (allFiles[i] != null) {
-                                            showToast(
-                                                'Uploading Documents\n might take some time',
-                                                context,
-                                                duration: 5);
-                                            String ex;
+                                    formattedFrom =
+                                        format.format(start.toDate());
+                                    formattedFrom =
+                                        formattedFrom + " 00:00:00+0000";
+                                    otherCourses[index]['start'] =
+                                        formattedFrom;
 
-                                            if (i == 0) {
-                                              for (int j = 0;
-                                                  j < allFiles[0][0].length;
-                                                  j++) {
-                                                if ((allFiles[0][0][j]) !=
-                                                    null) {
-                                                  ex = p.extension(p.basename(
-                                                      allFiles[0][0][j].path));
+                                    formattedTo = format.format(end.toDate());
+                                    formattedTo =
+                                        formattedTo + " 00:00:00+0000";
 
-                                                  _uploadFile(allFiles[0][0][j],
-                                                          "Sem $j", i, ex)
-                                                      .then((url) {
-                                                    setState(() {
-                                                      education[widget
-                                                                  .courseEdu]
-                                                              ["sem_records"][j]
-                                                          ['certificate'] = url;
-                                                    });
-                                                  });
-                                                }
-                                              }
-                                            } else {
-                                              if (i == 1) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
+                                    otherCourses[index]['end'] = formattedTo;
+                                    education[
+                                            widget.nameofOtherCourses[index]] =
+                                        otherCourses[index];
+                                    print(education);
+                                    // setState(() {
+                                    //   loading = true;
+                                    // });
+                                    // for (int i = 0; i < allFiles.length; i++) {
+                                    //   if (allFiles[i] != null) {
+                                    //     showToast(
+                                    //         'Uploading Documents\n might take some time',
+                                    //         context,
+                                    //         duration: 5);
+                                    //     String ex;
 
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["XII"]
-                                                        ["certificate"] = url;
-                                                  });
-                                                  //print(education);
-                                                });
-                                              } else if (i == 2) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["X"]
-                                                        ["certificate"] = url;
-                                                  });
-                                                });
-                                                // dynamic result =
-                                                //     await _APIService
-                                                //         .sendProfileData(
-                                                //             education);
-                                                // if (result == -1) {
-                                                //   showToast('Failed', context);
-                                                // } else if (result == 0) {
-                                                //   showToast('Failed', context);
-                                                // } else if (result == -2) {
-                                                //   showToast(
-                                                //       'Could not connect to server',
-                                                //       context);
-                                                // } else if (result == 1) {
-                                                //   showToast(
-                                                //       'Data Updated Successfully',
-                                                //       context);
-                                                //   Navigator.pop(context);
-                                                // } else {
-                                                //   showToast(
-                                                //       'Unexpected error occured',
-                                                //       context);
-                                                // }
-                                              }
-                                            }
-                                          } else {
-                                            if (i == 2) {
-                                               showToast(
-                                                'Uploading Documents\n might take some time',
-                                                context,
-                                                duration: 5);
-                                              dynamic result = await _APIService
-                                                  .sendProfileData(education);
-                                              if (result == -1) {
-                                                showToast('Failed', context);
-                                              } else if (result == 0) {
-                                                showToast('Failed', context);
-                                              } else if (result == -2) {
-                                                showToast(
-                                                    'Could not connect to server',
-                                                    context);
-                                              } else if (result == 1) {
-                                                showToast(
-                                                    'Data Updated Successfully',
-                                                    context);
-                                                Navigator.pop(context);
-                                              } else {
-                                                showToast(
-                                                    'Unexpected error occured',
-                                                    context);
-                                              }
-                                            }
-                                          }
-                                        }
+                                    //     if (i == 0) {
+                                    //       for (int j = 0;
+                                    //           j < allFiles[0][0].length;
+                                    //           j++) {
+                                    //         if ((allFiles[0][0][j]) != null) {
+                                    //           ex = p.extension(p.basename(
+                                    //               allFiles[0][0][j].path));
 
-                                        // allFiles.add(file);
-                                        // print(widget.isUg);
-                                        // if (widget.isUg!=true)
-                                        //   Navigator.pushReplacement(
-                                        //       context,
-                                        //       MaterialPageRoute(
-                                        //           builder: (context) => Other(
-                                        //                 oth: education,
-                                        //                 allFiles: allFiles,
-                                        //               )));
-                                        // else {
-                                        //   Navigator.pop(context);
-                                        // }
-                                      }
+                                    //           _uploadFile(allFiles[0][0][j],
+                                    //                   "Sem $j", i, ex)
+                                    //               .then((url) {
+                                    //             setState(() {
+                                    //               education[widget.courseEdu]
+                                    //                       ["sem_records"][j]
+                                    //                   ['certificate'] = url;
+                                    //               if (allFiles[1] == null &&
+                                    //                   allFiles[2] == null &&
+                                    //                   allFiles[3] == null) {
+                                    //                 callApi();
+                                    //               }
+                                    //             });
+                                    //           });
+                                    //         }
+                                    //       }
+                                    //     } else if (i == 1) {
+                                    //       ex = p.basename(allFiles[i].path);
+
+                                    //       _uploadFile(allFiles[i],
+                                    //               "Certificate 10th", i, ex)
+                                    //           .then((url) {
+                                    //         setState(() {
+                                    //           education["XII"]["certificate"] =
+                                    //               url;
+                                    //           if (allFiles[2] == null &&
+                                    //               allFiles[3] == null) {
+                                    //             callApi();
+                                    //           }
+                                    //         });
+
+                                    //         //print(education);
+                                    //       });
+                                    //     } else if (i == 2) {
+                                    //       ex = p.basename(allFiles[i].path);
+                                    //       _uploadFile(allFiles[i],
+                                    //               "Certificate 10th", i, ex)
+                                    //           .then((url) {
+                                    //         setState(() {
+                                    //           education["X"]["certificate"] =
+                                    //               url;
+                                    //           print(education);
+                                    //           if (allFiles[3] == null) {
+                                    //             callApi();
+                                    //           }
+                                    //         });
+                                    //       });
+                                    //     } else if (i == 3) {
+                                    //       ex = p.basename(allFiles[i].path);
+                                    //       _uploadFile(allFiles[i],
+                                    //               "Certificate Other", i, ex)
+                                    //           .then((url) {
+                                    //         setState(() {
+                                    //           education[widget
+                                    //                   .nameofOtherCourses[
+                                    //               index]]["certificate"] = url;
+                                    //           print(education);
+
+                                    //           callApi();
+                                    //         });
+                                    //       });
+                                    //     }
+                                    //   } else {
+                                    //     if (i == 2) {
+                                    //       showToast(
+                                    //           'Uploading Documents\n might take some time',
+                                    //           context,
+                                    //           duration: 5);
+                                    //       dynamic result =
+                                    //           await _APIService.sendProfileData(
+                                    //               education);
+                                    //       if (result == -1) {
+                                    //         showToast('Failed', context);
+                                    //       } else if (result == 0) {
+                                    //         showToast('Failed', context);
+                                    //       } else if (result == -2) {
+                                    //         showToast(
+                                    //             'Could not connect to server',
+                                    //             context);
+                                    //       } else if (result == 1) {
+                                    //         showToast(
+                                    //             'Data Updated Successfully',
+                                    //             context);
+                                    //         Navigator.pop(context);
+                                    //       } else {
+                                    //         showToast(
+                                    //             'Unexpected error occured',
+                                    //             context);
+                                    //       }
+                                    //     }
+                                    //   }
+                                    // }
+                                  }
                                 }),
                           ],
                         ),
