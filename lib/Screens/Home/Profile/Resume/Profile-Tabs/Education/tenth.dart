@@ -599,6 +599,7 @@ class _TenthState extends State<Tenth> {
                                           setState(() {
                                             loading = true;
                                           });
+                                          showToast("Uploading..Might Take Some time", context);
                                           List temp = await upload();
                                           for(int i = 0; i < allFiles.length; i++) {
                                             if(i == 0) {
