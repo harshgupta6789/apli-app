@@ -109,6 +109,15 @@ class _OtherState extends State<Other> {
     else
       scale = 1;
     return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
+          allFiles: allFiles,
+          education: education,
+          courseEdu:
+          widget.courseEdu,
+        )));
+      },
       child: Scaffold(
           appBar: PreferredSize(
             child: AppBar(
@@ -128,7 +137,15 @@ class _OtherState extends State<Other> {
                 padding: EdgeInsets.only(bottom: 10.0),
                 child: IconButton(
                     icon: Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
+                        allFiles: allFiles,
+                        education: education,
+                        courseEdu:
+                        widget.courseEdu,
+                      )));
+                    }),
               ),
             ),
             preferredSize: Size.fromHeight(55),
@@ -467,6 +484,12 @@ class _OtherState extends State<Other> {
                                     )));
                                   } else {
                                     Navigator.pop(context);
+                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
+                                      allFiles: allFiles,
+                                      education: education,
+                                      courseEdu:
+                                      widget.courseEdu,
+                                    )));
                                   }
                                 }),
                             RaisedButton(
@@ -479,7 +502,7 @@ class _OtherState extends State<Other> {
                                       BorderSide(color: basicColor, width: 1.2),
                                 ),
                                 child: Text(
-                                  'Save',
+                                  'Done',
                                   style: TextStyle(color: basicColor),
                                 ),
                                 onPressed: () async {

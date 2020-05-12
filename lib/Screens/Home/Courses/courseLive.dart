@@ -1,3 +1,4 @@
+import 'package:apli/Shared/scroll.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -29,9 +30,19 @@ class _CourseLiveState extends State<CourseLive> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
+      body: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              YoutubePlayer(
+                controller: _controller,
+                showVideoProgressIndicator: true,
+              ),
+              Text('fsdfbsdmnbdmbcmbm,d', style: TextStyle(fontSize: 20),)
+            ],
+          ),
+        ),
       ),
     );
   }
