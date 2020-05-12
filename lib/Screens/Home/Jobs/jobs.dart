@@ -133,7 +133,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               ),
             ),
           )),
-          Center(
+           Center(
               child: ScrollConfiguration(
             behavior: MyBehavior(),
             child: SingleChildScrollView(
@@ -142,16 +142,35 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                 children: <Widget>[
                   Image.asset("Assets/Images/job.png"),
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Your jobs will be listed here.",
-                        style: TextStyle(fontSize: 18),
-                      ))
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "I know you are interested in job \nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                                text: "Profile",
+                                style: TextStyle(color: basicColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                                  currentTab: 3,
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                    setState(() {});
+                                  }),
+                          ]),
+                    ),
+                  )
                 ],
               ),
             ),
           )),
-          Center(
+           Center(
               child: ScrollConfiguration(
             behavior: MyBehavior(),
             child: SingleChildScrollView(
@@ -160,11 +179,30 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                 children: <Widget>[
                   Image.asset("Assets/Images/job.png"),
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "All caught up!",
-                        style: TextStyle(fontSize: 18),
-                      ))
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "I know you are interested in job \nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                                text: "Profile",
+                                style: TextStyle(color: basicColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                                  currentTab: 3,
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                    setState(() {});
+                                  }),
+                          ]),
+                    ),
+                  )
                 ],
               ),
             ),

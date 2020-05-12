@@ -27,8 +27,8 @@ Orientation orientation;
 
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int estimateTs =
-      DateTime(2020, 5, 12, 16, 12, 0).millisecondsSinceEpoch; // set needed date
+  int estimateTs = DateTime(2020, 5, 12, 17, 38, 0)
+      .millisecondsSinceEpoch; // set needed date
 
   @override
   void initState() {
@@ -151,25 +151,33 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                       stream: Stream.periodic(Duration(seconds: 1), (i) => i),
                       builder:
                           (BuildContext context, AsyncSnapshot<int> snapshot) {
-                        DateFormat format = DateFormat("mm:ss");
+                        var dateString;
                         int now = DateTime.now().millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
-                        var dateString =
-                            '${remaining.inHours}:${format.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}';
-                        print(dateString);
+                        if (remaining.inDays > 0)
+                          dateString = remaining.inDays.toString() + ' days';
+                        else if (remaining.inHours > 0)
+                          dateString = remaining.inHours.toString() + ' hrs';
+                        else if (remaining.inMinutes > 0)
+                          dateString = remaining.inMinutes.toString() + ' min';
+                        else 
+                          dateString = remaining.inSeconds.toString() + "sec";
+                        //print(dateString);
                         if (remaining.isNegative) {
                           return Column(
                             children: <Widget>[
                               Padding(
-                                padding: EdgeInsets.only(top:20.0),
+                                padding: EdgeInsets.only(top: 20.0),
                                 child: RaisedButton(
                                     color: Colors.transparent,
                                     elevation: 0,
-                                    padding: EdgeInsets.only(left: 22, right: 22),
+                                    padding:
+                                        EdgeInsets.only(left: 22, right: 22),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(color: basicColor, width: 1.2),
+                                      side: BorderSide(
+                                          color: basicColor, width: 1.2),
                                     ),
                                     child: Text(
                                       'Start',
@@ -185,7 +193,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                             Container(
                               color: Colors.greenAccent.withOpacity(0.3),
                               alignment: Alignment.center,
-                              child: Text(dateString),
+                              child: Text(dateString??""),
                             ),
                             RaisedButton(
                               disabledColor: Colors.grey,
