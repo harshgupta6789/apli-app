@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_timer/flutter_timer.dart';
+import 'package:intl/intl.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
@@ -26,6 +27,9 @@ Orientation orientation;
 
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  int estimateTs =
+      DateTime(2020, 5, 12, 16, 12, 0).millisecondsSinceEpoch; // set needed date
+
   @override
   void initState() {
     _tabController = new TabController(vsync: this, length: _listTabs.length);
@@ -93,85 +97,153 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ),
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
-                if(snapshot
-                    .data.documents[index].data['type'] == 'Live')
+                if (snapshot.data.documents[index].data['type'] == 'Live')
+                  // return Column(
+                  //   mainAxisSize: MainAxisSize.min,
+                  //   crossAxisAlignment: CrossAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     TikTikTimer(
+                  //       initialDate: DateTime.now(),
+                  //       running: true,
+                  //       height: 150,
+                  //       width: 150,
+                  //       backgroundColor: Colors.indigo,
+                  //       timerTextStyle:
+                  //           TextStyle(color: Colors.white, fontSize: 20),
+                  //       borderRadius: 100,
+                  //       isRaised: true,
+                  //       tracetime: (time) {
+                  //         // print(time.getCurrentSecond);
+                  //       },
+                  //     ),
+                  //     CountdownTimer(
+                  //       endTime:
+                  //           Timestamp.fromDate(DateTime(2020, 5, 17, 16, 0))
+                  //               .seconds,
+                  //       defaultDays: "==",
+                  //       defaultHours: "--",
+                  //       defaultMin: "**",
+                  //       defaultSec: "++",
+                  //       daysSymbol: "days",
+                  //       hoursSymbol: "h ",
+                  //       minSymbol: "m ",
+                  //       secSymbol: "s",
+                  //       daysTextStyle:
+                  //           TextStyle(fontSize: 20, color: Colors.red),
+                  //       hoursTextStyle:
+                  //           TextStyle(fontSize: 30, color: Colors.orange),
+                  //       minTextStyle:
+                  //           TextStyle(fontSize: 40, color: Colors.lightBlue),
+                  //       secTextStyle:
+                  //           TextStyle(fontSize: 50, color: Colors.pink),
+                  //       daysSymbolTextStyle:
+                  //           TextStyle(fontSize: 25, color: Colors.green),
+                  //       hoursSymbolTextStyle:
+                  //           TextStyle(fontSize: 35, color: Colors.amberAccent),
+                  //       minSymbolTextStyle:
+                  //           TextStyle(fontSize: 45, color: Colors.black),
+                  //       secSymbolTextStyle:
+                  //           TextStyle(fontSize: 55, color: Colors.deepOrange),
+                  //     )
+                  //   ],
+                  // );
+                  return StreamBuilder(
+                      stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+                      builder:
+                          (BuildContext context, AsyncSnapshot<int> snapshot) {
+                        DateFormat format = DateFormat("mm:ss");
+                        int now = DateTime.now().millisecondsSinceEpoch;
+                        Duration remaining =
+                            Duration(milliseconds: estimateTs - now);
+                        var dateString =
+                            '${remaining.inHours}:${format.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}';
+                        print(dateString);
+                        if (remaining.isNegative) {
+                          return Column(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(top:20.0),
+                                child: RaisedButton(
+                                    color: Colors.transparent,
+                                    elevation: 0,
+                                    padding: EdgeInsets.only(left: 22, right: 22),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(color: basicColor, width: 1.2),
+                                    ),
+                                    child: Text(
+                                      'Start',
+                                      style: TextStyle(color: basicColor),
+                                    ),
+                                    onPressed: () {}),
+                              ),
+                            ],
+                          );
+                        }
+                        return Column(
+                          children: <Widget>[
+                            Container(
+                              color: Colors.greenAccent.withOpacity(0.3),
+                              alignment: Alignment.center,
+                              child: Text(dateString),
+                            ),
+                            RaisedButton(
+                              disabledColor: Colors.grey,
+                              color: Colors.transparent,
+                              elevation: 0,
+                              padding: EdgeInsets.only(left: 22, right: 22),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                side: BorderSide(color: basicColor, width: 1.2),
+                              ),
+                              child: Text(
+                                'Start',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            )
+                          ],
+                        );
+                      });
+                else
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      TikTikTimer(
-                        initialDate: DateTime.now(),
-                        running: true,
-                        height: 150,
-                        width: 150,
-                        backgroundColor: Colors.indigo,
-                        timerTextStyle: TextStyle(color: Colors.white, fontSize: 20),
-                        borderRadius: 100,
-                        isRaised: true,
-                        tracetime: (time) {
-                          // print(time.getCurrentSecond);
-                        },
-                      ),
-                      CountdownTimer(
-                        endTime: Timestamp.fromDate(DateTime(2020, 5, 17, 16, 0)).seconds,
-                        defaultDays: "==",
-                        defaultHours: "--",
-                        defaultMin: "**",
-                        defaultSec: "++",
-                        daysSymbol: "days",
-                        hoursSymbol: "h ",
-                        minSymbol: "m ",
-                        secSymbol: "s",
-                        daysTextStyle: TextStyle(fontSize: 20, color: Colors.red),
-                        hoursTextStyle: TextStyle(fontSize: 30, color: Colors.orange),
-                        minTextStyle: TextStyle(fontSize: 40, color: Colors.lightBlue),
-                        secTextStyle: TextStyle(fontSize: 50, color: Colors.pink),
-                        daysSymbolTextStyle: TextStyle(fontSize: 25, color: Colors.green),
-                        hoursSymbolTextStyle: TextStyle(fontSize: 35, color: Colors.amberAccent),
-                        minSymbolTextStyle: TextStyle(fontSize: 45, color: Colors.black),
-                        secSymbolTextStyle: TextStyle(fontSize: 55, color: Colors.deepOrange),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 20.0, top: 10),
+                      //   child: Text(
+                      //     "Introduction",
+                      //     style: TextStyle(
+                      //         fontSize: 18.0, fontWeight: FontWeight.w600),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (BuildContext context) => VideoApp(
+                                      videoUrl: snapshot
+                                          .data.documents[index].data['link'],
+                                      title: snapshot
+                                          .data.documents[index].data['title'],
+                                      isCourse: true,
+                                    )));
+                          },
+                          title: Text(
+                            snapshot.data.documents[index].data['title'] ??
+                                "Play Me",
+                            style: TextStyle(
+                                fontSize: 17.0, fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(
+                            "Video | 2m",
+                            style: TextStyle(fontSize: 12.5),
+                          ),
+                        ),
                       )
                     ],
                   );
-                else return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    // Padding(
-                    //   padding: EdgeInsets.only(left: 20.0, top: 10),
-                    //   child: Text(
-                    //     "Introduction",
-                    //     style: TextStyle(
-                    //         fontSize: 18.0, fontWeight: FontWeight.w600),
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                      child: ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) => VideoApp(
-                                    videoUrl: snapshot
-                                        .data.documents[index].data['link'],
-                                    title: snapshot
-                                        .data.documents[index].data['title'],
-                                    isCourse: true,
-                                  )));
-                        },
-                        title: Text(
-                          snapshot.data.documents[index].data['title'] ??
-                              "Play Me",
-                          style: TextStyle(
-                              fontSize: 17.0, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          "Video | 2m",
-                          style: TextStyle(fontSize: 12.5),
-                        ),
-                      ),
-                    )
-                  ],
-                );
               });
         } else {
           return Loading();
