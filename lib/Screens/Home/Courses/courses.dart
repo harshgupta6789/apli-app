@@ -153,6 +153,8 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           (BuildContext context, AsyncSnapshot<int> snapshot) {
                         var dateString;
                         int now = DateTime.now().millisecondsSinceEpoch;
+                        int estimateTs =
+                            DateTime(2020, 5, 12, 16, 22, 20).millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
                         if (remaining.inDays > 0)
@@ -191,6 +193,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                         return Column(
                           children: <Widget>[
                             Container(
+                              height: 50,
                               color: Colors.greenAccent.withOpacity(0.3),
                               alignment: Alignment.center,
                               child: Text(dateString??""),
