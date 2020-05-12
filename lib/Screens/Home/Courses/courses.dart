@@ -26,9 +26,7 @@ double height, width;
 Orientation orientation;
 
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  int estimateTs =
-      DateTime(2020, 5, 12, 16, 12, 0).millisecondsSinceEpoch; // set needed date
+  TabController _tabController;// set needed date
 
   @override
   void initState() {
@@ -153,10 +151,12 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           (BuildContext context, AsyncSnapshot<int> snapshot) {
                         DateFormat format = DateFormat("mm:ss");
                         int now = DateTime.now().millisecondsSinceEpoch;
+                        int estimateTs =
+                            DateTime(2020, 5, 12, 16, 22, 20).millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
                         var dateString =
-                            '${remaining.inHours}:${format.format(DateTime.fromMillisecondsSinceEpoch(remaining.inMilliseconds))}';
+                            '${remaining.inDays < 0 ? '' : remaining.inDays}${remaining.inHours}:${remaining.inMinutes.toString().length > 1 ? remaining.inMinutes : '0' + remaining.inMinutes.toString()}:${remaining.inSeconds.toString().length > 1 ? remaining.inSeconds : '0' + remaining.inSeconds.toString()}';
                         print(dateString);
                         if (remaining.isNegative) {
                           return Column(
@@ -183,6 +183,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                         return Column(
                           children: <Widget>[
                             Container(
+                              height: 50,
                               color: Colors.greenAccent.withOpacity(0.3),
                               alignment: Alignment.center,
                               child: Text(dateString),
