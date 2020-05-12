@@ -132,7 +132,6 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
       current = temp[widget.courseEdu];
       temp.remove("X");
       temp.remove("XII");
-      temp.remove("Diploma");
       temp.remove(widget.courseEdu);
       temp.remove('current_education');
       print(temp);
@@ -238,37 +237,37 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                       physics: ScrollPhysics(),
                       itemCount: otherCourses.length,
                       itemBuilder: (BuildContext context1, int index) {
-                        // String from = otherCourses[index]['start'] == null
-                        //     ? null
-                        //     : DateTime.fromMicrosecondsSinceEpoch(
-                        //                 otherCourses[index]['start']
-                        //                     .microsecondsSinceEpoch)
-                        //             .month
-                        //             .toString() +
-                        //         '-' +
-                        //         DateTime.fromMicrosecondsSinceEpoch(
-                        //                 otherCourses[index]['start']
-                        //                     .microsecondsSinceEpoch)
-                        //             .year
-                        //             .toString();
-                        // String to = otherCourses[index]['end'] == null
-                        //     ? null
-                        //     : DateTime.fromMicrosecondsSinceEpoch(
-                        //                 otherCourses[index]['end']
-                        //                     .microsecondsSinceEpoch)
-                        //             .month
-                        //             .toString() +
-                        //         '-' +
-                        //         DateTime.fromMicrosecondsSinceEpoch(
-                        //                 otherCourses[index]['end']
-                        //                     .microsecondsSinceEpoch)
-                        //             .year
-                        //             .toString();
-                        // String duration = (from ?? '') +
-                        //     ' to ' +
-                        //     ((from != null && to == null)
-                        //         ? 'ongoing'
-                        //         : to ?? '');
+                        String from = otherCourses[index]['start'] == null
+                            ? null
+                            : DateTime.fromMicrosecondsSinceEpoch(
+                                        otherCourses[index]['start']
+                                            .microsecondsSinceEpoch)
+                                    .month
+                                    .toString() +
+                                '-' +
+                                DateTime.fromMicrosecondsSinceEpoch(
+                                        otherCourses[index]['start']
+                                            .microsecondsSinceEpoch)
+                                    .year
+                                    .toString();
+                        String to = otherCourses[index]['end'] == null
+                            ? null
+                            : DateTime.fromMicrosecondsSinceEpoch(
+                                        otherCourses[index]['end']
+                                            .microsecondsSinceEpoch)
+                                    .month
+                                    .toString() +
+                                '-' +
+                                DateTime.fromMicrosecondsSinceEpoch(
+                                        otherCourses[index]['end']
+                                            .microsecondsSinceEpoch)
+                                    .year
+                                    .toString();
+                        String duration = (from ?? '') +
+                            ' to ' +
+                            ((from != null && to == null)
+                                ? 'ongoing'
+                                : to ?? '');
 
                         return Column(
                           children: <Widget>[
@@ -298,7 +297,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                         Text('Board: ' +
                                             (otherCourses[index]['board'] ??
                                                 '')),
-                                       // Text('Duration: ' + duration),
+                                        Text('Duration: ' + duration),
                                         // Text('Industry Type: ' +
                                         //     (otherCourses[index]['industry'] ??
                                         //         '')),

@@ -443,6 +443,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                             ),
                           )
                         ],
+
                       ),
                     ),
                   ),
