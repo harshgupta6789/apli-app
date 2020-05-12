@@ -1,3 +1,4 @@
+import 'package:apli/Screens/Home/Courses/courseLive.dart';
 import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
@@ -150,21 +151,36 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   return StreamBuilder(
                       stream: Stream.periodic(Duration(seconds: 1), (i) => i),
                       builder:
-                          (BuildContext context, AsyncSnapshot<int> snapshot) {
+                          (BuildContext context, AsyncSnapshot<int> snapshot2) {
                         var dateString;
                         int now = DateTime.now().millisecondsSinceEpoch;
                         int estimateTs =
-                            DateTime(2020, 5, 12, 16, 22, 20).millisecondsSinceEpoch;
+                            DateTime(2020, 5, 11, 16, 0, 0).millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
-                        if (remaining.inDays > 0)
-                          dateString = remaining.inDays.toString() + ' days';
-                        else if (remaining.inHours > 0)
-                          dateString = remaining.inHours.toString() + ' hrs';
+                        if (remaining.inDays > 0) {
+                          if(remaining.inDays == 1) {
+                            dateString = remaining.inDays.toString() + ' day';
+                          } else
+                            dateString = remaining.inDays.toString() + ' days';
+                        } else {
+                          if (remaining.inHours > 0){
+                            if(remaining.inHours == 1)
+                              dateString = remaining.inHours.toString() + ' hour';
+                            else
+                              dateString = remaining.inHours.toString() + ' hours';
+                          }
                         else if (remaining.inMinutes > 0)
-                          dateString = remaining.inMinutes.toString() + ' min';
-                        else 
-                          dateString = remaining.inSeconds.toString() + "sec";
+                            if(remaining.inMinutes == 1)
+                              dateString = remaining.inMinutes.toString() + ' min';
+                            else
+                              dateString = remaining.inMinutes.toString() + ' mins';
+                        else
+                          if(remaining.inSeconds == 1)
+                            dateString = remaining.inSeconds.toString() + ' sec';
+                          else
+                            dateString = remaining.inSeconds.toString() + ' sec';
+                        }
                         //print(dateString);
                         if (remaining.isNegative) {
                           return Column(
@@ -185,7 +201,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                       'Start',
                                       style: TextStyle(color: basicColor),
                                     ),
-                                    onPressed: () {}),
+                                    onPressed: () {
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CourseLive(link: snapshot.data.documents[index].data['link'],)));
+                                    }),
                               ),
                             ],
                           );
@@ -196,7 +214,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                               height: 50,
                               color: Colors.greenAccent.withOpacity(0.3),
                               alignment: Alignment.center,
-                              child: Text(dateString??""),
+                              child: Text(dateString + ' remaining ' ?? ""),
                             ),
                             RaisedButton(
                               disabledColor: Colors.grey,

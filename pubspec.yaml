@@ -58,6 +58,7 @@ dependencies:
   flutter_plugin_pdf_viewer: ^1.0.7
   flutter_timer: ^0.0.6
   flutter_countdown_timer: ^1.1.0
+  youtube_player_flutter: ^6.1.1
 
 
 dev_dependencies:
