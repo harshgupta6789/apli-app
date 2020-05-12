@@ -283,7 +283,7 @@ class _LoginState extends State<Login> {
                                           loading = false;
                                         });
                                       } else if (result == 1) {
-                                        showToast('Login Successfull', context);
+                                        showToast('Login Successful', context);
                                         setState(() {
                                           loading = false;
                                         });

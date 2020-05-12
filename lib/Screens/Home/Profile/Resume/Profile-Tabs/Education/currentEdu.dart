@@ -18,7 +18,7 @@ class CurrentEducation extends StatefulWidget {
   final Map<dynamic, dynamic> education;
   final int sem;
   final bool isUg;
-  final String course, branch, duration;
+  final String course, branch, duration, type;
   final VoidCallback onButtonPressed;
 
   CurrentEducation(
@@ -28,7 +28,8 @@ class CurrentEducation extends StatefulWidget {
       this.course,
       this.branch,
       this.duration,
-      this.isUg});
+      this.isUg,
+      this.type});
   @override
   _CurrentEducationState createState() => _CurrentEducationState();
 }
@@ -575,35 +576,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       }
 
                                       edu[course]['sem_records'] = sems;
-
-                                      //uploadAll();
-//                                print(edu);
-//                                await SharedPreferences.getInstance().then((value) async {
-//                                  for(int i = 0; i < currentFiles.length; i++) {
-//                                    if(currentFiles[i] != null) {
-//                                      StorageReference storageReference;
-//                                      storageReference =
-//                                          FirebaseStorage.instance.ref().child("candidate_resumes/${value.getString('email')}-${Random().nextInt(999999999).toString()}");
-//                                      uploadTask = storageReference.putFile(currentFiles[i]);
-//                                      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-//                                      await downloadUrl.ref.getDownloadURL().then((url) {
-//                                        print(edu[course]['sem_records'][i]['semester_score'].runtimeType);
-//                                        edu[course]['sem_records'][i]['semester_score'] = url;
-//                                        print(edu[course]['sem_records'][i]['certificate']);
-//                                        setState(() {
-//                                          temp = temp + 1;
-//                                        });
-//                                      });
-//                                    } else setState(() {
-//                                      temp = temp + 1;
-//                                    });
-//                                  }
-//                                });
-//                                while(true) {
-//                                  if(temp == currentFiles.length) {
-//                                    break;
-//                                  }
-//                                }
                                       Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
@@ -614,6 +586,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                       currentFiles
                                                     ],
                                                     isUg: widget.isUg,
+                                                type: widget.type,
                                                   )));
                                     }
                                   }),

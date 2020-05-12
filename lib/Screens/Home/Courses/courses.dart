@@ -7,10 +7,7 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_timer/flutter_timer.dart';
-import 'package:intl/intl.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
@@ -28,7 +25,7 @@ Orientation orientation;
 
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int estimateTs = DateTime(2020, 5, 12, 17, 38, 0)
+  int estimateTs = DateTime(2020, 5, 17, 16, 0, 0)
       .millisecondsSinceEpoch; // set needed date
 
   @override
@@ -443,7 +440,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                             ),
                           )
                         ],
-
                       ),
                     ),
                   ),

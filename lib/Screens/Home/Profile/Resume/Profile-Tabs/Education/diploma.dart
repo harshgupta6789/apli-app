@@ -19,10 +19,10 @@ class Diploma extends StatefulWidget {
   final Map<dynamic, dynamic> xii;
   final List allFiles;
   final bool isUg;
-  final String courseEdu;
+  final String courseEdu, type;
 
   const Diploma(
-      {Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu})
+      {Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu, this.type})
       : super(key: key);
   @override
   _DiplomaState createState() => _DiplomaState();
@@ -36,8 +36,9 @@ class _DiplomaState extends State<Diploma> {
   final format = DateFormat("yyyy-MM-dd");
   final _formKey = GlobalKey<FormState>();
   String fileName;
-  String unit;
-  String institute, stream, board, cgpa, email, specialization , certificate;
+  String unit, type;
+  int score;
+  String institute, stream, board, email, specialization , certificate;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -58,19 +59,45 @@ class _DiplomaState extends State<Diploma> {
   }
 
   void init() {
-    if (widget.xii['XII'] != null)
+    setState(() {
+      allFiles = widget.allFiles;
+      education = widget.xii;
+      type = widget.type;
+    });
+    if(type == null) {
       setState(() {
-        allFiles = widget.allFiles;
-        education = widget.xii;
-        institute = widget.xii['XII']['institute'] ?? "";
-        board = widget.xii['XII']['board'] ?? "";
-        cgpa = widget.xii['XII']['score'].toString() ?? "";
-        specialization = widget.xii['XII']['specialization'];
-        start = widget.xii['XII']['start'] ?? Timestamp.now();
-        end = widget.xii['XII']['end'] ?? Timestamp.now();
-        unit = widget.xii['X']['score_unit'];
-        certificate = widget.xii['XII']['certificate'];
+        type = 'Class XII';
+        institute = '';
+        board = '';
+        score = 0;
+        specialization = '';
+        start = Timestamp.now();
+        end = Timestamp.now();
+        unit = '%';
+        certificate = null;
       });
+    } else {
+      if(type == 'Class XII')
+        setState(() {
+          type = 'XII';
+        });
+      print(education.keys);
+      setState(() {
+        institute = education[type]['institute'] ?? "";
+        board = education[type]['board'] ?? "";
+        score = education[type]['score'] ?? 0;
+        specialization = education[type]['specialization'] ?? '';
+        start = education[type]['start'] ?? Timestamp.now();
+        end = education[type]['end'] ?? Timestamp.now();
+        unit = education[type]['score_unit'] ?? '%';
+        certificate = education[type]['certificate'];
+      });
+      if(type == 'XII') {
+        setState(() {
+          type = 'Class XII';
+        });
+      }
+    }
   }
 
   Future filePicker(BuildContext context) async {
@@ -151,15 +178,48 @@ class _DiplomaState extends State<Diploma> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       SizedBox(height: 30),
+                      DropdownButton<String>(
+                        //hint: Text("Unit"),
+                        value: type ??
+                            'Class XII',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14),
+                        icon: Padding(
+                          padding:
+                          const EdgeInsets.only(left: 10.0),
+                          child:
+                          Icon(Icons.keyboard_arrow_down),
+                        ),
+                        underline: SizedBox(),
+                        items: <String>['Class XII', 'Diploma']
+                            .map<DropdownMenuItem<String>>(
+                                (String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            type =
+                                value;
+                          });
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
                       TextFormField(
-                        initialValue: education['XII']['institute'] ?? '',
+                        initialValue: institute ?? '',
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) =>
                             FocusScope.of(context).nextFocus(),
                         obscureText: false,
                         decoration: x("Institute Name"),
                         onChanged: (text) {
-                          setState(() => education['XII']['institute'] = text);
+                          setState(() => institute = text);
                         },
                         validator: (value) {
                           if (value.isEmpty)
@@ -172,7 +232,7 @@ class _DiplomaState extends State<Diploma> {
                         height: 15,
                       ),
                       TextFormField(
-                        initialValue: education['XII']['specialization'] ?? '',
+                        initialValue: specialization ?? '',
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) =>
                             FocusScope.of(context).nextFocus(),
@@ -180,7 +240,7 @@ class _DiplomaState extends State<Diploma> {
                         decoration: x("Stream"),
                         onChanged: (text) {
                           setState(
-                              () => education['XII']['specialization'] = text);
+                              () => specialization = text);
                         },
                         validator: (value) {
                           if (value.isEmpty)
@@ -193,13 +253,13 @@ class _DiplomaState extends State<Diploma> {
                         height: 15,
                       ),
                       TextFormField(
-                        initialValue: education['XII']['board'] ?? '',
+                        initialValue: board ?? '',
                         textInputAction: TextInputAction.next,
                         onFieldSubmitted: (_) =>
                             FocusScope.of(context).nextFocus(),
                         obscureText: false,
                         onChanged: (text) {
-                          setState(() => education['XII']['board'] = text);
+                          setState(() => board = text);
                         },
                         validator: (value) {
                           if (value.isEmpty)
@@ -219,9 +279,9 @@ class _DiplomaState extends State<Diploma> {
                           Container(
                             width: width * 0.35,
                             child: TextFormField(
-                              initialValue: education['XII']['score'] == null
+                              initialValue: score == null
                                   ? ''
-                                  : education['XII']['score'].toString(),
+                                  : score.toString(),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.numberWithOptions(),
                               onFieldSubmitted: (_) =>
@@ -229,7 +289,7 @@ class _DiplomaState extends State<Diploma> {
                               obscureText: false,
                               decoration: x("Score"),
                               onChanged: (text) {
-                                setState(() => education['XII']['score'] =
+                                setState(() => score =
                                     int.tryParse(text));
                               },
                               validator: (value) {
@@ -261,7 +321,7 @@ class _DiplomaState extends State<Diploma> {
                                       padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                       child: DropdownButton<String>(
                                         //hint: Text("Unit"),
-                                        value: education['XII']['score_unit'] ??
+                                        value: unit ??
                                             '%',
                                         style: TextStyle(
                                             color: Colors.black,
@@ -284,7 +344,7 @@ class _DiplomaState extends State<Diploma> {
                                         }).toList(),
                                         onChanged: (value) {
                                           setState(() {
-                                            education['XII']['score_unit'] =
+                                            unit =
                                                 value;
                                           });
                                         },
@@ -491,14 +551,33 @@ class _DiplomaState extends State<Diploma> {
                                           format.format(start.toDate());
                                       formattedFrom =
                                           formattedFrom + " 00:00:00+0000";
-                                      education['XII']['start'] = formattedFrom;
 
                                       formattedTo = format.format(end.toDate());
                                       formattedTo =
                                           formattedTo + " 00:00:00+0000";
-                                      education['XII']['end'] = formattedTo;
                                     });
+                                    String temp;
+                                    if(type == 'Class XII')
+                                      temp = 'XII';
+                                    else temp = 'Diploma';
+                                    if(widget.type == null) {
+                                      education[temp] = {};
+                                    } else if(widget.type == temp) {
 
+                                    } else {
+                                      education[temp] = {};
+                                      print(widget.type);
+                                      education.remove(widget.type == 'Class XII' ? 'XII' : 'Diploma');
+                                    }
+                                    education[temp]['institute'] = institute;
+                                    education[temp]['board'] = board;
+                                    education[temp]['score'] = score;
+                                    education[temp]['specialization'] = specialization;
+                                    education[temp]['start'] = formattedFrom;
+                                    education[temp]['end'] = formattedTo;
+                                    education[temp]['score_unit'] = unit;
+                                    education[temp]['certificate'] = certificate;
+                                    print(education.keys);
                                     allFiles.add(file);
                                     Navigator.pushReplacement(
                                         context,

@@ -24,7 +24,7 @@ class _EducationOverviewState extends State<EducationOverview> {
   String batchId;
   int semToBuild = 1;
   bool isUg = false;
-  String course, branch, duration;
+  String course, branch, duration, type;
   String unit;
   String institute, stream, board, cgpa;
   DateTime from, to;
@@ -79,19 +79,12 @@ class _EducationOverviewState extends State<EducationOverview> {
                 branch = data.documents[0].data['branch'];
                 duration = data.documents[0].data['batch_year'];
                 isUg = data.documents[0].data['is_ug'] ?? false;
-                completeEducation = s.data['education'];
-                if(completeEducation['XII'] == null) {
-                  completeEducation['XII'] = {
-                    'board': "",
-                    'certificate': null,
-                    'institute': "",
-                    'score': 0,
-                    'score_unit': "%",
-                    'specialization': "",
-                    'start': Timestamp.now(),
-                    'end': Timestamp.now()
-                  };
-                }
+                completeEducation = s.data['education'] ?? {};
+                if(completeEducation['XII'] == null && completeEducation['Diploma'] == null) {
+                  type = null;
+                } else if(completeEducation.containsKey('XII'))
+                  type = 'Class XII';
+                else type = 'Diploma';
                 if(completeEducation['X'] == null) {
                   completeEducation['X'] = {
                     'board': "",
@@ -164,6 +157,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                         branch: branch,
                         education: completeEducation,
                         isUg: isUg,
+                        type: type,
                         onButtonPressed: () {
                           pageController.animateToPage(
                             1,

@@ -945,6 +945,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                           dynamic result =
                                               await _APIService.sendProfileData(
                                                   map);
+                                          print(map);
                                           if (result == -1) {
                                             showToast('Failed', context);
                                           } else if (result == 0) {

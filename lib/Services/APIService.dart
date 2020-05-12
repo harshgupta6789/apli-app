@@ -32,7 +32,7 @@ class APIService {
               "gender": "${map['gender']}",
               "highest_qualification": "${map['highest_qualification']}",
               "languages": map['languages'],
-              "ph_no": "999999",
+              "ph_no": "${map['ph_no']}",
               "profile_picture": "${map['profile_picture']}",
               "roll_no": "${map['roll_no']}",
             });

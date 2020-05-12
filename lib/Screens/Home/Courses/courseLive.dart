@@ -1,3 +1,4 @@
+import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -20,7 +21,10 @@ class _CourseLiveState extends State<CourseLive> {
       flags: YoutubePlayerFlags(
         autoPlay: true,
         mute: false,
-        isLive: true
+        isLive: true,
+        forceHD: true,
+        loop: false,
+        disableDragSeek: true
       ),
     );
     super.initState();
@@ -28,10 +32,13 @@ class _CourseLiveState extends State<CourseLive> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
+    return SafeArea(
+      child: Scaffold(
+        body: YoutubePlayer(
+          controller: _controller,
+          showVideoProgressIndicator: true,
+          liveUIColor: basicColor,
+        ),
       ),
     );
   }
