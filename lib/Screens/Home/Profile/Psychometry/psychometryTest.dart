@@ -102,7 +102,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
           : Scaffold(
               backgroundColor: Colors.white,
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(70),
+                preferredSize: Size.fromHeight(55),
                 child: AppBar(
                   backgroundColor: basicColor,
                   title: Text(
@@ -164,11 +164,11 @@ class _PsychometryTestState extends State<PsychometryTest> {
                       behavior: MyBehavior(),
                       child: SingleChildScrollView(
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: EdgeInsets.all(10),
                           child: Column(
                             children: [
                               Padding(
-                                  padding: EdgeInsets.fromLTRB(8.0, 20, 8, 12),
+                                  padding: EdgeInsets.fromLTRB(0, 10, 8, 12),
                                   child: Align(
                                       child: Text('Q${position + 1}',
                                           style: TextStyle(
@@ -179,11 +179,11 @@ class _PsychometryTestState extends State<PsychometryTest> {
                               Text(remainingQuestions[position][1],
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   )),
                               SizedBox(
-                                height: 20,
+                                height: 10,
                               ),
                               ListView.builder(
                                   physics: NeverScrollableScrollPhysics(),
@@ -209,6 +209,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                                       : Colors.grey
                                                           .withOpacity(0.4))),
                                           child: ListTile(
+                                            dense: false,
                                             title: Text(
                                               options[i],
                                               style: TextStyle(
@@ -238,7 +239,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                     visible: position == 0 ? false : true,
                                     child: Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                          EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                                       child: Align(
                                         child: RaisedButton(
                                           color: Colors.transparent,
@@ -274,7 +275,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                         : true,
                                     child: Padding(
                                       padding:
-                                          EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                                          EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                                       child: Align(
                                         child: RaisedButton(
                                           color: Colors.transparent,

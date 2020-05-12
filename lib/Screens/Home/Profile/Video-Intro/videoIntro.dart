@@ -28,7 +28,6 @@ double width, height;
 
 class _VideoIntroState extends State<VideoIntro>
     with SingleTickerProviderStateMixin {
-
   String email;
   int Status;
   List<CameraDescription> cameras;
@@ -40,6 +39,7 @@ class _VideoIntroState extends State<VideoIntro>
   bool isUploaded = true, error = false;
   String result = '';
   String fetchUrl;
+  double fontSize = 15;
   currentState x = currentState.none;
   StorageUploadTask uploadTask;
   VideoPlayerController fileVideocontroller;
@@ -220,84 +220,70 @@ class _VideoIntroState extends State<VideoIntro>
                   child: Text(videoIntroSlogan,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontWeight: FontWeight.bold,
                       )),
                   alignment: Alignment.center),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+              padding: const EdgeInsets.fromLTRB(8.0, 10, 8, 8),
               child: Align(
                   child: Text("Instructions to follow",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: basicColor)),
                   alignment: Alignment.center),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child:
-                  Text("1. Lorem ipsum dolor sit amet, consectetur",
+                  child: Text(
+                      "1. Tell something which is not mention in your resume.",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                       )),
                   alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child:
-                  Text("2. Lorem ipsum dolor sit amet, ",
+                  child: Text("2. Please be well dressed for the Video",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                       )),
                   alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child:
-                  Text("3. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
+                  child: Text(
+                      "4. Please check your internet connection and surrounding noise while recording",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                       )),
                   alignment: Alignment.centerLeft),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+              padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child:
-                  Text("4. Lorem ipsum dolor sit amet, consectetur",
+                  child: Text("4. Lorem ipsum dolor sit amet, consectetur",
                       style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      )),
-                  alignment: Alignment.centerLeft),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
-              child: Align(
-                  child:
-                  Text("5. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
-                      style: TextStyle(
-                        fontSize: 15,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.bold,
                       )),
                   alignment: Alignment.centerLeft),
             ),
             Row(
-
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(8, 35, 5, 8),
+                    padding: EdgeInsets.fromLTRB(8, 20, 5, 8),
                     child: Align(
                       child: RaisedButton(
                         color: Colors.white,
@@ -324,7 +310,7 @@ class _VideoIntroState extends State<VideoIntro>
                 ),
                 Container(
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(5, 35, 0, 8),
+                    padding: EdgeInsets.fromLTRB(5, 20, 0, 8),
                     child: Align(
                       child: RaisedButton(
                           color: Colors.white,
@@ -664,10 +650,10 @@ class _VideoIntroState extends State<VideoIntro>
               ),
               Icon(
                 Icons.done_outline,
-                size: 50.0,
+                size: 40.0,
               ),
               Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 20.0),
                 child: Text(
                   "Your Video Intro Has Been Uploaded Succesfully!",
                   textAlign: TextAlign.center,
@@ -682,95 +668,61 @@ class _VideoIntroState extends State<VideoIntro>
                     child: Text(
                       "Delete & Re-Upload",
                       style: TextStyle(
-                          fontSize: 18.0,
+                          fontSize: fontSize,
                           color: basicColor,
                           fontWeight: FontWeight.w600),
                     ),
                     onPressed: () async {
                       await showDialog(
-                          context: context,
-                          builder: (context) => new AlertDialog(
-                        title: new Text(
-                          'Are you sure you want to delete your Video Intro?',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () async {
-                              Navigator.pop(context);
-                              setState(() {
-                                loading = true;
-                              });
-                              await usergetVideoUrl();
-                              if (fetchUrl != null) {
-                                var ref = FirebaseStorage.instance
-                                    .getReferenceFromUrl(fetchUrl);
-
-                                await ref.then((reference) {
-                                  reference.delete().then((x) {
-                                    setState(() {
-                                      x = currentState.none;
-                                      fetchUrl = null;
-                                    });
-                                    deleteVideoUrl();
-                                    usergetVideoUrl();
-                                  });
-                                  setState(() {
-                                    loading = false;
-                                  });
+                        context: context,
+                        builder: (context) => new AlertDialog(
+                          title: new Text(
+                            'Are you sure you want to delete your Video Intro?',
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                setState(() {
+                                  loading = true;
                                 });
-                              }
-                            },
-                            child: new Text(
-                              'Yes',
-                              style: TextStyle(color: Colors.black),
+                                await usergetVideoUrl();
+                                if (fetchUrl != null) {
+                                  var ref = FirebaseStorage.instance
+                                      .getReferenceFromUrl(fetchUrl);
+
+                                  await ref.then((reference) {
+                                    reference.delete().then((x) {
+                                      setState(() {
+                                        x = currentState.none;
+                                        fetchUrl = null;
+                                      });
+                                      deleteVideoUrl();
+                                      usergetVideoUrl();
+                                    });
+                                    setState(() {
+                                      loading = false;
+                                    });
+                                  });
+                                }
+                              },
+                              child: new Text(
+                                'Yes',
+                                style: TextStyle(color: Colors.black),
+                              ),
                             ),
-                          ),
-                          FlatButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: new Text(
-                              'No',
-                              style: TextStyle(color: Colors.black),
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: new Text(
+                                'No',
+                                style: TextStyle(color: Colors.black),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                       );
-//                      AwesomeDialog(
-//                        context: context,
-//                        dialogType: DialogType.ERROR,
-//                        tittle: "Are You Sure?",
-//                        desc: "Yes!",
-//                        btnCancelText: "Cancel",
-//                        btnCancelOnPress: () {
-//                          //Navigator.of(context).pop();
-//                        },
-//                        btnOkOnPress: () async {
-//                          setState(() {
-//                            loading = true;
-//                          });
-//                          await usergetVideoUrl();
-//                          if (fetchUrl != null) {
-//                            var ref = FirebaseStorage.instance
-//                                .getReferenceFromUrl(fetchUrl);
-//
-//                            await ref.then((reference) {
-//                              reference.delete().then((x) {
-//                                setState(() {
-//                                  x = currentState.none;
-//                                  fetchUrl = null;
-//                                });
-//                                deleteVideoUrl();
-//                                usergetVideoUrl();
-//                              });
-//                              setState(() {
-//                                loading = false;
-//                              });
-//                            });
-//                          }
-//                        },
-//                        btnOkText: "Delete",
-//                      ).show();
                     }),
               ),
             ],
@@ -800,6 +752,9 @@ class _VideoIntroState extends State<VideoIntro>
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    if (width <= 360) {
+      fontSize = 12;
+    }
     return email == null
         ? Loading()
         : loading

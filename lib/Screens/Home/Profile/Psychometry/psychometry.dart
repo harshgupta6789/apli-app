@@ -26,6 +26,7 @@ class _PsychometryState extends State<Psychometry>
   String email;
   bool error = false;
   int status;
+  double fontSize = 15;
 
   userInit() async {
     await SharedPreferences.getInstance().then((prefs) async {
@@ -101,6 +102,9 @@ class _PsychometryState extends State<Psychometry>
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    if (width <= 360) {
+      fontSize = 12;
+    }
     if (error)
       return Center(
         child: Text('Error occured, try again later'),
@@ -112,7 +116,7 @@ class _PsychometryState extends State<Psychometry>
             behavior: MyBehavior(),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+                padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -122,79 +126,60 @@ class _PsychometryState extends State<Psychometry>
                           child: Text(psychometryTestSlogan,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 17,
                                 fontWeight: FontWeight.bold,
                               )),
                           alignment: Alignment.center),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                      padding: const EdgeInsets.fromLTRB(8.0, 10, 8, 8),
                       child: Align(
                           child: Text("Instructions to follow",
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 17,
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: basicColor)),
                           alignment: Alignment.center),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+                      padding:
+                          EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Lorem ipsum dolor sit amet, consectetur",
+                              Text("1. Complete the test in first attempt",
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: fontSize,
                                     fontWeight: FontWeight.bold,
                                   )),
                           alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+                      padding:
+                          EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
-                          child:
-                              Text("2. Lorem ipsum dolor sit amet, ",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                          child: Text("2. Completing the test will increasing your hiring chances.",
+                              style: TextStyle(
+                                fontSize:fontSize,
+                                fontWeight: FontWeight.bold,
+                              )),
                           alignment: Alignment.centerLeft),
                     ),
                     Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
+                      padding:
+                          EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
-                          child:
-                              Text("3. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                          child: Text(
+                              "3. Please Check your internet connection before you start the test,",
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.bold,
+                              )),
                           alignment: Alignment.centerLeft),
                     ),
+                 
                     Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
-                      child: Align(
-                          child:
-                              Text("4. Lorem ipsum dolor sit amet, consectetur",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                          alignment: Alignment.centerLeft),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
-                      child: Align(
-                          child:
-                              Text("5. Lorem ipsum dolor sit amet, consectetur consectetur consectetur consectetur",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                          alignment: Alignment.centerLeft),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(8.0, 35, 8, 8),
+                      padding: EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                       child: Align(
                         child: RaisedButton(
                           color: Colors.white,

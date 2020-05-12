@@ -126,7 +126,8 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
-            if (checkStatus(status) && s.data['pdfResume'] != null) loadPdf(s.data['pdfResume']);
+            if (checkStatus(status) && s.data['pdfResume'] != null)
+              loadPdf(s.data['pdfResume']);
           });
         } catch (e) {
           print(e.toString());
@@ -160,7 +161,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                         behavior: MyBehavior(),
                         child: SingleChildScrollView(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+                            padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                             child: Column(
                               children: <Widget>[
                                 Padding(
@@ -168,38 +169,44 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                   child: Text(resumeSlogan,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 17,
                                         fontWeight: FontWeight.bold,
                                       )),
                                 ),
                                 SizedBox(
-                                  height: height * 0.05,
+                                  height: height * 0.01,
                                 ),
                                 Container(
                                   height: height * 0.5,
                                   width: width * 0.8,
                                   decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.black,
-                                      width: 1
-                                    )
-                                  ),
+                                      border: Border.all(
+                                          color: Colors.black, width: 1)),
                                   child: Stack(
                                     children: <Widget>[
                                       Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Stack(
-                                          children: <Widget>[
-                                            PDFViewer(
-                                              document: doc,
-                                              showIndicator: false,
-                                              showPicker: false,
-                                              tooltip: PDFViewerTooltip(last: null, jump: null, previous: null),
-                                            ),
-                                            Align(alignment: Alignment.bottomCenter,child: Container(width: width * 0.8, height: 50, color: Colors.white,))
-                                          ],
-                                        )
-                                      ),
+                                          alignment: Alignment.topCenter,
+                                          child: Stack(
+                                            children: <Widget>[
+                                              PDFViewer(
+                                                document: doc,
+                                                showIndicator: false,
+                                                showPicker: false,
+                                                tooltip: PDFViewerTooltip(
+                                                    last: null,
+                                                    jump: null,
+                                                    previous: null),
+                                              ),
+                                              Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: Container(
+                                                    width: width * 0.8,
+                                                    height: 50,
+                                                    color: Colors.white,
+                                                  ))
+                                            ],
+                                          )),
                                       Align(
                                         alignment: Alignment.bottomRight,
                                         child: Padding(
@@ -258,8 +265,10 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                 padding:
                                                     const EdgeInsets.all(4.0),
                                                 child: IconButton(
-                                                    icon: Icon(EvaIcons
-                                                        .downloadOutline, color: Colors.black,),
+                                                    icon: Icon(
+                                                      EvaIcons.downloadOutline,
+                                                      color: Colors.black,
+                                                    ),
                                                     onPressed: () async {
                                                       var status =
                                                           await Permission
@@ -293,6 +302,10 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
 
                                                             await ref.then(
                                                                 (reference) {
+                                                              showToast(
+                                                                  "Downloading",
+                                                                  context,
+                                                                  duration: 1);
                                                               downloadFile(
                                                                   reference);
                                                             });
