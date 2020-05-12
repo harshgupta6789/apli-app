@@ -12,7 +12,6 @@ class _MockJobsState extends State<MockJobs> {
   @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    //final user = Provider.of<User>(context);
 
     return Scaffold(
         key: _scaffoldKey,
