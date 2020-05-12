@@ -176,12 +176,15 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                             fontWeight: FontWeight.bold,
                                           )),
                                       alignment: Alignment.topLeft)),
-                              Text(remainingQuestions[position][1],
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                              Align(
+                                alignment: Alignment.topLeft,
+                                                              child: Text(remainingQuestions[position][1],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -212,6 +215,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                             dense: false,
                                             title: Text(
                                               options[i],
+                                              textAlign: TextAlign.left,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   color: remainingQuestions[

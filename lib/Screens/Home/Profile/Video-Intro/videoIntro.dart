@@ -261,7 +261,7 @@ class _VideoIntroState extends State<VideoIntro>
               padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
                   child: Text(
-                      "4. Please check your internet connection and surrounding noise while recording",
+                      "3. Please check your internet connection and surrounding noise while recording",
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
@@ -271,7 +271,7 @@ class _VideoIntroState extends State<VideoIntro>
             Padding(
               padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child: Text("4. Lorem ipsum dolor sit amet, consectetur",
+                  child: Text("4. Please check your internet connection and surrounding noise while recording.",
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
