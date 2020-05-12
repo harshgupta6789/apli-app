@@ -84,7 +84,6 @@ class _BasicIntroState extends State<BasicIntro> {
             });
           });
         } catch (e) {
-          print(e.toString());
           setState(() {
             error = true;
           });
@@ -905,7 +904,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                         dynamic result =
                                             await _APIService.sendProfileData(
                                                 map);
-                                        print(result);
                                         if (result == -1) {
                                           showToast('Failed', context);
                                         } else if (result == 0) {

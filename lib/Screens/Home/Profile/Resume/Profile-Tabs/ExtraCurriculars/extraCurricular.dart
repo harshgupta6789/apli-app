@@ -25,7 +25,6 @@ class ExtraCurricular extends StatelessWidget {
           temp = snapshot.data['extra_curricular'] ?? [];
         });
       } catch (e) {
-        print(e.toString());
         temp = [
           {'error': true}
         ];

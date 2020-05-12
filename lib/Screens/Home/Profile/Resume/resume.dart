@@ -126,7 +126,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
-            if (checkStatus(status)) loadPdf(s.data['pdfResume']);
+            if (checkStatus(status) && s.data['pdfResume'] != null) loadPdf(s.data['pdfResume']);
           });
         } catch (e) {
           print(e.toString());
@@ -152,7 +152,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
         ? Loading()
         : loading
             ? Loading()
-            : !checkStatus(status)
+            : !checkStatus(status) && pdfUrl == null
                 ? noResume()
                 : doc == null
                     ? Loading()

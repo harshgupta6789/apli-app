@@ -1,11 +1,12 @@
+import 'dart:async';
+
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
-import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Experience/newExperience.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,22 +25,125 @@ class OtherCoursesHome extends StatefulWidget {
 class _OtherCoursesHomeState extends State<OtherCoursesHome> {
   double width, height;
   bool loading = false;
-  Map temp = {};
+  Map temp = {}, x, xii, current;
   List otherCourses = [];
-  List nameOfOtherCourses = [];
+  List nameOfOtherCourses = [], allFiles;
+  StorageUploadTask uploadTask;
+
+  Future<List> upload() async {
+    List temp = [[], null, null, []];
+    for(int i = 0; i < allFiles.length; i++) {
+      if(i == 0) {
+        for(int j = 0; j < allFiles[0].length; j++) {
+          temp[0].add(null);
+        }
+      }
+      else if(i == 3) {
+        for(int j = 0; j < allFiles[3].length; j++) {
+          temp[3].add(null);
+        }
+      }
+    }
+    try {
+      await SharedPreferences.getInstance().then((value) async {
+        for (int i = 0; i < allFiles.length; i++) {
+          if(i == 0)
+            for (int j = 0; j < allFiles[0].length; j++) {
+              if(allFiles[0][j] != null) {
+                final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+                final StorageUploadTask uploadTask = storageReference.putFile(allFiles[0][j]);
+
+                final StreamSubscription<StorageTaskEvent> streamSubscription =
+                uploadTask.events.listen((event) {
+
+                });
+                await uploadTask.onComplete;
+                streamSubscription.cancel();
+
+                String imageUrl = await storageReference.getDownloadURL();
+                temp[0][j] = imageUrl;
+              } else temp[0][j] = null;
+            }
+          else if(i == 1) {
+            if(allFiles[1] != null) {
+              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[1]);
+
+              final StreamSubscription<StorageTaskEvent> streamSubscription =
+              uploadTask.events.listen((event) {
+
+              });
+              await uploadTask.onComplete;
+              streamSubscription.cancel();
+
+              String imageUrl = await storageReference.getDownloadURL();
+              temp[1] = imageUrl;
+            } else temp[1] = null;
+
+          } else if(i == 2) {
+            if(allFiles[2] != null) {
+              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[2]);
+
+              final StreamSubscription<StorageTaskEvent> streamSubscription =
+              uploadTask.events.listen((event) {
+
+              });
+              await uploadTask.onComplete;
+              streamSubscription.cancel();
+
+              String imageUrl = await storageReference.getDownloadURL();
+              temp[2] = imageUrl;
+            } else temp[2] = null;
+          } else if(i == 3)
+            for (int j = 0; j < allFiles[3].length; j++) {
+              if(allFiles[3][j] != null) {
+                final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+                final StorageUploadTask uploadTask = storageReference.putFile(allFiles[3][j]);
+
+                final StreamSubscription<StorageTaskEvent> streamSubscription =
+                uploadTask.events.listen((event) {
+
+                });
+                await uploadTask.onComplete;
+                streamSubscription.cancel();
+
+                String imageUrl = await storageReference.getDownloadURL();
+                temp[3][j] = imageUrl;
+              } else temp[3][j] = null;
+            }
+        }
+      });
+    } catch (e) {
+    }
+    return temp;
+  }
 
   void init() {
     setState(() {
       temp = widget.education;
+      allFiles = widget.allFiles;
+      x = temp['X'];
+      xii = temp['XII'];
+      current = temp[widget.courseEdu];
       temp.remove("X");
       temp.remove("XII");
       temp.remove(widget.courseEdu);
-      print(temp.keys.toList());
-      nameOfOtherCourses = temp.keys.toList();
+      temp.remove('current_education');
+      print(temp);
+      nameOfOtherCourses = temp.keys.toList() == null ? [] : temp.keys.toList();
+      print(nameOfOtherCourses);
       temp.forEach((k, v) {
         otherCourses.add(v);
       });
-      print(otherCourses);
+      temp['X'] = x;
+      temp['XII'] = xii;
+      temp[widget.courseEdu] = current;
+      temp['current_education'] = widget.courseEdu;
     });
   }
 
@@ -55,7 +159,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -107,6 +211,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                       nameofOtherCourses: nameOfOtherCourses,
                                       index: otherCourses.length,
                                       allFiles: widget.allFiles,
+                                  courseEdu: widget.courseEdu,
                                     )));
                       },
                       child: ListTile(
@@ -186,11 +291,10 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                         SizedBox(
                                           height: 5,
                                         ),
-                                        Text('specialization: ' +
-                                            (otherCourses[index]
-                                                    ['specialization'] ??
-                                                '')),
-                                        Text('board: ' +
+                                        Text('Score: ' +
+                                            ((otherCourses[index]['score'] ?? '') + (otherCourses[index]['score_unit'] ?? '%'))
+                                        ),
+                                        Text('Board: ' +
                                             (otherCourses[index]['board'] ??
                                                 '')),
                                         Text('Duration: ' + duration),
@@ -217,36 +321,22 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) => Other(
-                                                        courseEdu:
-                                                            widget.courseEdu,
-                                                        oth: widget.education,
+                                                    old: true,
+                                                    oth: widget.education,
+                                                    otherCourses : otherCourses,
+                                                    nameofOtherCourses: nameOfOtherCourses,
+                                                    index: index,
+                                                    allFiles: widget.allFiles,
+                                                    courseEdu: widget.courseEdu,
                                                       )));
                                         } else if (result == 1) {
-                                          // setState(() {
-                                          //   loading = true;
-                                          // });
-                                          // Map<String, dynamic> map = {};
-                                          // map['experience'] =
-                                          //     List.from(otherCourses);
-                                          // map['index'] = index;
-                                          // // TODO call API
-                                          // dynamic result =
-                                          //     await _APIService.sendProfileData(
-                                          //         map);
-                                          // if (result == 1) {
-                                          //   showToast(
-                                          //       'Data Updated Successfully',
-                                          //       context);
-                                          // } else {
-                                          //   showToast(
-                                          //       'Unexpected error occured',
-                                          //       context);
-                                          // }
-                                          // Navigator.pushReplacement(
-                                          //     context,
-                                          //     MaterialPageRoute(
-                                          //         builder: (context) =>
-                                          //             OtherCoursesHome()));
+                                          setState(() {
+                                            temp.remove(nameOfOtherCourses[index]);
+                                            print(temp.keys);
+                                            nameOfOtherCourses.removeAt(index);
+                                            otherCourses.removeAt(index);
+                                            allFiles[3].removeAt(index);
+                                          });
                                         }
                                       },
                                       itemBuilder: (BuildContext context) =>
@@ -277,11 +367,100 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                             ),
                             SizedBox(
                               height: 20,
-                            )
+                            ),
                           ],
                         );
                       },
                     ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  RaisedButton(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                        side: BorderSide(color: basicColor, width: 1.5),
+                      ),
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: basicColor),
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          loading = true;
+                        });
+                        print(temp.keys);
+                        for (int i = 0; i < nameOfOtherCourses.length; i++) {
+                          String formattedTo, formattedFrom;
+                          formattedFrom =
+                              apiDateFormat.format(temp[nameOfOtherCourses[i]]['start'].toDate());
+                          formattedFrom =
+                              formattedFrom + " 00:00:00+0000";
+                          formattedTo =
+                              apiDateFormat.format(temp[nameOfOtherCourses[i]]['end'].toDate());
+                          formattedTo =
+                              formattedTo + " 00:00:00+0000";
+                          Map temp1 = temp[nameOfOtherCourses[i]];
+                          temp1['start'] = formattedFrom;
+                          temp[nameOfOtherCourses[i]] = temp1;
+                          Map temp2 = temp[nameOfOtherCourses[i]];
+                          temp1['end'] = formattedTo;
+                          temp[nameOfOtherCourses[i]] = temp2;
+                        }
+
+                        List temp2 = await upload();
+                        for(int i = 0; i < allFiles.length; i++) {
+                          if(i == 0) {
+                            for(int j = 0; j < allFiles[0].length; j++) {
+                              if(allFiles[0][j] != null) {
+                                temp[widget.courseEdu]['sem_records'][j]['certificate'] = temp2[0][j];
+                              }
+                            }
+                          } else if(i == 1) {
+                            if(allFiles[i] != null) {
+                              temp['XII']['certificate'] = temp2[i];
+                            }
+                          } else if(i == 2) {
+                            if(allFiles[i] != null) {
+                              temp['X']['certificate'] = temp2[i];
+                            }
+                          } else if(i == 3) {
+                            for(int j = 0; j < allFiles[3].length; j++) {
+                              if(allFiles[3][j] != null) {
+                                temp[nameOfOtherCourses[j]]['certificate'] = temp2[3][j];
+                              }
+                            }
+                          }
+                        }
+                        print(temp.keys);
+                        dynamic result =
+                        await _APIService
+                            .sendProfileData(
+                            temp);
+                        if (result == -1) {
+                          showToast('Failed', context);
+                        } else if (result == 0) {
+                          showToast('Failed', context);
+                        } else if (result == -2) {
+                          showToast(
+                              'Could not connect to server',
+                              context);
+                        } else if (result == 1) {
+                          showToast(
+                              'Data Updated Successfully',
+                              context);
+                        } else {
+                          showToast(
+                              'Unexpected error occured',
+                              context);
+                        }
+                        Navigator.pop(context);
+                      }
+                  ),
+                  SizedBox(
+                    height: 30,
                   )
                 ],
               ),

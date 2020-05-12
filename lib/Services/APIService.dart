@@ -10,8 +10,6 @@ class APIService {
   APIService({this.type});
 
   Future sendProfileData(Map<dynamic, dynamic> map) async {
-    String url;
-    final format = DateFormat("yyyy-MM-dd");
     try {
       int result;
       await SharedPreferences.getInstance().then((value) async {
@@ -42,7 +40,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -51,9 +48,7 @@ class APIService {
 
           case 7:
             {
-            
               String eduToPass = json.encode(map);
-              print(eduToPass);
               Response response = await Dio().post(educationURL, data: {
                 "email": "${value.getString('email')}",
                 "secret": "$passHashSecret",
@@ -63,7 +58,6 @@ class APIService {
                 var temp = response.data['success'];
                 if (temp == true) {
                   result = 1;
-                  print(result);
                 } else
                   result = -1;
               } else
@@ -92,9 +86,7 @@ class APIService {
                         " 00:00:00+0000";
               }
             }
-            print(map['experience']);
             String expToPass = jsonEncode(map['experience']);
-            print(expToPass);
             Response response = await Dio().post(expURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
@@ -104,7 +96,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -112,14 +103,12 @@ class APIService {
             break;
 
           case 5:
-            print(map);
             if(map['index'] != -1) {
               map['project'].removeAt(map['index']);
             }
             for (int i = 0; i < map['project'].length; i++) {
               map['project'][i]['bullet_point1'] = map['project'][i]['information'][0];
               map['project'][i]['bullet_point2'] = map['project'][i]['information'][1];
-              print(map);
               if (map['project'][i]['from'] != null) {
                 map['project'][i]['from'] = apiDateFormat
                     .format(map['project'][i]['from'].toDate()) +
@@ -131,9 +120,7 @@ class APIService {
                         " 00:00:00+0000";
               }
             }
-            print(map['project']);
             String expToPass = jsonEncode(map['project']);
-            print(expToPass);
             Response response = await Dio().post(projectsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
@@ -143,7 +130,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -168,9 +154,7 @@ class APIService {
                         " 00:00:00+0000";
               }
             }
-            print(map['extra_curricular']);
             String expToPass = jsonEncode(map['extra_curricular']);
-            print(expToPass);
             Response response = await Dio().post(extraCURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
@@ -180,7 +164,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -189,14 +172,12 @@ class APIService {
 
           case 3:
 
-            print(map['award']);
             for(int i = 0; i < map['award'].length; i++) {
               map['award'][i]['date'] = apiDateFormat
                   .format(map['award'][i]['date'].toDate()) +
                   " 00:00:00+0000";
             }
             String expToPass = jsonEncode(map['award']);
-            print(expToPass);
             Response response = await Dio().post(awardsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
@@ -206,7 +187,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -215,9 +195,7 @@ class APIService {
 
           case 2:
 
-            print(map['skill']);
             String expToPass = jsonEncode(map['skill']);
-            print(expToPass);
             Response response = await Dio().post(skillsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
@@ -227,7 +205,6 @@ class APIService {
               var temp = response.data['success'];
               if (temp == true) {
                 result = 1;
-                print(result);
               } else
                 result = -1;
             } else
@@ -239,10 +216,8 @@ class APIService {
             break;
         }
       });
-      print(result);
       return result;
     } catch (e) {
-      print(e.toString());
       return 0;
     }
   }

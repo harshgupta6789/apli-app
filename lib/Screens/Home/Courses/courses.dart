@@ -6,7 +6,9 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_countdown_timer/countdown_timer.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_timer/flutter_timer.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
@@ -91,7 +93,47 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   ),
               itemCount: snapshot.data.documents.length,
               itemBuilder: (BuildContext context, int index) {
-                return Column(
+                if(snapshot
+                    .data.documents[index].data['type'] == 'Live')
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TikTikTimer(
+                        initialDate: DateTime.now(),
+                        running: true,
+                        height: 150,
+                        width: 150,
+                        backgroundColor: Colors.indigo,
+                        timerTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+                        borderRadius: 100,
+                        isRaised: true,
+                        tracetime: (time) {
+                          // print(time.getCurrentSecond);
+                        },
+                      ),
+                      CountdownTimer(
+                        endTime: Timestamp.fromDate(DateTime(2020, 5, 17, 16, 0)).seconds,
+                        defaultDays: "==",
+                        defaultHours: "--",
+                        defaultMin: "**",
+                        defaultSec: "++",
+                        daysSymbol: "days",
+                        hoursSymbol: "h ",
+                        minSymbol: "m ",
+                        secSymbol: "s",
+                        daysTextStyle: TextStyle(fontSize: 20, color: Colors.red),
+                        hoursTextStyle: TextStyle(fontSize: 30, color: Colors.orange),
+                        minTextStyle: TextStyle(fontSize: 40, color: Colors.lightBlue),
+                        secTextStyle: TextStyle(fontSize: 50, color: Colors.pink),
+                        daysSymbolTextStyle: TextStyle(fontSize: 25, color: Colors.green),
+                        hoursSymbolTextStyle: TextStyle(fontSize: 35, color: Colors.amberAccent),
+                        minSymbolTextStyle: TextStyle(fontSize: 45, color: Colors.black),
+                        secSymbolTextStyle: TextStyle(fontSize: 55, color: Colors.deepOrange),
+                      )
+                    ],
+                  );
+                else return Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

@@ -335,12 +335,11 @@ class _DiplomaState extends State<Diploma> {
                                 },
                                 onChanged: (date) {
                                   setState(() {
-                                    String formatted;
-                                    if (date != null) {
-                                      formatted = format.format(date);
-                                      formatted = formatted + " 00:00:00+0000";
-                                      education['XII']['start'] = formatted;
-                                    }
+                                    start = (date == null)
+                                        ? null
+                                        : Timestamp
+                                        .fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                                   });
                                 },
                                 textInputAction: TextInputAction.next,
@@ -381,12 +380,11 @@ class _DiplomaState extends State<Diploma> {
                                 },
                                 onChanged: (date) {
                                   setState(() {
-                                    String formatted;
-                                    if (date != null) {
-                                      formatted = format.format(date);
-                                      formatted = formatted + " 00:00:00+0000";
-                                      education['XII']['end'] = formatted;
-                                    }
+                                    end = (date == null)
+                                        ? null
+                                        : Timestamp
+                                        .fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                                   });
                                 },
                                 textInputAction: TextInputAction.next,
@@ -418,24 +416,11 @@ class _DiplomaState extends State<Diploma> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: <Widget>[
                                   SizedBox(
-                                    width: width * 0.15 * scale,
+                                    width: width * 0.3 * scale,
                                     child: AutoSizeText(
-                                      certificate ?? '',
+                                      fileName ?? '',
                                       overflow: TextOverflow.ellipsis,
                                       maxLines: 1,
-                                    ),
-                                  ),
-                                  Visibility(
-                                    visible: file != null,
-                                    child: IconButton(
-                                      icon: Icon(Icons.clear),
-                                      onPressed: () {
-                                        setState(() {
-                                          file = null;
-                                          fileName = null;
-                                        });
-                                      },
-                                      padding: EdgeInsets.all(0),
                                     ),
                                   ),
                                 ],
@@ -445,9 +430,17 @@ class _DiplomaState extends State<Diploma> {
                               padding: EdgeInsets.only(right: 5),
                               child: MaterialButton(
                                 onPressed: () {
-                                  filePicker(context);
+                                  if(file == null) {
+                                    filePicker(context);
+                                  } else {
+                                    setState(() {
+                                      file = null;
+                                      fileName = null;
+                                      certificate = null;
+                                    });
+                                  }
                                 },
-                                child: Text("Browse"),
+                                child: Text(file == null ? "Browse" : "Remove"),
                                 color: Colors.grey,
                               ),
                             ),
@@ -506,9 +499,7 @@ class _DiplomaState extends State<Diploma> {
                                       education['XII']['end'] = formattedTo;
                                     });
 
-                                    print(education);
                                     allFiles.add(file);
-
                                     Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(

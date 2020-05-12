@@ -106,7 +106,6 @@ class _AwardsFormState extends State<AwardsForm> {
     email = widget.email;
     snapshot = widget.snapshot;
     awards = snapshot.data['award'] ?? [];
-    print(awards);
     super.initState();
   }
 
@@ -266,8 +265,6 @@ class _AwardsFormState extends State<AwardsForm> {
                                                         newAwardDescription,
                                                     'date': newAwardDate
                                                   });
-                                                  print(newAwardDate);
-                                                  print(newAwardDescription);
                                                 });
                                             },
                                           ),

@@ -79,7 +79,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                 branch = data.documents[0].data['branch'];
                 duration = data.documents[0].data['batch_year'];
                 isUg = data.documents[0].data['is_ug'] ?? false;
-                if (s.data['education'] == null) {
+                completeEducation = s.data['education'];
+                if(completeEducation['XII'] == null) {
                   completeEducation['XII'] = {
                     'board': "",
                     'certificate': null,
@@ -90,6 +91,8 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'start': Timestamp.now(),
                     'end': Timestamp.now()
                   };
+                }
+                if(completeEducation['X'] == null) {
                   completeEducation['X'] = {
                     'board': "",
                     'certificate': null,
@@ -100,100 +103,9 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'start': Timestamp.now(),
                     'end': Timestamp.now()
                   };
-                } else {
-                  completeEducation['XII'] = s.data['education']['XII'] ??
-                      {
-                        'board': "",
-                        'certificate': null,
-                        'institute': "",
-                        'score': 0,
-                        'score_unit': "%",
-                        'specialization': "",
-                        'start': Timestamp.now(),
-                        'end': Timestamp.now()
-                      };
-                  completeEducation['X'] = s.data['education']['X'] ??
-                      {
-                        'board': "",
-                        'certificate': null,
-                        'institute': "",
-                        'score': 0,
-                        'score_unit': "%",
-                        'specialization': "",
-                        'start': Timestamp.now(),
-                        'end': Timestamp.now()
-                      };
-                  completeEducation[course] = s.data['education'][course] ?? {};
                 }
-
-                if (s.data['education'] != null) {
-                  print(isUg);
-                  if (isUg == false) {
-                    if (s.data['education']['other-education'] != null) {
-                      completeEducation['education']['other-education'] =
-                          s.data['education']['other-education'];
-                    } else {
-                     Map temp  = {
-                        'institute': "",
-                        'specialization': "",
-                        'board': "",
-                        'score': "",
-                        'score_unit': "%",
-                        'start': Timestamp.now(),
-                        'end': Timestamp.now(),
-                        'certificate': null,
-                      };
-                      completeEducation['other-education'] = temp;
-                    }
-                  }
-                  if (s.data['education'][course] != null) {
-                    if (s.data['education'][course]['sem_records'] != null) {
-                      for (int i = 0; i < semToBuild; i++) {
-                        sems[i] = {
-                          'certificate': s.data['education'][course]
-                              ['sem_records'][i]['certificate'],
-                          'closed_backlog': s.data['education'][course]
-                              ['sem_records'][i]['closed_backlog'],
-                          'live_backlog': s.data['education'][course]
-                              ['sem_records'][i]['live_backlog'],
-                          'semester_score': s.data['education'][course]
-                              ['sem_records'][i]['semester_score']
-                        };
-                      }
-                      completeEducation[course]['sem_records'] = sems;
-                    } else {
-                      for (int i = 0; i < semToBuild; i++) {
-                        sems[i] = {
-                          'certificate': null,
-                          'closed_backlog': 0,
-                          'live_backlog': 0,
-                          'semester_score': 0
-                        };
-                      }
-                      completeEducation[course] = {
-                        'score': 0,
-                        'total_closed_backlogs': 0,
-                        'total_live_backlogs': 0,
-                        'sem_records': sems,
-                      };
-                    }
-                  } else {
-                    for (int i = 0; i < semToBuild; i++) {
-                      sems[i] = {
-                        'certificate': null,
-                        'closed_backlog': 0,
-                        'live_backlog': 0,
-                        'semester_score': 0
-                      };
-                    }
-                    completeEducation[course] = {
-                      'score': 0,
-                      'total_closed_backlogs': 0,
-                      'total_live_backlogs': 0,
-                      'sem_records': sems,
-                    };
-                  }
-                } else {
+                completeEducation['current_education'] = course;
+                if(completeEducation[course] == null) {
                   for (int i = 0; i < semToBuild; i++) {
                     sems[i] = {
                       'certificate': null,
@@ -208,9 +120,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'total_live_backlogs': 0,
                     'sem_records': sems,
                   };
-                  print(completeEducation[course]['sem_records']);
                 }
-                print(completeEducation['other-education']);
               });
             });
           } else {
@@ -218,8 +128,6 @@ class _EducationOverviewState extends State<EducationOverview> {
               email = s.data['email'];
             });
           }
-
-          print(email);
         });
       });
     } catch (e) {

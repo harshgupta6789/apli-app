@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
@@ -48,23 +49,76 @@ class _TenthState extends State<Tenth> {
   List filenames;
   final _APIService = APIService(type: 7);
 
-  Future<String> _uploadFile(
-      File file, String filename, int index, String extension) async {
-    String url;
-    await SharedPreferences.getInstance().then((value) async {
-      StorageReference storageReference;
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child("documents/${value.getString("email")}/$filename$extension");
-      uploadTask = storageReference.putFile(file);
-      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-      url = (await downloadUrl.ref.getDownloadURL());
-      if (url != null) {
-        print(url);
-        setState(() {});
-      } else if (url == null) {}
-    });
-    return url;
+  Future<List> upload() async {
+    List temp = [[]];
+    for(int i = 0; i < allFiles.length; i++) {
+      if(i == 0) {
+        for(int j = 0; j < allFiles[0].length; j++) {
+          temp[0].add(null);
+        }
+      } else if(i == 1) temp.add(null);
+      else if(i == 2) temp.add(null);
+    }
+    try {
+      await SharedPreferences.getInstance().then((value) async {
+        for (int i = 0; i < allFiles.length; i++) {
+          if(i == 0)
+            for (int j = 0; j < allFiles[0].length; j++) {
+              if(allFiles[0][j] != null) {
+                final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+                final StorageUploadTask uploadTask = storageReference.putFile(allFiles[0][j]);
+
+                final StreamSubscription<StorageTaskEvent> streamSubscription =
+                uploadTask.events.listen((event) {
+
+                });
+                await uploadTask.onComplete;
+                streamSubscription.cancel();
+
+                String imageUrl = await storageReference.getDownloadURL();
+                temp[0][j] = imageUrl;
+              } else temp[0][j] = null;
+            }
+          else if(i == 1) {
+            if(allFiles[1] != null) {
+              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[1]);
+
+              final StreamSubscription<StorageTaskEvent> streamSubscription =
+              uploadTask.events.listen((event) {
+
+              });
+              await uploadTask.onComplete;
+              streamSubscription.cancel();
+
+              String imageUrl = await storageReference.getDownloadURL();
+              temp[1] = imageUrl;
+            } else temp[1] = null;
+
+          } else if(i == 2) {
+            if(allFiles[2] != null) {
+              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/${DateTime.now()}");
+
+              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[2]);
+
+              final StreamSubscription<StorageTaskEvent> streamSubscription =
+              uploadTask.events.listen((event) {
+
+              });
+              await uploadTask.onComplete;
+              streamSubscription.cancel();
+
+              String imageUrl = await storageReference.getDownloadURL();
+              temp[2] = imageUrl;
+            } else temp[2] = null;
+          }
+        }
+      });
+    } catch (e) {
+    }
+    return temp;
   }
 
   void init() {
@@ -102,22 +156,6 @@ class _TenthState extends State<Tenth> {
               tittle: e,
               body: Text("Error Has Occured"))
           .show();
-    }
-  }
-
-  void callApi() async {
-    dynamic result = await _APIService.sendProfileData(education);
-    if (result == -1) {
-      showToast('Failed', context);
-    } else if (result == 0) {
-      showToast('Failed', context);
-    } else if (result == -2) {
-      showToast('Could not connect to server', context);
-    } else if (result == 1) {
-      showToast('Data Updated Successfully', context);
-      Navigator.pop(context);
-    } else {
-      showToast('Unexpected error occured', context);
     }
   }
 
@@ -370,14 +408,11 @@ class _TenthState extends State<Tenth> {
                                     },
                                     onChanged: (date) {
                                       setState(() {
-                                        String formatted;
-                                        if (date != null) {
-                                          formatted = format.format(date);
-                                          formatted =
-                                              formatted + " 00:00:00+0000";
-                                          education['X']['start'] = formatted;
-                                          print(formatted);
-                                        }
+                                        start = (date == null)
+                                            ? null
+                                            : Timestamp
+                                            .fromMicrosecondsSinceEpoch(
+                                            date.microsecondsSinceEpoch);
                                       });
                                     },
                                     textInputAction: TextInputAction.next,
@@ -419,14 +454,11 @@ class _TenthState extends State<Tenth> {
                                     },
                                     onChanged: (date) {
                                       setState(() {
-                                        String formatted;
-                                        if (date != null) {
-                                          formatted = format.format(date);
-                                          formatted =
-                                              formatted + " 00:00:00+0000";
-                                          education['X']['end'] = formatted;
-                                          print(education['X']['end']);
-                                        }
+                                        end = (date == null)
+                                            ? null
+                                            : Timestamp
+                                            .fromMicrosecondsSinceEpoch(
+                                            date.microsecondsSinceEpoch);
                                       });
                                     },
                                     textInputAction: TextInputAction.next,
@@ -459,24 +491,11 @@ class _TenthState extends State<Tenth> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: <Widget>[
                                       SizedBox(
-                                        width: width * 0.15 * scale,
+                                        width: width * 0.3 * scale,
                                         child: AutoSizeText(
-                                          certificate ?? '',
+                                          fileName ?? '',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
-                                        ),
-                                      ),
-                                      Visibility(
-                                        visible: file != null,
-                                        child: IconButton(
-                                          icon: Icon(Icons.clear),
-                                          onPressed: () {
-                                            setState(() {
-                                              file = null;
-                                              fileName = null;
-                                            });
-                                          },
-                                          padding: EdgeInsets.all(0),
                                         ),
                                       ),
                                     ],
@@ -486,9 +505,17 @@ class _TenthState extends State<Tenth> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: MaterialButton(
                                     onPressed: () {
-                                      filePicker(context);
+                                      if(file == null) {
+                                        filePicker(context);
+                                      } else {
+                                        setState(() {
+                                          file = null;
+                                          fileName = null;
+                                          certificate = null;
+                                        });
+                                      }
                                     },
-                                    child: Text("Browse"),
+                                    child: Text(file == null ? "Browse" : "Remove"),
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -549,8 +576,15 @@ class _TenthState extends State<Tenth> {
                                         formattedTo =
                                             formattedTo + " 00:00:00+0000";
                                         education['X']['end'] = formattedTo;
-                                        allFiles.add(file);
+                                        setState(() {
+                                          allFiles.add(file);
+                                        });
                                         if (widget.isUg != true) {
+                                          allFiles.add([]);
+                                          education.forEach((key, value) {
+                                            if(key != 'X' && key != 'XII' && key != 'current_education' && key != widget.courseEdu)
+                                              allFiles[3].add(null);
+                                          });
                                           Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
@@ -565,116 +599,46 @@ class _TenthState extends State<Tenth> {
                                           setState(() {
                                             loading = true;
                                           });
-                                          for (int i = 0;
-                                              i < allFiles.length;
-                                              i++) {
-                                            if (allFiles[i] != null) {
-                                              showToast(
-                                                  'Uploading Documents\n might take some time',
-                                                  context,
-                                                  duration: 5);
-                                              String ex;
-
-                                              if (i == 0) {
-                                                for (int j = 0;
-                                                    j < allFiles[0][0].length;
-                                                    j++) {
-                                                  if ((allFiles[0][0][j]) !=
-                                                      null) {
-                                                    ex = p.extension(p.basename(
-                                                        allFiles[0][0][j]
-                                                            .path));
-
-                                                    _uploadFile(
-                                                            allFiles[0][0][j],
-                                                            "Sem $j",
-                                                            i,
-                                                            ex)
-                                                        .then((url) {
-                                                      setState(() {
-                                                        education[widget
-                                                                    .courseEdu][
-                                                                "sem_records"][j]
-                                                            [
-                                                            'certificate'] = url;
-                                                        if (allFiles[1] ==
-                                                                null &&
-                                                            allFiles[2] ==
-                                                                null) {
-                                                          callApi();
-                                                        }
-                                                      });
-                                                    });
-                                                  }
+                                          List temp = await upload();
+                                          for(int i = 0; i < allFiles.length; i++) {
+                                            if(i == 0) {
+                                              for(int j = 0; j < allFiles[0].length; j++) {
+                                                if(allFiles[0][j] != null) {
+                                                  education[widget.courseEdu]['sem_records'][j]['certificate'] = temp[0][j];
                                                 }
-                                              } else if (i == 1) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
-
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["XII"]
-                                                        ["certificate"] = url;
-                                                    if (allFiles[2] == null) {
-                                                      callApi();
-                                                    }
-                                                  });
-
-                                                  //print(education);
-                                                });
-                                              } else if (i == 2) {
-                                                ex = p
-                                                    .basename(allFiles[i].path);
-                                                _uploadFile(
-                                                        allFiles[i],
-                                                        "Certificate 10th",
-                                                        i,
-                                                        ex)
-                                                    .then((url) {
-                                                  setState(() {
-                                                    education["X"]
-                                                        ["certificate"] = url;
-                                                    print(education);
-                                                    callApi();
-                                                  });
-                                                });
                                               }
-                                            } else {
-                                              if (i == 2) {
-                                                showToast(
-                                                    'Uploading Documents\n might take some time',
-                                                    context,
-                                                    duration: 5);
-                                                dynamic result =
-                                                    await _APIService
-                                                        .sendProfileData(
-                                                            education);
-                                                if (result == -1) {
-                                                  showToast('Failed', context);
-                                                } else if (result == 0) {
-                                                  showToast('Failed', context);
-                                                } else if (result == -2) {
-                                                  showToast(
-                                                      'Could not connect to server',
-                                                      context);
-                                                } else if (result == 1) {
-                                                  showToast(
-                                                      'Data Updated Successfully',
-                                                      context);
-                                                  Navigator.pop(context);
-                                                } else {
-                                                  showToast(
-                                                      'Unexpected error occured',
-                                                      context);
-                                                }
+                                            } else if(i == 1) {
+                                              if(allFiles[i] != null) {
+                                                education['XII']['certificate'] = temp[i];
+                                              }
+                                            } else if(i == 2) {
+                                              if(allFiles[i] != null) {
+                                                education['X']['certificate'] = temp[i];
                                               }
                                             }
                                           }
+                                          dynamic result =
+                                          await _APIService
+                                              .sendProfileData(
+                                              education);
+                                          if (result == -1) {
+                                            showToast('Failed', context);
+                                          } else if (result == 0) {
+                                            showToast('Failed', context);
+                                          } else if (result == -2) {
+                                            showToast(
+                                                'Could not connect to server',
+                                                context);
+                                          } else if (result == 1) {
+                                            showToast(
+                                                'Data Updated Successfully',
+                                                context);
+                                          } else {
+                                            showToast(
+                                                'Unexpected error occured',
+                                                context);
+                                          }
+                                          Navigator.pop(context);
                                         }
                                       }
                                     }),

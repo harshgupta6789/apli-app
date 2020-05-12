@@ -425,44 +425,23 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                           SizedBox(
                                             width: width * 0.3 * scale,
                                             child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
                                               children: <Widget>[
                                                 SizedBox(
                                                   width: width * 0.3 * scale,
                                                   child: AutoSizeText(
-                                                    edu[course]['sem_records']
-                                                                    [index][
-                                                                'certificate'] ??
-                                                            currentFiles[
-                                                                    index] !=
-                                                                null
+                                                    currentFiles[
+                                                    index] !=
+                                                        null
                                                         ? p.basename(
-                                                                currentFiles[
-                                                                        index]
-                                                                    .path) ??
-                                                            ''
-                                                        : "No Certificate",
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                        currentFiles[
+                                                        index]
+                                                            .path) :
+                                                        '',
+                                                    overflow: TextOverflow.ellipsis,
                                                     maxLines: 1,
                                                   ),
                                                 ),
-                                                // Visibility(
-                                                //   visible:
-                                                //       currentFiles[index] != null,
-                                                //   child: IconButton(
-                                                //     icon: Icon(Icons.clear),
-                                                //     onPressed: () {
-                                                //       setState(() {
-                                                //         currentFiles[index] = null;
-                                                //         currentFileNames[index] =
-                                                //             null;
-                                                //       });
-                                                //     },
-                                                //     padding: EdgeInsets.all(0),
-                                                //   ),
-                                                // ),
                                               ],
                                             ),
                                           ),
@@ -470,9 +449,17 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                             padding: EdgeInsets.only(right: 5),
                                             child: MaterialButton(
                                               onPressed: () {
-                                                filePicker(context, index);
+                                                if(currentFiles[index] == null) {
+                                                  filePicker(context, index);
+                                                } else {
+                                                  setState(() {
+                                                    currentFiles[index] = null;
+                                                    currentFileNames[index] =
+                                                    null;
+                                                  });
+                                                }
                                               },
-                                              child: Text("Browse"),
+                                              child: Text(currentFiles[index] == null ? "Browse" : "Remove"),
                                               color: Colors.grey,
                                             ),
                                           ),
@@ -586,11 +573,9 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         };
                                         sems.add(x);
                                       }
-                                      print(sems);
 
                                       edu[course]['sem_records'] = sems;
 
-                                      print(edu);
                                       //uploadAll();
 //                                print(edu);
 //                                await SharedPreferences.getInstance().then((value) async {
@@ -626,7 +611,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                     courseEdu: course,
                                                     xii: edu,
                                                     allFiles: [
-                                                      [currentFiles]
+                                                      currentFiles
                                                     ],
                                                     isUg: widget.isUg,
                                                   )));

@@ -113,18 +113,18 @@ class _CourseMainState extends State<CourseMain> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: <Widget>[
-                                                    Text("Trending",
+                                                    Text('Trending',
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.yellow)),
-                                                    Text("Startup 101",
+                                                    Text(snapshot.data.documents[index]['title'] ?? 'No Title',
                                                         style: TextStyle(
                                                           fontSize: 28,
                                                           color: Colors.white,
                                                           fontWeight:
                                                               FontWeight.w700,
                                                         )),
-                                                    Text("By Harvard",
+                                                    Text('By' + (snapshot.data.documents[index]['author'] ?? 'No Author'),
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w100,

@@ -141,6 +141,7 @@ class _VideoIntroState extends State<VideoIntro>
             }
           });
         } catch (e) {
+          print(e.toString());
           setState(() {
             error = true;
           });

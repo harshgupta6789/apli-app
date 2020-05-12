@@ -25,7 +25,6 @@ class Experience extends StatelessWidget {
           temp = snapshot.data['experience'] ?? [];
         });
       } catch (e) {
-        print(e.toString());
         temp = [
           {'error': true}
         ];

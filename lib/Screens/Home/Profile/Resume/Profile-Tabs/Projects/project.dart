@@ -25,7 +25,6 @@ class Project extends StatelessWidget {
           temp = snapshot.data['projects'] ?? [];
         });
       } catch (e) {
-        print(e.toString());
         temp = [
           {'error': true}
         ];

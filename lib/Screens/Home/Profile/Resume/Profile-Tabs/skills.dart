@@ -576,12 +576,8 @@ class _SkillsState extends State<Skills> {
                                                                             newMiniSkill:
                                                                                 'Basic'
                                                                           });
-                                                                          print(
-                                                                              newMiniSkill);
                                                                           newMiniSkill =
                                                                               null;
-                                                                          print(
-                                                                              newMiniSkill);
                                                                         });
                                                                     },
                                                                   ),

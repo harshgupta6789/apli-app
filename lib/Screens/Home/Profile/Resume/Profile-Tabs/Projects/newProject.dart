@@ -317,25 +317,11 @@ class _NewProjectState extends State<NewProject> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   children: <Widget>[
                                     SizedBox(
-                                      width: width * 0.15 * scale,
+                                      width: width * 0.3 * scale,
                                       child: AutoSizeText(
                                         fileName ?? '',
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
-                                      ),
-                                    ),
-                                    Visibility(
-                                      visible: file != null,
-                                      child: IconButton(
-                                        icon: Icon(Icons.clear),
-                                        onPressed: () {
-                                          setState(() {
-                                            file = null;
-                                            fileName = null;
-                                            certificate = null;
-                                          });
-                                        },
-                                        padding: EdgeInsets.all(0),
                                       ),
                                     ),
                                   ],
@@ -345,9 +331,17 @@ class _NewProjectState extends State<NewProject> {
                                 padding: EdgeInsets.only(right: 5),
                                 child: MaterialButton(
                                   onPressed: () {
-                                    filePicker(context);
+                                    if(file == null) {
+                                      filePicker(context);
+                                    } else {
+                                      setState(() {
+                                        file = null;
+                                        fileName = null;
+                                        certificate = null;
+                                      });
+                                    }
                                   },
-                                  child: Text("Browse"),
+                                  child: Text(file == null ? "Browse" : "Remove"),
                                   color: Colors.grey,
                                 ),
                               ),
