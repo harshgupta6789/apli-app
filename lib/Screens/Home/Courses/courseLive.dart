@@ -14,7 +14,6 @@ class _CourseLiveState extends State<CourseLive> {
   
   @override
   void initState() {
-    // TODO: implement initState
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.link),
       flags: YoutubePlayerFlags(
@@ -28,10 +27,12 @@ class _CourseLiveState extends State<CourseLive> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
+    return SafeArea(
+          child: Scaffold(
+        body: YoutubePlayer(
+          controller: _controller,
+          showVideoProgressIndicator: true,
+        ),
       ),
     );
   }
