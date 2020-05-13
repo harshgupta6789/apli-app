@@ -49,11 +49,13 @@ class APIService {
           case 7:
             {
               String eduToPass = json.encode(map);
+              print(eduToPass);
               Response response = await Dio().post(educationURL, data: {
                 "email": "${value.getString('email')}",
                 "secret": "$passHashSecret",
                 'education': eduToPass
               });
+              print(response.data);
               if (response.statusCode == 200) {
                 var temp = response.data['success'];
                 if (temp == true) {

@@ -16,7 +16,7 @@ import 'package:intl/intl.dart';
 class Other extends StatefulWidget {
   final Map<dynamic, dynamic> oth;
   final List allFiles, otherCourses, nameofOtherCourses;
-  final String courseEdu;
+  final String courseEdu, type;
   final bool old;
   final int index;
 
@@ -28,7 +28,8 @@ class Other extends StatefulWidget {
       this.old,
       this.otherCourses,
       this.nameofOtherCourses,
-      this.index})
+      this.index,
+      this.type})
       : super(key: key);
   @override
   _OtherState createState() => _OtherState();
@@ -116,6 +117,7 @@ class _OtherState extends State<Other> {
           education: education,
           courseEdu:
           widget.courseEdu,
+          type: widget.type,
         )));
       },
       child: Scaffold(
@@ -144,6 +146,7 @@ class _OtherState extends State<Other> {
                         education: education,
                         courseEdu:
                         widget.courseEdu,
+                        type: widget.type,
                       )));
                     }),
               ),
@@ -304,101 +307,89 @@ class _OtherState extends State<Other> {
                         ],
                       ),
                       SizedBox(height: 15.0),
+                      DateTimeField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'cannot be empty';
+                            }
+                            return null;
+                          },
+                          format: format,
+                          initialValue: start == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                              start.microsecondsSinceEpoch),
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate:
+                                currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            var temp = start != null
+                                ? format
+                                .format(DateTime
+                                .fromMicrosecondsSinceEpoch(start
+                                .microsecondsSinceEpoch))
+                                .toString() ??
+                                "DOB"
+                                : "DOB";
+                            return date;
+                          },
+                          onChanged: (date) {
+                            setState(() {
+                              start = (date == null)
+                                  ? null
+                                  : Timestamp.fromMicrosecondsSinceEpoch(
+                                  date.microsecondsSinceEpoch);
+                            });
+                          },
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          decoration: x("From")),
                       SizedBox(height: 15.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                format: format,
-                                initialValue: start == null
-                                    ? null
-                                    : DateTime.fromMicrosecondsSinceEpoch(
-                                        start.microsecondsSinceEpoch),
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-                                  var temp = start != null
-                                      ? format
-                                              .format(DateTime
-                                                  .fromMicrosecondsSinceEpoch(start
-                                                      .microsecondsSinceEpoch))
-                                              .toString() ??
-                                          "DOB"
-                                      : "DOB";
-                                  return date;
-                                },
-                                onChanged: (date) {
-                                  setState(() {
-                                    start = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
-                                  });
-                                },
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
-                                decoration: x("From")),
-                          ),
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                format: format,
-                                initialValue: end == null
-                                    ? null
-                                    : DateTime.fromMicrosecondsSinceEpoch(
-                                        end.microsecondsSinceEpoch),
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-                                  var temp = end != null
-                                      ? format
-                                              .format(DateTime
-                                                  .fromMicrosecondsSinceEpoch(end
-                                                      .microsecondsSinceEpoch))
-                                              .toString() ??
-                                          "DOB"
-                                      : "DOB";
-                                  return date;
-                                },
-                                onChanged: (date) {
-                                  setState(() {
-                                    end = (date == null)
-                                        ? null
-                                        : Timestamp.fromMicrosecondsSinceEpoch(
-                                            date.microsecondsSinceEpoch);
-                                  });
-                                },
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
-                                decoration: x("To")),
-                          ),
-                        ],
-                      ),
+                      DateTimeField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'cannot be empty';
+                            }
+                            return null;
+                          },
+                          format: format,
+                          initialValue: end == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                              end.microsecondsSinceEpoch),
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate:
+                                currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            var temp = end != null
+                                ? format
+                                .format(DateTime
+                                .fromMicrosecondsSinceEpoch(end
+                                .microsecondsSinceEpoch))
+                                .toString() ??
+                                "DOB"
+                                : "DOB";
+                            return date;
+                          },
+                          onChanged: (date) {
+                            setState(() {
+                              end = (date == null)
+                                  ? null
+                                  : Timestamp.fromMicrosecondsSinceEpoch(
+                                  date.microsecondsSinceEpoch);
+                            });
+                          },
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          decoration: x("To")),
                       SizedBox(height: 15.0),
                       Container(
                         decoration: BoxDecoration(
@@ -481,6 +472,7 @@ class _OtherState extends State<Other> {
                                       education: education,
                                       courseEdu:
                                       widget.courseEdu,
+                                      type: widget.type,
                                     )));
                                   } else {
                                     Navigator.pop(context);
@@ -489,6 +481,7 @@ class _OtherState extends State<Other> {
                                       education: education,
                                       courseEdu:
                                       widget.courseEdu,
+                                      type: widget.type,
                                     )));
                                   }
                                 }),
@@ -524,11 +517,13 @@ class _OtherState extends State<Other> {
                                       education[courseName] =
                                       otherCourses[index];
                                     }
+                                    Navigator.pop(context);
                                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
                                       allFiles: allFiles,
                                       education: education,
                                       courseEdu:
                                       widget.courseEdu,
+                                      type: widget.type,
                                     )));
                                   }
                                 }),

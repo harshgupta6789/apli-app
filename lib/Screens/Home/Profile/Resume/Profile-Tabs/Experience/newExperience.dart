@@ -118,6 +118,9 @@ class _NewExperienceState extends State<NewExperience> {
     information = experiences[index]['information'] ?? ['', '', ''];
     from = experiences[index]['from'] ?? Timestamp.now();
     to = experiences[index]['to'] ?? Timestamp.now();
+//    if(certificate != null)
+//      fileName = getFileNameFromURL(certificate);
+//    print(fileName);
     getInfo();
     super.initState();
   }
@@ -242,102 +245,91 @@ class _NewExperienceState extends State<NewExperience> {
                           },
                         ),
                         SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Container(
-                              width: width * 0.4,
-                              child: DateTimeField(
-                                  validator: (value) {
-                                    if (value == null)
-                                      return 'cannot be empty';
-                                    else
-                                      return null;
-                                  },
-                                  format: format,
-                                  initialValue: from == null
-                                      ? null
-                                      : DateTime.fromMicrosecondsSinceEpoch(
-                                          from.microsecondsSinceEpoch),
-                                  onShowPicker: (context, currentValue) async {
-                                    final date = await showDatePicker(
-                                        context: context,
-                                        firstDate: DateTime(1900),
-                                        initialDate:
-                                            currentValue ?? DateTime.now(),
-                                        lastDate: DateTime(2100));
-                                    var temp = from != null
-                                        ? format
-                                                .format(DateTime
-                                                    .fromMicrosecondsSinceEpoch(
-                                                        from.microsecondsSinceEpoch))
-                                                .toString() ??
-                                            "DOB"
-                                        : "DOB";
-                                    return date;
-                                  },
-                                  onChanged: (date) {
-                                    setState(() {
-                                      from = (date == null)
-                                          ? null
-                                          : Timestamp
-                                              .fromMicrosecondsSinceEpoch(
-                                                  date.microsecondsSinceEpoch);
-                                    });
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                  onFieldSubmitted: (_) =>
-                                      FocusScope.of(context).nextFocus(),
-                                  decoration: x("From")),
-                            ),
-                            Container(
-                              width: width * 0.4,
-                              child: DateTimeField(
-                                  validator: (value) {
-                                    if (value == null)
-                                      return 'cannot be empty';
-                                    else
-                                      return null;
-                                  },
-                                  format: format,
-                                  initialValue: to == null
-                                      ? null
-                                      : DateTime.fromMicrosecondsSinceEpoch(
-                                          to.microsecondsSinceEpoch),
-                                  onShowPicker: (context, currentValue) async {
-                                    final date = await showDatePicker(
-                                        context: context,
-                                        firstDate: DateTime(1900),
-                                        initialDate:
-                                            currentValue ?? DateTime.now(),
-                                        lastDate: DateTime(2100));
-                                    var temp = to != null
-                                        ? format
-                                                .format(DateTime
-                                                    .fromMicrosecondsSinceEpoch(
-                                                        to.microsecondsSinceEpoch))
-                                                .toString() ??
-                                            "DOB"
-                                        : "DOB";
-                                    return date;
-                                  },
-                                  onChanged: (date) {
-                                    setState(() {
-                                      to = (date == null)
-                                          ? null
-                                          : Timestamp
-                                              .fromMicrosecondsSinceEpoch(
-                                                  date.microsecondsSinceEpoch);
-                                    });
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                  onFieldSubmitted: (_) =>
-                                      FocusScope.of(context).nextFocus(),
-                                  decoration: x("To")),
-                            ),
-                          ],
-                        ),
+                        DateTimeField(
+                            validator: (value) {
+                              if (value == null)
+                                return 'cannot be empty';
+                              else
+                                return null;
+                            },
+                            format: format,
+                            initialValue: from == null
+                                ? null
+                                : DateTime.fromMicrosecondsSinceEpoch(
+                                from.microsecondsSinceEpoch),
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate:
+                                  currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+                              var temp = from != null
+                                  ? format
+                                  .format(DateTime
+                                  .fromMicrosecondsSinceEpoch(
+                                  from.microsecondsSinceEpoch))
+                                  .toString() ??
+                                  "DOB"
+                                  : "DOB";
+                              return date;
+                            },
+                            onChanged: (date) {
+                              setState(() {
+                                from = (date == null)
+                                    ? null
+                                    : Timestamp
+                                    .fromMicrosecondsSinceEpoch(
+                                    date.microsecondsSinceEpoch);
+                              });
+                            },
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) =>
+                                FocusScope.of(context).nextFocus(),
+                            decoration: x("From")),
+                        SizedBox(height: 15,),
+                        DateTimeField(
+                            validator: (value) {
+                              if (value == null)
+                                return 'cannot be empty';
+                              else
+                                return null;
+                            },
+                            format: format,
+                            initialValue: to == null
+                                ? null
+                                : DateTime.fromMicrosecondsSinceEpoch(
+                                to.microsecondsSinceEpoch),
+                            onShowPicker: (context, currentValue) async {
+                              final date = await showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate:
+                                  currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+                              var temp = to != null
+                                  ? format
+                                  .format(DateTime
+                                  .fromMicrosecondsSinceEpoch(
+                                  to.microsecondsSinceEpoch))
+                                  .toString() ??
+                                  "DOB"
+                                  : "DOB";
+                              return date;
+                            },
+                            onChanged: (date) {
+                              setState(() {
+                                to = (date == null)
+                                    ? null
+                                    : Timestamp
+                                    .fromMicrosecondsSinceEpoch(
+                                    date.microsecondsSinceEpoch);
+                              });
+                            },
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) =>
+                                FocusScope.of(context).nextFocus(),
+                            decoration: x("To")),
                         SizedBox(height: 15.0),
                         TextFormField(
                           initialValue: designation,

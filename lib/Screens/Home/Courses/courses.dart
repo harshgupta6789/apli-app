@@ -90,6 +90,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.separated(
+            physics: ScrollPhysics(),
               separatorBuilder: (BuildContext context, int index) => Divider(
                     thickness: 1.2,
                   ),
@@ -152,7 +153,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                         var dateString;
                         int now = DateTime.now().millisecondsSinceEpoch;
                         int estimateTs =
-                            DateTime(2020, 5, 11, 16, 0, 0).millisecondsSinceEpoch;
+                            DateTime(2020, 5, 17, 16, 0, 0).millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
                         if (remaining.inDays > 0) {
@@ -178,7 +179,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           else
                             dateString = remaining.inSeconds.toString() + ' sec';
                         }
-                        //print(dateString);
                         if (remaining.isNegative) {
                           return Column(
                             children: <Widget>[
@@ -220,7 +220,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                               padding: EdgeInsets.only(left: 22, right: 22),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: basicColor, width: 1.2),
+                                side: BorderSide(color: Colors.grey, width: 1.2),
                               ),
                               child: Text(
                                 'Start',

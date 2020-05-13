@@ -43,21 +43,6 @@ class _DiplomaState extends State<Diploma> {
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
 
-  Future<void> _uploadFile(File file, String filename) async {
-    await SharedPreferences.getInstance().then((value) async {
-      StorageReference storageReference;
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child("documents/${value.getString("email")}/$filename");
-      uploadTask = storageReference.putFile(file);
-      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-      final String url = (await downloadUrl.ref.getDownloadURL());
-
-      if (url != null) {
-      } else if (url == null) {}
-    });
-  }
-
   void init() {
     setState(() {
       allFiles = widget.allFiles;
@@ -66,7 +51,7 @@ class _DiplomaState extends State<Diploma> {
     });
     if(type == null) {
       setState(() {
-        type = 'Class XII';
+        type = 'XII';
         institute = '';
         board = '';
         score = 0;
@@ -77,11 +62,8 @@ class _DiplomaState extends State<Diploma> {
         certificate = null;
       });
     } else {
-      if(type == 'Class XII')
-        setState(() {
-          type = 'XII';
-        });
       print(education.keys);
+      print(type);
       setState(() {
         institute = education[type]['institute'] ?? "";
         board = education[type]['board'] ?? "";
@@ -92,11 +74,6 @@ class _DiplomaState extends State<Diploma> {
         unit = education[type]['score_unit'] ?? '%';
         certificate = education[type]['certificate'];
       });
-      if(type == 'XII') {
-        setState(() {
-          type = 'Class XII';
-        });
-      }
     }
   }
 
@@ -181,7 +158,7 @@ class _DiplomaState extends State<Diploma> {
                       DropdownButton<String>(
                         //hint: Text("Unit"),
                         value: type ??
-                            'Class XII',
+                            'XII',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
@@ -193,7 +170,7 @@ class _DiplomaState extends State<Diploma> {
                           Icon(Icons.keyboard_arrow_down),
                         ),
                         underline: SizedBox(),
-                        items: <String>['Class XII', 'Diploma']
+                        items: <String>['XII', 'Diploma']
                             .map<DropdownMenuItem<String>>(
                                 (String value) {
                               return DropdownMenuItem<String>(
@@ -358,102 +335,93 @@ class _DiplomaState extends State<Diploma> {
                         ],
                       ),
                       SizedBox(height: 15.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Date cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                format: format,
-                                initialValue: start == null
-                                    ? null
-                                    : DateTime.fromMicrosecondsSinceEpoch(
-                                        start.microsecondsSinceEpoch),
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-                                  var temp = start != null
-                                      ? format
-                                              .format(DateTime
-                                                  .fromMicrosecondsSinceEpoch(start
-                                                      .microsecondsSinceEpoch))
-                                              .toString() ??
-                                          "DOB"
-                                      : "DOB";
-                                  return date;
-                                },
-                                onChanged: (date) {
-                                  setState(() {
-                                    start = (date == null)
-                                        ? null
-                                        : Timestamp
-                                        .fromMicrosecondsSinceEpoch(
-                                        date.microsecondsSinceEpoch);
-                                  });
-                                },
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
-                                decoration: x("From")),
-                          ),
-                          Container(
-                            width: width * 0.35,
-                            child: DateTimeField(
-                                validator: (value) {
-                                  if (value == null) {
-                                    return 'Date cannot be empty';
-                                  }
-                                  return null;
-                                },
-                                format: format,
-                                initialValue: end == null
-                                    ? null
-                                    : DateTime.fromMicrosecondsSinceEpoch(
-                                        end.microsecondsSinceEpoch),
-                                onShowPicker: (context, currentValue) async {
-                                  final date = await showDatePicker(
-                                      context: context,
-                                      firstDate: DateTime(1900),
-                                      initialDate:
-                                          currentValue ?? DateTime.now(),
-                                      lastDate: DateTime(2100));
-                                  var temp = end != null
-                                      ? format
-                                              .format(DateTime
-                                                  .fromMicrosecondsSinceEpoch(end
-                                                      .microsecondsSinceEpoch))
-                                              .toString() ??
-                                          "DOB"
-                                      : "DOB";
-                                  return date;
-                                },
-                                onChanged: (date) {
-                                  setState(() {
-                                    end = (date == null)
-                                        ? null
-                                        : Timestamp
-                                        .fromMicrosecondsSinceEpoch(
-                                        date.microsecondsSinceEpoch);
-                                  });
-                                },
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
-                                decoration: x("To")),
-                          ),
-                        ],
+                      DateTimeField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Date cannot be empty';
+                            }
+                            return null;
+                          },
+                          format: format,
+                          initialValue: start == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                              start.microsecondsSinceEpoch),
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate:
+                                currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            var temp = start != null
+                                ? format
+                                .format(DateTime
+                                .fromMicrosecondsSinceEpoch(start
+                                .microsecondsSinceEpoch))
+                                .toString() ??
+                                "DOB"
+                                : "DOB";
+                            return date;
+                          },
+                          onChanged: (date) {
+                            setState(() {
+                              start = (date == null)
+                                  ? null
+                                  : Timestamp
+                                  .fromMicrosecondsSinceEpoch(
+                                  date.microsecondsSinceEpoch);
+                            });
+                          },
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          decoration: x("From")),
+                      SizedBox(
+                        height: 15,
                       ),
+                      DateTimeField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Date cannot be empty';
+                            }
+                            return null;
+                          },
+                          format: format,
+                          initialValue: end == null
+                              ? null
+                              : DateTime.fromMicrosecondsSinceEpoch(
+                              end.microsecondsSinceEpoch),
+                          onShowPicker: (context, currentValue) async {
+                            final date = await showDatePicker(
+                                context: context,
+                                firstDate: DateTime(1900),
+                                initialDate:
+                                currentValue ?? DateTime.now(),
+                                lastDate: DateTime(2100));
+                            var temp = end != null
+                                ? format
+                                .format(DateTime
+                                .fromMicrosecondsSinceEpoch(end
+                                .microsecondsSinceEpoch))
+                                .toString() ??
+                                "DOB"
+                                : "DOB";
+                            return date;
+                          },
+                          onChanged: (date) {
+                            setState(() {
+                              end = (date == null)
+                                  ? null
+                                  : Timestamp
+                                  .fromMicrosecondsSinceEpoch(
+                                  date.microsecondsSinceEpoch);
+                            });
+                          },
+                          textInputAction: TextInputAction.next,
+                          onFieldSubmitted: (_) =>
+                              FocusScope.of(context).nextFocus(),
+                          decoration: x("To")),
                       SizedBox(height: 15.0),
                       Container(
                         decoration: BoxDecoration(
@@ -556,19 +524,15 @@ class _DiplomaState extends State<Diploma> {
                                       formattedTo =
                                           formattedTo + " 00:00:00+0000";
                                     });
-                                    String temp;
-                                    if(type == 'Class XII')
-                                      temp = 'XII';
-                                    else temp = 'Diploma';
+                                    String temp = type;
                                     if(widget.type == null) {
-                                      education[temp] = {};
+
                                     } else if(widget.type == temp) {
 
                                     } else {
-                                      education[temp] = {};
-                                      print(widget.type);
-                                      education.remove(widget.type == 'Class XII' ? 'XII' : 'Diploma');
+                                      education.remove(widget.type);
                                     }
+                                    education[temp] = {};
                                     education[temp]['institute'] = institute;
                                     education[temp]['board'] = board;
                                     education[temp]['score'] = score;
@@ -578,6 +542,7 @@ class _DiplomaState extends State<Diploma> {
                                     education[temp]['score_unit'] = unit;
                                     education[temp]['certificate'] = certificate;
                                     print(education.keys);
+                                    print(education);
                                     allFiles.add(file);
                                     Navigator.pushReplacement(
                                         context,
@@ -587,6 +552,7 @@ class _DiplomaState extends State<Diploma> {
                                                   courseEdu: widget.courseEdu,
                                                   allFiles: allFiles,
                                                   isUg: widget.isUg,
+                                              type: temp,
                                                 )));
                                   }
                                 }),

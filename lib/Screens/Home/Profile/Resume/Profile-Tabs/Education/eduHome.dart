@@ -83,7 +83,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                 if(completeEducation['XII'] == null && completeEducation['Diploma'] == null) {
                   type = null;
                 } else if(completeEducation.containsKey('XII'))
-                  type = 'Class XII';
+                  type = 'XII';
                 else type = 'Diploma';
                 if(completeEducation['X'] == null) {
                   completeEducation['X'] = {

@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -10,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'diploma.dart';
 
@@ -51,70 +49,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
   StorageUploadTask uploadTask;
   int temp = 0;
 
-  Future<void> _uploadFile(File file, String filename, int index) async {
-    await SharedPreferences.getInstance().then((value) async {
-      StorageReference storageReference;
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child("documents/${value.getString("email")}/$filename");
-      uploadTask = storageReference.putFile(file);
-      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-      final String url = (await downloadUrl.ref.getDownloadURL());
-
-      if (uploadTask.isInProgress) {
-        print('abd');
-        setState(() {
-          isUploading = true;
-        });
-      }
-
-      if (url != null) {
-        setState(() {
-          currentFileNames[index] = url;
-          edu[course]["sem_records"][index]['certificate'] =
-              currentFileNames[index];
-          temp = index;
-          isUploading = false;
-        });
-        print(currentFileNames);
-        print(temp);
-      } else if (url == null) {}
-    });
-  }
-
-  Widget uploading() {
-    return StreamBuilder<StorageTaskEvent>(
-        stream: uploadTask.events,
-        builder: (context, AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-          if (asyncSnapshot.hasData) {
-            final StorageTaskEvent event = asyncSnapshot.data;
-            final StorageTaskSnapshot snapshot = event.snapshot;
-            return Column(
-              children: <Widget>[
-                Loading(),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: CircularProgressIndicator(value: 0.2),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("üploading Files")),
-              ],
-            );
-          }
-          return Align(child: Text("Uploading Your Resume!..."));
-        });
-  }
-
-  Future uploadAll() {
-    for (int i = 0; i < semToBuild; i++) {
-      if (currentFiles[i] != null) {
-        // String fileName = p.basename(currentFiles[i].path);
-        _uploadFile(currentFiles[i], "Sem $i", i);
-      } else {}
-    }
-    return null;
-  }
 
   void init() {
     setState(() {
@@ -195,9 +129,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
           ),
           preferredSize: Size.fromHeight(55),
         ),
-        body: isUploading
-            ? uploading()
-            : ScrollConfiguration(
+        body: ScrollConfiguration(
                 child: SingleChildScrollView(
                     child: Form(
                   key: _formKey,
@@ -210,9 +142,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                       children: <Widget>[
                         SizedBox(height: 30.0),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                                width: width * 0.2,
+                                width: width * 0.4,
                                 child: Text(
                                   "Course",
                                   style: TextStyle(
@@ -220,7 +153,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       fontSize: 18),
                                 )),
                             Container(
-                              width: width * 0.7,
+                              width: width * 0.5,
                               child: TextFormField(
                                 enabled: false,
                                 initialValue: course,
@@ -237,9 +170,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         ),
                         SizedBox(height: 15.0),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                                width: width * 0.2,
+                                width: width * 0.4,
                                 child: Text(
                                   "Branch",
                                   style: TextStyle(
@@ -247,7 +181,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       fontSize: 18),
                                 )),
                             Container(
-                              width: width * 0.7,
+                              width: width * 0.5,
                               child: TextFormField(
                                 enabled: false,
                                 initialValue: branch,
@@ -264,9 +198,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         ),
                         SizedBox(height: 15.0),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Container(
-                                width: width * 0.2,
+                                width: width * 0.4,
                                 child: Text(
                                   "Duration",
                                   style: TextStyle(
@@ -274,7 +209,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       fontSize: 18),
                                 )),
                             Container(
-                                width: width * 0.7,
+                                width: width * 0.5,
                                 child: TextFormField(
                                   enabled: false,
                                   initialValue: duration,

@@ -124,7 +124,7 @@ class _CourseMainState extends State<CourseMain> {
                                                           fontWeight:
                                                               FontWeight.w700,
                                                         )),
-                                                    Text('By' + (snapshot.data.documents[index]['author'] ?? 'No Author'),
+                                                    Text('By ' + (snapshot.data.documents[index]['author'] ?? 'No Author'),
                                                         style: TextStyle(
                                                             fontWeight:
                                                                 FontWeight.w100,

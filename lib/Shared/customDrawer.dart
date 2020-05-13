@@ -126,7 +126,7 @@ class _CustomDrawerState extends State<CustomDrawer> with AutomaticKeepAliveClie
                 ListTile(
                   dense: true,
                   title: Text(
-                    "Notifications",
+                    "Notifications Settings",
                     style: TextStyle(
                         fontWeight: FontWeight.bold, fontSize: fontSize),
                   ),
