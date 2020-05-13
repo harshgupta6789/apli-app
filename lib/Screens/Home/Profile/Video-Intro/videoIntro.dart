@@ -261,7 +261,7 @@ class _VideoIntroState extends State<VideoIntro>
               padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
                   child: Text(
-                      "3. Please check your internet connection and surrounding noise while recording",
+                      "3. Please Keep your script limited to 60 seconds and be well prepared",
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
