@@ -236,14 +236,19 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           obscureText: false,
                           decoration: x("Average Score"),
                           onChanged: (text) {
+                            print(int.parse(text));
                             setState(
-                                () => edu[course]['score'] = int.parse(text));
+                                () {
+                                  edu[course]['score'] = int.parse(text);
+                                });
                           },
                           keyboardType: TextInputType.numberWithOptions(),
                           validator: (value) {
-                            if (value.isEmpty)
-                              return 'score cannot be empty';
-                            else
+                            if (value.isEmpty) {
+                              return 'postal code cannot be empty';
+                            } else if (!(int.tryParse(value) != null)) {
+                              return 'invalid postal';
+                            } else
                               return null;
                           },
                         ),

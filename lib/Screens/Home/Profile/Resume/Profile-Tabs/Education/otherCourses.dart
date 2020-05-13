@@ -244,9 +244,11 @@ class _OtherState extends State<Other> {
                                 cgpa = text;
                               },
                               validator: (value) {
-                                if (value.isEmpty)
-                                  return 'cgpa cannot be empty';
-                                else
+                                if (value.isEmpty) {
+                                  return 'score code cannot be empty';
+                                } else if (!(int.tryParse(value) != null)) {
+                                  return 'invalid score';
+                                } else
                                   return null;
                               },
                             ),

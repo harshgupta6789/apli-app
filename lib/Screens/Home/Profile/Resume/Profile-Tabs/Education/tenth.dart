@@ -300,9 +300,11 @@ class _TenthState extends State<Tenth> {
                                         int.tryParse(text));
                                   },
                                   validator: (value) {
-                                    if (value.isEmpty)
-                                      return 'score cannot be empty';
-                                    else
+                                    if (value.isEmpty) {
+                                      return 'score code cannot be empty';
+                                    } else if (!(int.tryParse(value) != null)) {
+                                      return 'invalid score';
+                                    } else
                                       return null;
                                   },
                                 ),
@@ -571,7 +573,7 @@ class _TenthState extends State<Tenth> {
                                         if (widget.isUg != true) {
                                           allFiles.add([]);
                                           education.forEach((key, value) {
-                                            if(key != 'X' && key != 'XII' && key != 'current_education' && key != widget.courseEdu)
+                                            if(key != 'X' && key != 'XII' && key != 'current_education' && key != widget.courseEdu && key != 'Diploma')
                                               allFiles[3].add(null);
                                           });
                                           Navigator.pushReplacement(

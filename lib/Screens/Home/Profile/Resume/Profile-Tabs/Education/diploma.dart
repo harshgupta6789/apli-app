@@ -270,9 +270,11 @@ class _DiplomaState extends State<Diploma> {
                                     int.tryParse(text));
                               },
                               validator: (value) {
-                                if (value.isEmpty)
-                                  return 'score cannot be empty';
-                                else
+                                if (value.isEmpty) {
+                                  return 'score code cannot be empty';
+                                } else if (!(int.tryParse(value) != null)) {
+                                  return 'invalid score';
+                                } else
                                   return null;
                               },
                             ),
