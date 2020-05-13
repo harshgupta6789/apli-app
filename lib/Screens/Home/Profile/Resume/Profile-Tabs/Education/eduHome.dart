@@ -90,7 +90,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                     'board': "",
                     'certificate': null,
                     'institute': "",
-                    'score': 0,
+                    'score': '',
                     'score_unit': "%",
                     'specialization': "",
                     'start': Timestamp.now(),

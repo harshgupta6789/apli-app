@@ -14,6 +14,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,7 +26,12 @@ class Tenth extends StatefulWidget {
   final String courseEdu, type;
 
   const Tenth(
-      {Key key, @required this.x, this.allFiles, this.isUg, this.courseEdu, this.type})
+      {Key key,
+      @required this.x,
+      this.allFiles,
+      this.isUg,
+      this.courseEdu,
+      this.type})
       : super(key: key);
   @override
   _TenthState createState() => _TenthState();
@@ -49,73 +55,81 @@ class _TenthState extends State<Tenth> {
 
   Future<List> upload() async {
     List temp = [[]];
-    for(int i = 0; i < allFiles.length; i++) {
-      if(i == 0) {
-        for(int j = 0; j < allFiles[0].length; j++) {
+    for (int i = 0; i < allFiles.length; i++) {
+      if (i == 0) {
+        for (int j = 0; j < allFiles[0].length; j++) {
           temp[0].add(null);
         }
-      } else if(i == 1) temp.add(null);
-      else if(i == 2) temp.add(null);
+      } else if (i == 1)
+        temp.add(null);
+      else if (i == 2) temp.add(null);
     }
     try {
       await SharedPreferences.getInstance().then((value) async {
         for (int i = 0; i < allFiles.length; i++) {
-          if(i == 0)
+          if (i == 0)
             for (int j = 0; j < allFiles[0].length; j++) {
-              if(allFiles[0][j] != null) {
-                final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/sem$j${DateTime.now()}");
+              if (allFiles[0][j] != null) {
+                final StorageReference storageReference = FirebaseStorage()
+                    .ref()
+                    .child(
+                        "documents/${value.getString("email")}/sem$j${DateTime.now()}");
 
-                final StorageUploadTask uploadTask = storageReference.putFile(allFiles[0][j]);
+                final StorageUploadTask uploadTask =
+                    storageReference.putFile(allFiles[0][j]);
 
                 final StreamSubscription<StorageTaskEvent> streamSubscription =
-                uploadTask.events.listen((event) {
-
-                });
+                    uploadTask.events.listen((event) {});
                 await uploadTask.onComplete;
                 streamSubscription.cancel();
 
                 String imageUrl = await storageReference.getDownloadURL();
                 temp[0][j] = imageUrl;
-              } else temp[0][j] = null;
+              } else
+                temp[0][j] = null;
             }
-          else if(i == 1) {
-            if(allFiles[1] != null) {
-              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/TwelfthOrDiploma${DateTime.now()}");
+          else if (i == 1) {
+            if (allFiles[1] != null) {
+              final StorageReference storageReference = FirebaseStorage()
+                  .ref()
+                  .child(
+                      "documents/${value.getString("email")}/TwelfthOrDiploma${DateTime.now()}");
 
-              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[1]);
+              final StorageUploadTask uploadTask =
+                  storageReference.putFile(allFiles[1]);
 
               final StreamSubscription<StorageTaskEvent> streamSubscription =
-              uploadTask.events.listen((event) {
-
-              });
+                  uploadTask.events.listen((event) {});
               await uploadTask.onComplete;
               streamSubscription.cancel();
 
               String imageUrl = await storageReference.getDownloadURL();
               temp[1] = imageUrl;
-            } else temp[1] = null;
+            } else
+              temp[1] = null;
+          } else if (i == 2) {
+            if (allFiles[2] != null) {
+              final StorageReference storageReference = FirebaseStorage()
+                  .ref()
+                  .child(
+                      "documents/${value.getString("email")}/Tenth${DateTime.now()}");
 
-          } else if(i == 2) {
-            if(allFiles[2] != null) {
-              final StorageReference storageReference = FirebaseStorage().ref().child("documents/${value.getString("email")}/Tenth${DateTime.now()}");
-
-              final StorageUploadTask uploadTask = storageReference.putFile(allFiles[2]);
+              final StorageUploadTask uploadTask =
+                  storageReference.putFile(allFiles[2]);
 
               final StreamSubscription<StorageTaskEvent> streamSubscription =
-              uploadTask.events.listen((event) {
-
-              });
+                  uploadTask.events.listen((event) {});
               await uploadTask.onComplete;
               streamSubscription.cancel();
 
               String imageUrl = await storageReference.getDownloadURL();
               temp[2] = imageUrl;
-            } else temp[2] = null;
+            } else
+              temp[2] = null;
           }
         }
       });
-    } catch (e) {
-    }
+    } catch (e) {}
     return temp;
   }
 
@@ -289,21 +303,22 @@ class _TenthState extends State<Tenth> {
                                       ? ''
                                       : education['X']['score'].toString(),
                                   textInputAction: TextInputAction.next,
-                                  keyboardType:
-                                      TextInputType.numberWithOptions(),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    new WhitelistingTextInputFormatter(
+                                        RegExp("[0-9]")),
+                                  ],
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("Score"),
                                   onChanged: (text) {
-                                    setState(() => education['X']['score'] =
-                                        int.tryParse(text));
+                                    setState(
+                                        () => education['X']['score'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return 'score cannot be empty';
-                                    } else if (!(int.tryParse(value) != null)) {
-                                      return 'invalid score';
                                     } else
                                       return null;
                                   },
@@ -380,23 +395,20 @@ class _TenthState extends State<Tenth> {
                               initialValue: start == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  start.microsecondsSinceEpoch),
-                              onShowPicker:
-                                  (context, currentValue) async {
+                                      start.microsecondsSinceEpoch),
+                              onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
-                                    initialDate:
-                                    currentValue ?? DateTime.now(),
+                                    initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
                                 var temp = start != null
                                     ? format
-                                    .format(DateTime
-                                    .fromMicrosecondsSinceEpoch(
-                                    start
-                                        .microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "DOB"
+                                            .format(DateTime
+                                                .fromMicrosecondsSinceEpoch(start
+                                                    .microsecondsSinceEpoch))
+                                            .toString() ??
+                                        "DOB"
                                     : "DOB";
                                 return date;
                               },
@@ -404,9 +416,8 @@ class _TenthState extends State<Tenth> {
                                 setState(() {
                                   start = (date == null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
                                 });
                               },
                               textInputAction: TextInputAction.next,
@@ -427,22 +438,20 @@ class _TenthState extends State<Tenth> {
                               initialValue: end == null
                                   ? null
                                   : DateTime.fromMicrosecondsSinceEpoch(
-                                  end.microsecondsSinceEpoch),
-                              onShowPicker:
-                                  (context, currentValue) async {
+                                      end.microsecondsSinceEpoch),
+                              onShowPicker: (context, currentValue) async {
                                 final date = await showDatePicker(
                                     context: context,
                                     firstDate: DateTime(1900),
-                                    initialDate:
-                                    currentValue ?? DateTime.now(),
+                                    initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
                                 var temp = end != null
                                     ? format
-                                    .format(DateTime
-                                    .fromMicrosecondsSinceEpoch(
-                                    end.microsecondsSinceEpoch))
-                                    .toString() ??
-                                    "DOB"
+                                            .format(DateTime
+                                                .fromMicrosecondsSinceEpoch(
+                                                    end.microsecondsSinceEpoch))
+                                            .toString() ??
+                                        "DOB"
                                     : "DOB";
                                 return date;
                               },
@@ -450,9 +459,8 @@ class _TenthState extends State<Tenth> {
                                 setState(() {
                                   end = (date == null)
                                       ? null
-                                      : Timestamp
-                                      .fromMicrosecondsSinceEpoch(
-                                      date.microsecondsSinceEpoch);
+                                      : Timestamp.fromMicrosecondsSinceEpoch(
+                                          date.microsecondsSinceEpoch);
                                 });
                               },
                               textInputAction: TextInputAction.next,
@@ -496,7 +504,7 @@ class _TenthState extends State<Tenth> {
                                   padding: EdgeInsets.only(right: 5),
                                   child: MaterialButton(
                                     onPressed: () {
-                                      if(file == null) {
+                                      if (file == null) {
                                         filePicker(context);
                                       } else {
                                         setState(() {
@@ -506,7 +514,8 @@ class _TenthState extends State<Tenth> {
                                         });
                                       }
                                     },
-                                    child: Text(file == null ? "Browse" : "Remove"),
+                                    child: Text(
+                                        file == null ? "Browse" : "Remove"),
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -573,7 +582,11 @@ class _TenthState extends State<Tenth> {
                                         if (widget.isUg != true) {
                                           allFiles.add([]);
                                           education.forEach((key, value) {
-                                            if(key != 'X' && key != 'XII' && key != 'current_education' && key != widget.courseEdu && key != 'Diploma')
+                                            if (key != 'X' &&
+                                                key != 'XII' &&
+                                                key != 'current_education' &&
+                                                key != widget.courseEdu &&
+                                                key != 'Diploma')
                                               allFiles[3].add(null);
                                           });
                                           Navigator.pushReplacement(
@@ -591,29 +604,39 @@ class _TenthState extends State<Tenth> {
                                           setState(() {
                                             loading = true;
                                           });
-                                          showToast("Uploading..Might Take Some time", context);
+                                          showToast(
+                                              "Uploading..Might Take Some time",
+                                              context);
                                           List temp = await upload();
-                                          for(int i = 0; i < allFiles.length; i++) {
-                                            if(i == 0) {
-                                              for(int j = 0; j < allFiles[0].length; j++) {
-                                                if(allFiles[0][j] != null) {
-                                                  education[widget.courseEdu]['sem_records'][j]['certificate'] = temp[0][j];
+                                          for (int i = 0;
+                                              i < allFiles.length;
+                                              i++) {
+                                            if (i == 0) {
+                                              for (int j = 0;
+                                                  j < allFiles[0].length;
+                                                  j++) {
+                                                if (allFiles[0][j] != null) {
+                                                  education[widget.courseEdu]
+                                                              ['sem_records'][j]
+                                                          ['certificate'] =
+                                                      temp[0][j];
                                                 }
                                               }
-                                            } else if(i == 1) {
-                                              if(allFiles[i] != null) {
-                                                education['XII']['certificate'] = temp[i];
+                                            } else if (i == 1) {
+                                              if (allFiles[i] != null) {
+                                                education['XII']
+                                                    ['certificate'] = temp[i];
                                               }
-                                            } else if(i == 2) {
-                                              if(allFiles[i] != null) {
-                                                education['X']['certificate'] = temp[i];
+                                            } else if (i == 2) {
+                                              if (allFiles[i] != null) {
+                                                education['X']['certificate'] =
+                                                    temp[i];
                                               }
                                             }
                                           }
                                           dynamic result =
-                                          await _APIService
-                                              .sendProfileData(
-                                              education);
+                                              await _APIService.sendProfileData(
+                                                  education);
                                           if (result == -1) {
                                             showToast('Failed', context);
                                           } else if (result == 0) {

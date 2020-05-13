@@ -11,6 +11,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -67,7 +68,7 @@ class _DiplomaState extends State<Diploma> {
       setState(() {
         institute = education[type]['institute'] ?? "";
         board = education[type]['board'] ?? "";
-        score = education[type]['score'] ?? '';
+        score = education[type]['score']!=null?education[type]['score'].toString():"";
         specialization = education[type]['specialization'] ?? '';
         start = education[type]['start'] ?? Timestamp.now();
         end = education[type]['end'] ?? Timestamp.now();
@@ -249,93 +250,94 @@ class _DiplomaState extends State<Diploma> {
                       SizedBox(
                         height: 15,
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children: <Widget>[
-                      //     Container(
-                      //       width: width * 0.35,
-                      //       child: TextFormField(
-                      //         initialValue: score == null
-                      //             ? ''
-                      //             : score.toString(),
-                      //         textInputAction: TextInputAction.next,
-                      //         keyboardType: TextInputType.numberWithOptions(),
-                      //         onFieldSubmitted: (_) =>
-                      //             FocusScope.of(context).nextFocus(),
-                      //         obscureText: false,
-                      //         decoration: x("Score"),
-                      //         onChanged: (text) {
-                      //           setState(() => score =
-                      //               text);
-                      //         },
-                      //         validator: (value) {
-                      //           if (value.isEmpty) {
-                      //             return 'score cannot be empty';
-                      //           } else if (!(int.tryParse(value) != null)) {
-                      //             return 'invalid score';
-                      //           } else
-                      //             return null;
-                      //         },
-                      //       ),
-                      //     ),
-                      //     Container(
-                      //       width: width * 0.35,
-                      //       child: Stack(
-                      //         children: <Widget>[
-                      //           Align(
-                      //             alignment: Alignment.centerLeft,
-                      //             child: TextFormField(
-                      //               enabled: false,
-                      //               style:
-                      //                   TextStyle(fontWeight: FontWeight.w500),
-                      //               decoration: x("Unit"),
-                      //             ),
-                      //           ),
-                      //           Align(
-                      //             alignment: Alignment.centerRight,
-                      //             child: ClipRRect(
-                      //               borderRadius: BorderRadius.circular(5),
-                      //               child: Container(
-                      //                 padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
-                      //                 child: DropdownButton<String>(
-                      //                   //hint: Text("Unit"),
-                      //                   value: unit ??
-                      //                       '%',
-                      //                   style: TextStyle(
-                      //                       color: Colors.black,
-                      //                       fontWeight: FontWeight.w400,
-                      //                       fontSize: 14),
-                      //                   icon: Padding(
-                      //                     padding:
-                      //                         const EdgeInsets.only(left: 10.0),
-                      //                     child:
-                      //                         Icon(Icons.keyboard_arrow_down),
-                      //                   ),
-                      //                   underline: SizedBox(),
-                      //                   items: <String>['/4', '/10', '%']
-                      //                       .map<DropdownMenuItem<String>>(
-                      //                           (String value) {
-                      //                     return DropdownMenuItem<String>(
-                      //                       value: value,
-                      //                       child: Text(value),
-                      //                     );
-                      //                   }).toList(),
-                      //                   onChanged: (value) {
-                      //                     setState(() {
-                      //                       unit =
-                      //                           value;
-                      //                     });
-                      //                   },
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            width: width * 0.35,
+                            child: TextFormField(
+                              initialValue: score == null
+                                  ? ''
+                                  : score.toString(),
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                              onFieldSubmitted: (_) =>
+                                  FocusScope.of(context).nextFocus(),
+                              obscureText: false,
+                              decoration: x("Score"),
+                              onChanged: (text) {
+                                setState(() => score =
+                                    text);
+                              },
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'score cannot be empty';
+                                } else if (!(int.tryParse(value) != null)) {
+                                  return 'invalid score';
+                                } else
+                                  return null;
+                              },
+                            ),
+                          ),
+                          Container(
+                            width: width * 0.35,
+                            child: Stack(
+                              children: <Widget>[
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: TextFormField(
+                                    enabled: false,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.w500),
+                                    decoration: x("Unit"),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: Container(
+                                      padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
+                                      child: DropdownButton<String>(
+                                        //hint: Text("Unit"),
+                                        value: unit ??
+                                            '%',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 14),
+                                        icon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 10.0),
+                                          child:
+                                              Icon(Icons.keyboard_arrow_down),
+                                        ),
+                                        underline: SizedBox(),
+                                        items: <String>['/4', '/10', '%']
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            unit =
+                                                value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(height: 15.0),
                       DateTimeField(
                           validator: (value) {

@@ -227,6 +227,9 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         : edu[course]['score'].toString(),
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                    ],
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Average Score"),
@@ -280,6 +283,16 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         ['semester_score'] = text;
                                   });
                                 },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'Score cannot be empty';
+                                  } else
+                                    return null;
+                                },
+                                inputFormatters: [
+                                  new WhitelistingTextInputFormatter(
+                                      RegExp("[0-9]")),
+                                ],
                               ),
                               SizedBox(height: 15.0),
                               TextFormField(
@@ -301,11 +314,14 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 },
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'cant be empty';
-                                  } else {
+                                    return 'backlog cannot be empty';
+                                  } else
                                     return null;
-                                  }
                                 },
+                                inputFormatters: [
+                                  new WhitelistingTextInputFormatter(
+                                      RegExp("[0-9]")),
+                                ],
                               ),
                               SizedBox(height: 15.0),
                               TextFormField(
@@ -323,9 +339,18 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 keyboardType: TextInputType.number,
                                 onChanged: (text) {
                                   setState(() => edu[course]['sem_records']
-                                          [index]['live_backlog'] =
-                                      text);
+                                      [index]['live_backlog'] = text);
                                 },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'backlog cannot be empty';
+                                  } else
+                                    return null;
+                                },
+                                inputFormatters: [
+                                  new WhitelistingTextInputFormatter(
+                                      RegExp("[0-9]")),
+                                ],
                               ),
                               SizedBox(height: 15.0),
                               Container(
@@ -396,25 +421,23 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         ? edu[course]['total_closed_backlogs'].toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
                     keyboardType: TextInputType.number,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Closed Backlog"),
                     onChanged: (text) {
                       setState(() => edu[course]['total_closed_backlogs'] =
-                          int.parse(text) ?? 0);
+                          text);
                     },
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'field cannot be empty';
-                      } else if (!(int.tryParse(value) != null)) {
-                        return 'invalid input';
                       } else
                         return null;
                     },
+                    inputFormatters: [
+                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                    ],
                   ),
                   SizedBox(
                     height: 15,
@@ -424,25 +447,23 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         ? edu[course]['total_live_backlogs'].toString()
                         : null,
                     textInputAction: TextInputAction.next,
-                    inputFormatters: [
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
                     keyboardType: TextInputType.number,
                     onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Live Backlog"),
                     onChanged: (text) {
                       setState(() => edu[course]['total_live_backlogs'] =
-                          int.parse(text) ?? 0);
+                          text);
                     },
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'field cannot be empty';
-                      } else if (!(int.tryParse(value) != null)) {
-                        return 'invalid input';
                       } else
                         return null;
                     },
+                    inputFormatters: [
+                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
+                    ],
                   ),
                   SizedBox(height: 30.0),
                   Padding(
