@@ -287,13 +287,14 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                           if (pdfUrl != null) {
                                                             String firebaseUrl =
                                                                 pdfUrl.replaceAll(
-                                                                    "https://storage.googleapis.com/aplidotai.appspot.com/",
-                                                                    "gs://aplidotai.appspot.com/");
+                                                                    pdfUrltoBeReplaced,
+                                                                    pdfUrltoreplacedWith);
                                                             firebaseUrl =
                                                                 firebaseUrl
                                                                     .replaceAll(
                                                                         "%40",
                                                                         "@");
+                                                          print(firebaseUrl);
 
                                                             var ref = FirebaseStorage
                                                                 .instance

@@ -19,7 +19,8 @@ const String checkLogin = "https://apli.ai/accounts/api/login";
 const String checkLoginSecret = "AnTokvMivXC4utZRV8smIRDJdj2jveaz";
 const String send_mail = "https://apli.ai/accounts/api/send_mail";
 const String send_mailSecret = "IIZyENHyHjRcHRYdUxPxsigJfopeu8Az";
-
+const String pdfUrltoBeReplaced = "https://storage.googleapis.com/aplidotai-be4e6.appspot.com/";
+const String pdfUrltoreplacedWith = "gs://aplidotai-be4e6.appspot.com/";
 const String basic_infoURL = "https://apli.ai/candidate/api/basic_info";
 const String projectsURL = "https://apli.ai/candidate/api/projects";
 const String expURL = "https://apli.ai/candidate/api/experience";
