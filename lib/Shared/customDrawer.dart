@@ -141,7 +141,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                       icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
                   onTap: () async {
                     const url =
-                        'https://play.google.com/store/apps/details?id=com.example.apliauth';
+                        'https://play.google.com/store/apps/details?id=com.apliai.app';
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {
@@ -162,7 +162,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                       icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
                   onTap: () async {
                     const url =
-                        'https://play.google.com/store/apps/details?id=com.example.apliauth';
+                        'https://play.google.com/store/apps/details?id=com.apliai.app';
                     Share.share(url);
                   }),
               Divider(
