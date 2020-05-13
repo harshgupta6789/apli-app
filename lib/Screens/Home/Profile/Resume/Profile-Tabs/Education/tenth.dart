@@ -301,7 +301,7 @@ class _TenthState extends State<Tenth> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      return 'score code cannot be empty';
+                                      return 'score cannot be empty';
                                     } else if (!(int.tryParse(value) != null)) {
                                       return 'invalid score';
                                     } else
