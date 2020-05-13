@@ -30,6 +30,7 @@ class AuthService {
                   '}'),
             );
             if (response.statusCode == 200) {
+              print(response.body);
               var decodedData = jsonDecode(response.body);
               if (decodedData["secret"] == checkLoginSecret) {
                 bool temp = decodedData["result"];

@@ -7,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 
@@ -48,7 +49,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
   Map<dynamic, dynamic> edu = {};
   StorageUploadTask uploadTask;
   int temp = 0;
-
 
   void init() {
     setState(() {
@@ -130,419 +130,396 @@ class _CurrentEducationState extends State<CurrentEducation> {
           preferredSize: Size.fromHeight(55),
         ),
         body: ScrollConfiguration(
-                child: SingleChildScrollView(
-                    child: Form(
-                  key: _formKey,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: width * 0.05, top: 20, right: width * 0.05),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 30.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                                width: width * 0.4,
-                                child: Text(
-                                  "Course",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                )),
-                            Container(
-                              width: width * 0.5,
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: course,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xff4285f4))),
-                                    labelStyle: TextStyle(color: Colors.black)),
-                                keyboardType: TextInputType.numberWithOptions(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                                width: width * 0.4,
-                                child: Text(
-                                  "Branch",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                )),
-                            Container(
-                              width: width * 0.5,
-                              child: TextFormField(
-                                enabled: false,
-                                initialValue: branch,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xff4285f4))),
-                                    labelStyle: TextStyle(color: Colors.black)),
-                                keyboardType: TextInputType.numberWithOptions(),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 15.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Container(
-                                width: width * 0.4,
-                                child: Text(
-                                  "Duration",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18),
-                                )),
-                            Container(
-                                width: width * 0.5,
-                                child: TextFormField(
-                                  enabled: false,
-                                  initialValue: duration,
-                                  obscureText: false,
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                              color: Color(0xff4285f4))),
-                                      labelStyle:
-                                          TextStyle(color: Colors.black)),
-                                  keyboardType:
-                                      TextInputType.numberWithOptions(),
-                                )),
-                          ],
-                        ),
-                        SizedBox(height: 30.0),
-                        TextFormField(
-                          initialValue: edu[course]['score'] == null
-                              ? ''
-                              : edu[course]['score'].toString(),
-                          textInputAction: TextInputAction.next,
-                          keyboardType:
-                          TextInputType.numberWithOptions(),
-                          onFieldSubmitted: (_) =>
-                              FocusScope.of(context).nextFocus(),
+          child: SingleChildScrollView(
+              child: Form(
+            key: _formKey,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: width * 0.05, top: 20, right: width * 0.05),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 30.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                          width: width * 0.4,
+                          child: Text(
+                            "Course",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          )),
+                      Container(
+                        width: width * 0.5,
+                        child: TextFormField(
+                          enabled: false,
+                          initialValue: course,
                           obscureText: false,
-                          decoration: x("Average Score"),
-                          onChanged: (text) {
-                            setState(() => edu[course]['score'] =
-                                int.tryParse(text));
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'score code cannot be empty';
-                            } else if (!(int.tryParse(value) != null)) {
-                              return 'invalid score';
-                            } else
-                              return null;
-                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              labelStyle: TextStyle(color: Colors.black)),
+                          keyboardType: TextInputType.number,
                         ),
-                        SizedBox(height: 20.0),
-                        Text(
-                          "Semester Scores",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                          width: width * 0.4,
+                          child: Text(
+                            "Branch",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          )),
+                      Container(
+                        width: width * 0.5,
+                        child: TextFormField(
+                          enabled: false,
+                          initialValue: branch,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Color(0xff4285f4))),
+                              labelStyle: TextStyle(color: Colors.black)),
+                          keyboardType: TextInputType.number,
                         ),
-                        SizedBox(height: 20.0),
-                        ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: semToBuild,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Container(
+                          width: width * 0.4,
+                          child: Text(
+                            "Duration",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18),
+                          )),
+                      Container(
+                          width: width * 0.5,
+                          child: TextFormField(
+                            enabled: false,
+                            initialValue: duration,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xff4285f4))),
+                                labelStyle: TextStyle(color: Colors.black)),
+                            keyboardType: TextInputType.number,
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 30.0),
+                  TextFormField(
+                    initialValue: edu[course]['score'] == null
+                        ? ''
+                        : edu[course]['score'].toString(),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Average Score"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['score'] = text);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'score code cannot be empty';
+                      } else
+                        return null;
+                    },
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    "Semester Scores",
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 18),
+                  ),
+                  SizedBox(height: 20.0),
+                  ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: semToBuild,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Sem ${index + 1}",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w600, fontSize: 20),
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
+                                        ? edu[course]['sem_records'][index]
+                                                ['semester_score']
+                                            .toString()
+                                        : null,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Score"),
+                                keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                  setState(() {
+                                    edu[course]['sem_records'][index]
+                                        ['semester_score'] = text;
+                                  });
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
+                                        ? edu[course]['sem_records'][index]
+                                                ['closed_backlog']
+                                            .toString()
+                                        : null,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Closed Backlogs"),
+                                keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                  setState(() => edu[course]['sem_records']
+                                      [index]['closed_backlog'] = text);
+                                },
+                                validator: (value) {
+                                  if (value.isEmpty) {
+                                    return 'cant be empty';
+                                  } else {
+                                    return null;
+                                  }
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              TextFormField(
+                                initialValue:
+                                    edu[course]['sem_records'][index] != null
+                                        ? edu[course]['sem_records'][index]
+                                                ['live_backlog']
+                                            .toString()
+                                        : null,
+                                textInputAction: TextInputAction.next,
+                                onFieldSubmitted: (_) =>
+                                    FocusScope.of(context).nextFocus(),
+                                obscureText: false,
+                                decoration: x("Live Backlogs"),
+                                keyboardType: TextInputType.number,
+                                onChanged: (text) {
+                                  setState(() => edu[course]['sem_records']
+                                          [index]['live_backlog'] =
+                                      text);
+                                },
+                              ),
+                              SizedBox(height: 15.0),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    border:
+                                        Border.all(color: Color(0xff4285f4))),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    Text(
-                                      "Sem ${index + 1}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 20),
+                                    Padding(
+                                      padding: EdgeInsets.only(left: 5.0),
+                                      child: Text(
+                                        "Certificate : ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14),
+                                      ),
                                     ),
-                                    SizedBox(height: 15.0),
-                                    TextFormField(
-                                      initialValue: edu[course]['sem_records']
-                                                  [index] !=
-                                              null
-                                          ? edu[course]['sem_records'][index]
-                                                  ['semester_score']
-                                              .toString()
-                                          : null,
-                                      textInputAction: TextInputAction.next,
-                                      onFieldSubmitted: (_) =>
-                                          FocusScope.of(context).nextFocus(),
-                                      obscureText: false,
-                                      decoration: x("Score"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(),
-                                      onChanged: (text) {
-                                        setState(() {
-                                          edu[course]['sem_records'][index]
-                                                  ['semester_score'] =
-                                              int.parse(text) ?? 0;
-                                        });
-                                      },
-                                    ),
-                                    SizedBox(height: 15.0),
-                                    TextFormField(
-                                      initialValue: edu[course]['sem_records']
-                                                  [index] !=
-                                              null
-                                          ? edu[course]['sem_records'][index]
-                                                  ['closed_backlog']
-                                              .toString()
-                                          : null,
-                                      textInputAction: TextInputAction.next,
-                                      onFieldSubmitted: (_) =>
-                                          FocusScope.of(context).nextFocus(),
-                                      obscureText: false,
-                                      decoration: x("Closed Backlogs"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(),
-                                      onChanged: (text) {
-                                        setState(() => edu[course]
-                                                    ['sem_records'][index]
-                                                ['closed_backlog'] =
-                                            int.parse(text) ?? 0);
-                                      },
-                                    ),
-                                    SizedBox(height: 15.0),
-                                    TextFormField(
-                                      initialValue: edu[course]['sem_records']
-                                                  [index] !=
-                                              null
-                                          ? edu[course]['sem_records'][index]
-                                                  ['live_backlog']
-                                              .toString()
-                                          : null,
-                                      textInputAction: TextInputAction.next,
-                                      onFieldSubmitted: (_) =>
-                                          FocusScope.of(context).nextFocus(),
-                                      obscureText: false,
-                                      decoration: x("Live Backlogs"),
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(),
-                                      onChanged: (text) {
-                                        setState(() => edu[course]
-                                                ['sem_records'][index]
-                                            ['live_backlog'] = int.parse(text) ?? 0);
-                                      },
-                                    ),
-                                    SizedBox(height: 15.0),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          border: Border.all(
-                                              color: Color(0xff4285f4))),
+                                    SizedBox(
+                                      width: width * 0.3 * scale,
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         children: <Widget>[
-                                          Padding(
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            child: Text(
-                                              "Certificate : ",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14),
-                                            ),
-                                          ),
                                           SizedBox(
                                             width: width * 0.3 * scale,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  width: width * 0.3 * scale,
-                                                  child: AutoSizeText(
-                                                    currentFiles[
-                                                    index] !=
-                                                        null
-                                                        ? p.basename(
-                                                        currentFiles[
-                                                        index]
-                                                            .path) :
-                                                        '',
-                                                    overflow: TextOverflow.ellipsis,
-                                                    maxLines: 1,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(right: 5),
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                                if(currentFiles[index] == null) {
-                                                  filePicker(context, index);
-                                                } else {
-                                                  setState(() {
-                                                    currentFiles[index] = null;
-                                                    currentFileNames[index] =
-                                                    null;
-                                                  });
-                                                }
-                                              },
-                                              child: Text(currentFiles[index] == null ? "Browse" : "Remove"),
-                                              color: Colors.grey,
+                                            child: AutoSizeText(
+                                              currentFiles[index] != null
+                                                  ? p.basename(
+                                                      currentFiles[index].path)
+                                                  : '',
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 30.0)
-                                  ]);
-                            }),
-                        TextFormField(
-                          initialValue: edu[course]['total_closed_backlogs'] !=
-                                  null
-                              ? edu[course]['total_closed_backlogs'].toString()
-                              : null,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.numberWithOptions(),
-                          onFieldSubmitted: (_) =>
-                              FocusScope.of(context).nextFocus(),
-                          obscureText: false,
-                          decoration: x("Total Closed Backlog"),
-                          onChanged: (text) {
-                            setState(() => edu[course]
-                                ['total_closed_backlogs'] = int.parse(text) ?? 0);
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'field cannot be empty';
-                            } else if (!(int.tryParse(value) != null)) {
-                              return 'invalid input';
-                            } else
-                              return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        TextFormField(
-                          initialValue: edu[course]['total_live_backlogs'] !=
-                                  null
-                              ? edu[course]['total_live_backlogs'].toString()
-                              : null,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.numberWithOptions(),
-                          onFieldSubmitted: (_) =>
-                              FocusScope.of(context).nextFocus(),
-                          obscureText: false,
-                          decoration: x("Total Live Backlog"),
-                          onChanged: (text) {
-                            setState(() => edu[course]['total_live_backlogs'] =
-                                int.parse(text) ?? 0);
-                          },
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'field cannot be empty';
-                            } else if (!(int.tryParse(value) != null)) {
-                              return 'invalid input';
-                            } else
-                              return null;
-                          },
-                        ),
-                        SizedBox(height: 30.0),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 20.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Visibility(
-                                visible: false,
-                                child: RaisedButton(
-                                    color: Colors.transparent,
-                                    elevation: 0,
-                                    padding:
-                                        EdgeInsets.only(left: 22, right: 22),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: basicColor, width: 1.2),
+                                    Padding(
+                                      padding: EdgeInsets.only(right: 5),
+                                      child: MaterialButton(
+                                        onPressed: () {
+                                          if (currentFiles[index] == null) {
+                                            filePicker(context, index);
+                                          } else {
+                                            setState(() {
+                                              currentFiles[index] = null;
+                                              currentFileNames[index] = null;
+                                            });
+                                          }
+                                        },
+                                        child: Text(currentFiles[index] == null
+                                            ? "Browse"
+                                            : "Remove"),
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                    child: Text(
-                                      'Delete',
-                                      style: TextStyle(color: basicColor),
-                                    ),
-                                    onPressed: () {}),
+                                  ],
+                                ),
                               ),
-                              RaisedButton(
-                                  color: Colors.transparent,
-                                  elevation: 0,
-                                  padding: EdgeInsets.only(left: 22, right: 22),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    side: BorderSide(
-                                        color: basicColor, width: 1.2),
-                                  ),
-                                  child: Text(
-                                    'Next',
-                                    style: TextStyle(color: basicColor),
-                                  ),
-                                  onPressed: () async {
-                                    if (_formKey.currentState.validate()) {
-                                      List sems = [];
-                                      for (int i = 0; i < widget.sem; i++) {
-                                        Map x;
-                                        x = {
-                                          'certificate': edu[course]
-                                              ['sem_records'][i]['certificate'],
-                                          'closed_backlog': edu[course]
-                                                  ['sem_records'][i]
-                                              ['closed_backlog'],
-                                          'live_backlog': edu[course]
-                                                  ['sem_records'][i]
-                                              ['live_backlog'],
-                                          'semester_score': edu[course]
-                                                  ['sem_records'][i]
-                                              ['semester_score'],
-                                        };
-                                        sems.add(x);
-                                      }
+                              SizedBox(height: 30.0)
+                            ]);
+                      }),
+                  TextFormField(
+                    initialValue: edu[course]['total_closed_backlogs'] != null
+                        ? edu[course]['total_closed_backlogs'].toString()
+                        : null,
+                    textInputAction: TextInputAction.next,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Total Closed Backlog"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['total_closed_backlogs'] =
+                          int.parse(text) ?? 0);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'field cannot be empty';
+                      } else if (!(int.tryParse(value) != null)) {
+                        return 'invalid input';
+                      } else
+                        return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    initialValue: edu[course]['total_live_backlogs'] != null
+                        ? edu[course]['total_live_backlogs'].toString()
+                        : null,
+                    textInputAction: TextInputAction.next,
+                    inputFormatters: [
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
+                    obscureText: false,
+                    decoration: x("Total Live Backlog"),
+                    onChanged: (text) {
+                      setState(() => edu[course]['total_live_backlogs'] =
+                          int.parse(text) ?? 0);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'field cannot be empty';
+                      } else if (!(int.tryParse(value) != null)) {
+                        return 'invalid input';
+                      } else
+                        return null;
+                    },
+                  ),
+                  SizedBox(height: 30.0),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Visibility(
+                          visible: false,
+                          child: RaisedButton(
+                              color: Colors.transparent,
+                              elevation: 0,
+                              padding: EdgeInsets.only(left: 22, right: 22),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                side: BorderSide(color: basicColor, width: 1.2),
+                              ),
+                              child: Text(
+                                'Delete',
+                                style: TextStyle(color: basicColor),
+                              ),
+                              onPressed: () {}),
+                        ),
+                        RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              'Next',
+                              style: TextStyle(color: basicColor),
+                            ),
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                List sems = [];
+                                for (int i = 0; i < widget.sem; i++) {
+                                  Map x;
+                                  x = {
+                                    'certificate': edu[course]['sem_records'][i]
+                                        ['certificate'],
+                                    'closed_backlog': edu[course]['sem_records']
+                                        [i]['closed_backlog'],
+                                    'live_backlog': edu[course]['sem_records']
+                                        [i]['live_backlog'],
+                                    'semester_score': edu[course]['sem_records']
+                                        [i]['semester_score'],
+                                  };
+                                  sems.add(x);
+                                }
 
-                                      edu[course]['sem_records'] = sems;
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Diploma(
-                                                    courseEdu: course,
-                                                    xii: edu,
-                                                    allFiles: [
-                                                      currentFiles
-                                                    ],
-                                                    isUg: widget.isUg,
-                                                type: widget.type,
-                                                  )));
-                                    }
-                                  }),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
+                                edu[course]['sem_records'] = sems;
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Diploma(
+                                              courseEdu: course,
+                                              xii: edu,
+                                              allFiles: [currentFiles],
+                                              isUg: widget.isUg,
+                                              type: widget.type,
+                                            )));
+                              }
+                            }),
                       ],
                     ),
                   ),
-                )),
-                behavior: MyBehavior(),
-              ));
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
+              ),
+            ),
+          )),
+          behavior: MyBehavior(),
+        ));
   }
 }
