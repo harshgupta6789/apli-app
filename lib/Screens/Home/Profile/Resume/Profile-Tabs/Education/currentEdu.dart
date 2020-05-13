@@ -227,23 +227,26 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         ),
                         SizedBox(height: 30.0),
                         TextFormField(
-                          initialValue: edu[course]['score'] != null
-                              ? edu[course]['score'].toString()
-                              : null,
+                          initialValue: edu[course]['score'] == null
+                              ? ''
+                              : edu[course]['score'].toString(),
                           textInputAction: TextInputAction.next,
+                          keyboardType:
+                          TextInputType.numberWithOptions(),
                           onFieldSubmitted: (_) =>
                               FocusScope.of(context).nextFocus(),
                           obscureText: false,
                           decoration: x("Average Score"),
                           onChanged: (text) {
-                            setState(
-                                () => edu[course]['score'] = int.parse(text));
+                            setState(() => edu[course]['score'] =
+                                int.tryParse(text));
                           },
-                          keyboardType: TextInputType.numberWithOptions(),
                           validator: (value) {
-                            if (value.isEmpty)
-                              return 'score cannot be empty';
-                            else
+                            if (value.isEmpty) {
+                              return 'score code cannot be empty';
+                            } else if (!(int.tryParse(value) != null)) {
+                              return 'invalid score';
+                            } else
                               return null;
                           },
                         ),
@@ -289,7 +292,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         setState(() {
                                           edu[course]['sem_records'][index]
                                                   ['semester_score'] =
-                                              int.parse(text);
+                                              int.parse(text) ?? 0;
                                         });
                                       },
                                     ),
@@ -313,7 +316,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                         setState(() => edu[course]
                                                     ['sem_records'][index]
                                                 ['closed_backlog'] =
-                                            int.parse(text));
+                                            int.parse(text) ?? 0);
                                       },
                                     ),
                                     SizedBox(height: 15.0),
@@ -335,7 +338,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                       onChanged: (text) {
                                         setState(() => edu[course]
                                                 ['sem_records'][index]
-                                            ['live_backlog'] = int.parse(text));
+                                            ['live_backlog'] = int.parse(text) ?? 0);
                                       },
                                     ),
                                     SizedBox(height: 15.0),
@@ -418,13 +421,15 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           decoration: x("Total Closed Backlog"),
                           onChanged: (text) {
                             setState(() => edu[course]
-                                ['total_closed_backlogs'] = int.parse(text));
+                                ['total_closed_backlogs'] = int.parse(text) ?? 0);
                           },
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Field name cannot be empty';
-                            }
-                            return null;
+                              return 'field cannot be empty';
+                            } else if (!(int.tryParse(value) != null)) {
+                              return 'invalid input';
+                            } else
+                              return null;
                           },
                         ),
                         SizedBox(
@@ -443,13 +448,15 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           decoration: x("Total Live Backlog"),
                           onChanged: (text) {
                             setState(() => edu[course]['total_live_backlogs'] =
-                                int.parse(text));
+                                int.parse(text) ?? 0);
                           },
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Field cannot be empty';
-                            }
-                            return null;
+                              return 'field cannot be empty';
+                            } else if (!(int.tryParse(value) != null)) {
+                              return 'invalid input';
+                            } else
+                              return null;
                           },
                         ),
                         SizedBox(height: 30.0),
