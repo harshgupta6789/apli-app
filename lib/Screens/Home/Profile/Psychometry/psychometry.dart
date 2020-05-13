@@ -147,7 +147,7 @@ class _PsychometryState extends State<Psychometry>
                           EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child:
-                              Text("1. Complete the test in first attempt",
+                              Text("1. You will get only one chance to complete this test",
                                   style: TextStyle(
                                     fontSize: fontSize,
                                     fontWeight: FontWeight.bold,
@@ -158,7 +158,7 @@ class _PsychometryState extends State<Psychometry>
                       padding:
                           EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
-                          child: Text("2. Completing the test will increasing your hiring chances.",
+                          child: Text("2. Completing the test will increase your hiring chances.",
                               style: TextStyle(
                                 fontSize:fontSize,
                                 fontWeight: FontWeight.bold,
@@ -170,7 +170,7 @@ class _PsychometryState extends State<Psychometry>
                           EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
                           child: Text(
-                              "3. Please Check your internet connection before you start the test,",
+                              "3. Please check your internet connection before you start the test,",
                               style: TextStyle(
                                 fontSize: fontSize,
                                 fontWeight: FontWeight.bold,

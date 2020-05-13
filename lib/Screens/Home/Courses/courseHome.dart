@@ -74,7 +74,9 @@ class _CourseMainState extends State<CourseMain> {
                                 shrinkWrap: true,
                                 physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
-                                  return Padding(
+                                  if(snapshot.data.documents[index]['live'] == null)
+                                    return Container();
+                                  else return Padding(
                                     padding: const EdgeInsets.only(
                                         bottom: 20, top: 20),
                                     child: InkWell(

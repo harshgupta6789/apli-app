@@ -396,6 +396,7 @@ class _SkillsState extends State<Skills> {
                                                                       SizedBox(),
                                                                   items: <
                                                                       String>[
+                                                                    'Starter',
                                                                     'Basic',
                                                                     'Intermediate',
                                                                     'Expert'

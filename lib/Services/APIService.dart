@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +35,7 @@ class APIService {
               "profile_picture": "${map['profile_picture']}",
               "roll_no": "${map['roll_no']}",
             });
+            print(response.statusCode);
             if (response.statusCode == 200) {
               var temp = response.data['success'];
               if (temp == true) {
@@ -55,7 +55,6 @@ class APIService {
                 "secret": "$passHashSecret",
                 'education': eduToPass
               });
-              print(response.data);
               if (response.statusCode == 200) {
                 var temp = response.data['success'];
                 if (temp == true) {
