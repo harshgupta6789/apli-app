@@ -4,6 +4,7 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,9 @@ import 'package:flutter_html/flutter_html.dart';
 class Courses extends StatefulWidget {
   final String documentId;
   final String email;
+  final String imageUrl;
 
-  const Courses({Key key, @required this.documentId, @required this.email})
+  const Courses({Key key, @required this.documentId, @required this.email , this.imageUrl})
       : super(key: key);
 
   @override
@@ -405,15 +407,24 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                       child: Stack(
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
-                          SizedBox(
-                              width: double.infinity,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(8.0),
-                                child: Image.asset(
-                                  "Assets/Images/course.png",
-                                  fit: BoxFit.cover,
-                                ),
-                              )),
+                         SizedBox(
+                                    width: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: widget.imageUrl == null
+                                          ? Image.asset(
+                                              "Assets/Images/course.png",
+                                              fit: BoxFit.cover,
+                                            )
+                                          : CachedNetworkImage(
+                                              imageUrl: widget.imageUrl,
+                                              placeholder: (context, url) =>
+                                                  Loading(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                    )),
                           Positioned(
                             top: height * 0.15,
                             left: width * 0.1,

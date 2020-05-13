@@ -59,7 +59,7 @@ dependencies:
   flutter_timer: ^0.0.6
   flutter_countdown_timer: ^1.1.0
   youtube_player_flutter: ^6.1.1
-
+  cached_network_image:
 
 dev_dependencies:
   flutter_test:
