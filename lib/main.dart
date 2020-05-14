@@ -1,12 +1,17 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
+import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider<ThemeChanger>(
+    create: (_) => ThemeChanger(),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -20,11 +25,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apli',
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          appBarTheme: AppBarTheme(color: basicColor),
-          accentColor: basicColor,
-          fontFamily: 'Sans'),
+      theme: ThemeChanger().getTheme(),
+      // theme: ThemeData(
+      //     primarySwatch: Colors.blue,
+      //     appBarTheme: AppBarTheme(color: basicColor),
+      //     accentColor: basicColor,
+      //     fontFamily: 'Sans'),
       home: MySplash(),
     );
   }
