@@ -126,8 +126,14 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               status = s.data['profile_status'] ?? 0;
               email = s.data['email'];
             });
-            if (checkStatus(status) && s.data['pdfResume'] != null)
-              loadPdf(s.data['pdfResume']);
+            if (checkStatus(status)) {
+              if(s.data['pdfResume'] != null)
+                loadPdf(s.data['pdfResume']);
+              else
+                setState(() {
+                  error = true;
+                });
+            }
           });
         } catch (e) {
           print(e.toString());
@@ -149,7 +155,11 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    return email == null
+    return error ? Scaffold(
+      body: Center(
+        child: Text('Error occured, try again later'),
+      ),
+    ) : email == null
         ? Loading()
         : loading
             ? Loading()
