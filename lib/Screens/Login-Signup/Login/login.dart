@@ -246,7 +246,7 @@ class _LoginState extends State<Login> {
                                               forgotPassword = false;
                                             });
                                           } else {
-                                            showToast('Account does not exists',
+                                            showToast('Account does not exist',
                                                 context);
                                           }
                                         });
@@ -326,7 +326,7 @@ class _LoginState extends State<Login> {
                             text: TextSpan(
                                 text:
                                 forgotPassword
-                                    ? 'Remember Password?'
+                                    ? 'Remember Password? '
                                     : signup,
                                 style: TextStyle(color: Colors.black, fontSize: 18),
                                 children: [

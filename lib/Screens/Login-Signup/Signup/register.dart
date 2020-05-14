@@ -8,7 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:search_choices/search_choices.dart';
 import 'package:search_widget/search_widget.dart';
+import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 import '../../HomeLoginWrapper.dart';
 import 'collegeNotFound.dart';
@@ -28,6 +30,8 @@ class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  String selectedValueSingleDialogEllipsis;
+  bool toDisplayClear = false;
 
   String fname = '',
       lname = '',
@@ -38,7 +42,7 @@ class _RegisterState extends State<Register> {
   String fieldOfStudy = '', state = '', city = '';
   String collegeText, courseText, branchText, batchText;
   Timestamp timestamp;
-
+  List<DropdownMenuItem> dropdown = [];
   bool validatePassword(String value) {
     Pattern pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -160,6 +164,19 @@ class _RegisterState extends State<Register> {
                         }
                       }
                     });
+                    List x = course.keys.toList();
+                    for (int i = 0; i < x.length; i++) {
+                      var temp = DropdownMenuItem(
+                        child: Text(
+                          x[i].toString(),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        value: x[i].toString(),
+                      );
+                      if (dropdown.contains(temp)) {}
+                      dropdown.add(temp);
+                    }
+
                     course.remove('');
                     return ScrollConfiguration(
                       behavior: MyBehavior(),
@@ -313,96 +330,301 @@ class _RegisterState extends State<Register> {
                                         ),
                                       ),
                                     )
-                                  : SearchWidget<String>(
-                                      dataList: course.keys.toList(),
-                                      hideSearchBoxWhenItemSelected: false,
-                                      listContainerHeight:
-                                          MediaQuery.of(context).size.height /
-                                              4,
-                                      queryBuilder:
-                                          (String query, List<String> list) {
-                                        return list.where((String item) {
-                                          return item
-                                              .toLowerCase()
-                                              .contains(query.toLowerCase());
-                                        }).toList();
-                                      },
-                                      popupListItemBuilder: (String item) {
-                                        return PopupListItemWidget(item);
-                                      },
-                                      selectedItemBuilder: (String selectedItem,
-                                          VoidCallback deleteSelectedItem) {
-                                        return Container();
-                                      },
-                                      onItemSelected: (item) {
-                                        setState(() {
-                                          collegeText = item;
-                                          collegeSet = true;
-                                          //collegeNotFound = false;
-                                          allSet = false;
-                                        });
-                                        if (course[item].length == 0)
+                                  : Padding(
+                                      padding: EdgeInsets.only(
+                                          top: height * 0.02,
+                                          left: width * 0.1,
+                                          right: width * 0.1),
+                                      child: SearchableDropdown(
+                                        displayClearIcon: toDisplayClear,
+                                        onClear: () {
                                           setState(() {
-                                            allSet = true;
-                                            collegeSet = false;
+                                            selectedValueSingleDialogEllipsis =
+                                                null;
+                                            toDisplayClear = false;
                                           });
-                                      },
-                                      noItemsFoundWidget: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
-                                          Icon(
-                                            Icons.folder_open,
-                                            size: 24,
-                                            color: Colors.grey[900]
-                                                .withOpacity(0.7),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          FlatButton(
-                                            onPressed: () {
-                                              Navigator.pushReplacement(
-                                                  (context),
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CollegeNotFound(
-                                                              phoneNo: widget
-                                                                  .phoneNo)));
-                                            },
-                                            child: Text(
-                                              "College not found?",
-                                              style: TextStyle(
-                                                fontSize: 16,
+                                        },
+                                        items: dropdown,
+                                        value:
+                                            selectedValueSingleDialogEllipsis,
+                                        hint: Row(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 8.0),
+                                              child: Icon(
+                                                Icons.school,
                                                 color: basicColor,
                                               ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      textFieldBuilder:
-                                          (TextEditingController controller,
-                                              FocusNode focusNode) {
-                                        return Padding(
-                                          padding: EdgeInsets.only(
-                                              top: height * 0.02,
-                                              left: width * 0.1,
-                                              right: width * 0.1),
-                                          child: TextFormField(
-                                            controller: controller,
-                                            focusNode: focusNode,
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.grey[600]),
-                                            decoration: loginFormField.copyWith(
-                                                hintText: 'College Name',
-                                                prefixIcon: Icon(
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text("College Name"),
+                                            )
+                                          ],
+                                        ),
+                                        searchHint: "Select one",
+                                        searchFn: (String keyword, items) {
+                                          List<int> ret = List<int>();
+                                          if (keyword != null &&
+                                              items != null &&
+                                              keyword.isNotEmpty) {
+                                            keyword.split(" ").forEach((k) {
+                                              int i = 0;
+                                              items.forEach((item) {
+                                                if (k.isNotEmpty &&
+                                                    (item.value
+                                                        .toString()
+                                                        .toLowerCase()
+                                                        .contains(
+                                                            k.toLowerCase()))) {
+                                                  ret.add(i);
+                                                }
+                                                i++;
+                                              });
+                                            });
+                                          }
+                                          if (keyword.isEmpty) {
+                                            ret = Iterable<int>.generate(
+                                                    items.length)
+                                                .toList();
+                                          }
+                                          if(ret.isEmpty){
+                                            print("Not Found");
+                                          }
+                                          return (ret);
+                                        },
+                                        onChanged: (value) {
+                                        
+                                          if (value != null) {
+                                            setState(() {
+                                              selectedValueSingleDialogEllipsis =
+                                                  value;
+                                              toDisplayClear = true;
+                                            });
+                                          }
+                                        },
+                                        selectedValueWidgetFn: (item) {
+                                          return (Row(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 8.0),
+                                                child: Icon(
                                                   Icons.school,
                                                   color: basicColor,
-                                                )),
-                                          ),
-                                        );
-                                      },
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    item,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ))
+                                            ],
+                                          ));
+                                        },
+                                        dialogBox: true,
+                                        isExpanded: true,
+                                      ),
                                     ),
+                              //    courseSet || courseText != null
+                              // ? InkWell(
+                              //     onTap: () {
+                              //       setState(() {
+                              //         collegeText = null;
+                              //         collegeSet = false;
+                              //         courseText = null;
+                              //         courseSet = false;
+                              //         branchText = null;
+                              //         branchSet = false;
+                              //         batchText = null;
+                              //         batchSet = false;
+                              //         allSet = false;
+                              //       });
+                              //     },
+                              //     child: Padding(
+                              //       padding: EdgeInsets.only(
+                              //           top: height * 0.02,
+                              //           left: width * 0.1,
+                              //           right: width * 0.1),
+                              //       child: TextFormField(
+                              //         enabled: false,
+                              //         style: TextStyle(
+                              //             fontSize: 16,
+                              //             color: Colors.grey[600]),
+                              //         decoration: loginFormField.copyWith(
+                              //             hintText: collegeText,
+                              //             hintStyle: TextStyle(
+                              //                 color: Colors.black),
+                              //             prefixIcon: Icon(Icons.school,
+                              //                 color: basicColor),
+                              //             suffixIcon: Icon(Icons.delete)),
+                              //       ),
+                              //     ),
+                              //   )
+                              // : Padding(
+                              //     padding: EdgeInsets.only(
+                              //         top: height * 0.02,
+                              //         left: width * 0.1,
+                              //         right: width * 0.1),
+                              //     child: SearchChoices.single(
+                              //       displayClearIcon: toDisplayClear,
+                              //       onClear: (){
+                              //         setState(() {
+                              //           selectedValueSingleDialogEllipsis = null;
+                              //           toDisplayClear = false;
+                              //         });
+                              //       },
+                              //       items: dropdown,
+                              //       value:
+                              //           selectedValueSingleDialogEllipsis,
+                              //       hint: Row(
+                              //         children: [
+                              //           Padding(
+                              //             padding: const EdgeInsets.only(
+                              //                 right: 8.0),
+                              //             child: Icon(
+                              //               Icons.school,
+                              //               color: basicColor,
+                              //             ),
+                              //           ),
+                              //           Padding(
+                              //             padding:
+                              //                 const EdgeInsets.all(8.0),
+                              //             child: Text("Course Name"),
+                              //           )
+                              //         ],
+                              //       ),
+                              //       searchHint: "Select one",
+                              //       onChanged: (value) {
+                              //         if (value != null) {
+                              //           setState(() {
+                              //             selectedValueSingleDialogEllipsis =
+                              //                 value;
+                              //             toDisplayClear = true;
+                              //           });
+                              //         }
+                              //       },
+                              //       selectedValueWidgetFn: (item) {
+                              //         return (Row(
+                              //           children: [
+                              //             Padding(
+                              //               padding: const EdgeInsets.only(
+                              //                   right: 8.0),
+                              //               child: Icon(
+                              //                 Icons.school,
+                              //                 color: basicColor,
+                              //               ),
+                              //             ),
+                              //             Padding(
+                              //                 padding:
+                              //                     const EdgeInsets.all(8.0),
+                              //                 child: Text(
+                              //                   item,
+                              //                   overflow:
+                              //                       TextOverflow.ellipsis,
+                              //                 ))
+                              //           ],
+                              //         ));
+                              //       },
+                              //       dialogBox: true,
+                              //       isExpanded: true,
+                              //     ),
+                              //   ),
+                              // : SearchWidget<String>(
+                              //     dataList: course.keys.toList(),
+                              //     hideSearchBoxWhenItemSelected: false,
+                              //     listContainerHeight:
+                              //         MediaQuery.of(context).size.height /
+                              //             4,
+                              //     queryBuilder:
+                              //         (String query, List<String> list) {
+                              //       return list.where((String item) {
+                              //         return item
+                              //             .toLowerCase()
+                              //             .contains(query.toLowerCase());
+                              //       }).toList();
+                              //     },
+                              //     popupListItemBuilder: (String item) {
+                              //       return PopupListItemWidget(item);
+                              //     },
+                              //     selectedItemBuilder: (String selectedItem,
+                              //         VoidCallback deleteSelectedItem) {
+                              //       return Container();
+                              //     },
+                              //     onItemSelected: (item) {
+                              //       setState(() {
+                              //         collegeText = item;
+                              //         collegeSet = true;
+                              //         //collegeNotFound = false;
+                              //         allSet = false;
+                              //       });
+                              //       if (course[item].length == 0)
+                              //         setState(() {
+                              //           allSet = true;
+                              //           collegeSet = false;
+                              //         });
+                              //     },
+                              //     noItemsFoundWidget: Row(
+                              //       mainAxisSize: MainAxisSize.min,
+                              //       children: <Widget>[
+                              //         Icon(
+                              //           Icons.folder_open,
+                              //           size: 24,
+                              //           color: Colors.grey[900]
+                              //               .withOpacity(0.7),
+                              //         ),
+                              //         const SizedBox(width: 10),
+                              //         FlatButton(
+                              //           onPressed: () {
+                              //             Navigator.pushReplacement(
+                              //                 (context),
+                              //                 MaterialPageRoute(
+                              //                     builder: (context) =>
+                              //                         CollegeNotFound(
+                              //                             phoneNo: widget
+                              //                                 .phoneNo)));
+                              //           },
+                              //           child: Text(
+                              //             "College not found?",
+                              //             style: TextStyle(
+                              //               fontSize: 16,
+                              //               color: basicColor,
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //     textFieldBuilder:
+                              //         (TextEditingController controller,
+                              //             FocusNode focusNode) {
+                              //       return Padding(
+                              //         padding: EdgeInsets.only(
+                              //             top: height * 0.02,
+                              //             left: width * 0.1,
+                              //             right: width * 0.1),
+                              //         child: TextFormField(
+                              //           controller: controller,
+                              //           focusNode: focusNode,
+                              //           textInputAction:
+                              //               TextInputAction.next,
+                              //           style: TextStyle(
+                              //               fontSize: 16,
+                              //               color: Colors.grey[600]),
+                              //           decoration: loginFormField.copyWith(
+                              //               hintText: 'College Name',
+                              //               prefixIcon: Icon(
+                              //                 Icons.school,
+                              //                 color: basicColor,
+                              //               )),
+                              //         ),
+                              //       );
+                              //     },
+                              //   ),
                               Visibility(
                                 visible: collegeSet,
                                 child: Container(
