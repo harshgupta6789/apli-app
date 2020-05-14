@@ -166,7 +166,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                     backgroundImage: _image != null
                                         ? FileImage(_image)
                                         : profile != null
-                                            ? NetworkImage(profile)
+                                            ? profile == defaultPic ? AssetImage("Assets/Images/defaultProfilePicture.jpeg") : NetworkImage(profile)
                                             : null),
                                 MaterialButton(
                                   onPressed: getImage,

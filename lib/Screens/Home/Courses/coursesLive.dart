@@ -34,8 +34,6 @@ Orientation orientation;
 
 class _CoursesLiveState extends State<CoursesLive>
     with SingleTickerProviderStateMixin {
-  int estimateTs =
-      DateTime(2020, 5, 17, 16, 0, 0).millisecondsSinceEpoch; // set needed date
 
   @override
   void initState() {
@@ -257,34 +255,34 @@ class _CoursesLiveState extends State<CoursesLive>
                               if (remaining.isNegative) {
                                 return Column(
                                   children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 20.0),
-                                      child: RaisedButton(
-                                          color: Colors.transparent,
-                                          elevation: 0,
-                                          padding: EdgeInsets.only(
-                                              left: 22, right: 22),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            side: BorderSide(
-                                                color: basicColor, width: 1.2),
-                                          ),
-                                          child: Text(
-                                            'Start',
-                                            style: TextStyle(color: basicColor),
-                                          ),
-                                          onPressed: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CourseLive(
-                                                          link: snapshot.data
-                                                                  .documents[0]
-                                                              ['link'],
-                                                        )));
-                                          }),
+                                    Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(top: 20.0),
+                                        child: RaisedButton(
+                                            color: Colors.transparent,
+                                            elevation: 0,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              side: BorderSide(
+                                                  color: basicColor, width: 1.2),
+                                            ),
+                                            child: Text(
+                                              'Start',
+                                              style: TextStyle(color: basicColor),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CourseLive(
+                                                            link: snapshot.data
+                                                                    .documents[0]
+                                                                ['link'],
+                                                          )));
+                                            }),
+                                      ),
                                     ),
                                   ],
                                 );
@@ -304,8 +302,6 @@ class _CoursesLiveState extends State<CoursesLive>
                                       disabledColor: Colors.grey,
                                       color: Colors.transparent,
                                       elevation: 0,
-                                      padding:
-                                          EdgeInsets.only(left: 22, right: 22),
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(5.0),

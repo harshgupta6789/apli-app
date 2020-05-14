@@ -2,10 +2,7 @@ import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/currentE
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/diploma.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCourses.dart';
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/tenth.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/loading.dart';
-import 'package:apli/Shared/scroll.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -118,7 +115,7 @@ class _EducationOverviewState extends State<EducationOverview> {
             });
           } else {
             setState(() {
-              email = s.data['email'];
+              error = true;
             });
           }
         });
@@ -140,7 +137,11 @@ class _EducationOverviewState extends State<EducationOverview> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return email == null
+    return error ? Scaffold(
+      body: Center(
+        child: Text('Error occured, try again later'),
+      ),
+    ) : email == null
         ? Loading()
         : loading
             ? Loading()

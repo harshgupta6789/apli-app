@@ -76,7 +76,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                                 minRadius: 30,
                                 maxRadius: 35,
                                 backgroundImage: snapshot.data[1] != null
-                                    ? NetworkImage(snapshot.data[1])
+                                    ? snapshot.data[1] == defaultPic ? AssetImage("Assets/Images/defaultProfilePicture.jpeg") : NetworkImage(snapshot.data[1])
                                     : null,
                               ),
                             ),
