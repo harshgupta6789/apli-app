@@ -309,20 +309,18 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   onPressed: () async {
-                                     Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => Register(phoneNo)));
-                                    // if (_formKey.currentState.validate()) {
-                                    //   setState(() {
-                                    //     loading = true;
-                                    //     errorMessage = '';
-                                    //   });
-                                    //   var net = await Connectivity()
-                                    //       .checkConnectivity();
-                                    //   if (net == ConnectivityResult.none) {
-                                    //     showToast('No Internet', context);
-                                    //   }
-                                    //   verifyPhone();
-                                    // }
+                                    if (_formKey.currentState.validate()) {
+                                      setState(() {
+                                        loading = true;
+                                        errorMessage = '';
+                                      });
+                                      var net = await Connectivity()
+                                          .checkConnectivity();
+                                      if (net == ConnectivityResult.none) {
+                                        showToast('No Internet', context);
+                                      }
+                                      verifyPhone();
+                                    }
                                   }),
                             )),
                       ],

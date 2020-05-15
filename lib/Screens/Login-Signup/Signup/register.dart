@@ -332,7 +332,7 @@ class _RegisterState extends State<Register> {
                                               fontSize: 16,
                                               color: Colors.grey[600]),
                                           decoration: loginFormField.copyWith(
-                                              hintText: collegeText,
+                                              hintText: "College",
                                               hintStyle: TextStyle(
                                                   color: Colors.black),
                                               prefixIcon: Icon(Icons.school,
@@ -349,6 +349,7 @@ class _RegisterState extends State<Register> {
                                               return MyDialogContent(
                                                 listToSearch: collegeList,
                                                 isClg: true,
+                                                phoneNo: widget.phoneNo,
                                               );
                                             });
                                         setState(() {
@@ -370,7 +371,7 @@ class _RegisterState extends State<Register> {
                                               fontSize: 16,
                                               color: Colors.grey[600]),
                                           decoration: loginFormField.copyWith(
-                                            hintText: collegeText,
+                                            hintText: collegeText??"College",
                                             hintStyle:
                                                 TextStyle(color: Colors.black),
                                             prefixIcon: Icon(Icons.school,
@@ -406,7 +407,7 @@ class _RegisterState extends State<Register> {
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
                                               decoration: loginFormField.copyWith(
-                                                  hintText: courseText,
+                                                  hintText: "Course",
                                                   hintStyle: TextStyle(
                                                       color: Colors.black),
                                                   prefixIcon: Icon(
@@ -448,7 +449,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: courseText,
+                                                hintText: courseText??"Course",
                                                 hintStyle: TextStyle(
                                                     color: Colors.black),
                                                 prefixIcon: Icon(
@@ -486,7 +487,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      hintText: branchText,
+                                                      hintText: "Branch",
                                                       hintStyle: TextStyle(
                                                           color: Colors.black),
                                                       prefixIcon: Icon(
@@ -527,7 +528,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: branchText,
+                                                hintText: branchText??"Branch",
                                                 hintStyle: TextStyle(
                                                     color: Colors.black),
                                                 prefixIcon: Icon(
@@ -563,7 +564,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      hintText: batchText,
+                                                      hintText: "Batch",
                                                       hintStyle: TextStyle(
                                                           color: Colors.black),
                                                       prefixIcon: Icon(
@@ -605,7 +606,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: batchText,
+                                                hintText: batchText??"Batch",
                                                 hintStyle: TextStyle(
                                                     color: Colors.black),
                                                 prefixIcon: Icon(Icons.book,
@@ -856,12 +857,14 @@ class _MyDialogContentState extends State<MyDialogContent> {
                   },
                   controller: editingController,
                   decoration: InputDecoration(
+                      
                       labelText: "Search",
                       hintText: "Search",
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
+                          borderSide: BorderSide(color: basicColor),
                           borderRadius:
-                              BorderRadius.all(Radius.circular(25.0)))),
+                              BorderRadius.all(Radius.circular(10.0)))),
                 ),
               ),
               ListTile(
@@ -900,7 +903,8 @@ class _MyDialogContentState extends State<MyDialogContent> {
                     hintText: "Search",
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+                        borderSide: BorderSide(color: basicColor),
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)))),
               ),
             ),
             Expanded(
