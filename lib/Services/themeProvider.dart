@@ -14,7 +14,6 @@ class ThemeChanger with ChangeNotifier {
   }
 
   init() async {
-    print("h");
     prefs = await SharedPreferences.getInstance();
     String theme = prefs.getString("theme") ?? "light";
     if (theme == "light") {

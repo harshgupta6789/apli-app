@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -42,7 +44,10 @@ class _RegisterState extends State<Register> {
   String fieldOfStudy = '', state = '', city = '';
   String collegeText, courseText, branchText, batchText;
   Timestamp timestamp;
-  List<DropdownMenuItem> dropdown = [];
+  //List<DropdownMenuItem> dropdown = [];
+  List collegeList = [];
+  TextEditingController editingController = TextEditingController();
+
   bool validatePassword(String value) {
     Pattern pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -109,6 +114,11 @@ class _RegisterState extends State<Register> {
   bool allSet = false;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
@@ -164,18 +174,19 @@ class _RegisterState extends State<Register> {
                         }
                       }
                     });
-                    List x = course.keys.toList();
-                    for (int i = 0; i < x.length; i++) {
-                      var temp = DropdownMenuItem(
-                        child: Text(
-                          x[i].toString(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        value: x[i].toString(),
-                      );
-                      if (dropdown.contains(temp)) {}
-                      dropdown.add(temp);
-                    }
+                    collegeList = course.keys.toList();
+                    //duplicateCollegeList = List.from(collegeList);
+                    // for (int i = 0; i < x.length; i++) {
+                    //   var temp = DropdownMenuItem(
+                    //     child: Text(
+                    //       x[i].toString(),
+                    //       overflow: TextOverflow.ellipsis,
+                    //     ),
+                    //     value: x[i].toString(),
+                    //   );
+                    //   if (dropdown.contains(temp)) {}
+                    //   dropdown.add(temp);
+                    // }
 
                     course.remove('');
                     return ScrollConfiguration(
@@ -330,107 +341,152 @@ class _RegisterState extends State<Register> {
                                         ),
                                       ),
                                     )
-                                  : Padding(
-                                      padding: EdgeInsets.only(
-                                          top: height * 0.02,
-                                          left: width * 0.1,
-                                          right: width * 0.1),
-                                      child: SearchableDropdown(
-                                        displayClearIcon: toDisplayClear,
-                                        onClear: () {
-                                          setState(() {
-                                            selectedValueSingleDialogEllipsis =
-                                                null;
-                                            toDisplayClear = false;
-                                          });
-                                        },
-                                        items: dropdown,
-                                        value:
-                                            selectedValueSingleDialogEllipsis,
-                                        hint: Row(
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8.0),
-                                              child: Icon(
-                                                Icons.school,
-                                                color: basicColor,
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text("College Name"),
-                                            )
-                                          ],
+                                  : InkWell(
+                                      onTap: () async {
+                                        String x = await showDialog(
+                                            context: context,
+                                            builder: (_) {
+                                              return MyDialogContent(
+                                                listToSearch: collegeList,
+                                              );
+                                            });
+                                        setState(() {
+                                          collegeText = x;
+                                        });
+                                        print(x);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            top: height * 0.02,
+                                            left: width * 0.1,
+                                            right: width * 0.1),
+                                        child: TextFormField(
+                                          enabled: false,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.grey[600]),
+                                          decoration: loginFormField.copyWith(
+                                              hintText: collegeText,
+                                              hintStyle: TextStyle(
+                                                  color: Colors.black),
+                                              prefixIcon: Icon(Icons.school,
+                                                  color: basicColor),
+                                              suffixIcon: Icon(Icons.delete)),
                                         ),
-                                        searchHint: "Select one",
-                                        searchFn: (String keyword, items) {
-                                          List<int> ret = List<int>();
-                                          if (keyword != null &&
-                                              items != null &&
-                                              keyword.isNotEmpty) {
-                                            keyword.split(" ").forEach((k) {
-                                              int i = 0;
-                                              items.forEach((item) {
-                                                if (k.isNotEmpty &&
-                                                    (item.value
-                                                        .toString()
-                                                        .toLowerCase()
-                                                        .contains(
-                                                            k.toLowerCase()))) {
-                                                  ret.add(i);
-                                                }
-                                                i++;
-                                              });
-                                            });
-                                          }
-                                          if (keyword.isEmpty) {
-                                            ret = Iterable<int>.generate(
-                                                    items.length)
-                                                .toList();
-                                          }
-                                          if(ret.isEmpty){
-                                            print("Not Found");
-                                          }
-                                          return (ret);
-                                        },
-                                        onChanged: (value) {
-                                        
-                                          if (value != null) {
-                                            setState(() {
-                                              selectedValueSingleDialogEllipsis =
-                                                  value;
-                                              toDisplayClear = true;
-                                            });
-                                          }
-                                        },
-                                        selectedValueWidgetFn: (item) {
-                                          return (Row(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    right: 8.0),
-                                                child: Icon(
-                                                  Icons.school,
-                                                  color: basicColor,
-                                                ),
-                                              ),
-                                              Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    item,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ))
-                                            ],
-                                          ));
-                                        },
-                                        dialogBox: true,
-                                        isExpanded: true,
                                       ),
                                     ),
+                              // : Padding(
+                              //     padding: EdgeInsets.only(
+                              //         top: height * 0.02,
+                              //         left: width * 0.1,
+                              //         right: width * 0.1),
+                              //     child: SearchableDropdown(
+                              //       displayClearIcon: toDisplayClear,
+                              //       onClear: () {
+                              //         setState(() {
+                              //           selectedValueSingleDialogEllipsis =
+                              //               null;
+                              //           toDisplayClear = false;
+                              //         });
+                              //       },
+                              //       items: dropdown,
+                              //       value:
+                              //           selectedValueSingleDialogEllipsis,
+                              //       hint: Row(
+                              //         children: [
+                              //           Padding(
+                              //             padding: const EdgeInsets.only(
+                              //                 right: 8.0),
+                              //             child: Icon(
+                              //               Icons.school,
+                              //               color: basicColor,
+                              //             ),
+                              //           ),
+                              //           Padding(
+                              //             padding:
+                              //                 const EdgeInsets.all(8.0),
+                              //             child: Text("College Name"),
+                              //           )
+                              //         ],
+                              //       ),
+                              //       searchHint: "Select one",
+                              //       searchFn: (String keyword, items) {
+                              //         List<int> ret = List<int>();
+
+                              //         if (keyword != null &&
+                              //             items != null &&
+                              //             keyword.isNotEmpty) {
+                              //           keyword.split(" ").forEach((k) {
+                              //             int i = 0;
+                              //             items.forEach((item) {
+                              //               if (k.isNotEmpty &&
+                              //                   (item.value
+                              //                       .toString()
+                              //                       .toLowerCase()
+                              //                       .contains(
+                              //                           k.toLowerCase()))) {
+                              //                 ret.add(i);
+                              //                 print(item);
+                              //               } else {
+                              //                 var temp = DropdownMenuItem(
+                              //                   child: Text(
+                              //                     keyword,
+                              //                     overflow:
+                              //                         TextOverflow.ellipsis,
+                              //                   ),
+                              //                   value: keyword,
+                              //                 );
+                              //                  items.add(temp);
+                              //               }
+
+                              //               i++;
+                              //             });
+                              //           });
+                              //         }
+                              //         if (keyword.isEmpty) {
+                              //           ret = Iterable<int>.generate(
+                              //                   items.length)
+                              //               .toList();
+                              //         }
+                              //         if (ret.isEmpty) {}
+
+                              //         return (ret);
+                              //       },
+                              //       onChanged: (value) {
+                              //         if (value != null) {
+                              //           setState(() {
+                              //             selectedValueSingleDialogEllipsis =
+                              //                 value;
+                              //             toDisplayClear = true;
+                              //           });
+                              //         }
+                              //       },
+                              //       selectedValueWidgetFn: (item) {
+                              //         return (Row(
+                              //           children: [
+                              //             Padding(
+                              //               padding: const EdgeInsets.only(
+                              //                   right: 8.0),
+                              //               child: Icon(
+                              //                 Icons.school,
+                              //                 color: basicColor,
+                              //               ),
+                              //             ),
+                              //             Padding(
+                              //                 padding:
+                              //                     const EdgeInsets.all(8.0),
+                              //                 child: Text(
+                              //                   item,
+                              //                   overflow:
+                              //                       TextOverflow.ellipsis,
+                              //                 ))
+                              //           ],
+                              //         ));
+                              //       },
+                              //       dialogBox: true,
+                              //       isExpanded: true,
+                              //     ),
+                              //   ),
                               //    courseSet || courseText != null
                               // ? InkWell(
                               //     onTap: () {
@@ -1099,5 +1155,144 @@ class PopupListItemWidget extends StatelessWidget {
         style: const TextStyle(fontSize: 16),
       ),
     );
+  }
+}
+
+class MyDialogContent extends StatefulWidget {
+  MyDialogContent({
+    Key key,
+    this.listToSearch,
+    this.phoneNo,
+  }) : super(key: key);
+  final listToSearch;
+  final String phoneNo;
+
+  @override
+  _MyDialogContentState createState() => new _MyDialogContentState();
+}
+
+class _MyDialogContentState extends State<MyDialogContent> {
+  TextEditingController editingController = TextEditingController();
+  String val;
+  var items = List<String>();
+
+  @override
+  void initState() {
+    items.addAll(widget.listToSearch);
+    print(items);
+    super.initState();
+  }
+
+  void filterSearchResults(String query) {
+    List<String> dummySearchList = List<String>();
+    dummySearchList.addAll(widget.listToSearch);
+    if (query.isNotEmpty) {
+      List<String> dummyListData = List<String>();
+      dummySearchList.forEach((item) {
+        if (item.toLowerCase().contains(query.toLowerCase())) {
+          dummyListData.add(item);
+        }
+      });
+      setState(() {
+        items.clear();
+        items.addAll(dummyListData);
+        val = query;
+        //print(items);
+      });
+
+      return;
+    } else {
+      setState(() {
+        items.clear();
+        items.addAll(widget.listToSearch);
+      });
+    }
+  }
+
+  _getContent() {
+    if (items.isEmpty) {
+      return AlertDialog(
+        content: Container(
+          height: 300,
+          width: 300,
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  onChanged: (value) {
+                    filterSearchResults(value);
+                  },
+                  controller: editingController,
+                  decoration: InputDecoration(
+                      labelText: "Search",
+                      hintText: "Search",
+                      prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(25.0)))),
+                ),
+              ),
+              Expanded(
+                  child: ListTile(
+                title: Text(val ?? "Not Found?"),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                      (context),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CollegeNotFound(phoneNo: widget.phoneNo)));
+                },
+              )),
+            ],
+          ),
+        ),
+      );
+    }
+    return AlertDialog(
+      content: Container(
+        height: 300,
+        width: 300,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                onChanged: (value) {
+                  filterSearchResults(value);
+                },
+                controller: editingController,
+                decoration: InputDecoration(
+                    labelText: "Search",
+                    hintText: "Search",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)))),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('${items[index]}'),
+                    onTap: () {
+                      Navigator.pop(context, '${items[index]}');
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _getContent();
   }
 }
