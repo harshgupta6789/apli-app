@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
@@ -10,9 +9,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:search_choices/search_choices.dart';
-import 'package:search_widget/search_widget.dart';
-import 'package:searchable_dropdown/searchable_dropdown.dart';
 
 import '../../HomeLoginWrapper.dart';
 import 'collegeNotFound.dart';
@@ -33,7 +29,7 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
   String selectedValueSingleDialogEllipsis;
-  bool toDisplayClear = false;
+  bool toDisplayClear = false, obscure = true;
 
   String fname = '',
       lname = '',
@@ -44,23 +40,8 @@ class _RegisterState extends State<Register> {
   String fieldOfStudy = '', state = '', city = '';
   String collegeText, courseText, branchText, batchText;
   Timestamp timestamp;
-  //List<DropdownMenuItem> dropdown = [];
   List collegeList = [];
   TextEditingController editingController = TextEditingController();
-
-  bool validatePassword(String value) {
-    Pattern pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regex = new RegExp(pattern);
-    if (value.length < 8) {
-      return false;
-    } else {
-      if (!regex.hasMatch(value))
-        return false;
-      else
-        return true;
-    }
-  }
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -68,7 +49,6 @@ class _RegisterState extends State<Register> {
           builder: (context) => new AlertDialog(
             title: new Text(
               'Are you sure?',
-              style: TextStyle(color: basicColor),
             ),
             content: new Text(
                 'Your details will not be saved and you will have to start over again !!!'),
@@ -77,7 +57,6 @@ class _RegisterState extends State<Register> {
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'CANCEL',
-                  style: TextStyle(color: basicColor),
                 ),
               ),
               new FlatButton(
@@ -87,7 +66,6 @@ class _RegisterState extends State<Register> {
                 },
                 child: new Text(
                   'YES',
-                  style: TextStyle(color: basicColor),
                 ),
               ),
             ],
@@ -202,110 +180,119 @@ class _RegisterState extends State<Register> {
                                 child: Image.asset("Assets/Images/logo.png"),
                               ),
                               Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: TextFormField(
-                                    obscureText: false,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    decoration: loginFormField.copyWith(
-                                        hintText: 'First Name',
-                                        prefixIcon: Icon(
-                                          EvaIcons.personOutline,
-                                          color: basicColor,
-                                        )),
-                                    onChanged: (text) {
-                                      setState(() => fname = text);
-                                    },
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'first name cannot be empty';
-                                      }
-                                      return null;
-                                    },
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: TextFormField(
-                                    obscureText: false,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    decoration: loginFormField.copyWith(
-                                        hintText: 'Last Name',
-                                        prefixIcon: Icon(
-                                          EvaIcons.personAddOutline,
-                                          color: basicColor,
-                                        )),
-                                    onChanged: (text) {
-                                      setState(() => lname = text);
-                                    },
-                                    validator: (value) {
-                                      if (value.isEmpty) {
-                                        return 'last name cannot be empty';
-                                      }
-                                      return null;
-                                    },
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: TextFormField(
-                                    obscureText: false,
-                                    keyboardType: TextInputType.emailAddress,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    decoration: loginFormField.copyWith(
-                                        hintText: 'Email ID',
-                                        prefixIcon: Icon(EvaIcons.emailOutline,
-                                            color: basicColor)),
-                                    onChanged: (text) {
-                                      setState(() {
-                                        error = '';
-                                        email = text;
-                                      });
-                                    },
-                                    validator: (value) {
-                                      if (!validateEmail(value)) {
-                                        return 'please enter valid email';
-                                      }
-                                      return null;
-                                    },
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.02,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: TextFormField(
-                                    obscureText: false,
-                                    keyboardType: TextInputType.visiblePassword,
-                                    textInputAction: TextInputAction.next,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context).nextFocus(),
-                                    decoration: loginFormField.copyWith(
-                                        hintText: 'Password',
-                                        prefixIcon: Icon(EvaIcons.lockOutline,
-                                            color: basicColor)),
-                                    onChanged: (text) {
-                                      setState(() => password = text);
-                                    },
-                                    validator: (value) {
-                                      if (!validatePassword(value)) {
-                                        return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
-                                      }
-                                      return null;
-                                    },
-                                  )),
+                                padding: EdgeInsets.only(
+                                    top: height * 0.02,
+                                    left: width * 0.1,
+                                    right: width * 0.1),
+                                child: Column(
+                                  children: <Widget>[
+                                    TextFormField(
+                                      obscureText: false,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context).nextFocus(),
+                                      decoration: loginFormField.copyWith(
+                                          hintText: 'First Name',
+                                          prefixIcon: Icon(
+                                            EvaIcons.personOutline,
+                                            color: basicColor,
+                                          )),
+                                      onChanged: (text) {
+                                        setState(() => fname = text);
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'first name cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: height * 0.02,),
+                                    TextFormField(
+                                      obscureText: false,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context).nextFocus(),
+                                      decoration: loginFormField.copyWith(
+                                          hintText: 'Last Name',
+                                          prefixIcon: Icon(
+                                            EvaIcons.personAddOutline,
+                                            color: basicColor,
+                                          )),
+                                      onChanged: (text) {
+                                        setState(() => lname = text);
+                                      },
+                                      validator: (value) {
+                                        if (value.isEmpty) {
+                                          return 'last name cannot be empty';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: height * 0.02,),
+                                    TextFormField(
+                                      obscureText: false,
+                                      keyboardType: TextInputType.emailAddress,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context).nextFocus(),
+                                      decoration: loginFormField.copyWith(
+                                          hintText: 'Email ID',
+                                          prefixIcon: Icon(EvaIcons.emailOutline,
+                                              color: basicColor)),
+                                      onChanged: (text) {
+                                        setState(() {
+                                          error = '';
+                                          email = text;
+                                        });
+                                      },
+                                      validator: (value) {
+                                        if (!validateEmail(value)) {
+                                          return 'please enter valid email';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                    SizedBox(height: height * 0.02,),
+                                    TextFormField(
+                                      obscureText: obscure,
+                                      keyboardType: TextInputType.visiblePassword,
+                                      textInputAction: TextInputAction.next,
+                                      onFieldSubmitted: (_) =>
+                                          FocusScope.of(context).nextFocus(),
+                                      decoration: loginFormField.copyWith(
+                                          hintText: 'Password',
+                                          suffixIcon: IconButton(
+                                            icon: !obscure
+                                                ? Icon(
+                                              EvaIcons.eyeOffOutline,
+                                              color: basicColor,
+                                            )
+                                                : Icon(
+                                              EvaIcons.eyeOutline,
+                                              color: Colors.grey,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                obscure = !obscure;
+                                              });
+                                            },
+                                          ),
+                                          prefixIcon: Icon(EvaIcons.lockOutline,
+                                              color: basicColor)),
+                                      onChanged: (text) {
+                                        setState(() => password = text);
+                                      },
+                                      validator: (value) {
+                                        if (!validatePassword(value)) {
+                                          return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
                               collegeSet || collegeText != null
                                   ? InkWell(
                                       onTap: () {
@@ -328,11 +315,12 @@ class _RegisterState extends State<Register> {
                                             right: width * 0.1),
                                         child: TextFormField(
                                           enabled: false,
+                                          initialValue: collegeText,
                                           style: TextStyle(
                                               fontSize: 16,
                                               color: Colors.grey[600]),
                                           decoration: loginFormField.copyWith(
-                                              hintText: "College",
+                                              hintText: collegeText ?? "College",
                                               hintStyle: TextStyle(
                                                   color: Colors.black),
                                               prefixIcon: Icon(Icons.school,
@@ -371,11 +359,12 @@ class _RegisterState extends State<Register> {
                                               fontSize: 16,
                                               color: Colors.grey[600]),
                                           decoration: loginFormField.copyWith(
-                                            hintText: collegeText??"College",
+                                            hintText: collegeText ?? "College",
                                             hintStyle:
-                                                TextStyle(color: Colors.black),
+                                                TextStyle(color: Colors.grey[600]),
                                             prefixIcon: Icon(Icons.school,
                                                 color: basicColor),
+                                            suffixIcon: Icon(Icons.keyboard_arrow_up)
                                           ),
                                         ),
                                       ),
@@ -407,7 +396,7 @@ class _RegisterState extends State<Register> {
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
                                               decoration: loginFormField.copyWith(
-                                                  hintText: "Course",
+                                                  hintText: courseText ?? "Course",
                                                   hintStyle: TextStyle(
                                                       color: Colors.black),
                                                   prefixIcon: Icon(
@@ -449,12 +438,13 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: courseText??"Course",
+                                                hintText: "Course",
                                                 hintStyle: TextStyle(
-                                                    color: Colors.black),
+                                                    color: Colors.grey[600]),
                                                 prefixIcon: Icon(
                                                     Icons.collections_bookmark,
                                                     color: basicColor),
+                                                suffixIcon: Icon(Icons.keyboard_arrow_up)
                                               ),
                                             ),
                                           ),
@@ -487,7 +477,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      hintText: "Branch",
+                                                      hintText: branchText ?? "Branch",
                                                       hintStyle: TextStyle(
                                                           color: Colors.black),
                                                       prefixIcon: Icon(
@@ -528,12 +518,13 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: branchText??"Branch",
+                                                hintText: "Branch",
                                                 hintStyle: TextStyle(
-                                                    color: Colors.black),
+                                                    color: Colors.grey[600]),
                                                 prefixIcon: Icon(
                                                     Icons.library_books,
                                                     color: basicColor),
+                                                suffixIcon: Icon(Icons.keyboard_arrow_up)
                                               ),
                                             ),
                                           ),
@@ -564,7 +555,7 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                      hintText: "Batch",
+                                                      hintText: batchText ?? "Batch",
                                                       hintStyle: TextStyle(
                                                           color: Colors.black),
                                                       prefixIcon: Icon(
@@ -606,11 +597,12 @@ class _RegisterState extends State<Register> {
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: batchText??"Batch",
+                                                hintText: "Batch",
                                                 hintStyle: TextStyle(
-                                                    color: Colors.black),
+                                                    color: Colors.grey[600]),
                                                 prefixIcon: Icon(Icons.book,
                                                     color: basicColor),
+                                                      suffixIcon: Icon(Icons.keyboard_arrow_up)
                                               ),
                                             ),
                                           ),
@@ -857,8 +849,6 @@ class _MyDialogContentState extends State<MyDialogContent> {
                   },
                   controller: editingController,
                   decoration: InputDecoration(
-                      
-                      labelText: "Search",
                       hintText: "Search",
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(
@@ -899,12 +889,11 @@ class _MyDialogContentState extends State<MyDialogContent> {
                 },
                 controller: editingController,
                 decoration: InputDecoration(
-                    labelText: "Search",
                     hintText: "Search",
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: basicColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)))),
+                        borderRadius: BorderRadius.all(Radius.circular(6.0)))),
               ),
             ),
             Expanded(

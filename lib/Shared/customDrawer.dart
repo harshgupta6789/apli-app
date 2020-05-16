@@ -1,5 +1,6 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:app_settings/app_settings.dart';
@@ -205,6 +206,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => Wrapper()),
                         (Route<dynamic> route) => false);
+                    showToast('Logged Out Successfully', context);
                   }),
               Divider(
                 thickness: dividerThickness,

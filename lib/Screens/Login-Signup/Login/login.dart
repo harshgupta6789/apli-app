@@ -1,5 +1,6 @@
 import 'package:apli/Screens/Home/mainScreen.dart';
 import 'package:apli/Screens/Login-Signup/Login/forgotPassword.dart';
+import 'package:apli/Screens/Login-Signup/Signup/register.dart';
 import 'package:apli/Screens/Login-Signup/Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -164,6 +165,7 @@ class _LoginState extends State<Login> {
                                   children: <Widget>[
                                     Checkbox(
                                         value: rememberMe,
+                                        activeColor: basicColor,
                                         onChanged: (bool temp) {
                                           setState(() {
                                             rememberMe = !rememberMe;
@@ -227,7 +229,7 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        showToast('No Internet', context);
+                                        showToast('No Internet', context, color: Colors.red);
                                       } else {
                                         DocumentReference doc = Firestore
                                             .instance
@@ -247,7 +249,7 @@ class _LoginState extends State<Login> {
                                             });
                                           } else {
                                             showToast('Account does not exist',
-                                                context);
+                                                context, color: Colors.red);
                                           }
                                         });
                                       }
@@ -265,20 +267,20 @@ class _LoginState extends State<Login> {
                                           .signInWithoutAuth(email, password);
                                       if (result == -10) {
                                         showToast(
-                                            'Account does not exists', context);
+                                            'Account does not exists', context, color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -1) {
                                         showToast(
                                             'Invalid username and password',
-                                            context);
+                                            context, color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -2) {
                                         showToast(
-                                            'Cannot connect server', context);
+                                            'Cannot connect server', context, color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
@@ -302,13 +304,13 @@ class _LoginState extends State<Login> {
                                           loading = false;
                                         });
                                         showToast(
-                                            'Failed, try again later', context);
+                                            'Failed, try again later', context, color: Colors.red);
                                       }
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
                                         showToast(
-                                            'No Internet Connection', context);
+                                            'No Internet Connection', context, color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
@@ -343,7 +345,7 @@ class _LoginState extends State<Login> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    VerifyPhoneNo()),
+                                                    Register('+919999999999')),
                                           );
                                         }),
                                 ]),

@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toast/toast.dart';
 
 class VerifyPhoneNo extends StatefulWidget {
   @override
@@ -41,7 +42,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   }
 
   Future<void> verifyPhone() async {
-    print('abd');
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {
         loading = false;
@@ -49,7 +49,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
       this.verificationId = verId;
       smsOTPDialog(context).then((value) {});
     };
-    print('abd');
     try {
       await _auth.verifyPhoneNumber(
           phoneNumber: phoneNo, // PHONE NUMBER TO SEND OTP
@@ -65,7 +64,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             setState(() {
               loading = true;
             });
-            showToast('Verified Successfully', context);
+            showToast('Verified Successfully', context, gravity: Toast.TOP);
             await Future.delayed(Duration(seconds: 1));
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Register(phoneNo)));
@@ -75,7 +74,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           },
           verificationFailed: (AuthException exceptio) {
             print(exceptio.message);
-            showToast('Unexpected error', context);
+            showToast('Unexpected error', context, gravity: Toast.TOP, color: Colors.red);
             setState(() {
               loading = false;
             });
@@ -143,27 +142,29 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                 FlatButton(
                                   child: Text('Verify'),
                                   onPressed: () {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    _auth.currentUser().then((user) async {
-                                      if (user != null) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        try {
-                                          await FirebaseAuth.instance.signOut();
-                                        } catch (e) {}
-                                        Navigator.of(context).pop();
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Register(phoneNo)));
-                                      } else {
-                                        signIn();
-                                      }
-                                    });
+                                    if(this.smsOTP.length == 6) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      _auth.currentUser().then((user) async {
+                                        if (user != null) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          try {
+                                            await FirebaseAuth.instance.signOut();
+                                          } catch (e) {}
+                                          Navigator.of(context).pop();
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Register(phoneNo)));
+                                        } else {
+                                          signIn();
+                                        }
+                                      });
+                                    }
                                   },
                                 )
                               ],
@@ -310,16 +311,18 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                   ),
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) {
-                                      setState(() {
-                                        loading = true;
-                                        errorMessage = '';
-                                      });
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        showToast('No Internet', context);
+                                        showToast('No Internet', context, gravity: Toast.TOP, color: Colors.red);
                                       }
-                                      verifyPhone();
+                                      else {
+                                        setState(() {
+                                          loading = true;
+                                          errorMessage = '';
+                                        });
+                                        verifyPhone();
+                                      }
                                     }
                                   }),
                             )),

@@ -3,13 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
-showToast(String msg, BuildContext context, {int duration}) {
+showToast(String msg, BuildContext context, {int duration, Color color, int gravity}) {
   Toast.show(msg, context,
-      backgroundColor: basicColor, duration: duration ?? 3);
+      backgroundColor: Colors.transparent,
+      duration: duration ?? 3,
+      border: Border.all(
+        color: color ?? basicColor,
+      ),
+      textColor: color ?? basicColor,
+      backgroundRadius: 4,
+      gravity: gravity ?? Toast.BOTTOM);
 }
-
-
-
 
 bool validateEmail(String value) {
   String p =
@@ -34,9 +38,6 @@ bool validatePassword(String value) {
   }
 }
 
-
-
-
 int decimalToBinary(int decimal) {
   int binary = 0, i = 1;
   while (decimal > 0) {
@@ -53,17 +54,11 @@ int binaryToDecimal(int binary) {
   return decimal;
 }
 
-
-
-
 String getFileNameFromURL(String url) {
   Pattern pattern = r'[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))';
   RegExp regExp = new RegExp(pattern);
   return regExp.stringMatch(url);
 }
-
-
-
 
 InputDecoration x(String t) {
   return InputDecoration(

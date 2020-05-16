@@ -229,7 +229,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                     const EdgeInsets.all(4.0),
                                                 child: IconButton(
                                                   icon: Icon(
-                                                      EvaIcons.editOutline),
+                                                      EvaIcons.editOutline, color: Colors.black,),
                                                   onPressed: () {
                                                     Navigator.push(
                                                       context,
@@ -245,7 +245,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                     const EdgeInsets.all(4.0),
                                                 child: IconButton(
                                                     icon: Icon(
-                                                        EvaIcons.shareOutline),
+                                                        EvaIcons.shareOutline, color: Colors.black,),
                                                     onPressed: () async {
                                                       if (pdfUrl != null) {
                                                         var request =
