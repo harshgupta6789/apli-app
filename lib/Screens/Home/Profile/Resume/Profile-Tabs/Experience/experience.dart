@@ -274,13 +274,13 @@ class _ExperiencesState extends State<Experiences> {
                                               loading = true;
                                             });
                                             Map<String, dynamic> map = {};
-                                            map['experience'] = List.from(experiences);
+                                            map['experience'] =
+                                                List.from(experiences);
                                             map['index'] = index;
                                             // TODO call API
-                                            dynamic result =
-                                            await _APIService.sendProfileData(
-                                                map);
-                                            if(result == 1) {
+                                            dynamic result = await _APIService
+                                                .sendProfileData(map);
+                                            if (result == 1) {
                                               showToast(
                                                   'Data Updated Successfully',
                                                   context);
@@ -289,7 +289,11 @@ class _ExperiencesState extends State<Experiences> {
                                                   'Unexpected error occured',
                                                   context);
                                             }
-                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Experience()));
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>

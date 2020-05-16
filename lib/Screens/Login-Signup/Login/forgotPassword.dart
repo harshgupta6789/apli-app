@@ -22,7 +22,7 @@ double height, width;
 class _ForgotPasswordState extends State<ForgotPassword> {
   bool loading = false;
 
-  String smsOTP;
+  String smsOTP = '';
   String verificationId;
   String errorMessage = '';
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -130,31 +130,33 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 FlatButton(
                                   child: Text('Verify'),
                                   onPressed: () {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    _auth.currentUser().then((user) async {
-                                      if (user != null) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        try {
-                                          await FirebaseAuth.instance.signOut();
-                                        } catch (e) {}
-                                        Navigator.of(context).pop();
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    UpdatePassword(
-                                                        email: widget.email)));
-                                      } else {
-                                        signIn();
-                                      }
-                                    });
-//                  _auth.currentUser().then((user) {
-//                    signIn();
-//                  });
+                                    if (this.smsOTP != null &&
+                                        this.smsOTP.length == 6) {
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      _auth.currentUser().then((user) async {
+                                        if (user != null) {
+                                          setState(() {
+                                            loading = false;
+                                          });
+                                          try {
+                                            await FirebaseAuth.instance
+                                                .signOut();
+                                          } catch (e) {}
+                                          Navigator.of(context).pop();
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UpdatePassword(
+                                                          email:
+                                                              widget.email)));
+                                        } else {
+                                          signIn();
+                                        }
+                                      });
+                                    }
                                   },
                                 )
                               ],

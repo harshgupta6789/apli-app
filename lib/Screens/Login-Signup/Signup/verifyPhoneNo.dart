@@ -30,7 +30,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   final _formKey = GlobalKey<FormState>();
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  String smsOTP;
+  String smsOTP = '';
   String verificationId;
   String errorMessage = '';
 
@@ -74,7 +74,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           },
           verificationFailed: (AuthException exceptio) {
             print(exceptio.message);
-            showToast('Unexpected error', context, gravity: Toast.TOP, color: Colors.red);
+            showToast('Unexpected error', context,
+                gravity: Toast.TOP, color: Colors.red);
             setState(() {
               loading = false;
             });
@@ -142,7 +143,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                 FlatButton(
                                   child: Text('Verify'),
                                   onPressed: () {
-                                    if(this.smsOTP.length == 6) {
+                                    if (this.smsOTP != null &&
+                                        this.smsOTP.length == 6) {
                                       setState(() {
                                         loading = true;
                                       });
@@ -152,7 +154,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                             loading = false;
                                           });
                                           try {
-                                            await FirebaseAuth.instance.signOut();
+                                            await FirebaseAuth.instance
+                                                .signOut();
                                           } catch (e) {}
                                           Navigator.of(context).pop();
                                           Navigator.pushReplacement(
@@ -314,9 +317,10 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        showToast('No Internet', context, gravity: Toast.TOP, color: Colors.red);
-                                      }
-                                      else {
+                                        showToast('No Internet', context,
+                                            gravity: Toast.TOP,
+                                            color: Colors.red);
+                                      } else {
                                         setState(() {
                                           loading = true;
                                           errorMessage = '';

@@ -505,16 +505,13 @@ class _AwardsFormState extends State<AwardsForm> {
                                 map['award'] = List.from(awards);
                                 map['index'] = -1;
                                 dynamic result =
-                                await _APIService.sendProfileData(
-                                    map);
-                                if(result == 1) {
+                                    await _APIService.sendProfileData(map);
+                                if (result == 1) {
                                   showToast(
-                                      'Data Updated Successfully',
-                                      context);
+                                      'Data Updated Successfully', context);
                                 } else {
                                   showToast(
-                                      'Unexpected error occured',
-                                      context);
+                                      'Unexpected error occured', context);
                                 }
                                 Navigator.pop(context);
                               }

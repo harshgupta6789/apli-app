@@ -15,7 +15,8 @@ class Courses extends StatefulWidget {
   final String email;
   final String imageUrl;
 
-  const Courses({Key key, @required this.documentId, @required this.email , this.imageUrl})
+  const Courses(
+      {Key key, @required this.documentId, @required this.email, this.imageUrl})
       : super(key: key);
 
   @override
@@ -27,8 +28,8 @@ Orientation orientation;
 
 class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int estimateTs = DateTime(2020, 5, 17, 16, 0, 0)
-      .millisecondsSinceEpoch; // set needed date
+  int estimateTs =
+      DateTime(2020, 5, 17, 16, 0, 0).millisecondsSinceEpoch; // set needed date
 
   @override
   void initState() {
@@ -92,7 +93,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.separated(
-            physics: ScrollPhysics(),
+              physics: ScrollPhysics(),
               separatorBuilder: (BuildContext context, int index) => Divider(
                     thickness: 1.2,
                   ),
@@ -154,32 +155,36 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                           (BuildContext context, AsyncSnapshot<int> snapshot2) {
                         var dateString;
                         int now = DateTime.now().millisecondsSinceEpoch;
-                        int estimateTs =
-                            DateTime(2020, 5, 17, 16, 0, 0).millisecondsSinceEpoch;
+                        int estimateTs = DateTime(2020, 5, 17, 16, 0, 0)
+                            .millisecondsSinceEpoch;
                         Duration remaining =
                             Duration(milliseconds: estimateTs - now);
                         if (remaining.inDays > 0) {
-                          if(remaining.inDays == 1) {
+                          if (remaining.inDays == 1) {
                             dateString = remaining.inDays.toString() + ' day';
                           } else
                             dateString = remaining.inDays.toString() + ' days';
                         } else {
-                          if (remaining.inHours > 0){
-                            if(remaining.inHours == 1)
-                              dateString = remaining.inHours.toString() + ' hour';
+                          if (remaining.inHours > 0) {
+                            if (remaining.inHours == 1)
+                              dateString =
+                                  remaining.inHours.toString() + ' hour';
                             else
-                              dateString = remaining.inHours.toString() + ' hours';
-                          }
-                        else if (remaining.inMinutes > 0)
-                            if(remaining.inMinutes == 1)
-                              dateString = remaining.inMinutes.toString() + ' min';
-                            else
-                              dateString = remaining.inMinutes.toString() + ' mins';
-                        else
-                          if(remaining.inSeconds == 1)
-                            dateString = remaining.inSeconds.toString() + ' sec';
+                              dateString =
+                                  remaining.inHours.toString() + ' hours';
+                          } else if (remaining.inMinutes >
+                              0) if (remaining.inMinutes == 1)
+                            dateString =
+                                remaining.inMinutes.toString() + ' min';
                           else
-                            dateString = remaining.inSeconds.toString() + ' sec';
+                            dateString =
+                                remaining.inMinutes.toString() + ' mins';
+                          else if (remaining.inSeconds == 1)
+                            dateString =
+                                remaining.inSeconds.toString() + ' sec';
+                          else
+                            dateString =
+                                remaining.inSeconds.toString() + ' sec';
                         }
                         if (remaining.isNegative) {
                           return Column(
@@ -201,7 +206,15 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                       style: TextStyle(color: basicColor),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CourseLive(link: snapshot.data.documents[index].data['link'],)));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => CourseLive(
+                                                    link: snapshot
+                                                        .data
+                                                        .documents[index]
+                                                        .data['link'],
+                                                  )));
                                     }),
                               ),
                             ],
@@ -222,7 +235,8 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                               padding: EdgeInsets.only(left: 22, right: 22),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: Colors.grey, width: 1.2),
+                                side:
+                                    BorderSide(color: Colors.grey, width: 1.2),
                               ),
                               child: Text(
                                 'Start',
@@ -407,24 +421,23 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                       child: Stack(
                         alignment: Alignment.centerLeft,
                         children: <Widget>[
-                         SizedBox(
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: widget.imageUrl == null
-                                          ? Image.asset(
-                                              "Assets/Images/course.png",
-                                              fit: BoxFit.cover,
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl: widget.imageUrl,
-                                              placeholder: (context, url) =>
-                                                  Loading(),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                    )),
+                          SizedBox(
+                              width: double.infinity,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: widget.imageUrl == null
+                                    ? Image.asset(
+                                        "Assets/Images/course.png",
+                                        fit: BoxFit.cover,
+                                      )
+                                    : CachedNetworkImage(
+                                        imageUrl: widget.imageUrl,
+                                        placeholder: (context, url) =>
+                                            Loading(),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      ),
+                              )),
                           Positioned(
                             top: height * 0.15,
                             left: width * 0.1,

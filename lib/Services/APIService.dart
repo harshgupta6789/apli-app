@@ -64,18 +64,19 @@ class APIService {
               } else
                 result = -2;
               break;
-             
             }
 
           case 6:
-
-            if(map['index'] != -1) {
+            if (map['index'] != -1) {
               map['experience'].removeAt(map['index']);
             }
             for (int i = 0; i < map['experience'].length; i++) {
-              map['experience'][i]['bullet_point1'] = map['experience'][i]['information'][0];
-              map['experience'][i]['bullet_point2'] = map['experience'][i]['information'][1];
-              map['experience'][i]['bullet_point3'] = map['experience'][i]['information'][2];
+              map['experience'][i]['bullet_point1'] =
+                  map['experience'][i]['information'][0];
+              map['experience'][i]['bullet_point2'] =
+                  map['experience'][i]['information'][1];
+              map['experience'][i]['bullet_point3'] =
+                  map['experience'][i]['information'][2];
               if (map['experience'][i]['from'] != null) {
                 map['experience'][i]['from'] = apiDateFormat
                         .format(map['experience'][i]['from'].toDate()) +
@@ -104,16 +105,18 @@ class APIService {
             break;
 
           case 5:
-            if(map['index'] != -1) {
+            if (map['index'] != -1) {
               map['project'].removeAt(map['index']);
             }
             for (int i = 0; i < map['project'].length; i++) {
-              map['project'][i]['bullet_point1'] = map['project'][i]['information'][0];
-              map['project'][i]['bullet_point2'] = map['project'][i]['information'][1];
+              map['project'][i]['bullet_point1'] =
+                  map['project'][i]['information'][0];
+              map['project'][i]['bullet_point2'] =
+                  map['project'][i]['information'][1];
               if (map['project'][i]['from'] != null) {
-                map['project'][i]['from'] = apiDateFormat
-                    .format(map['project'][i]['from'].toDate()) +
-                    " 00:00:00+0000";
+                map['project'][i]['from'] =
+                    apiDateFormat.format(map['project'][i]['from'].toDate()) +
+                        " 00:00:00+0000";
               }
               if (map['project'][i]['to'] != null) {
                 map['project'][i]['to'] =
@@ -138,21 +141,23 @@ class APIService {
             break;
 
           case 4:
-            if(map['index'] != -1) {
+            if (map['index'] != -1) {
               map['extra_curricular'].removeAt(map['index']);
             }
             for (int i = 0; i < map['extra_curricular'].length; i++) {
-              map['extra_curricular'][i]['bullet_point1'] = map['extra_curricular'][i]['info'][0];
-              map['extra_curricular'][i]['bullet_point2'] = map['extra_curricular'][i]['info'][1];
+              map['extra_curricular'][i]['bullet_point1'] =
+                  map['extra_curricular'][i]['info'][0];
+              map['extra_curricular'][i]['bullet_point2'] =
+                  map['extra_curricular'][i]['info'][1];
               if (map['extra_curricular'][i]['start'] != null) {
                 map['extra_curricular'][i]['start'] = apiDateFormat
-                    .format(map['extra_curricular'][i]['start'].toDate()) +
+                        .format(map['extra_curricular'][i]['start'].toDate()) +
                     " 00:00:00+0000";
               }
               if (map['extra_curricular'][i]['end'] != null) {
-                map['extra_curricular'][i]['end'] =
-                    apiDateFormat.format(map['extra_curricular'][i]['end'].toDate()) +
-                        " 00:00:00+0000";
+                map['extra_curricular'][i]['end'] = apiDateFormat
+                        .format(map['extra_curricular'][i]['end'].toDate()) +
+                    " 00:00:00+0000";
               }
             }
             String expToPass = jsonEncode(map['extra_curricular']);
@@ -172,11 +177,10 @@ class APIService {
             break;
 
           case 3:
-
-            for(int i = 0; i < map['award'].length; i++) {
-              map['award'][i]['date'] = apiDateFormat
-                  .format(map['award'][i]['date'].toDate()) +
-                  " 00:00:00+0000";
+            for (int i = 0; i < map['award'].length; i++) {
+              map['award'][i]['date'] =
+                  apiDateFormat.format(map['award'][i]['date'].toDate()) +
+                      " 00:00:00+0000";
             }
             String expToPass = jsonEncode(map['award']);
             Response response = await Dio().post(awardsURL, data: {
@@ -195,7 +199,6 @@ class APIService {
             break;
 
           case 2:
-
             String expToPass = jsonEncode(map['skill']);
             Response response = await Dio().post(skillsURL, data: {
               "secret": "$passHashSecret",

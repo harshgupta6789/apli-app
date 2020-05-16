@@ -86,12 +86,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 }
                 break;
               case 'Alert':
-                {
-                }
+                {}
                 break;
               default:
-                {
-                }
+                {}
                 break;
             }
           }

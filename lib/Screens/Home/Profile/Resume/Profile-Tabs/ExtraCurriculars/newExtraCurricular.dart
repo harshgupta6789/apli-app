@@ -44,8 +44,9 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
-      storageReference =
-          FirebaseStorage.instance.ref().child("documents/${value.getString('email')}/$filename");
+      storageReference = FirebaseStorage.instance
+          .ref()
+          .child("documents/${value.getString('email')}/$filename");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       await downloadUrl.ref.getDownloadURL().then((url) {
@@ -211,22 +212,20 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                             initialValue: start == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                start.microsecondsSinceEpoch),
+                                    start.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = start != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  start
-                                      .microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  start.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -234,16 +233,17 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                               setState(() {
                                 start = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             decoration: x("From")),
-                        SizedBox(height: 15,),
+                        SizedBox(
+                          height: 15,
+                        ),
                         DateTimeField(
                             validator: (value) {
                               if (value == null)
@@ -255,21 +255,20 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                             initialValue: end == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                end.microsecondsSinceEpoch),
+                                    end.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = end != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  end.microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  end.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -277,9 +276,8 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                               setState(() {
                                 end = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
@@ -323,7 +321,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                 padding: EdgeInsets.only(right: 5),
                                 child: MaterialButton(
                                   onPressed: () {
-                                    if(file == null) {
+                                    if (file == null) {
                                       filePicker(context);
                                     } else {
                                       setState(() {
@@ -333,7 +331,8 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                       });
                                     }
                                   },
-                                  child: Text(file == null ? "Browse" : "Remove"),
+                                  child:
+                                      Text(file == null ? "Browse" : "Remove"),
                                   color: Colors.grey,
                                 ),
                               ),
@@ -433,34 +432,37 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                         color: basicColor, width: 1.2),
                                   ),
                                   child: Text(
-                                    widget.old == false ? 'Cancel': 'Delete',
+                                    widget.old == false ? 'Cancel' : 'Delete',
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if(widget.old == false)
+                                    if (widget.old == false)
                                       Navigator.pop(context);
                                     else {
                                       setState(() {
                                         loading = true;
                                       });
                                       Map<String, dynamic> map = {};
-                                      map['extra_curricular'] = List.from(extraCurriculars);
+                                      map['extra_curricular'] =
+                                          List.from(extraCurriculars);
                                       map['index'] = index;
                                       // TODO call API
                                       dynamic result =
-                                      await _APIService.sendProfileData(
-                                          map);
-                                      if(result == 1) {
-                                        showToast(
-                                            'Data Updated Successfully',
+                                          await _APIService.sendProfileData(
+                                              map);
+                                      if (result == 1) {
+                                        showToast('Data Updated Successfully',
                                             context);
                                       } else {
-                                        showToast(
-                                            'Unexpected error occured',
+                                        showToast('Unexpected error occured',
                                             context);
                                       }
                                       Navigator.pop(context);
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ExtraCurricular()));
                                     }
                                   }),
                               RaisedButton(
@@ -479,54 +481,68 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) if (validateBulletPoint(
                                         info[
-                                        0])) if (validateBulletPoint(
-                                        info[
-                                        1])) {
+                                            0])) if (validateBulletPoint(
+                                        info[1])) {
                                       setState(() {
                                         loading = true;
                                       });
                                       if (file == null) {
                                         // TODO call API
                                         extraCurriculars[index]['role'] = role;
-                                        extraCurriculars[index]['organisation'] = organisation;
-                                        extraCurriculars[index]['start'] = start;
+                                        extraCurriculars[index]
+                                            ['organisation'] = organisation;
+                                        extraCurriculars[index]['start'] =
+                                            start;
                                         extraCurriculars[index]['end'] = end;
-                                        extraCurriculars[index]['certificate'] = certificate;
+                                        extraCurriculars[index]['certificate'] =
+                                            certificate;
                                         extraCurriculars[index]['info'] = info;
                                         Map<String, dynamic> map = {};
-                                        map['extra_curricular'] = List.from(extraCurriculars);
+                                        map['extra_curricular'] =
+                                            List.from(extraCurriculars);
                                         map['index'] = -1;
                                         dynamic result =
-                                        await _APIService.sendProfileData(
-                                            map);
-                                        if(result == 1) {
-                                          showToast(
-                                              'Data Updated Successfully',
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == 1) {
+                                          showToast('Data Updated Successfully',
                                               context);
                                         } else {
-                                          showToast(
-                                              'Unexpected error occured',
+                                          showToast('Unexpected error occured',
                                               context);
                                         }
                                         Navigator.pop(context);
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ExtraCurricular()));
                                       } else {
-                                        showToast('Uploading certificate will take some time', context);
-                                        _uploadFile(file, fileName).then((f) async {
+                                        showToast(
+                                            'Uploading certificate will take some time',
+                                            context);
+                                        _uploadFile(file, fileName)
+                                            .then((f) async {
                                           // TODO call API
-                                          extraCurriculars[index]['role'] = role;
-                                          extraCurriculars[index]['organisation'] = organisation;
-                                          extraCurriculars[index]['start'] = start;
+                                          extraCurriculars[index]['role'] =
+                                              role;
+                                          extraCurriculars[index]
+                                              ['organisation'] = organisation;
+                                          extraCurriculars[index]['start'] =
+                                              start;
                                           extraCurriculars[index]['end'] = end;
-                                          extraCurriculars[index]['certificate'] = certificate;
-                                          extraCurriculars[index]['info'] = info;
+                                          extraCurriculars[index]
+                                              ['certificate'] = certificate;
+                                          extraCurriculars[index]['info'] =
+                                              info;
                                           Map<String, dynamic> map = {};
-                                          map['extra_curricular'] = List.from(extraCurriculars);
+                                          map['extra_curricular'] =
+                                              List.from(extraCurriculars);
                                           map['index'] = -1;
                                           dynamic result =
-                                          await _APIService.sendProfileData(
-                                              map);
-                                          if(result == 1) {
+                                              await _APIService.sendProfileData(
+                                                  map);
+                                          if (result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
@@ -536,7 +552,11 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                                 context);
                                           }
                                           Navigator.pop(context);
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ExtraCurricular()));
                                         });
                                       }
                                     }

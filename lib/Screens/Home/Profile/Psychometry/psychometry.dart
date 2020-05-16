@@ -146,21 +146,22 @@ class _PsychometryState extends State<Psychometry>
                       padding:
                           EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
-                          child:
-                              Text("1. You will get only one chance to complete this test",
-                                  style: TextStyle(
-                                    fontSize: fontSize,
-                                    fontWeight: FontWeight.bold,
-                                  )),
+                          child: Text(
+                              "1. You will get only one chance to complete this test",
+                              style: TextStyle(
+                                fontSize: fontSize,
+                                fontWeight: FontWeight.bold,
+                              )),
                           alignment: Alignment.centerLeft),
                     ),
                     Padding(
                       padding:
                           EdgeInsets.fromLTRB(width * 0.1, 8, width * 0.1, 8),
                       child: Align(
-                          child: Text("2. Completing the test will increase your hiring chances.",
+                          child: Text(
+                              "2. Completing the test will increase your hiring chances.",
                               style: TextStyle(
-                                fontSize:fontSize,
+                                fontSize: fontSize,
                                 fontWeight: FontWeight.bold,
                               )),
                           alignment: Alignment.centerLeft),
@@ -177,7 +178,6 @@ class _PsychometryState extends State<Psychometry>
                               )),
                           alignment: Alignment.centerLeft),
                     ),
-                 
                     Padding(
                       padding: EdgeInsets.fromLTRB(8.0, 20, 8, 8),
                       child: Align(

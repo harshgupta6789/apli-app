@@ -36,7 +36,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => Register(widget.phoneNo)));
-                      return null;
+              return null;
             },
             child: Scaffold(
               body: ScrollConfiguration(

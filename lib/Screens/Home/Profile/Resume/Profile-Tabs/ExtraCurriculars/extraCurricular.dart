@@ -263,13 +263,13 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                               loading = true;
                                             });
                                             Map<String, dynamic> map = {};
-                                            map['extra_curricular'] = List.from(extraCurriculars);
+                                            map['extra_curricular'] =
+                                                List.from(extraCurriculars);
                                             map['index'] = index;
                                             // TODO call API
-                                            dynamic result =
-                                            await _APIService.sendProfileData(
-                                                map);
-                                            if(result == 1) {
+                                            dynamic result = await _APIService
+                                                .sendProfileData(map);
+                                            if (result == 1) {
                                               showToast(
                                                   'Data Updated Successfully',
                                                   context);
@@ -278,7 +278,11 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                                   'Unexpected error occured',
                                                   context);
                                             }
-                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ExtraCurricular()));
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ExtraCurricular()));
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>

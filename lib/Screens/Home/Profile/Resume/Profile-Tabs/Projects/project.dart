@@ -261,13 +261,13 @@ class _ProjectsState extends State<Projects> {
                                               loading = true;
                                             });
                                             Map<String, dynamic> map = {};
-                                            map['project'] = List.from(projects);
+                                            map['project'] =
+                                                List.from(projects);
                                             map['index'] = index;
                                             // TODO call API
-                                            dynamic result =
-                                            await _APIService.sendProfileData(
-                                                map);
-                                            if(result == 1) {
+                                            dynamic result = await _APIService
+                                                .sendProfileData(map);
+                                            if (result == 1) {
                                               showToast(
                                                   'Data Updated Successfully',
                                                   context);
@@ -276,7 +276,11 @@ class _ProjectsState extends State<Projects> {
                                                   'Unexpected error occured',
                                                   context);
                                             }
-                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
+                                            Navigator.pushReplacement(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Project()));
                                           }
                                         },
                                         itemBuilder: (BuildContext context) =>

@@ -15,7 +15,6 @@ class Updates extends StatefulWidget {
 double width, height;
 
 class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
-
   @override
   bool get wantKeepAlive => true;
 

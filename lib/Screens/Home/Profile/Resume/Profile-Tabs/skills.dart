@@ -709,15 +709,13 @@ class _SkillsState extends State<Skills> {
                                         map['skill'] = List.from(skills);
                                         map['index'] = -1;
                                         dynamic result =
-                                        await _APIService.sendProfileData(
-                                            map);
-                                        if(result == 1) {
-                                          showToast(
-                                              'Data Updated Successfully',
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == 1) {
+                                          showToast('Data Updated Successfully',
                                               context);
                                         } else {
-                                          showToast(
-                                              'Unexpected error occured',
+                                          showToast('Unexpected error occured',
                                               context);
                                         }
                                         Navigator.pop(context);

@@ -29,8 +29,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
     'Completely Disagree'
   ];
 
-  bool allDone = false;
-  bool loading = false;
+  bool allDone = false, visibleNext = false, loading = false;
 
   PageController controller =
       PageController(initialPage: 0, viewportFraction: 1, keepPage: true);
@@ -158,7 +157,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                 child: PageView.builder(
                   itemCount: remainingQuestions.length,
                   controller: controller,
-                  physics: PageScrollPhysics(),
+                  physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, position) {
                     return ScrollConfiguration(
                       behavior: MyBehavior(),
@@ -178,7 +177,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                       alignment: Alignment.topLeft)),
                               Align(
                                 alignment: Alignment.topLeft,
-                                                              child: Text(remainingQuestions[position][1],
+                                child: Text(remainingQuestions[position][1],
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontSize: 15,
@@ -230,6 +229,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                                 remainingQuestions[position]
                                                     [2] = (i + 1).toString();
                                                 checkCount();
+                                                visibleNext = true;
                                               });
                                             },
                                           )),
@@ -240,7 +240,8 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Visibility(
-                                    visible: position == 0 ? false : true,
+                                    visible:
+                                        false, //position == 0 ? false : true,
                                     child: Padding(
                                       padding:
                                           EdgeInsets.fromLTRB(8.0, 20, 8, 8),
@@ -273,36 +274,44 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                     ),
                                   ),
                                   Visibility(
-                                    visible: position ==
-                                            remainingQuestions.length - 1
-                                        ? false
-                                        : true,
-                                    child: Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(8.0, 20, 8, 8),
-                                      child: Align(
-                                        child: RaisedButton(
-                                          color: Colors.transparent,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(50.0),
-                                            side: BorderSide(
-                                                color: basicColor, width: 1.5),
+                                    visible: visibleNext,
+                                    child: Visibility(
+                                      visible: position ==
+                                              remainingQuestions.length - 1
+                                          ? false
+                                          : true,
+                                      child: Padding(
+                                        padding:
+                                            EdgeInsets.fromLTRB(8.0, 20, 8, 8),
+                                        child: Align(
+                                          child: RaisedButton(
+                                            color: Colors.transparent,
+                                            elevation: 0,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50.0),
+                                              side: BorderSide(
+                                                  color: basicColor,
+                                                  width: 1.5),
+                                            ),
+                                            child: Text(
+                                              'Next',
+                                              style:
+                                                  TextStyle(color: basicColor),
+                                            ),
+                                            onPressed: () {
+                                              controller.animateToPage(
+                                                  position + 1,
+                                                  duration: Duration(
+                                                      milliseconds: 200),
+                                                  curve: Curves.linear);
+                                              setState(() {
+                                                visibleNext = false;
+                                              });
+                                            },
                                           ),
-                                          child: Text(
-                                            'Next',
-                                            style: TextStyle(color: basicColor),
-                                          ),
-                                          onPressed: () {
-                                            controller.animateToPage(
-                                                position + 1,
-                                                duration:
-                                                    Duration(milliseconds: 200),
-                                                curve: Curves.linear);
-                                          },
+                                          alignment: Alignment.bottomRight,
                                         ),
-                                        alignment: Alignment.bottomRight,
                                       ),
                                     ),
                                   )

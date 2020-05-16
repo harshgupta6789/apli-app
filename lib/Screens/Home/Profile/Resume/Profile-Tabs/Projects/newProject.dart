@@ -44,8 +44,9 @@ class _NewProjectState extends State<NewProject> {
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
-      storageReference =
-          FirebaseStorage.instance.ref().child("documents/${value.getString('email')}/$filename");
+      storageReference = FirebaseStorage.instance
+          .ref()
+          .child("documents/${value.getString('email')}/$filename");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       await downloadUrl.ref.getDownloadURL().then((url) {
@@ -211,21 +212,20 @@ class _NewProjectState extends State<NewProject> {
                             initialValue: from == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                from.microsecondsSinceEpoch),
+                                    from.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = from != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  from.microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  from.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -233,16 +233,17 @@ class _NewProjectState extends State<NewProject> {
                               setState(() {
                                 from = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             decoration: x("From")),
-                        SizedBox(height: 15,),
+                        SizedBox(
+                          height: 15,
+                        ),
                         DateTimeField(
                             validator: (value) {
                               if (value == null) {
@@ -254,21 +255,20 @@ class _NewProjectState extends State<NewProject> {
                             initialValue: to == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                to.microsecondsSinceEpoch),
+                                    to.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = to != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  to.microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  to.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -276,9 +276,8 @@ class _NewProjectState extends State<NewProject> {
                               setState(() {
                                 to = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
@@ -322,7 +321,7 @@ class _NewProjectState extends State<NewProject> {
                                 padding: EdgeInsets.only(right: 5),
                                 child: MaterialButton(
                                   onPressed: () {
-                                    if(file == null) {
+                                    if (file == null) {
                                       filePicker(context);
                                     } else {
                                       setState(() {
@@ -332,7 +331,8 @@ class _NewProjectState extends State<NewProject> {
                                       });
                                     }
                                   },
-                                  child: Text(file == null ? "Browse" : "Remove"),
+                                  child:
+                                      Text(file == null ? "Browse" : "Remove"),
                                   color: Colors.grey,
                                 ),
                               ),
@@ -432,11 +432,11 @@ class _NewProjectState extends State<NewProject> {
                                         color: basicColor, width: 1.2),
                                   ),
                                   child: Text(
-                                    widget.old == false ? 'Cancel': 'Delete',
+                                    widget.old == false ? 'Cancel' : 'Delete',
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if(widget.old == false)
+                                    if (widget.old == false)
                                       Navigator.pop(context);
                                     else {
                                       setState(() {
@@ -447,19 +447,20 @@ class _NewProjectState extends State<NewProject> {
                                       map['index'] = index;
                                       // TODO call API
                                       dynamic result =
-                                      await _APIService.sendProfileData(
-                                          map);
-                                      if(result == 1) {
-                                        showToast(
-                                            'Data Updated Successfully',
+                                          await _APIService.sendProfileData(
+                                              map);
+                                      if (result == 1) {
+                                        showToast('Data Updated Successfully',
                                             context);
                                       } else {
-                                        showToast(
-                                            'Unexpected error occured',
+                                        showToast('Unexpected error occured',
                                             context);
                                       }
                                       Navigator.pop(context);
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => Project()));
                                     }
                                   }),
                               RaisedButton(
@@ -478,54 +479,65 @@ class _NewProjectState extends State<NewProject> {
                                   onPressed: () async {
                                     if (_formKey.currentState.validate()) if (validateBulletPoint(
                                         information[
-                                        0])) if (validateBulletPoint(
-                                        information[
-                                        1])) {
+                                            0])) if (validateBulletPoint(
+                                        information[1])) {
                                       setState(() {
                                         loading = true;
                                       });
                                       if (file == null) {
                                         // TODO call API
                                         projects[index]['Name'] = Name;
-                                        projects[index]['University_Company'] = University_Company;
+                                        projects[index]['University_Company'] =
+                                            University_Company;
                                         projects[index]['from'] = from;
                                         projects[index]['to'] = to;
-                                        projects[index]['certificate'] = certificate;
-                                        projects[index]['information'] = information;
+                                        projects[index]['certificate'] =
+                                            certificate;
+                                        projects[index]['information'] =
+                                            information;
                                         Map<String, dynamic> map = {};
                                         map['project'] = List.from(projects);
                                         map['index'] = -1;
                                         dynamic result =
-                                        await _APIService.sendProfileData(
-                                            map);
-                                        if(result == 1) {
-                                          showToast(
-                                              'Data Updated Successfully',
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == 1) {
+                                          showToast('Data Updated Successfully',
                                               context);
                                         } else {
-                                          showToast(
-                                              'Unexpected error occured',
+                                          showToast('Unexpected error occured',
                                               context);
                                         }
                                         Navigator.pop(context);
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Project()));
                                       } else {
-                                        showToast('Uploading certificate will take some time', context);
-                                        _uploadFile(file, fileName).then((f) async {
+                                        showToast(
+                                            'Uploading certificate will take some time',
+                                            context);
+                                        _uploadFile(file, fileName)
+                                            .then((f) async {
                                           // TODO call API
                                           projects[index]['Name'] = Name;
-                                          projects[index]['University_Company'] = University_Company;
+                                          projects[index]
+                                                  ['University_Company'] =
+                                              University_Company;
                                           projects[index]['from'] = from;
                                           projects[index]['to'] = to;
-                                          projects[index]['certificate'] = certificate;
-                                          projects[index]['information'] = information;
+                                          projects[index]['certificate'] =
+                                              certificate;
+                                          projects[index]['information'] =
+                                              information;
                                           Map<String, dynamic> map = {};
                                           map['project'] = List.from(projects);
                                           map['index'] = -1;
                                           dynamic result =
-                                          await _APIService.sendProfileData(
-                                              map);
-                                          if(result == 1) {
+                                              await _APIService.sendProfileData(
+                                                  map);
+                                          if (result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
@@ -535,7 +547,11 @@ class _NewProjectState extends State<NewProject> {
                                                 context);
                                           }
                                           Navigator.pop(context);
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Project()));
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Project()));
                                         });
                                       }
                                     }

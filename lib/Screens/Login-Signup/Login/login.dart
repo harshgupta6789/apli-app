@@ -1,6 +1,5 @@
 import 'package:apli/Screens/Home/mainScreen.dart';
 import 'package:apli/Screens/Login-Signup/Login/forgotPassword.dart';
-import 'package:apli/Screens/Login-Signup/Signup/register.dart';
 import 'package:apli/Screens/Login-Signup/Signup/verifyPhoneNo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -14,7 +13,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Services/auth.dart';
-import '../../HomeLoginWrapper.dart';
 
 double height, width;
 
@@ -153,10 +151,9 @@ class _LoginState extends State<Login> {
                           visible: !forgotPassword,
                           child: Padding(
                             padding: EdgeInsets.only(
-                              top: height * 0.02,
-                              left: width * 0.1,
-                              right: width * 0.1
-                            ),
+                                top: height * 0.02,
+                                left: width * 0.1,
+                                right: width * 0.1),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
@@ -229,7 +226,8 @@ class _LoginState extends State<Login> {
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
-                                        showToast('No Internet', context, color: Colors.red);
+                                        showToast('No Internet', context,
+                                            color: Colors.red);
                                       } else {
                                         DocumentReference doc = Firestore
                                             .instance
@@ -249,7 +247,8 @@ class _LoginState extends State<Login> {
                                             });
                                           } else {
                                             showToast('Account does not exist',
-                                                context, color: Colors.red);
+                                                context,
+                                                color: Colors.red);
                                           }
                                         });
                                       }
@@ -267,20 +266,23 @@ class _LoginState extends State<Login> {
                                           .signInWithoutAuth(email, password);
                                       if (result == -10) {
                                         showToast(
-                                            'Account does not exists', context, color: Colors.red);
+                                            'Account does not exists', context,
+                                            color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -1) {
                                         showToast(
                                             'Invalid username and password',
-                                            context, color: Colors.red);
+                                            context,
+                                            color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
                                       } else if (result == -2) {
                                         showToast(
-                                            'Cannot connect server', context, color: Colors.red);
+                                            'Cannot connect server', context,
+                                            color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
@@ -304,13 +306,15 @@ class _LoginState extends State<Login> {
                                           loading = false;
                                         });
                                         showToast(
-                                            'Failed, try again later', context, color: Colors.red);
+                                            'Failed, try again later', context,
+                                            color: Colors.red);
                                       }
                                       var net = await Connectivity()
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
                                         showToast(
-                                            'No Internet Connection', context, color: Colors.red);
+                                            'No Internet Connection', context,
+                                            color: Colors.red);
                                         setState(() {
                                           loading = false;
                                         });
@@ -326,27 +330,29 @@ class _LoginState extends State<Login> {
                           child: RichText(
                             textAlign: TextAlign.center,
                             text: TextSpan(
-                                text:
-                                forgotPassword
+                                text: forgotPassword
                                     ? 'Remember Password? '
                                     : signup,
-                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 18),
                                 children: [
                                   TextSpan(
-                                      text: forgotPassword ? 'Login' : " Signup here",
+                                      text: forgotPassword
+                                          ? 'Login'
+                                          : " Signup here",
                                       style: TextStyle(color: basicColor),
                                       recognizer: TapGestureRecognizer()
                                         ..onTap = () {
                                           forgotPassword
                                               ? setState(() {
-                                            forgotPassword = false;
-                                          })
+                                                  forgotPassword = false;
+                                                })
                                               : Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Register('+919999999999')),
-                                          );
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          VerifyPhoneNo()),
+                                                );
                                         }),
                                 ]),
                           ),

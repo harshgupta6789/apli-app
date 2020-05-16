@@ -68,10 +68,14 @@ class _BasicIntroState extends State<BasicIntro> {
               mname = snapshot.data['Middle_name'];
               lname = snapshot.data['Last_name'];
               email = snapshot.data['email'];
-              mno = snapshot.data['ph_no'] == null ? null : snapshot.data['ph_no'].toString();
+              mno = snapshot.data['ph_no'] == null
+                  ? null
+                  : snapshot.data['ph_no'].toString();
               dob = snapshot.data['dob'];
               gender = snapshot.data['gender'] ?? 'Male';
-              roll_no = snapshot.data['gender'] == null ? null : snapshot.data['roll_no'].toString();
+              roll_no = snapshot.data['gender'] == null
+                  ? null
+                  : snapshot.data['roll_no'].toString();
               highest_qualification = snapshot.data['highest_qualification'];
               languages = snapshot.data['languages'] ?? {'': 'Expert'};
               address = snapshot.data['Address'] ?? {};
@@ -166,7 +170,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     backgroundImage: _image != null
                                         ? FileImage(_image)
                                         : profile != null
-                                            ? profile == defaultPic ? AssetImage("Assets/Images/defaultProfilePicture.jpeg") : NetworkImage(profile)
+                                            ? profile == defaultPic
+                                                ? AssetImage(
+                                                    "Assets/Images/defaultProfilePicture.jpeg")
+                                                : NetworkImage(profile)
                                             : null),
                                 MaterialButton(
                                   onPressed: getImage,

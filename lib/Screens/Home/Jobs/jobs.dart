@@ -133,7 +133,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               ),
             ),
           )),
-           Center(
+          Center(
               child: ScrollConfiguration(
             behavior: MyBehavior(),
             child: SingleChildScrollView(
@@ -170,7 +170,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               ),
             ),
           )),
-           Center(
+          Center(
               child: ScrollConfiguration(
             behavior: MyBehavior(),
             child: SingleChildScrollView(

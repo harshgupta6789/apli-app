@@ -426,8 +426,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     obscureText: false,
                     decoration: x("Total Closed Backlog"),
                     onChanged: (text) {
-                      setState(() => edu[course]['total_closed_backlogs'] =
-                          text);
+                      setState(
+                          () => edu[course]['total_closed_backlogs'] = text);
                     },
                     validator: (value) {
                       if (value.isEmpty) {
@@ -452,8 +452,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     obscureText: false,
                     decoration: x("Total Live Backlog"),
                     onChanged: (text) {
-                      setState(() => edu[course]['total_live_backlogs'] =
-                          text);
+                      setState(() => edu[course]['total_live_backlogs'] = text);
                     },
                     validator: (value) {
                       if (value.isEmpty) {

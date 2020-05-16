@@ -271,7 +271,8 @@ class _VideoIntroState extends State<VideoIntro>
             Padding(
               padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
               child: Align(
-                  child: Text("4. Don't worry you can have as many takes as you want",
+                  child: Text(
+                      "4. Don't worry you can have as many takes as you want",
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,

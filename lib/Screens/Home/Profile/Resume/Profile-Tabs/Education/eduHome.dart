@@ -77,12 +77,14 @@ class _EducationOverviewState extends State<EducationOverview> {
                 duration = data.documents[0].data['batch_year'];
                 isUg = data.documents[0].data['is_ug'] ?? false;
                 completeEducation = s.data['education'] ?? {};
-                if(completeEducation['XII'] == null && completeEducation['Diploma'] == null) {
+                if (completeEducation['XII'] == null &&
+                    completeEducation['Diploma'] == null) {
                   type = null;
-                } else if(completeEducation.containsKey('XII'))
+                } else if (completeEducation.containsKey('XII'))
                   type = 'XII';
-                else type = 'Diploma';
-                if(completeEducation['X'] == null) {
+                else
+                  type = 'Diploma';
+                if (completeEducation['X'] == null) {
                   completeEducation['X'] = {
                     'board': "",
                     'certificate': null,
@@ -95,7 +97,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                   };
                 }
                 completeEducation['current_education'] = course;
-                if(completeEducation[course] == null) {
+                if (completeEducation[course] == null) {
                   for (int i = 0; i < semToBuild; i++) {
                     sems[i] = {
                       'certificate': null,
@@ -137,53 +139,55 @@ class _EducationOverviewState extends State<EducationOverview> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return error ? Scaffold(
-      body: Center(
-        child: Text('Error occured, try again later'),
-      ),
-    ) : email == null
-        ? Loading()
-        : loading
+    return error
+        ? Scaffold(
+            body: Center(
+              child: Text('Error occured, try again later'),
+            ),
+          )
+        : email == null
             ? Loading()
-            : WillPopScope(
-                child: Scaffold(
-                  body: PageView(
-                    physics: new NeverScrollableScrollPhysics(),
-                    controller: pageController,
-                    children: <Widget>[
-                      CurrentEducation(
-                        sem: semToBuild,
-                        course: course,
-                        duration: duration,
-                        branch: branch,
-                        education: completeEducation,
-                        isUg: isUg,
-                        type: type,
-                        onButtonPressed: () {
-                          pageController.animateToPage(
-                            1,
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.linear,
-                          );
-                        },
+            : loading
+                ? Loading()
+                : WillPopScope(
+                    child: Scaffold(
+                      body: PageView(
+                        physics: new NeverScrollableScrollPhysics(),
+                        controller: pageController,
+                        children: <Widget>[
+                          CurrentEducation(
+                            sem: semToBuild,
+                            course: course,
+                            duration: duration,
+                            branch: branch,
+                            education: completeEducation,
+                            isUg: isUg,
+                            type: type,
+                            onButtonPressed: () {
+                              pageController.animateToPage(
+                                1,
+                                duration: Duration(milliseconds: 300),
+                                curve: Curves.linear,
+                              );
+                            },
+                          ),
+                          Diploma(
+                            xii: completeEducation,
+                          ),
+                          Tenth(
+                            x: completeEducation,
+                          ),
+                          Other(
+                            oth: completeEducation,
+                          )
+                        ],
                       ),
-                      Diploma(
-                        xii: completeEducation,
-                      ),
-                      Tenth(
-                        x: completeEducation,
-                      ),
-                      Other(
-                        oth: completeEducation,
-                      )
-                    ],
-                  ),
-                ),
-                onWillPop: () {
-                  _onWillPop();
-                  return;
-                },
-              );
+                    ),
+                    onWillPop: () {
+                      _onWillPop();
+                      return;
+                    },
+                  );
   }
 
   Future<bool> _onWillPop() async {

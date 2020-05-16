@@ -10,26 +10,24 @@ class CourseLive extends StatefulWidget {
 }
 
 class _CourseLiveState extends State<CourseLive> {
-  
   YoutubePlayerController _controller;
-  
+
   @override
   void initState() {
     // TODO: implement initState
     _controller = YoutubePlayerController(
       initialVideoId: YoutubePlayer.convertUrlToId(widget.link),
       flags: YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-        isLive: true,
-        forceHD: true,
-        loop: false,
-        disableDragSeek: true
-      ),
+          autoPlay: true,
+          mute: false,
+          isLive: true,
+          forceHD: true,
+          loop: false,
+          disableDragSeek: true),
     );
     super.initState();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

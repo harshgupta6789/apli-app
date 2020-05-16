@@ -34,7 +34,6 @@ Orientation orientation;
 
 class _CoursesLiveState extends State<CoursesLive>
     with SingleTickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -265,11 +264,13 @@ class _CoursesLiveState extends State<CoursesLive>
                                               borderRadius:
                                                   BorderRadius.circular(5.0),
                                               side: BorderSide(
-                                                  color: basicColor, width: 1.2),
+                                                  color: basicColor,
+                                                  width: 1.2),
                                             ),
                                             child: Text(
                                               'Start',
-                                              style: TextStyle(color: basicColor),
+                                              style:
+                                                  TextStyle(color: basicColor),
                                             ),
                                             onPressed: () {
                                               Navigator.push(
@@ -278,8 +279,8 @@ class _CoursesLiveState extends State<CoursesLive>
                                                       builder: (context) =>
                                                           CourseLive(
                                                             link: snapshot.data
-                                                                    .documents[0]
-                                                                ['link'],
+                                                                    .documents[
+                                                                0]['link'],
                                                           )));
                                             }),
                                       ),

@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
-showToast(String msg, BuildContext context, {int duration, Color color, int gravity}) {
+showToast(String msg, BuildContext context,
+    {int duration, Color color, int gravity}) {
   Toast.show(msg, context,
       backgroundColor: Colors.transparent,
       duration: duration ?? 3,

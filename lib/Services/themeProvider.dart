@@ -49,16 +49,14 @@ class ThemeChanger with ChangeNotifier {
 
 darkTheme() {
   return ThemeData(
-    brightness: Brightness.dark,
+      brightness: Brightness.dark,
       fontFamily: 'Sans',
       accentColor: basicColor,
       cardColor: Colors.black54,
       cardTheme: CardTheme(color: Colors.black54),
       iconTheme: IconThemeData(color: Colors.white),
       backgroundColor: Colors.black87,
-      textTheme: TextTheme(
-        
-      ));
+      textTheme: TextTheme());
 }
 
 blackTheme() {

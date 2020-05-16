@@ -23,7 +23,12 @@ class Diploma extends StatefulWidget {
   final String courseEdu, type;
 
   const Diploma(
-      {Key key, @required this.xii, this.allFiles, this.isUg, this.courseEdu, this.type})
+      {Key key,
+      @required this.xii,
+      this.allFiles,
+      this.isUg,
+      this.courseEdu,
+      this.type})
       : super(key: key);
   @override
   _DiplomaState createState() => _DiplomaState();
@@ -39,7 +44,7 @@ class _DiplomaState extends State<Diploma> {
   String fileName;
   String unit, type;
   String score;
-  String institute, stream, board, email, specialization , certificate;
+  String institute, stream, board, email, specialization, certificate;
   Timestamp start, end;
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
@@ -50,7 +55,7 @@ class _DiplomaState extends State<Diploma> {
       education = widget.xii;
       type = widget.type;
     });
-    if(type == null) {
+    if (type == null) {
       setState(() {
         type = 'XII';
         institute = '';
@@ -68,7 +73,9 @@ class _DiplomaState extends State<Diploma> {
       setState(() {
         institute = education[type]['institute'] ?? "";
         board = education[type]['board'] ?? "";
-        score = education[type]['score']!=null?education[type]['score'].toString():"";
+        score = education[type]['score'] != null
+            ? education[type]['score'].toString()
+            : "";
         specialization = education[type]['specialization'] ?? '';
         start = education[type]['start'] ?? Timestamp.now();
         end = education[type]['end'] ?? Timestamp.now();
@@ -158,31 +165,26 @@ class _DiplomaState extends State<Diploma> {
                       SizedBox(height: 30),
                       DropdownButton<String>(
                         //hint: Text("Unit"),
-                        value: type ??
-                            'XII',
+                        value: type ?? 'XII',
                         style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
                         icon: Padding(
-                          padding:
-                          const EdgeInsets.only(left: 10.0),
-                          child:
-                          Icon(Icons.keyboard_arrow_down),
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.keyboard_arrow_down),
                         ),
                         underline: SizedBox(),
                         items: <String>['XII', 'Diploma']
-                            .map<DropdownMenuItem<String>>(
-                                (String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            type =
-                                value;
+                            type = value;
                           });
                         },
                       ),
@@ -217,8 +219,7 @@ class _DiplomaState extends State<Diploma> {
                         obscureText: false,
                         decoration: x("Stream"),
                         onChanged: (text) {
-                          setState(
-                              () => specialization = text);
+                          setState(() => specialization = text);
                         },
                         validator: (value) {
                           if (value.isEmpty)
@@ -257,19 +258,20 @@ class _DiplomaState extends State<Diploma> {
                           Container(
                             width: width * 0.35,
                             child: TextFormField(
-                              initialValue: score == null
-                                  ? ''
-                                  : score.toString(),
+                              initialValue:
+                                  score == null ? '' : score.toString(),
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [new WhitelistingTextInputFormatter(RegExp("[0-9]")),],
+                              inputFormatters: [
+                                new WhitelistingTextInputFormatter(
+                                    RegExp("[0-9]")),
+                              ],
                               onFieldSubmitted: (_) =>
                                   FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: x("Score"),
                               onChanged: (text) {
-                                setState(() => score =
-                                    text);
+                                setState(() => score = text);
                               },
                               validator: (value) {
                                 if (value.isEmpty) {
@@ -302,8 +304,7 @@ class _DiplomaState extends State<Diploma> {
                                       padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
                                       child: DropdownButton<String>(
                                         //hint: Text("Unit"),
-                                        value: unit ??
-                                            '%',
+                                        value: unit ?? '%',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -325,8 +326,7 @@ class _DiplomaState extends State<Diploma> {
                                         }).toList(),
                                         onChanged: (value) {
                                           setState(() {
-                                            unit =
-                                                value;
+                                            unit = value;
                                           });
                                         },
                                       ),
@@ -350,21 +350,20 @@ class _DiplomaState extends State<Diploma> {
                           initialValue: start == null
                               ? null
                               : DateTime.fromMicrosecondsSinceEpoch(
-                              start.microsecondsSinceEpoch),
+                                  start.microsecondsSinceEpoch),
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
                                 firstDate: DateTime(1900),
-                                initialDate:
-                                currentValue ?? DateTime.now(),
+                                initialDate: currentValue ?? DateTime.now(),
                                 lastDate: DateTime(2100));
                             var temp = start != null
                                 ? format
-                                .format(DateTime
-                                .fromMicrosecondsSinceEpoch(start
-                                .microsecondsSinceEpoch))
-                                .toString() ??
-                                "DOB"
+                                        .format(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                start.microsecondsSinceEpoch))
+                                        .toString() ??
+                                    "DOB"
                                 : "DOB";
                             return date;
                           },
@@ -372,9 +371,8 @@ class _DiplomaState extends State<Diploma> {
                             setState(() {
                               start = (date == null)
                                   ? null
-                                  : Timestamp
-                                  .fromMicrosecondsSinceEpoch(
-                                  date.microsecondsSinceEpoch);
+                                  : Timestamp.fromMicrosecondsSinceEpoch(
+                                      date.microsecondsSinceEpoch);
                             });
                           },
                           textInputAction: TextInputAction.next,
@@ -395,21 +393,20 @@ class _DiplomaState extends State<Diploma> {
                           initialValue: end == null
                               ? null
                               : DateTime.fromMicrosecondsSinceEpoch(
-                              end.microsecondsSinceEpoch),
+                                  end.microsecondsSinceEpoch),
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
                                 firstDate: DateTime(1900),
-                                initialDate:
-                                currentValue ?? DateTime.now(),
+                                initialDate: currentValue ?? DateTime.now(),
                                 lastDate: DateTime(2100));
                             var temp = end != null
                                 ? format
-                                .format(DateTime
-                                .fromMicrosecondsSinceEpoch(end
-                                .microsecondsSinceEpoch))
-                                .toString() ??
-                                "DOB"
+                                        .format(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                end.microsecondsSinceEpoch))
+                                        .toString() ??
+                                    "DOB"
                                 : "DOB";
                             return date;
                           },
@@ -417,9 +414,8 @@ class _DiplomaState extends State<Diploma> {
                             setState(() {
                               end = (date == null)
                                   ? null
-                                  : Timestamp
-                                  .fromMicrosecondsSinceEpoch(
-                                  date.microsecondsSinceEpoch);
+                                  : Timestamp.fromMicrosecondsSinceEpoch(
+                                      date.microsecondsSinceEpoch);
                             });
                           },
                           textInputAction: TextInputAction.next,
@@ -462,7 +458,7 @@ class _DiplomaState extends State<Diploma> {
                               padding: EdgeInsets.only(right: 5),
                               child: MaterialButton(
                                 onPressed: () {
-                                  if(file == null) {
+                                  if (file == null) {
                                     filePicker(context);
                                   } else {
                                     setState(() {
@@ -529,10 +525,8 @@ class _DiplomaState extends State<Diploma> {
                                           formattedTo + " 00:00:00+0000";
                                     });
                                     String temp = type;
-                                    if(widget.type == null) {
-
-                                    } else if(widget.type == temp) {
-
+                                    if (widget.type == null) {
+                                    } else if (widget.type == temp) {
                                     } else {
                                       education.remove(widget.type);
                                     }
@@ -540,11 +534,13 @@ class _DiplomaState extends State<Diploma> {
                                     education[temp]['institute'] = institute;
                                     education[temp]['board'] = board;
                                     education[temp]['score'] = score;
-                                    education[temp]['specialization'] = specialization;
+                                    education[temp]['specialization'] =
+                                        specialization;
                                     education[temp]['start'] = formattedFrom;
                                     education[temp]['end'] = formattedTo;
                                     education[temp]['score_unit'] = unit;
-                                    education[temp]['certificate'] = certificate;
+                                    education[temp]['certificate'] =
+                                        certificate;
                                     print(education.keys);
                                     print(education);
                                     allFiles.add(file);
@@ -556,7 +552,7 @@ class _DiplomaState extends State<Diploma> {
                                                   courseEdu: widget.courseEdu,
                                                   allFiles: allFiles,
                                                   isUg: widget.isUg,
-                                              type: temp,
+                                                  type: temp,
                                                 )));
                                   }
                                 }),

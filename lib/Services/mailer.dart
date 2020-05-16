@@ -33,7 +33,7 @@ class MailerService {
       });
       return result ?? -2;
     } on Exception catch (e) {
-       print(e);
+      print(e);
       return null;
     }
   }

@@ -1,4 +1,3 @@
-
 import 'package:apli/Services/auth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
@@ -28,35 +27,26 @@ class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
-  String selectedValueSingleDialogEllipsis;
-  bool toDisplayClear = false, obscure = true;
+  bool obscure = true;
 
-  String fname = '',
-      lname = '',
-      email = '',
-      dateOfBirth = '',
-      password = '',
-      error = '';
-  String fieldOfStudy = '', state = '', city = '';
+  String fname = '', lname = '', email = '', dateOfBirth = '', password = '';
   String collegeText, courseText, branchText, batchText;
-  Timestamp timestamp;
-  List collegeList = [];
-  TextEditingController editingController = TextEditingController();
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
           context: context,
-          builder: (context) => new AlertDialog(
+          builder: (context) => AlertDialog(
             title: new Text(
-              'Are you sure?',
-            ),
-            content: new Text(
                 'Your details will not be saved and you will have to start over again !!!'),
+            content: new Text(
+              'Are you sure you want to leave?',
+            ),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'CANCEL',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
               new FlatButton(
@@ -66,6 +56,7 @@ class _RegisterState extends State<Register> {
                 },
                 child: new Text(
                   'YES',
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ],
@@ -74,16 +65,7 @@ class _RegisterState extends State<Register> {
         false;
   }
 
-  Map<String, List<String>> course = {
-    '': ['']
-  };
-  Map<String, List<String>> branch = {
-    '': ['']
-  };
-  Map<String, List<String>> batch = {
-    '': ['']
-  };
-  Map<String, String> batchID = {'': ''};
+  Map<String, dynamic> map = {};
 
   bool collegeSet = false;
   bool courseSet = false;
@@ -100,7 +82,6 @@ class _RegisterState extends State<Register> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
     return WillPopScope(
       onWillPop: () {
         _onWillPop();
@@ -121,52 +102,35 @@ class _RegisterState extends State<Register> {
                       String batchTemp = f.data['batch_name'];
                       String batchIDTemp = f.data['batch_id'];
 
-                      batchID[batchTemp] = batchIDTemp;
-
                       if (collegeTemp != null) {
-                        if (!course.containsKey(collegeTemp)) {
-                          course[collegeTemp] = [];
+                        if (!map.containsKey(collegeTemp)) {
+                          map[collegeTemp] = {};
                         }
                         if (courseTemp != null) {
-                          var temp1 = course[collegeTemp];
-                          if (!temp1.contains(courseTemp)) {
-                            temp1.add(courseTemp);
-                            course[collegeTemp] = temp1;
-                            branch[courseTemp] = [];
+                          var temp1 = map[collegeTemp];
+                          if (!temp1.containsKey(courseTemp)) {
+                            temp1[courseTemp] = {};
+                            map[collegeTemp] = temp1;
                           }
                           if (branchTemp != null) {
-                            var temp2 = branch[courseTemp];
-                            if (!temp2.contains(branchTemp)) {
-                              temp2.add(branchTemp);
-                              branch[courseTemp] = temp2;
-                              batch[branchTemp] = [];
+                            var temp2 = map[collegeTemp][courseTemp];
+                            if (!temp2.containsKey(branchTemp)) {
+                              temp2[branchTemp] = {};
+                              map[collegeTemp][courseTemp] = temp2;
                             }
                             if (batchTemp != null) {
-                              var temp3 = batch[branchTemp];
-                              if (!temp3.contains(batchTemp)) {
-                                temp3.add(batchTemp);
-                                batch[branchTemp] = temp3;
+                              var temp3 =
+                                  map[collegeTemp][courseTemp][branchTemp];
+                              if (!temp3.containsKey(batchTemp)) {
+                                temp3[batchTemp] = batchIDTemp;
+                                map[collegeTemp][courseTemp][branchTemp] =
+                                    temp3;
                               }
                             }
                           }
                         }
                       }
                     });
-                    collegeList = course.keys.toList();
-                    //duplicateCollegeList = List.from(collegeList);
-                    // for (int i = 0; i < x.length; i++) {
-                    //   var temp = DropdownMenuItem(
-                    //     child: Text(
-                    //       x[i].toString(),
-                    //       overflow: TextOverflow.ellipsis,
-                    //     ),
-                    //     value: x[i].toString(),
-                    //   );
-                    //   if (dropdown.contains(temp)) {}
-                    //   dropdown.add(temp);
-                    // }
-
-                    course.remove('');
                     return ScrollConfiguration(
                       behavior: MyBehavior(),
                       child: SingleChildScrollView(
@@ -207,7 +171,9 @@ class _RegisterState extends State<Register> {
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: height * 0.02,),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
                                     TextFormField(
                                       obscureText: false,
                                       textInputAction: TextInputAction.next,
@@ -229,7 +195,9 @@ class _RegisterState extends State<Register> {
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: height * 0.02,),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
                                     TextFormField(
                                       obscureText: false,
                                       keyboardType: TextInputType.emailAddress,
@@ -238,11 +206,11 @@ class _RegisterState extends State<Register> {
                                           FocusScope.of(context).nextFocus(),
                                       decoration: loginFormField.copyWith(
                                           hintText: 'Email ID',
-                                          prefixIcon: Icon(EvaIcons.emailOutline,
+                                          prefixIcon: Icon(
+                                              EvaIcons.emailOutline,
                                               color: basicColor)),
                                       onChanged: (text) {
                                         setState(() {
-                                          error = '';
                                           email = text;
                                         });
                                       },
@@ -253,11 +221,14 @@ class _RegisterState extends State<Register> {
                                         return null;
                                       },
                                     ),
-                                    SizedBox(height: height * 0.02,),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
                                     TextFormField(
                                       obscureText: obscure,
-                                      keyboardType: TextInputType.visiblePassword,
-                                      textInputAction: TextInputAction.next,
+                                      keyboardType:
+                                          TextInputType.visiblePassword,
+                                      textInputAction: TextInputAction.done,
                                       onFieldSubmitted: (_) =>
                                           FocusScope.of(context).nextFocus(),
                                       decoration: loginFormField.copyWith(
@@ -265,13 +236,13 @@ class _RegisterState extends State<Register> {
                                           suffixIcon: IconButton(
                                             icon: !obscure
                                                 ? Icon(
-                                              EvaIcons.eyeOffOutline,
-                                              color: basicColor,
-                                            )
+                                                    EvaIcons.eyeOffOutline,
+                                                    color: basicColor,
+                                                  )
                                                 : Icon(
-                                              EvaIcons.eyeOutline,
-                                              color: Colors.grey,
-                                            ),
+                                                    EvaIcons.eyeOutline,
+                                                    color: Colors.grey,
+                                                  ),
                                             onPressed: () {
                                               setState(() {
                                                 obscure = !obscure;
@@ -290,440 +261,433 @@ class _RegisterState extends State<Register> {
                                         return null;
                                       },
                                     ),
-                                  ],
-                                ),
-                              ),
-                              collegeSet || collegeText != null
-                                  ? InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          collegeText = null;
-                                          collegeSet = false;
-                                          courseText = null;
-                                          courseSet = false;
-                                          branchText = null;
-                                          branchSet = false;
-                                          batchText = null;
-                                          batchSet = false;
-                                          allSet = false;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: height * 0.02,
-                                            left: width * 0.1,
-                                            right: width * 0.1),
-                                        child: TextFormField(
-                                          enabled: false,
-                                          initialValue: collegeText,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey[600]),
-                                          decoration: loginFormField.copyWith(
-                                              hintText: collegeText ?? "College",
-                                              hintStyle: TextStyle(
-                                                  color: Colors.black),
-                                              prefixIcon: Icon(Icons.school,
-                                                  color: basicColor),
-                                              suffixIcon: Icon(Icons.delete)),
-                                        ),
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () async {
-                                        String x = await showDialog(
-                                            context: context,
-                                            builder: (_) {
-                                              return MyDialogContent(
-                                                listToSearch: collegeList,
-                                                isClg: true,
-                                                phoneNo: widget.phoneNo,
-                                              );
-                                            });
-                                        setState(() {
-                                          collegeText = x;
-                                          if (collegeText != null) {
-                                            collegeSet = true;
-                                          }
-                                        });
-                                        print(x);
-                                      },
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: height * 0.02,
-                                            left: width * 0.1,
-                                            right: width * 0.1),
-                                        child: TextFormField(
-                                          enabled: false,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey[600]),
-                                          decoration: loginFormField.copyWith(
-                                            hintText: collegeText ?? "College",
-                                            hintStyle:
-                                                TextStyle(color: Colors.grey[600]),
-                                            prefixIcon: Icon(Icons.school,
-                                                color: basicColor),
-                                            suffixIcon: Icon(Icons.keyboard_arrow_up)
-                                          ),
-                                        ),
-                                      ),
+                                    SizedBox(
+                                      height: height * 0.02,
                                     ),
-                              Visibility(
-                                visible: collegeSet,
-                                child: Container(
-                                  child: courseSet || courseText != null
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              courseText = null;
-                                              courseSet = false;
-                                              branchText = null;
-                                              branchSet = false;
-                                              batchText = null;
-                                              batchSet = false;
-                                              allSet = false;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
+                                    collegeSet || collegeText != null
+                                        ? InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                collegeText = null;
+                                                collegeSet = false;
+                                                courseText = null;
+                                                courseSet = false;
+                                                branchText = null;
+                                                branchSet = false;
+                                                batchText = null;
+                                                batchSet = false;
+                                                allSet = false;
+                                              });
+                                            },
                                             child: TextFormField(
                                               enabled: false,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[600]),
-                                              decoration: loginFormField.copyWith(
-                                                  hintText: courseText ?? "Course",
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.black),
-                                                  prefixIcon: Icon(
-                                                      Icons
-                                                          .collections_bookmark,
-                                                      color: basicColor),
-                                                  suffixIcon:
-                                                      Icon(Icons.delete)),
-                                            ),
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () async {
-                                            String x = await showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return MyDialogContent(
-                                                    listToSearch:
-                                                        course[collegeText],
-                                                  );
-                                                });
-                                            setState(() {
-                                              courseText = x;
-                                              if (courseText != null) {
-                                                courseSet = true;
-                                              }
-                                            });
-                                            print(x);
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: TextFormField(
-                                              enabled: false,
+                                              initialValue: collegeText,
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   color: Colors.grey[600]),
                                               decoration:
                                                   loginFormField.copyWith(
-                                                hintText: "Course",
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey[600]),
-                                                prefixIcon: Icon(
-                                                    Icons.collections_bookmark,
-                                                    color: basicColor),
-                                                suffixIcon: Icon(Icons.keyboard_arrow_up)
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: courseSet,
-                                child: Container(
-                                  child: branchSet || branchText != null
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              branchText = null;
-                                              branchSet = false;
-                                              batchText = null;
-                                              batchSet = false;
-                                              allSet = false;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: TextFormField(
-                                              enabled: false,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[600]),
-                                              decoration:
-                                                  loginFormField.copyWith(
-                                                      hintText: branchText ?? "Branch",
+                                                      hintText: collegeText ??
+                                                          "College",
                                                       hintStyle: TextStyle(
                                                           color: Colors.black),
                                                       prefixIcon: Icon(
-                                                          Icons.library_books,
+                                                          Icons.school,
                                                           color: basicColor),
                                                       suffixIcon:
                                                           Icon(Icons.delete)),
                                             ),
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () async {
-                                            String x = await showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return MyDialogContent(
-                                                    listToSearch:
-                                                        branch[courseText],
-                                                  );
-                                                });
-                                            setState(() {
-                                              branchText = x;
-                                              if (branchText != null) {
-                                                branchSet = true;
-                                              }
-                                            });
-                                            print(x);
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: TextFormField(
-                                              enabled: false,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[600]),
-                                              decoration:
-                                                  loginFormField.copyWith(
-                                                hintText: "Branch",
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey[600]),
-                                                prefixIcon: Icon(
-                                                    Icons.library_books,
-                                                    color: basicColor),
-                                                suffixIcon: Icon(Icons.keyboard_arrow_up)
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: branchSet,
-                                child: Container(
-                                  child: batchSet || batchText != null
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              batchText = null;
-                                              batchSet = false;
-                                              allSet = false;
-                                            });
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: TextFormField(
-                                              enabled: false,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[600]),
-                                              decoration:
-                                                  loginFormField.copyWith(
-                                                      hintText: batchText ?? "Batch",
-                                                      hintStyle: TextStyle(
-                                                          color: Colors.black),
-                                                      prefixIcon: Icon(
-                                                          Icons.book,
-                                                          color: basicColor),
-                                                      suffixIcon:
-                                                          Icon(Icons.delete)),
-                                            ),
-                                          ),
-                                        )
-                                      : InkWell(
-                                          onTap: () async {
-                                            String x = await showDialog(
-                                                context: context,
-                                                builder: (_) {
-                                                  return MyDialogContent(
-                                                    listToSearch:
-                                                        batch[branchText],
-                                                  );
-                                                });
-                                            setState(() {
-                                              batchText = x;
-                                              if (batchText != null) {
-                                                batchSet = true;
-                                                allSet = true;
-                                              }
-                                            });
-                                            print(x);
-                                          },
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                top: height * 0.02,
-                                                left: width * 0.1,
-                                                right: width * 0.1),
-                                            child: TextFormField(
-                                              enabled: false,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: Colors.grey[600]),
-                                              decoration:
-                                                  loginFormField.copyWith(
-                                                hintText: "Batch",
-                                                hintStyle: TextStyle(
-                                                    color: Colors.grey[600]),
-                                                prefixIcon: Icon(Icons.book,
-                                                    color: basicColor),
-                                                      suffixIcon: Icon(Icons.keyboard_arrow_up)
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                ),
-                              ),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.05,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: Container(
-                                    height: 70,
-                                    width: width * 0.8,
-                                    decoration: BoxDecoration(
-                                      color: basicColor,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: MaterialButton(
-                                        disabledColor: Colors.grey,
-                                        child: Text(
-                                          'Register',
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        onPressed: !allSet
-                                            ? null
-                                            : () async {
-                                                if (_formKey.currentState
-                                                    .validate()) {
-                                                  setState(() {
-                                                    loading = true;
+                                          )
+                                        : InkWell(
+                                            onTap: () async {
+                                              String x = await showDialog(
+                                                  context: context,
+                                                  builder: (_) {
+                                                    return MyDialogContent(
+                                                      listToSearch:
+                                                          map.keys.toList(),
+                                                      isClg: true,
+                                                      phoneNo: widget.phoneNo,
+                                                    );
                                                   });
-                                                  var net = await Connectivity()
-                                                      .checkConnectivity();
-                                                  if (net ==
-                                                      ConnectivityResult.none) {
-                                                    showToast(
-                                                        'No internet connection',
-                                                        context);
+                                              setState(() {
+                                                collegeText = x;
+                                                if (collegeText != null) {
+                                                  collegeSet = true;
+                                                }
+                                              });
+                                              print(x);
+                                            },
+                                            child: TextFormField(
+                                              enabled: false,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.grey[600]),
+                                              decoration:
+                                                  loginFormField.copyWith(
+                                                      hintText: collegeText ??
+                                                          "College",
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[600]),
+                                                      prefixIcon: Icon(
+                                                          Icons.school,
+                                                          color: basicColor),
+                                                      suffixIcon: Icon(Icons
+                                                          .keyboard_arrow_up)),
+                                            ),
+                                          ),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
+                                    Visibility(
+                                      visible: collegeSet,
+                                      child: Container(
+                                        child: courseSet || courseText != null
+                                            ? InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    courseText = null;
+                                                    courseSet = false;
+                                                    branchText = null;
+                                                    branchSet = false;
+                                                    batchText = null;
+                                                    batchSet = false;
+                                                    allSet = false;
+                                                  });
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration:
+                                                      loginFormField.copyWith(
+                                                          hintText:
+                                                              courseText ??
+                                                                  "Course",
+                                                          hintStyle: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                          prefixIcon: Icon(
+                                                              Icons
+                                                                  .collections_bookmark,
+                                                              color:
+                                                                  basicColor),
+                                                          suffixIcon: Icon(
+                                                              Icons.delete)),
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () async {
+                                                  String x = await showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return MyDialogContent(
+                                                          listToSearch:
+                                                              map[collegeText]
+                                                                  .keys
+                                                                  .toList(),
+                                                        );
+                                                      });
+                                                  setState(() {
+                                                    courseText = x;
+                                                    if (courseText != null) {
+                                                      courseSet = true;
+                                                    }
+                                                  });
+                                                  print(x);
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration: loginFormField.copyWith(
+                                                      hintText: "Course",
+                                                      hintStyle: TextStyle(
+                                                          color:
+                                                              Colors.grey[600]),
+                                                      prefixIcon: Icon(
+                                                          Icons
+                                                              .collections_bookmark,
+                                                          color: basicColor),
+                                                      suffixIcon: Icon(Icons
+                                                          .keyboard_arrow_up)),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
+                                    Visibility(
+                                      visible: courseSet,
+                                      child: Container(
+                                        child: branchSet || branchText != null
+                                            ? InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    branchText = null;
+                                                    branchSet = false;
+                                                    batchText = null;
+                                                    batchSet = false;
+                                                    allSet = false;
+                                                  });
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration:
+                                                      loginFormField.copyWith(
+                                                          hintText:
+                                                              branchText ??
+                                                                  "Branch",
+                                                          hintStyle: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                          prefixIcon: Icon(
+                                                              Icons
+                                                                  .library_books,
+                                                              color:
+                                                                  basicColor),
+                                                          suffixIcon: Icon(
+                                                              Icons.delete)),
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () async {
+                                                  String x = await showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return MyDialogContent(
+                                                          listToSearch:
+                                                              map[collegeText][
+                                                                      courseText]
+                                                                  .keys
+                                                                  .toList(),
+                                                        );
+                                                      });
+                                                  setState(() {
+                                                    branchText = x;
+                                                    if (branchText != null) {
+                                                      branchSet = true;
+                                                    }
+                                                  });
+                                                  print(x);
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration:
+                                                      loginFormField.copyWith(
+                                                          hintText: "Branch",
+                                                          hintStyle: TextStyle(
+                                                              color: Colors
+                                                                  .grey[600]),
+                                                          prefixIcon: Icon(
+                                                              Icons
+                                                                  .library_books,
+                                                              color:
+                                                                  basicColor),
+                                                          suffixIcon: Icon(Icons
+                                                              .keyboard_arrow_up)),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.02,
+                                    ),
+                                    Visibility(
+                                      visible: branchSet,
+                                      child: Container(
+                                        child: batchSet || batchText != null
+                                            ? InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    batchText = null;
+                                                    batchSet = false;
+                                                    allSet = false;
+                                                  });
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration:
+                                                      loginFormField.copyWith(
+                                                          hintText: batchText ??
+                                                              "Batch",
+                                                          hintStyle: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                          prefixIcon: Icon(
+                                                              Icons.book,
+                                                              color:
+                                                                  basicColor),
+                                                          suffixIcon: Icon(
+                                                              Icons.delete)),
+                                                ),
+                                              )
+                                            : InkWell(
+                                                onTap: () async {
+                                                  String x = await showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return MyDialogContent(
+                                                          listToSearch:
+                                                              map[collegeText][
+                                                                          courseText]
+                                                                      [
+                                                                      branchText]
+                                                                  .keys
+                                                                  .toList(),
+                                                        );
+                                                      });
+                                                  setState(() {
+                                                    batchText = x;
+                                                    if (batchText != null) {
+                                                      batchSet = true;
+                                                      allSet = true;
+                                                    }
+                                                  });
+                                                  print(x);
+                                                },
+                                                child: TextFormField(
+                                                  enabled: false,
+                                                  style: TextStyle(
+                                                      fontSize: 16,
+                                                      color: Colors.grey[600]),
+                                                  decoration:
+                                                      loginFormField.copyWith(
+                                                          hintText: "Batch",
+                                                          hintStyle: TextStyle(
+                                                              color: Colors
+                                                                  .grey[600]),
+                                                          prefixIcon: Icon(
+                                                              Icons.book,
+                                                              color:
+                                                                  basicColor),
+                                                          suffixIcon: Icon(Icons
+                                                              .keyboard_arrow_up)),
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.05,
+                                    ),
+                                    Container(
+                                      height: 70,
+                                      width: width * 0.8,
+                                      decoration: BoxDecoration(
+                                        color: basicColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: MaterialButton(
+                                          disabledColor: Colors.grey,
+                                          child: Text(
+                                            'Register',
+                                            style: TextStyle(
+                                                fontSize: 18.0,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                          onPressed: !allSet
+                                              ? null
+                                              : () async {
+                                                  if (_formKey.currentState
+                                                      .validate()) {
                                                     setState(() {
-                                                      loading = false;
+                                                      loading = true;
                                                     });
-                                                  } else {
-                                                    dynamic result = await _auth
-                                                        .registerWithoutAuth(
-                                                            fname,
-                                                            lname,
-                                                            email,
-                                                            password,
-                                                            widget.phoneNo,
-                                                            collegeText,
-                                                            courseText,
-                                                            branchText,
-                                                            batchText,
-                                                            batchID[batchText]);
-                                                    setState(() {
-                                                      loading = false;
-                                                    });
-                                                    if (result == -1) {
-                                                      //already exists
+                                                    var net =
+                                                        await Connectivity()
+                                                            .checkConnectivity();
+                                                    if (net ==
+                                                        ConnectivityResult
+                                                            .none) {
                                                       showToast(
-                                                          'Account already exists, try logging in',
+                                                          'No internet connection',
                                                           context);
-                                                    } else if (result == -2) {
-                                                      //server
-                                                      showToast(
-                                                          'Could not connect to server',
-                                                          context);
-                                                    } else if (result == 0) {
-                                                      //failed
-                                                      showToast(
-                                                          'Failed, try again later',
-                                                          context);
-                                                      Navigator.pop(context);
-                                                    } else if (result == 1) {
-                                                      //success
-                                                      showToast(
-                                                          'Successfully registered, kindly login again',
-                                                          context);
-                                                      Navigator.of(context)
-                                                          .pushAndRemoveUntil(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          Wrapper()),
-                                                              (Route<dynamic>
-                                                                      route) =>
-                                                                  false);
+                                                      setState(() {
+                                                        loading = false;
+                                                      });
                                                     } else {
-                                                      showToast(
-                                                          'Failed, try again later',
-                                                          context);
-                                                      Navigator.pop(context);
+                                                      dynamic result = await _auth
+                                                          .registerWithoutAuth(
+                                                              fname,
+                                                              lname,
+                                                              email,
+                                                              password,
+                                                              widget.phoneNo,
+                                                              collegeText,
+                                                              courseText,
+                                                              branchText,
+                                                              batchText,
+                                                              map[collegeText][
+                                                                          courseText]
+                                                                      [
+                                                                      branchText]
+                                                                  [batchText]);
+                                                      setState(() {
+                                                        loading = false;
+                                                      });
+                                                      if (result == -1) {
+                                                        //already exists
+                                                        showToast(
+                                                            'Account already exists, try logging in',
+                                                            context);
+                                                      } else if (result == -2) {
+                                                        //server
+                                                        showToast(
+                                                            'Could not connect to server',
+                                                            context);
+                                                      } else if (result == 0) {
+                                                        //failed
+                                                        showToast(
+                                                            'Failed, try again later',
+                                                            context);
+                                                        Navigator.pop(context);
+                                                      } else if (result == 1) {
+                                                        //success
+                                                        showToast(
+                                                            'Successfully registered, kindly login again',
+                                                            context);
+                                                        Navigator.of(context)
+                                                            .pushAndRemoveUntil(
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            Wrapper()),
+                                                                (Route<dynamic>
+                                                                        route) =>
+                                                                    false);
+                                                      } else {
+                                                        showToast(
+                                                            'Failed, try again later',
+                                                            context);
+                                                        Navigator.pop(context);
+                                                      }
                                                     }
                                                   }
-                                                }
-                                              }),
-                                  )),
-                              Padding(
-                                  padding: EdgeInsets.only(
-                                      top: height * 0.05,
-                                      left: width * 0.1,
-                                      right: width * 0.1),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text('Welcome Aboard!!'),
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
-                                error,
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              SizedBox(
-                                height: 10,
+                                                }),
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.05,
+                                    ),
+                                    Center(child: Text('Welcome Aboard!!')),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -734,47 +698,6 @@ class _RegisterState extends State<Register> {
                     return Loading();
                 },
               ),
-      ),
-    );
-  }
-}
-
-class NoItemsFound extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Icon(
-          Icons.folder_open,
-          size: 24,
-          color: Colors.grey[900].withOpacity(0.7),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          "Please choose from the list",
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[900].withOpacity(0.7),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class PopupListItemWidget extends StatelessWidget {
-  const PopupListItemWidget(this.item);
-
-  final String item;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: Text(
-        item,
-        style: const TextStyle(fontSize: 16),
       ),
     );
   }
@@ -798,17 +721,16 @@ class MyDialogContent extends StatefulWidget {
 class _MyDialogContentState extends State<MyDialogContent> {
   TextEditingController editingController = TextEditingController();
   String val;
-  var items = List<String>();
+  var items = List<dynamic>();
 
   @override
   void initState() {
     items.addAll(widget.listToSearch);
-    print(items);
     super.initState();
   }
 
   void filterSearchResults(String query) {
-    List<String> dummySearchList = List<String>();
+    List<dynamic> dummySearchList = List<dynamic>();
     dummySearchList.addAll(widget.listToSearch);
     if (query.isNotEmpty) {
       List<String> dummyListData = List<String>();
@@ -821,7 +743,6 @@ class _MyDialogContentState extends State<MyDialogContent> {
         items.clear();
         items.addAll(dummyListData);
         val = query;
-        //print(items);
       });
 
       return;
@@ -833,91 +754,62 @@ class _MyDialogContentState extends State<MyDialogContent> {
     }
   }
 
-  _getContent() {
-    if (items.isEmpty) {
-      return AlertDialog(
-        content: Container(
-          height: 300,
-          width: 300,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
-                  controller: editingController,
-                  decoration: InputDecoration(
-                      hintText: "Search",
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(color: basicColor),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(10.0)))),
-                ),
-              ),
-              ListTile(
-                title: Text(val ?? "Not Found?"),
-                onTap: () {
-                  if (widget.isClg != null && widget.isClg == true) {
-                    Navigator.pop(context);
-                    Navigator.pushReplacement(
-                        (context),
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                CollegeNotFound(phoneNo: widget.phoneNo)));
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
         height: 300,
         width: 300,
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                onChanged: (value) {
-                  filterSearchResults(value);
-                },
-                controller: editingController,
-                decoration: InputDecoration(
-                    hintText: "Search",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: basicColor),
-                        borderRadius: BorderRadius.all(Radius.circular(6.0)))),
-              ),
+            TextField(
+              onChanged: (value) {
+                filterSearchResults(value);
+              },
+              autofocus: true,
+              controller: editingController,
+              decoration: InputDecoration(
+                  hintText: "Search",
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: basicColor),
+                      borderRadius: BorderRadius.all(Radius.circular(6.0)))),
             ),
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('${items[index]}'),
+            SizedBox(
+              height: 15,
+            ),
+            items.isEmpty
+                ? ListTile(
+                    title: Text(widget.isClg == true
+                        ? val ?? "Not found?"
+                        : "Please choose from the list"),
                     onTap: () {
-                      Navigator.pop(context, '${items[index]}');
-                    },
-                  );
-                },
-              ),
-            ),
+                      if (widget.isClg != null && widget.isClg == true) {
+                        Navigator.pop(context);
+                        Navigator.pushReplacement(
+                            (context),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CollegeNotFound(phoneNo: widget.phoneNo)));
+                      }
+                    })
+                : Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text('${items[index]}'),
+                          onTap: () {
+                            Navigator.pop(context, '${items[index]}');
+                          },
+                        );
+                      },
+                    ),
+                  ),
           ],
         ),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _getContent();
   }
 }

@@ -65,7 +65,9 @@ class _OtherState extends State<Other> {
       institute = widget.otherCourses[index]['institute'] ?? "";
       certificate = widget.otherCourses[index]['certificate'] ?? null;
       board = widget.otherCourses[index]['board'] ?? "";
-      cgpa = widget.otherCourses[index]['score'] == null ? null : widget.otherCourses[index]['score'].toString();
+      cgpa = widget.otherCourses[index]['score'] == null
+          ? null
+          : widget.otherCourses[index]['score'].toString();
       fos = widget.otherCourses[index]['specialization'];
       start = widget.otherCourses[index]['start'] ?? Timestamp.now();
       end = widget.otherCourses[index]['end'] ?? Timestamp.now();
@@ -112,13 +114,15 @@ class _OtherState extends State<Other> {
     return WillPopScope(
       onWillPop: () {
         Navigator.pop(context);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
-          allFiles: allFiles,
-          education: education,
-          courseEdu:
-          widget.courseEdu,
-          type: widget.type,
-        )));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => OtherCoursesHome(
+                      allFiles: allFiles,
+                      education: education,
+                      courseEdu: widget.courseEdu,
+                      type: widget.type,
+                    )));
       },
       child: Scaffold(
           appBar: PreferredSize(
@@ -141,13 +145,15 @@ class _OtherState extends State<Other> {
                     icon: Icon(Icons.arrow_back),
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
-                        allFiles: allFiles,
-                        education: education,
-                        courseEdu:
-                        widget.courseEdu,
-                        type: widget.type,
-                      )));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OtherCoursesHome(
+                                    allFiles: allFiles,
+                                    education: education,
+                                    courseEdu: widget.courseEdu,
+                                    type: widget.type,
+                                  )));
                     }),
               ),
             ),
@@ -295,9 +301,9 @@ class _OtherState extends State<Other> {
                                           );
                                         }).toList(),
                                         onChanged: (value) {
-                                           setState(() {
-                                             unit = value;
-                                           });
+                                          setState(() {
+                                            unit = value;
+                                          });
                                         },
                                       ),
                                     ),
@@ -320,21 +326,20 @@ class _OtherState extends State<Other> {
                           initialValue: start == null
                               ? null
                               : DateTime.fromMicrosecondsSinceEpoch(
-                              start.microsecondsSinceEpoch),
+                                  start.microsecondsSinceEpoch),
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
                                 firstDate: DateTime(1900),
-                                initialDate:
-                                currentValue ?? DateTime.now(),
+                                initialDate: currentValue ?? DateTime.now(),
                                 lastDate: DateTime(2100));
                             var temp = start != null
                                 ? format
-                                .format(DateTime
-                                .fromMicrosecondsSinceEpoch(start
-                                .microsecondsSinceEpoch))
-                                .toString() ??
-                                "DOB"
+                                        .format(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                start.microsecondsSinceEpoch))
+                                        .toString() ??
+                                    "DOB"
                                 : "DOB";
                             return date;
                           },
@@ -343,7 +348,7 @@ class _OtherState extends State<Other> {
                               start = (date == null)
                                   ? null
                                   : Timestamp.fromMicrosecondsSinceEpoch(
-                                  date.microsecondsSinceEpoch);
+                                      date.microsecondsSinceEpoch);
                             });
                           },
                           textInputAction: TextInputAction.next,
@@ -362,21 +367,20 @@ class _OtherState extends State<Other> {
                           initialValue: end == null
                               ? null
                               : DateTime.fromMicrosecondsSinceEpoch(
-                              end.microsecondsSinceEpoch),
+                                  end.microsecondsSinceEpoch),
                           onShowPicker: (context, currentValue) async {
                             final date = await showDatePicker(
                                 context: context,
                                 firstDate: DateTime(1900),
-                                initialDate:
-                                currentValue ?? DateTime.now(),
+                                initialDate: currentValue ?? DateTime.now(),
                                 lastDate: DateTime(2100));
                             var temp = end != null
                                 ? format
-                                .format(DateTime
-                                .fromMicrosecondsSinceEpoch(end
-                                .microsecondsSinceEpoch))
-                                .toString() ??
-                                "DOB"
+                                        .format(
+                                            DateTime.fromMicrosecondsSinceEpoch(
+                                                end.microsecondsSinceEpoch))
+                                        .toString() ??
+                                    "DOB"
                                 : "DOB";
                             return date;
                           },
@@ -385,7 +389,7 @@ class _OtherState extends State<Other> {
                               end = (date == null)
                                   ? null
                                   : Timestamp.fromMicrosecondsSinceEpoch(
-                                  date.microsecondsSinceEpoch);
+                                      date.microsecondsSinceEpoch);
                             });
                           },
                           textInputAction: TextInputAction.next,
@@ -428,7 +432,7 @@ class _OtherState extends State<Other> {
                               padding: EdgeInsets.only(right: 5),
                               child: MaterialButton(
                                 onPressed: () {
-                                  if(file == null) {
+                                  if (file == null) {
                                     filePicker(context);
                                   } else {
                                     setState(() {
@@ -457,34 +461,40 @@ class _OtherState extends State<Other> {
                                 padding: EdgeInsets.only(left: 22, right: 22),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
-                                  side: BorderSide(
-                                      color: basicColor, width: 1.2),
+                                  side:
+                                      BorderSide(color: basicColor, width: 1.2),
                                 ),
                                 child: Text(
                                   widget.old == true ? 'Delete' : 'Cancel',
                                   style: TextStyle(color: basicColor),
                                 ),
                                 onPressed: () {
-                                  if(widget.old == true) {
+                                  if (widget.old == true) {
                                     education.remove(courseName);
                                     allFiles[3].removeAt(index);
                                     Navigator.pop(context);
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
-                                      allFiles: allFiles,
-                                      education: education,
-                                      courseEdu:
-                                      widget.courseEdu,
-                                      type: widget.type,
-                                    )));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OtherCoursesHome(
+                                                  allFiles: allFiles,
+                                                  education: education,
+                                                  courseEdu: widget.courseEdu,
+                                                  type: widget.type,
+                                                )));
                                   } else {
                                     Navigator.pop(context);
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
-                                      allFiles: allFiles,
-                                      education: education,
-                                      courseEdu:
-                                      widget.courseEdu,
-                                      type: widget.type,
-                                    )));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OtherCoursesHome(
+                                                  allFiles: allFiles,
+                                                  education: education,
+                                                  courseEdu: widget.courseEdu,
+                                                  type: widget.type,
+                                                )));
                                   }
                                 }),
                             RaisedButton(
@@ -503,30 +513,38 @@ class _OtherState extends State<Other> {
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
                                     allFiles[3].add(file);
-                                    otherCourses[index]['start'] = start ?? Timestamp.now();
-                                    otherCourses[index]['end'] = end ?? Timestamp.now();
-                                    otherCourses[index]['institute'] = institute;
+                                    otherCourses[index]['start'] =
+                                        start ?? Timestamp.now();
+                                    otherCourses[index]['end'] =
+                                        end ?? Timestamp.now();
+                                    otherCourses[index]['institute'] =
+                                        institute;
                                     otherCourses[index]['board'] = board;
                                     otherCourses[index]['score'] = cgpa;
-                                    otherCourses[index]['score_unit'] = unit ?? '%';
-                                    otherCourses[index]['certificate'] = certificate;
+                                    otherCourses[index]['score_unit'] =
+                                        unit ?? '%';
+                                    otherCourses[index]['certificate'] =
+                                        certificate;
                                     otherCourses[index]['specialization'] = '';
-                                    if(widget.old)
-                                      education[
-                                              widget.nameofOtherCourses[index]] =
+                                    if (widget.old)
+                                      education[widget
+                                              .nameofOtherCourses[index]] =
                                           otherCourses[index];
                                     else {
                                       education[courseName] =
-                                      otherCourses[index];
+                                          otherCourses[index];
                                     }
                                     Navigator.pop(context);
-                                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OtherCoursesHome(
-                                      allFiles: allFiles,
-                                      education: education,
-                                      courseEdu:
-                                      widget.courseEdu,
-                                      type: widget.type,
-                                    )));
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                OtherCoursesHome(
+                                                  allFiles: allFiles,
+                                                  education: education,
+                                                  courseEdu: widget.courseEdu,
+                                                  type: widget.type,
+                                                )));
                                   }
                                 }),
                           ],
@@ -543,5 +561,4 @@ class _OtherState extends State<Other> {
           )),
     );
   }
-
 }

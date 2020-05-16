@@ -51,8 +51,9 @@ class _NewExperienceState extends State<NewExperience> {
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
-      storageReference =
-          FirebaseStorage.instance.ref().child("documents/${value.getString('email')}/$filename");
+      storageReference = FirebaseStorage.instance
+          .ref()
+          .child("documents/${value.getString('email')}/$filename");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       await downloadUrl.ref.getDownloadURL().then((url) {
@@ -256,21 +257,20 @@ class _NewExperienceState extends State<NewExperience> {
                             initialValue: from == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                from.microsecondsSinceEpoch),
+                                    from.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = from != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  from.microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  from.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -278,16 +278,17 @@ class _NewExperienceState extends State<NewExperience> {
                               setState(() {
                                 from = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
                             onFieldSubmitted: (_) =>
                                 FocusScope.of(context).nextFocus(),
                             decoration: x("From")),
-                        SizedBox(height: 15,),
+                        SizedBox(
+                          height: 15,
+                        ),
                         DateTimeField(
                             validator: (value) {
                               if (value == null)
@@ -299,21 +300,20 @@ class _NewExperienceState extends State<NewExperience> {
                             initialValue: to == null
                                 ? null
                                 : DateTime.fromMicrosecondsSinceEpoch(
-                                to.microsecondsSinceEpoch),
+                                    to.microsecondsSinceEpoch),
                             onShowPicker: (context, currentValue) async {
                               final date = await showDatePicker(
                                   context: context,
                                   firstDate: DateTime(1900),
-                                  initialDate:
-                                  currentValue ?? DateTime.now(),
+                                  initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
                               var temp = to != null
                                   ? format
-                                  .format(DateTime
-                                  .fromMicrosecondsSinceEpoch(
-                                  to.microsecondsSinceEpoch))
-                                  .toString() ??
-                                  "DOB"
+                                          .format(DateTime
+                                              .fromMicrosecondsSinceEpoch(
+                                                  to.microsecondsSinceEpoch))
+                                          .toString() ??
+                                      "DOB"
                                   : "DOB";
                               return date;
                             },
@@ -321,9 +321,8 @@ class _NewExperienceState extends State<NewExperience> {
                               setState(() {
                                 to = (date == null)
                                     ? null
-                                    : Timestamp
-                                    .fromMicrosecondsSinceEpoch(
-                                    date.microsecondsSinceEpoch);
+                                    : Timestamp.fromMicrosecondsSinceEpoch(
+                                        date.microsecondsSinceEpoch);
                               });
                             },
                             textInputAction: TextInputAction.next,
@@ -497,7 +496,7 @@ class _NewExperienceState extends State<NewExperience> {
                                 padding: EdgeInsets.only(right: 5),
                                 child: MaterialButton(
                                   onPressed: () {
-                                    if(file == null) {
+                                    if (file == null) {
                                       filePicker(context);
                                     } else {
                                       setState(() {
@@ -507,7 +506,8 @@ class _NewExperienceState extends State<NewExperience> {
                                       });
                                     }
                                   },
-                                  child: Text(file == null ? "Browse" : "Remove"),
+                                  child:
+                                      Text(file == null ? "Browse" : "Remove"),
                                   color: Colors.grey,
                                 ),
                               ),
@@ -641,34 +641,37 @@ class _NewExperienceState extends State<NewExperience> {
                                         color: basicColor, width: 1.2),
                                   ),
                                   child: Text(
-                                    widget.old == false ? 'Cancel': 'Delete',
+                                    widget.old == false ? 'Cancel' : 'Delete',
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
-                                    if(widget.old == false)
+                                    if (widget.old == false)
                                       Navigator.pop(context);
                                     else {
                                       setState(() {
                                         loading = true;
                                       });
                                       Map<String, dynamic> map = {};
-                                      map['experience'] = List.from(experiences);
+                                      map['experience'] =
+                                          List.from(experiences);
                                       map['index'] = index;
                                       // TODO call API
                                       dynamic result =
-                                      await _APIService.sendProfileData(
-                                          map);
-                                      if(result == 1) {
-                                        showToast(
-                                            'Data Updated Successfully',
+                                          await _APIService.sendProfileData(
+                                              map);
+                                      if (result == 1) {
+                                        showToast('Data Updated Successfully',
                                             context);
                                       } else {
-                                        showToast(
-                                            'Unexpected error occured',
+                                        showToast('Unexpected error occured',
                                             context);
                                       }
                                       Navigator.pop(context);
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Experience()));
                                     }
                                   }),
                               RaisedButton(
@@ -700,48 +703,64 @@ class _NewExperienceState extends State<NewExperience> {
                                         experiences[index]['company'] = company;
                                         experiences[index]['from'] = from;
                                         experiences[index]['to'] = to;
-                                        experiences[index]['designation'] = designation;
-                                        experiences[index]['industry'] = industry;
+                                        experiences[index]['designation'] =
+                                            designation;
+                                        experiences[index]['industry'] =
+                                            industry;
                                         experiences[index]['domain'] = domain;
-                                        experiences[index]['certificate'] = certificate;
-                                        experiences[index]['information'] = information;
+                                        experiences[index]['certificate'] =
+                                            certificate;
+                                        experiences[index]['information'] =
+                                            information;
                                         Map<String, dynamic> map = {};
-                                        map['experience'] = List.from(experiences);
+                                        map['experience'] =
+                                            List.from(experiences);
                                         map['index'] = -1;
                                         dynamic result =
-                                        await _APIService.sendProfileData(
-                                            map);
-                                        if(result == 1) {
-                                          showToast(
-                                              'Data Updated Successfully',
+                                            await _APIService.sendProfileData(
+                                                map);
+                                        if (result == 1) {
+                                          showToast('Data Updated Successfully',
                                               context);
                                         } else {
-                                          showToast(
-                                              'Unexpected error occured',
+                                          showToast('Unexpected error occured',
                                               context);
                                         }
                                         Navigator.pop(context);
-                                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Experience()));
                                       } else {
-                                        showToast('Uploading certificate will take some time', context);
-                                        _uploadFile(file, fileName).then((f) async {
+                                        showToast(
+                                            'Uploading certificate will take some time',
+                                            context);
+                                        _uploadFile(file, fileName)
+                                            .then((f) async {
                                           // TODO call API\
                                           experiences[index]['Type'] = type;
-                                          experiences[index]['company'] = company;
+                                          experiences[index]['company'] =
+                                              company;
                                           experiences[index]['from'] = from;
                                           experiences[index]['to'] = to;
-                                          experiences[index]['designation'] = designation;
-                                          experiences[index]['industry'] = industry;
+                                          experiences[index]['designation'] =
+                                              designation;
+                                          experiences[index]['industry'] =
+                                              industry;
                                           experiences[index]['domain'] = domain;
-                                          experiences[index]['certificate'] = certificate;
-                                          experiences[index]['information'] = information;
+                                          experiences[index]['certificate'] =
+                                              certificate;
+                                          experiences[index]['information'] =
+                                              information;
                                           Map<String, dynamic> map = {};
-                                          map['experience'] = List.from(experiences);
+                                          map['experience'] =
+                                              List.from(experiences);
                                           map['index'] = -1;
                                           dynamic result =
-                                          await _APIService.sendProfileData(
-                                              map);
-                                          if(result == 1) {
+                                              await _APIService.sendProfileData(
+                                                  map);
+                                          if (result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
@@ -751,7 +770,11 @@ class _NewExperienceState extends State<NewExperience> {
                                                 context);
                                           }
                                           Navigator.pop(context);
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Experience()));
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Experience()));
                                         });
                                       }
                                     }

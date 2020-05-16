@@ -74,38 +74,25 @@ class _CourseMainState extends State<CourseMain> {
                                 shrinkWrap: true,
                                 physics: ScrollPhysics(),
                                 itemBuilder: (BuildContext context, int index) {
-                                  if(snapshot.data.documents[index]['live'] == null)
+                                  if (snapshot.data.documents[index]['live'] ==
+                                      null)
                                     return Container();
-                                  else return Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 20, top: 20),
-                                    child: InkWell(
-                                      onTap: () {
-                                        if (snapshot.data.documents[index]
-                                                    ['live'] !=
-                                                null &&
-                                            snapshot.data.documents[index]
-                                                    ['live'] !=
-                                                true) {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => Courses(
-                                                      documentId: snapshot
-                                                          .data
-                                                          .documents[index]
-                                                          .documentID,
-                                                      email: 'user',
-                                                      imageUrl: snapshot.data
-                                                                  .documents[
-                                                              index]['image'] ??
-                                                          null)));
-                                        } else {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      CoursesLive(
+                                  else
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 20, top: 20),
+                                      child: InkWell(
+                                        onTap: () {
+                                          if (snapshot.data.documents[index]
+                                                      ['live'] !=
+                                                  null &&
+                                              snapshot.data.documents[index]
+                                                      ['live'] !=
+                                                  true) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Courses(
                                                         documentId: snapshot
                                                             .data
                                                             .documents[index]
@@ -114,113 +101,133 @@ class _CourseMainState extends State<CourseMain> {
                                                         imageUrl: snapshot.data
                                                                     .documents[
                                                                 index]['image'] ??
-                                                            null,
-                                                        title: snapshot.data
-                                                                    .documents[
-                                                                index]['title'] ??
-                                                            'No Title',
-                                                      )));
-                                        }
-                                      },
-                                      child: Center(
-                                        child: Stack(
-                                          alignment: Alignment.centerLeft,
-                                          children: <Widget>[
-                                            SizedBox(
-                                              width: double.infinity,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: snapshot.data.documents[
-                                                            index]['image'] ==
-                                                        null
-                                                    ? Image.asset(
-                                                        "Assets/Images/course.png",
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : CachedNetworkImage(
-                                                        imageUrl: snapshot
-                                                                .data.documents[
-                                                            index]['image'],
-                                                        placeholder:
-                                                            (context, url) =>
-                                                                Loading(),
-                                                        errorWidget: (context,
-                                                                url, error) =>
-                                                            Icon(Icons.error),
-                                                      ),
+                                                            null)));
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CoursesLive(
+                                                          documentId: snapshot
+                                                              .data
+                                                              .documents[index]
+                                                              .documentID,
+                                                          email: 'user',
+                                                          imageUrl: snapshot
+                                                                      .data
+                                                                      .documents[
+                                                                  index]['image'] ??
+                                                              null,
+                                                          title: snapshot.data
+                                                                      .documents[
+                                                                  index]['title'] ??
+                                                              'No Title',
+                                                        )));
+                                          }
+                                        },
+                                        child: Center(
+                                          child: Stack(
+                                            alignment: Alignment.centerLeft,
+                                            children: <Widget>[
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child: snapshot.data
+                                                                  .documents[
+                                                              index]['image'] ==
+                                                          null
+                                                      ? Image.asset(
+                                                          "Assets/Images/course.png",
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : CachedNetworkImage(
+                                                          imageUrl: snapshot
+                                                                  .data
+                                                                  .documents[
+                                                              index]['image'],
+                                                          placeholder:
+                                                              (context, url) =>
+                                                                  Loading(),
+                                                          errorWidget: (context,
+                                                                  url, error) =>
+                                                              Icon(Icons.error),
+                                                        ),
 
-                                                // : CachedNetworkImage(
-                                                //     imageUrl:
-                                                //         "http://via.placeholder.com/350x150",
-                                                //     placeholder: (context,
-                                                //             url) =>
-                                                //         CircularProgressIndicator(),
-                                                //     errorWidget: (context,
-                                                //             url, error) =>
-                                                //         Icon(Icons.error),
-                                                //   ),
+                                                  // : CachedNetworkImage(
+                                                  //     imageUrl:
+                                                  //         "http://via.placeholder.com/350x150",
+                                                  //     placeholder: (context,
+                                                  //             url) =>
+                                                  //         CircularProgressIndicator(),
+                                                  //     errorWidget: (context,
+                                                  //             url, error) =>
+                                                  //         Icon(Icons.error),
+                                                  //   ),
+                                                ),
                                               ),
-                                            ),
-                                            snapshot.data.documents[index]
-                                                        ['live'] ??
-                                                    snapshot.data
-                                                            .documents[index]
-                                                        ['live']
-                                                ? Container()
-                                                : Positioned(
-                                                    top: height * 0.15,
-                                                    left: width * 0.1,
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              0.0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: <Widget>[
-                                                          Text('Trending',
-                                                              style: TextStyle(
+                                              snapshot.data.documents[index]
+                                                          ['live'] ??
+                                                      snapshot.data
+                                                              .documents[index]
+                                                          ['live']
+                                                  ? Container()
+                                                  : Positioned(
+                                                      top: height * 0.15,
+                                                      left: width * 0.1,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(0.0),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Text('Trending',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .yellow)),
+                                                            Text(
+                                                                snapshot.data.documents[
+                                                                            index]
+                                                                        [
+                                                                        'title'] ??
+                                                                    'No Title',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 28,
                                                                   color: Colors
-                                                                      .yellow)),
-                                                          Text(
-                                                              snapshot.data.documents[
-                                                                          index]
-                                                                      [
-                                                                      'title'] ??
-                                                                  'No Title',
-                                                              style: TextStyle(
-                                                                fontSize: 28,
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w700,
-                                                              )),
-                                                          Text(
-                                                              'By ' +
-                                                                  (snapshot.data
-                                                                              .documents[index]
-                                                                          [
-                                                                          'author'] ??
-                                                                      'No Author'),
-                                                              style: TextStyle(
+                                                                      .white,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w100,
-                                                                  fontSize: 18,
-                                                                  color: Colors
-                                                                      .white)),
-                                                        ],
+                                                                          .w700,
+                                                                )),
+                                                            Text(
+                                                                'By ' +
+                                                                    (snapshot.data.documents[index]
+                                                                            [
+                                                                            'author'] ??
+                                                                        'No Author'),
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w100,
+                                                                    fontSize:
+                                                                        18,
+                                                                    color: Colors
+                                                                        .white)),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                          ],
+                                                    )
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  );
+                                    );
                                 }),
                           ),
                         ),
