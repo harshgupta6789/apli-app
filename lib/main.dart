@@ -25,12 +25,12 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apli',
-      theme: ThemeChanger().getTheme(),
-      // theme: ThemeData(
-      //     primarySwatch: Colors.blue,
-      //     appBarTheme: AppBarTheme(color: basicColor),
-      //     accentColor: basicColor,
-      //     fontFamily: 'Sans'),
+      // theme: ThemeChanger().getTheme(),
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+          appBarTheme: AppBarTheme(color: basicColor),
+          accentColor: basicColor,
+          fontFamily: 'Sans'),
       home: MySplash(),
     );
   }
