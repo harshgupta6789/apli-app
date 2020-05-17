@@ -6,11 +6,11 @@ import 'package:toast/toast.dart';
 showToast(String msg, BuildContext context,
     {int duration, Color color, int gravity}) {
   Toast.show(msg, context,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white30,
       duration: duration ?? 3,
-      border: Border.all(
-        color: color ?? basicColor,
-      ),
+      // border: Border.all(
+      //   color: color ?? basicColor,
+      // ),
       textColor: color ?? basicColor,
       backgroundRadius: 4,
       gravity: gravity ?? Toast.BOTTOM);

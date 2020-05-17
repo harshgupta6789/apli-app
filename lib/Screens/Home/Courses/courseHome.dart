@@ -168,61 +168,6 @@ class _CourseMainState extends State<CourseMain> {
                                                   //   ),
                                                 ),
                                               ),
-                                              snapshot.data.documents[index]
-                                                          ['live'] ??
-                                                      snapshot.data
-                                                              .documents[index]
-                                                          ['live']
-                                                  ? Container()
-                                                  : Positioned(
-                                                      top: height * 0.15,
-                                                      left: width * 0.1,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(0.0),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: <Widget>[
-                                                            Text('Trending',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .yellow)),
-                                                            Text(
-                                                                snapshot.data.documents[
-                                                                            index]
-                                                                        [
-                                                                        'title'] ??
-                                                                    'No Title',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 28,
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                )),
-                                                            Text(
-                                                                'By ' +
-                                                                    (snapshot.data.documents[index]
-                                                                            [
-                                                                            'author'] ??
-                                                                        'No Author'),
-                                                                style: TextStyle(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w100,
-                                                                    fontSize:
-                                                                        18,
-                                                                    color: Colors
-                                                                        .white)),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    )
                                             ],
                                           ),
                                         ),
