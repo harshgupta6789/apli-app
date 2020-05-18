@@ -1,3 +1,4 @@
+import 'package:apli/Screens/Home/Jobs/allJobs.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
@@ -5,6 +6,7 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../HomeLoginWrapper.dart';
 
 class Jobs extends StatefulWidget {
@@ -14,11 +16,29 @@ class Jobs extends StatefulWidget {
 
 class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  int _currentTab = 1;
+  SharedPreferences prefs;
+
+  void getTab() async {
+    prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _currentTab = prefs.getInt("jobTab") ?? 1;
+     _tabController.index = _currentTab;
+    });
+  }
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
+    getTab();
+    _tabController =
+        new TabController(length: 3, vsync: this, initialIndex: _currentTab);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    //prefs.setInt("jobTab", 1);
+    super.dispose();
   }
 
   @override
@@ -133,43 +153,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
               ),
             ),
           )),
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("Assets/Images/job.png"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text:
-                              "I know you are interested in job \nbut first build your ",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(
-                                text: "Profile",
-                                style: TextStyle(color: basicColor),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => Wrapper(
-                                                  currentTab: 3,
-                                                )),
-                                        (Route<dynamic> route) => false);
-                                    setState(() {});
-                                  }),
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
+          AllJobs(),
           Center(
               child: ScrollConfiguration(
             behavior: MyBehavior(),

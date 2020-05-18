@@ -1,51 +1,78 @@
 {
   "project_info": {
-    "project_number": "895883268556",
-    "firebase_url": "https://aplidotai-be4e6.firebaseio.com",
-    "project_id": "aplidotai-be4e6",
-    "storage_bucket": "aplidotai-be4e6.appspot.com"
+    "project_number": "491401404214",
+    "firebase_url": "https://aplidotai.firebaseio.com",
+    "project_id": "aplidotai",
+    "storage_bucket": "aplidotai.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:895883268556:android:4fa629c790dcf4c1048d69",
+        "mobilesdk_app_id": "1:491401404214:android:38615545e17a56746b9d97",
         "android_client_info": {
           "package_name": "com.apliai.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "895883268556-uf8sae3u9mse2ggd4odn98pe74kgjps1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.apliai.app",
-            "certificate_hash": "1bb027b538237b175edf27bb5acd8b26f904d367"
-          }
-        },
-        {
-          "client_id": "895883268556-sre4n65voo65fj132pgpq4m08jju8stf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.apliai.app",
-            "certificate_hash": "1838a8f8b432470d9d8907da938e7a0fe2243d33"
-          }
-        },
-        {
-          "client_id": "895883268556-m6cscncgjehoqvpi8ra1ehtrrs2mmpl3.apps.googleusercontent.com",
+          "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCiwWL-s2jHqf-tJqS5bXlhQusKveacv4k"
+          "current_key": "AIzaSyD0Y5HaDQLt0DvhBc5FxEzO9c0Ofm3m-58"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "895883268556-m6cscncgjehoqvpi8ra1ehtrrs2mmpl3.apps.googleusercontent.com",
+              "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "491401404214-df883ucqto542ed462spl5q6t0f0irnm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.apli"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491401404214:android:9e8b47e693bd25b96b9d97",
+        "android_client_info": {
+          "package_name": "com.example.apliauth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0Y5HaDQLt0DvhBc5FxEzO9c0Ofm3m-58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491401404214-151vp91nlvrbfc8as4ep7rcr3ppnao02.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "491401404214-df883ucqto542ed462spl5q6t0f0irnm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.app.apli"
+              }
             }
           ]
         }

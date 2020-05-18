@@ -11,6 +11,7 @@ import '../HomeLoginWrapper.dart';
 import 'Courses/courseHome.dart';
 import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
+import 'package:toast/toast.dart';
 
 class MainScreen extends StatefulWidget {
   int currentTab;
@@ -66,34 +67,76 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        showAlertDialog(message['notification']['title'],
-            message['notification']['body'], DialogType.INFO, context, () {
-          if (message['data']['type'] != null) {
-            switch (message['data']['type']) {
-              case 'Job':
-                {
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => Wrapper(
-                                currentTab: 2,
-                              )),
-                      (Route<dynamic> route) => false);
-                  setState(() {});
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => Updates()),
-                  // );
-                }
-                break;
-              case 'Alert':
-                {}
-                break;
-              default:
-                {}
-                break;
+        if (_currentTab == 1) {
+          showAlertDialog(message['notification']['title'],
+              message['notification']['body'], DialogType.INFO, context, () {
+            if (message['data']['type'] != null) {
+              switch (message['data']['type']) {
+                case 'AppliedJob':
+                  {
+                    prefs.setInt("jobTab", 0);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => Wrapper(
+                                  currentTab: 1,
+                                )),
+                        (Route<dynamic> route) => false);
+                    setState(() {});
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => Updates()),
+                    // );
+                  }
+                  break;
+                case 'Alert':
+                  {}
+                  break;
+                default:
+                  {}
+                  break;
+              }
             }
-          }
-        });
+          });
+          // Toast.show("JOB", context,
+          //     backgroundColor: Colors.white30,
+          //     duration: 10,
+          //     // border: Border.all(
+          //     //   color: color ?? basicColor,
+          //     // ),
+          //     textColor: basicColor,
+          //     backgroundRadius: 4,
+          //     gravity: Toast.BOTTOM);
+
+        } else if (_currentTab != 1) {
+          showAlertDialog(message['notification']['title'],
+              message['notification']['body'], DialogType.INFO, context, () {
+            if (message['data']['type'] != null) {
+              switch (message['data']['type']) {
+                case 'Job':
+                  {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => Wrapper(
+                                  currentTab: 2,
+                                )),
+                        (Route<dynamic> route) => false);
+                    setState(() {});
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => Updates()),
+                    // );
+                  }
+                  break;
+                case 'Alert':
+                  {}
+                  break;
+                default:
+                  {}
+                  break;
+              }
+            }
+          });
+        }
       },
       // onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
@@ -155,6 +198,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: _currentTab,
         onTap: (index) {
           setState(() {

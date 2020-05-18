@@ -225,9 +225,15 @@ class APIService {
       return 0;
     }
   }
+  Future handleJobData() async{
+
+  }
 }
 
 // NOTE: result =     1 = true
 //       result =    -1 = false
 //       result =    -2 = could not connect to server
 //       result =     0 = failed
+// TYPE 0 = ALLJOBS
+// TYPE 1 = APPLIED
+// TYPE 2 = INCOMPLETE
