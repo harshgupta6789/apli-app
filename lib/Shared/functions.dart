@@ -8,9 +8,9 @@ showToast(String msg, BuildContext context,
   Toast.show(msg, context,
       backgroundColor: Colors.white30,
       duration: duration ?? 3,
-      // border: Border.all(
-      //   color: color ?? basicColor,
-      // ),
+      border: Border.all(
+        color: color ?? basicColor,
+      ),
       textColor: color ?? basicColor,
       backgroundRadius: 4,
       gravity: gravity ?? Toast.BOTTOM);

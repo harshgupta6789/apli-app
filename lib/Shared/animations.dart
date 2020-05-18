@@ -46,13 +46,16 @@ class _MyLinearProgressIndicatorState extends State<MyLinearProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Container(
-      child: LinearProgressIndicator(
-        value: animation.value,
-        backgroundColor: Colors.grey[300],
-        valueColor: color,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        height: 15,
+        child: LinearProgressIndicator(
+          value: animation.value,
+          backgroundColor: Colors.grey[300],
+          valueColor: color,
+        ),
       ),
-    ));
+    );
   }
 }

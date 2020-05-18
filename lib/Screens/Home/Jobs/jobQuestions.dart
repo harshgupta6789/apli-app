@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class JobQuestions extends StatefulWidget {
-   final List<CameraDescription> cameras;
+  final List<CameraDescription> cameras;
 
   const JobQuestions({Key key, this.cameras}) : super(key: key);
   @override
@@ -16,9 +17,9 @@ class JobQuestions extends StatefulWidget {
 }
 
 class _JobQuestionsState extends State<JobQuestions> {
-double height , width;
-CameraController controller;
-bool isRecordingStopped = false;
+  double height, width;
+  CameraController controller;
+  bool isRecordingStopped = false;
   String path;
   Timer _timer;
   int seconds = 0, minute = 0;
@@ -31,25 +32,29 @@ bool isRecordingStopped = false;
   bool isUploaded = true, error = false;
   StorageUploadTask uploadTask;
   int Status;
-  Widget _buildCameraPreview() {
-    final size = MediaQuery.of(context).size;
-    return ClipRect(
-      child: Container(
-        child: Transform.scale(
-          scale: controller.value.aspectRatio / size.aspectRatio,
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: controller.value.aspectRatio,
-              child: CameraPreview(controller),
-            ),
-          ),
-        ),
+
+  void startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(
+      oneSec,
+          (Timer timer) => setState(
+            () {
+          seconds = seconds + 1;
+          if (seconds >= 60) {
+            stopTimer();
+          }
+        },
       ),
     );
   }
-   @override
+
+  void stopTimer() {
+    seconds = 0;
+    _timer?.cancel();
+  }
+
+  @override
   void initState() {
-    
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -60,6 +65,7 @@ bool isRecordingStopped = false;
       }
       setState(() {});
     });
+    startTimer();
     super.initState();
   }
 
@@ -67,42 +73,61 @@ bool isRecordingStopped = false;
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
+    final size = MediaQuery.of(context).size;
     if (!controller.value.isInitialized) {
       return Container();
     }
-    return Scaffold(
-       appBar: PreferredSize(
-          child: AppBar(
-              backgroundColor: basicColor,
-              automaticallyImplyLeading: false,
-              leading: Padding(
-                padding: EdgeInsets.only(bottom: 5.0),
-                child: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Navigator.pop(context)),
-              ),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  "Apply",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
+    return SafeArea(
+      child: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(width * 0.1,  height * 0.07, width * 0.1, 0),
+                  child: Text('1. Tell me about your educationTell me about your education', style: TextStyle(fontWeight: FontWeight.w900, fontSize: 14, letterSpacing: 1.2), textAlign: TextAlign.left,),
                 ),
-              )),
-          preferredSize: Size.fromHeight(50),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-              child: Column(
-                children: [_buildCameraPreview()],
-              )),
-        ));
+                Padding(
+                    padding: EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: AspectRatio(
+                        aspectRatio: controller.value.aspectRatio,
+                        child: CameraPreview(controller),
+                      ),
+                    )),
+                SizedBox(height: 5,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.timer),
+                    SizedBox(width: 5,),
+                    Text('00:' + ((seconds.toString().length == 1) ? ('0' + seconds.toString()) : (seconds.toString())), style: TextStyle(fontWeight: FontWeight.bold),)
+                  ],
+                ),
+                SizedBox(height: 5,),
+                Container(
+                    padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1),
+                    child: MyLinearProgressIndicator(milliSeconds: 60000,)
+                ),
+                SizedBox(height: 5,),
+                RaisedButton(
+                    color: Colors.red,
+                    elevation: 0,
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(width: 0),
+                    ),
+                    child: Text(
+                      'DONE',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {
+
+                    }),
+              ],
+            ),
+          )),
+    );
   }
 }

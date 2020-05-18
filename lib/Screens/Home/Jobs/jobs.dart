@@ -23,7 +23,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
     prefs = await SharedPreferences.getInstance();
     setState(() {
       _currentTab = prefs.getInt("jobTab") ?? 1;
-     _tabController.index = _currentTab;
+      _tabController.index = _currentTab;
     });
   }
 
@@ -31,7 +31,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   void initState() {
     getTab();
     _tabController =
-        new TabController(length: 3, vsync: this, initialIndex: _currentTab);
+        TabController(length: 3, vsync: this, initialIndex: _currentTab);
     super.initState();
   }
 
@@ -100,13 +100,13 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,
                   tabs: [
-                    new Tab(
+                    Tab(
                       text: applied,
                     ),
-                    new Tab(
+                    Tab(
                       text: allJobs,
                     ),
-                    new Tab(
+                    Tab(
                       text: incomplete,
                     )
                   ],

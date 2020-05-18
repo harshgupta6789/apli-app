@@ -12,8 +12,7 @@ class AllJobs extends StatefulWidget {
 }
 
 class _AllJobsState extends State<AllJobs> {
-  double height, width;
-  double fontSize = 15;
+  double height, width, scale;
   final _APIService = APIService(type: 0);
 
   Future<dynamic> init() async {
@@ -30,81 +29,84 @@ class _AllJobsState extends State<AllJobs> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    if (width <= 360) {
-      fontSize = 12;
+    if (width >= 360) {
+      scale = 1.0;
+    } else {
+      scale = 0.7;
     }
     return ScrollConfiguration(
       behavior: MyBehavior(),
       child: SingleChildScrollView(
           child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
+              padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: 5,
+                  itemCount: 15,
+                  physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                        child: Card(
-                          elevation: 0.2,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
-                              side: BorderSide(color: Colors.black54)),
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 15.0),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: width * 0.01, top: 10.0),
-                                    child: ListTile(
-                                       onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => CompanyDetails()));
-            },
-                                        title: AutoSizeText(
-                                          "Flutter Developer",
+                    return Container(
+                      padding: EdgeInsets.only(bottom: 1),
+                      child: Card(
+                        elevation: 0.2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(7.0),
+                            side: BorderSide(color: Colors.black54)),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.only(
+                                    top: 10 * scale, bottom: 13 * scale),
+                                child: ListTile(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CompanyDetails()));
+                                    },
+                                    title: AutoSizeText(
+                                      "Flutter Developer",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: basicColor,
+                                          fontSize: 18 * scale,
+                                          fontWeight: FontWeight.w500),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        AutoSizeText(
+                                          "Powai , Maharashtra",
                                           maxLines: 2,
                                           style: TextStyle(
-                                              color: basicColor,
-                                              fontSize: 18,
+                                              color: Colors.black,
+                                              fontSize: 12 * scale,
                                               fontWeight: FontWeight.w500),
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        subtitle: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              "Powai , Maharashtra",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            AutoSizeText(
-                                              "2020-10-6",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500),
-                                              overflow: TextOverflow.ellipsis,
-                                            )
-                                          ],
-                                        ),
-                                        trailing: IconButton(
-                                          icon: Icon(Icons.bookmark,
-                                              color: Color(0xffebd234)),
-                                          onPressed: () {},
-                                        )),
-                                  ),
-                                ]),
-                          ),
-                        ),
+                                        AutoSizeText(
+                                          "Deadline: 20th April 2020",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12 * scale,
+                                              fontWeight: FontWeight.w500),
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      ],
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(Icons.bookmark,
+                                          color: Color(0xffebd234)),
+                                      onPressed: () {},
+                                    )),
+                              ),
+                            ])
                       ),
                     );
                   }))

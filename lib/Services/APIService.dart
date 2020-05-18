@@ -225,6 +225,7 @@ class APIService {
       return 0;
     }
   }
+
   Future handleJobData() async{
 
   }

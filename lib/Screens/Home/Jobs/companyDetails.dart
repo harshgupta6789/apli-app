@@ -22,45 +22,47 @@ class _CompanyDetailsState extends State<CompanyDetails> {
 
   Widget toShow() {
     if (isProceedClicked == false && toShowStart == false) {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-            child: AwsomeVideoPlayer(
-              "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-              playOptions: VideoPlayOptions(
-                aspectRatio: 1 / 1,
-                loop: false,
-                autoplay: false,
+      return Container(
+        padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: AwsomeVideoPlayer(
+                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                playOptions: VideoPlayOptions(
+                  aspectRatio: 1 / 1,
+                  loop: false,
+                  autoplay: false,
+                ),
+                videoStyle: VideoStyle(
+                    videoControlBarStyle: VideoControlBarStyle(
+                        fullscreenIcon: SizedBox(),
+                        forwardIcon: SizedBox(),
+                        rewindIcon: SizedBox()),
+                    videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
               ),
-              videoStyle: VideoStyle(
-                  videoControlBarStyle: VideoControlBarStyle(
-                      fullscreenIcon: SizedBox(),
-                      forwardIcon: SizedBox(),
-                      rewindIcon: SizedBox()),
-                  videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
-            child: Text(
-              "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1800s, when an nknown printer took agalley of type and scrambled ",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            SizedBox(height: 20,),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Text(
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1800s, when an nknown printer took agalley of type and scrambled ",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 30.0),
-            child: RaisedButton(
+            SizedBox(height: height * 0.05,),
+            RaisedButton(
                 color: basicColor,
                 elevation: 0,
-                padding: EdgeInsets.only(left: 22, right: 22),
+                padding: EdgeInsets.only(left: 40, right: 40),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                   side: BorderSide(color: basicColor, width: 1.2),
                 ),
                 child: Text(
-                  'Proceed',
+                  'PROCEED',
                   style: TextStyle(color: Colors.white),
                 ),
                 onPressed: () {
@@ -68,8 +70,8 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                     isProceedClicked = true;
                   });
                 }),
-          )
-        ],
+          ],
+        ),
       );
     } else if (isProceedClicked == true && toShowStart == false) {
       return Column(
@@ -286,13 +288,13 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                           child: RaisedButton(
                               color: basicColor,
                               elevation: 0,
-                              padding: EdgeInsets.only(left: 22, right: 22),
+                              padding: EdgeInsets.only(left: 30, right: 30),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                                 side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
-                                'Apply Now',
+                                'APPLY NOW',
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () {
@@ -448,13 +450,13 @@ class _CompanyDetailsState extends State<CompanyDetails> {
                           child: RaisedButton(
                               color: basicColor,
                               elevation: 0,
-                              padding: EdgeInsets.only(left: 22, right: 22),
+                              padding: EdgeInsets.only(left: 30, right: 30),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                                 side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
-                                'Start',
+                                'START',
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
