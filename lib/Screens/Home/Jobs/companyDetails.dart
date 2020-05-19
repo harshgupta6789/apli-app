@@ -1,5 +1,8 @@
 import 'package:apli/Screens/Home/Jobs/jobQuestions.dart';
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/functions.dart';
+import 'package:apli/Shared/loading.dart';
+import 'package:apli/Shared/scroll.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:apli/Shared/constants.dart';
@@ -7,997 +10,10 @@ import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class CompanyDetails extends StatefulWidget {
-  @override
-  _CompanyDetailsState createState() => _CompanyDetailsState();
-}
-
-class _CompanyDetailsState extends State<CompanyDetails> {
-  bool isProceedClicked = false, toShowStart = false;
-  double height, width, fontSize = 15;
-  List<CameraDescription> cameras;
-  camInit() async {
-    cameras = await availableCameras();
-  }
-
-  Widget toShow() {
-    if (isProceedClicked == false && toShowStart == false) {
-      return Container(
-        padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: AwsomeVideoPlayer(
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                playOptions: VideoPlayOptions(
-                  aspectRatio: 1 / 1,
-                  loop: false,
-                  autoplay: false,
-                ),
-                videoStyle: VideoStyle(
-                    videoControlBarStyle: VideoControlBarStyle(
-                        fullscreenIcon: SizedBox(),
-                        forwardIcon: SizedBox(),
-                        rewindIcon: SizedBox()),
-                    videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
-              ),
-            ),
-            SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1800s, when an nknown printer took agalley of type and scrambled ",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            ),
-            SizedBox(height: height * 0.05,),
-            RaisedButton(
-                color: basicColor,
-                elevation: 0,
-                padding: EdgeInsets.only(left: 40, right: 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(color: basicColor, width: 1.2),
-                ),
-                child: Text(
-                  'PROCEED',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  setState(() {
-                    isProceedClicked = true;
-                  });
-                }),
-          ],
-        ),
-      );
-    } else if (isProceedClicked == true && toShowStart == false) {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 18.0, left: 10.0, right: 10.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      ListTile(
-                          onTap: () {},
-                          title: AutoSizeText(
-                            "Flutter Developer",
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: basicColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AutoSizeText(
-                                  "Powai , Maharashtra",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                AutoSizeText(
-                                  "2020-10-6",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                          ),
-                          trailing: IconButton(
-                            icon:
-                                Icon(Icons.bookmark, color: Color(0xffebd234)),
-                            onPressed: () {},
-                          )),
-                      ListTile(
-                        dense: true,
-                        title: AutoSizeText(
-                          "Job's CTC : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      ListTile(
-                        dense: true,
-                        title: AutoSizeText(
-                          "Notice Period: ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      ListTile(
-                        title: AutoSizeText(
-                          "Role Description : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "foisefheoifeoifehefieoiufhefoiefeiuefeioffeiofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                maxLines: 4,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ListTile(
-                        title: AutoSizeText(
-                          "Key Responsibilities : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                maxLines: 4,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ListTile(
-                        title: AutoSizeText(
-                          "Soft Skills : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                maxLines: 4,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ListTile(
-                        title: AutoSizeText(
-                          "Technical Skills  : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                maxLines: 4,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      ListTile(
-                        title: AutoSizeText(
-                          "Requirements : ",
-                          maxLines: 2,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w600),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "1. HElllo\n2. REsume\n3. BYe\n",
-                                maxLines: 4,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 20.0, top: 10.0),
-                          child: RaisedButton(
-                              color: basicColor,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 30, right: 30),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'APPLY NOW',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isProceedClicked = true;
-                                  toShowStart = true;
-                                });
-                              }),
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 18.0, left: 10.0, right: 10.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      ListTile(
-                          onTap: () {},
-                          title: AutoSizeText(
-                            "Flutter Developer",
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: basicColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AutoSizeText(
-                                  "Powai , Maharashtra",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                AutoSizeText(
-                                  "2020-10-6",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                          ),
-                          trailing: IconButton(
-                            icon:
-                                Icon(Icons.bookmark, color: Color(0xffebd234)),
-                            onPressed: () {},
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 4),
-                        child: Align(
-                            child: RichText(
-                              text: TextSpan(
-                                text: 'Click ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: ' "Start" ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: basicColor)),
-                                  TextSpan(text: ' when you are ready! '),
-                                ],
-                              ),
-                            ),
-                            alignment: Alignment.center),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 10, 0.0, 8),
-                        child: Align(
-                            child: Text(
-                                "Please read the following instructions carefully.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.center),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 0, 8),
-                        child: Align(
-                            child: Text(
-                                "1. Say something which is not mentioned in your resume",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child:
-                                Text("2. Please be well dressed for the video",
-                                    style: TextStyle(
-                                      fontSize: fontSize,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "3. Please Keep your script limited to 60 seconds and be well prepared",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "4. Don't worry you can have as many takes as you want",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 20.0, top: 30.0),
-                          child: RaisedButton(
-                              color: basicColor,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 30, right: 30),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'START',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                var status = await Permission.storage.status;
-                                switch (status) {
-                                  case PermissionStatus.undetermined:
-                                    Map<Permission, PermissionStatus> statuses =
-                                        await [
-                                      Permission.storage,
-                                    ].request();
-                                    if (statuses[Permission.storage] ==
-                                        PermissionStatus.granted) {
-                                      var status2 =
-                                          await Permission.camera.status;
-                                      switch (status2) {
-                                        case PermissionStatus.undetermined:
-                                          Map<Permission, PermissionStatus>
-                                              statuses2 = await [
-                                            Permission.camera,
-                                          ].request();
-                                          if (statuses2[Permission.camera] ==
-                                              PermissionStatus.granted) {
-                                            var status3 = await Permission
-                                                .microphone.status;
-                                            switch (status3) {
-                                              case PermissionStatus
-                                                  .undetermined:
-                                                Map<Permission,
-                                                        PermissionStatus>
-                                                    statuses3 = await [
-                                                  Permission.microphone,
-                                                ].request();
-                                                if (statuses3[Permission
-                                                        .microphone] ==
-                                                    PermissionStatus.granted) {
-                                                  // TODO
-
-                                                  await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            JobQuestions(
-                                                              cameras: cameras,
-                                                            )),
-                                                  );
-                                                } else
-                                                  showToast(
-                                                      'Microphone Permission denied',
-                                                      context);
-                                                break;
-                                              case PermissionStatus.granted:
-                                                // TODO
-
-                                                await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          JobQuestions(
-                                                            cameras: cameras,
-                                                          )),
-                                                );
-
-                                                break;
-                                              default:
-                                                showToast(
-                                                    'Microphone Permission denied',
-                                                    context);
-                                                break;
-                                            }
-                                          } else
-                                            showToast(
-                                                'Camera Permission denied',
-                                                context);
-                                          break;
-
-                                        case PermissionStatus.granted:
-                                          var status3 = await Permission
-                                              .microphone.status;
-                                          switch (status3) {
-                                            case PermissionStatus.undetermined:
-                                              Map<Permission, PermissionStatus>
-                                                  statuses3 = await [
-                                                Permission.microphone,
-                                              ].request();
-                                              if (statuses3[
-                                                      Permission.microphone] ==
-                                                  PermissionStatus.granted) {
-                                                // TODO
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          JobQuestions(
-                                                            cameras: cameras,
-                                                          )),
-                                                );
-                                              } else
-                                                showToast(
-                                                    'Microphone Permission denied',
-                                                    context);
-                                              break;
-                                            case PermissionStatus.granted:
-                                              // TODO
-                                              await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        JobQuestions(
-                                                          cameras: cameras,
-                                                        )),
-                                              );
-
-                                              break;
-                                            default:
-                                              showToast(
-                                                  'Microphone Permission denied',
-                                                  context);
-                                              break;
-                                          }
-                                          break;
-                                        default:
-                                          showToast('Camera Permission Denied',
-                                              context);
-                                          break;
-                                      }
-                                    } else {
-                                      showToast(
-                                          'Storage Permission Denied', context);
-                                    }
-                                    break;
-                                  case PermissionStatus.granted:
-                                    var status2 =
-                                        await Permission.camera.status;
-                                    switch (status2) {
-                                      case PermissionStatus.undetermined:
-                                        Map<Permission, PermissionStatus>
-                                            statuses2 = await [
-                                          Permission.camera,
-                                        ].request();
-                                        if (statuses2[Permission.camera] ==
-                                            PermissionStatus.granted) {
-                                          var status3 =
-                                              await Permission.camera.status;
-                                          switch (status3) {
-                                            case PermissionStatus.undetermined:
-                                              Map<Permission, PermissionStatus>
-                                                  statuses3 = await [
-                                                Permission.microphone,
-                                              ].request();
-                                              if (statuses3[
-                                                      Permission.microphone] ==
-                                                  PermissionStatus.granted) {
-                                                await Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          JobQuestions(
-                                                            cameras: cameras,
-                                                          )),
-                                                );
-                                              } else
-                                                showToast(
-                                                    'Microphone Permission denied',
-                                                    context);
-                                              break;
-                                            case PermissionStatus.granted:
-                                              await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        JobQuestions(
-                                                          cameras: cameras,
-                                                        )),
-                                              );
-
-                                              break;
-                                            default:
-                                              showToast(
-                                                  'Microphone Permission denied',
-                                                  context);
-                                              break;
-                                          }
-                                        } else
-                                          showToast('Camera Permission denied',
-                                              context);
-                                        break;
-                                      case PermissionStatus.granted:
-                                        var status3 =
-                                            await Permission.microphone.status;
-                                        switch (status3) {
-                                          case PermissionStatus.undetermined:
-                                            Map<Permission, PermissionStatus>
-                                                statuses3 = await [
-                                              Permission.microphone,
-                                            ].request();
-                                            if (statuses3[
-                                                    Permission.microphone] ==
-                                                PermissionStatus.granted) {
-                                              // TODO
-                                              await Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        JobQuestions(
-                                                          cameras: cameras,
-                                                        )),
-                                              );
-                                            } else
-                                              showToast(
-                                                  'Microphone Permission denied',
-                                                  context);
-                                            break;
-                                          case PermissionStatus.granted:
-                                            // TODO
-                                            await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      JobQuestions(
-                                                        cameras: cameras,
-                                                      )),
-                                            );
-
-                                            break;
-                                          default:
-                                            showToast(
-                                                'Microphone Permission denied',
-                                                context);
-                                            break;
-                                        }
-                                        break;
-                                      default:
-                                        showToast('Camera Permission Denied',
-                                            context);
-                                        break;
-                                    }
-                                    break;
-                                  default:
-                                    showToast(
-                                        'Storage Permission denied', context);
-                                    break;
-                                }
-                                // _recordVideo();
-                              }),
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-  }
-
-  @override
-  void initState() {
-    camInit();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-
-    if (width <= 360) {
-      fontSize = 12;
-    }
-
-    return Scaffold(
-        appBar: PreferredSize(
-          child: AppBar(
-              backgroundColor: basicColor,
-              automaticallyImplyLeading: false,
-              leading: Padding(
-                padding: EdgeInsets.only(bottom: 5.0),
-                child: IconButton(
-                    icon: Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => Navigator.pop(context)),
-              ),
-              title: Padding(
-                padding: EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  "Apply",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
-              )),
-          preferredSize: Size.fromHeight(50),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 25, 8, 8),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 18.0, left: 10.0, right: 10.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              ListTile(
-                                  onTap: () {},
-                                  title: AutoSizeText(
-                                    "Flutter Developer",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        color: basicColor,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        AutoSizeText(
-                                          "Powai , Maharashtra",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        AutoSizeText(
-                                          "2020-10-6",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w500),
-                                          overflow: TextOverflow.ellipsis,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  trailing: IconButton(
-                                    icon:
-                                    Icon(Icons.bookmark, color: Color(0xffebd234)),
-                                    onPressed: () {},
-                                  )),
-                              ListTile(
-                                dense: true,
-                                title: AutoSizeText(
-                                  "Job's CTC : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              ListTile(
-                                dense: true,
-                                title: AutoSizeText(
-                                  "Notice Period: ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              ListTile(
-                                title: AutoSizeText(
-                                  "Role Description : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "foisefheoifeoifehefieoiufhefoiefeiuefeioffeiofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                        maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: AutoSizeText(
-                                  "Key Responsibilities : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                        maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: AutoSizeText(
-                                  "Soft Skills : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                        maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: AutoSizeText(
-                                  "Technical Skills  : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                        maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              ListTile(
-                                title: AutoSizeText(
-                                  "Requirements : ",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      fontSize: 18, fontWeight: FontWeight.w600),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "1. HElllo\n2. REsume\n3. BYe\n",
-                                        maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 20.0, right: 20.0, top: 10.0),
-                                  child: RaisedButton(
-                                      color: basicColor,
-                                      elevation: 0,
-                                      padding: EdgeInsets.only(left: 30, right: 30),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(5.0),
-                                        side: BorderSide(color: basicColor, width: 1.2),
-                                      ),
-                                      child: Text(
-                                        'APPLY NOW',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          isProceedClicked = true;
-                                          toShowStart = true;
-                                        });
-                                      }),
-                                ),
-                              )
-                            ]),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
-        ));
-  }
-}
-
 class CompanyProfile extends StatelessWidget {
+  final Map company;
+
+  const CompanyProfile({Key key, this.company}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1035,69 +51,103 @@ class CompanyProfile extends StatelessWidget {
                   padding: const EdgeInsets.all(4.0),
                   child: Container(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 18.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.only(
+                          bottom: 18.0, left: 10.0, right: 10.0),
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             ListTile(
-                                onTap: () {},
-                                title: AutoSizeText(
-                                  "Flutter Developer",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: basicColor,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        "Powai , Maharashtra",
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      AutoSizeText(
-                                        "2020-10-6",
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                trailing: IconButton(
-                                  icon:
-                                  Icon(Icons.bookmark, color: Color(0xffebd234)),
-                                  onPressed: () {},
-                                )),
-                            ListTile(
-                              dense: true,
+                              onTap: () {},
                               title: AutoSizeText(
-                                "Job's CTC : ",
+                                company['role'] ?? "Role not provided",
                                 maxLines: 2,
                                 style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
+                                    color: basicColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis,
                               ),
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 10.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    AutoSizeText(
+                                      company['location'] ??
+                                          "Location not provided",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    AutoSizeText(
+                                      company['deadline'] != null
+                                          ? "Deadline : " +
+                                              company['deadline'].toString()
+                                          : "No Deadline" ?? "No Deadline",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w500),
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              // trailing: IconButton(
+                              //   icon: Icon(Icons.bookmark,
+                              //       color: Color(0xffebd234)),
+                              //   onPressed: () {},
+                              // )),
                             ),
                             ListTile(
                               dense: true,
-                              title: AutoSizeText(
-                                "Notice Period: ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
+                              title: RichText(
+                                text: TextSpan(
+                                  text: 'Jobs CTC : ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: company['ctc'] ?? "Not Specified",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                              // title: AutoSizeText(
+                              //   // company['ctc']!=null?"Job's CTC" + company['ctc']??,
+                              //   maxLines: 2,
+                              //   style: TextStyle(
+                              //       fontSize: 18, fontWeight: FontWeight.w600),
+                              //   overflow: TextOverflow.ellipsis,
+                              // ),
+                            ),
+                            ListTile(
+                              dense: true,
+                              title: RichText(
+                                text: TextSpan(
+                                  text: 'Notice Period : ',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                        text: company['notice_period'] ??
+                                            "Not Specified",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                        )),
+                                  ],
+                                ),
                               ),
                             ),
                             ListTile(
@@ -1114,8 +164,8 @@ class CompanyProfile extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AutoSizeText(
-                                      "foisefheoifeoifehefieoiufhefoiefeiuefeioffeiofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
+                                    Text(
+                                      company['description'] ?? "Not Specified",
                                       maxLines: 4,
                                       style: TextStyle(
                                           fontSize: 15,
@@ -1141,9 +191,9 @@ class CompanyProfile extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    AutoSizeText(
-                                      "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                      maxLines: 4,
+                                    Text(
+                                      company['key_resp'] ?? "Not Specified",
+                                      // maxLines: 4,
                                       style: TextStyle(
                                           fontSize: 15,
                                           color: Colors.black,
@@ -1164,21 +214,23 @@ class CompanyProfile extends StatelessWidget {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AutoSizeText(
-                                      "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                      maxLines: 4,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        company['soft_skills'].length ?? 1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Text(
+                                        company['soft_skills'][index] ??
+                                            "Not Specified",
+                                        //maxLines: 4,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                        overflow: TextOverflow.ellipsis,
+                                      );
+                                    }),
                               ),
                             ),
                             ListTile(
@@ -1191,21 +243,23 @@ class CompanyProfile extends StatelessWidget {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AutoSizeText(
-                                      "1 .foisefheoifeoifehefieoiufhofuefiuefehieuighroighruggorguregrghogrguhergruggrgregoregeriugergoregguigierogeriu",
-                                      maxLines: 4,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        company['tech_skills'].length ?? 1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Text(
+                                        company['tech_skills'][index] ??
+                                            "Not Specified",
+                                        //maxLines: 4,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                        overflow: TextOverflow.ellipsis,
+                                      );
+                                    }),
                               ),
                             ),
                             ListTile(
@@ -1218,21 +272,23 @@ class CompanyProfile extends StatelessWidget {
                               ),
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    AutoSizeText(
-                                      "1. HElllo\n2. REsume\n3. BYe\n",
-                                      maxLines: 4,
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                                child: ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        company['requirements'].length ?? 1,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Text(
+                                        company['requirements'][index] ??
+                                            "Not Specified",
+                                        //maxLines: 4,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w500),
+                                        overflow: TextOverflow.ellipsis,
+                                      );
+                                    }),
                               ),
                             ),
                             Align(
@@ -1243,17 +299,26 @@ class CompanyProfile extends StatelessWidget {
                                 child: RaisedButton(
                                     color: basicColor,
                                     elevation: 0,
-                                    padding: EdgeInsets.only(left: 30, right: 30),
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 30),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(color: basicColor, width: 1.2),
+                                      side: BorderSide(
+                                          color: basicColor, width: 1.2),
                                     ),
                                     child: Text(
                                       'APPLY NOW',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyVideo()));
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CompanyVideo(
+                                                      job: company,
+                                                      jobID:
+                                                          company['job_id'])));
                                     }),
                               ),
                             )
@@ -1268,8 +333,31 @@ class CompanyProfile extends StatelessWidget {
   }
 }
 
-class CompanyVideo extends StatelessWidget {
+class CompanyVideo extends StatefulWidget {
+  final String jobID;
+  final Map job;
+
+  CompanyVideo({Key key, this.jobID, this.job}) : super(key: key);
+
+  @override
+  _CompanyVideoState createState() => _CompanyVideoState();
+}
+
+class _CompanyVideoState extends State<CompanyVideo> {
   double width, height, scale;
+  final _APIService = APIService();
+
+  Future<dynamic> getInfo() async {
+    dynamic result = await _APIService.getCompanyIntro(widget.jobID);
+    print(result);
+    return result;
+  }
+
+  Future ref() async {
+    setState(() {});
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -1301,60 +389,116 @@ class CompanyVideo extends StatelessWidget {
         preferredSize: Size.fromHeight(50),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: AwsomeVideoPlayer(
-                "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                playOptions: VideoPlayOptions(
-                  aspectRatio: 1 / 1,
-                  loop: false,
-                  autoplay: false,
-                ),
-                videoStyle: VideoStyle(
-                    videoControlBarStyle: VideoControlBarStyle(
-                        fullscreenIcon: SizedBox(),
-                        forwardIcon: SizedBox(),
-                        rewindIcon: SizedBox()),
-                    videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
-              ),
-            ),
-            SizedBox(height: 20,),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-              child: Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1800s, when an nknown printer took agalley of type and scrambled ",
-                textAlign: TextAlign.left,
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-              ),
-            ),
-            SizedBox(height: height * 0.05,),
-            RaisedButton(
-                color: basicColor,
-                elevation: 0,
-                padding: EdgeInsets.only(left: 40, right: 40),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(color: basicColor, width: 1.2),
-                ),
-                child: Text(
-                  'PROCEED',
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => CompanyInstructions()));
-                }),
-          ],
-        ),
+        padding:
+            EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
+        child: FutureBuilder(
+            future: getInfo(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                return ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: RefreshIndicator(
+                    onRefresh: ref,
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          snapshot.data['video'] ??
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: AwsomeVideoPlayer(
+                                  snapshot.data['video'],
+                                  playOptions: VideoPlayOptions(
+                                    aspectRatio: 1 / 1,
+                                    loop: false,
+                                    autoplay: false,
+                                  ),
+                                  videoStyle: VideoStyle(
+                                      videoControlBarStyle:
+                                          VideoControlBarStyle(
+                                              fullscreenIcon: SizedBox(),
+                                              forwardIcon: SizedBox(),
+                                              rewindIcon: SizedBox()),
+                                      videoTopBarStyle: VideoTopBarStyle(
+                                          popIcon: Container())),
+                                ),
+                              ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                            child: Text(
+                              snapshot.data['text'] ??
+                                  "No Info Specified",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                          SizedBox(
+                            height: height * 0.05,
+                          ),
+                          RaisedButton(
+                              color: basicColor,
+                              elevation: 0,
+                              padding: EdgeInsets.only(left: 40, right: 40),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                                side: BorderSide(color: basicColor, width: 1.2),
+                              ),
+                              child: Text(
+                                'PROCEED',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CompanyInstructions(
+                                              job: widget.job,
+                                            )));
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError)
+                return Center(
+                  child: Text('Error occured, try again later'),
+                );
+              else
+                return Loading();
+            }),
       ),
     );
   }
 }
 
-class CompanyInstructions extends StatelessWidget {
+class CompanyInstructions extends StatefulWidget {
+  final Map job;
+
+  const CompanyInstructions({Key key, this.job}) : super(key: key);
+  @override
+  _CompanyInstructionsState createState() => _CompanyInstructionsState();
+}
+
+class _CompanyInstructionsState extends State<CompanyInstructions> {
   double fontSize = 12;
+  List<CameraDescription> cameras;
+  camInit() async {
+    cameras = await availableCameras();
+  }
+
+  @override
+  void initState() {
+    camInit();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1394,46 +538,51 @@ class CompanyInstructions extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       ListTile(
-                          onTap: () {},
-                          title: AutoSizeText(
-                            "Flutter Developer",
-                            maxLines: 2,
-                            style: TextStyle(
-                                color: basicColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                            overflow: TextOverflow.ellipsis,
+                        onTap: () {},
+                        title: AutoSizeText(
+                          widget.job['role'] ?? "No Role Sepcified",
+                          maxLines: 2,
+                          style: TextStyle(
+                              color: basicColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AutoSizeText(
+                                widget.job['location'] ??
+                                    "Location not provided",
+                                maxLines: 2,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              AutoSizeText(
+                                widget.job['deadline'] != null
+                                    ? "Deadline : " +
+                                        widget.job['deadline'].toString()
+                                    : "No Deadline" ?? "No Deadline",
+                                maxLines: 2,
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500),
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            ],
                           ),
-                          subtitle: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                AutoSizeText(
-                                  "Powai , Maharashtra",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                AutoSizeText(
-                                  "2020-10-6",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w500),
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ],
-                            ),
-                          ),
-                          trailing: IconButton(
-                            icon:
-                            Icon(Icons.bookmark, color: Color(0xffebd234)),
-                            onPressed: () {},
-                          )),
+                        ),
+                        // trailing: IconButton(
+                        //   icon:
+                        //       Icon(Icons.bookmark, color: Color(0xffebd234)),
+                        //   onPressed: () {},
+                        // )),
+                      ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 4),
                         child: Align(
@@ -1473,18 +622,7 @@ class CompanyInstructions extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(10.0, 5, 0, 8),
                         child: Align(
                             child: Text(
-                                "1. Say something which is not mentioned in your resume",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child:
-                            Text("2. Please be well dressed for the video",
+                                "1. There will be a total of 15 questions in the interview.",
                                 style: TextStyle(
                                   fontSize: fontSize,
                                   fontWeight: FontWeight.bold,
@@ -1495,7 +633,7 @@ class CompanyInstructions extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
                         child: Align(
                             child: Text(
-                                "3. Please Keep your script limited to 60 seconds and be well prepared",
+                                "2. You will be given 60 seconds for answering each question.",
                                 style: TextStyle(
                                   fontSize: fontSize,
                                   fontWeight: FontWeight.bold,
@@ -1506,7 +644,40 @@ class CompanyInstructions extends StatelessWidget {
                         padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
                         child: Align(
                             child: Text(
-                                "4. Don't worry you can have as many takes as you want",
+                                "3. You have to attempt all the questions.",
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            alignment: Alignment.centerLeft),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                        child: Align(
+                            child: Text(
+                                "4. You cannot pause the interview in between.",
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            alignment: Alignment.centerLeft),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                        child: Align(
+                            child: Text(
+                                "5. Don’t close or reload the window during the interview.",
+                                style: TextStyle(
+                                  fontSize: fontSize,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            alignment: Alignment.centerLeft),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                        child: Align(
+                            child: Text(
+                                "6. Strict action will be taken if any abusive or offensive language is used.",
                                 style: TextStyle(
                                   fontSize: fontSize,
                                   fontWeight: FontWeight.bold,
@@ -1531,13 +702,17 @@ class CompanyInstructions extends StatelessWidget {
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
-                                bool storage = false, camera = false, microphone = false;
-                                var storageStatus = await Permission.storage.status;
-                                if(storageStatus == PermissionStatus.granted) {
+                                bool storage = false,
+                                    camera = false,
+                                    microphone = false;
+                                var storageStatus =
+                                    await Permission.storage.status;
+                                if (storageStatus == PermissionStatus.granted) {
                                   storage = true;
-                                } else if(storageStatus == PermissionStatus.undetermined) {
+                                } else if (storageStatus ==
+                                    PermissionStatus.undetermined) {
                                   Map<Permission, PermissionStatus> statuses =
-                                  await [
+                                      await [
                                     Permission.storage,
                                   ].request();
                                   if (statuses[Permission.storage] ==
@@ -1545,12 +720,14 @@ class CompanyInstructions extends StatelessWidget {
                                     storage = true;
                                   }
                                 }
-                                var cameraeStatus = await Permission.camera.status;
-                                if(cameraeStatus == PermissionStatus.granted) {
+                                var cameraeStatus =
+                                    await Permission.camera.status;
+                                if (cameraeStatus == PermissionStatus.granted) {
                                   camera = true;
-                                } else if(cameraeStatus == PermissionStatus.undetermined) {
+                                } else if (cameraeStatus ==
+                                    PermissionStatus.undetermined) {
                                   Map<Permission, PermissionStatus> statuses =
-                                  await [
+                                      await [
                                     Permission.camera,
                                   ].request();
                                   if (statuses[Permission.camera] ==
@@ -1558,12 +735,15 @@ class CompanyInstructions extends StatelessWidget {
                                     camera = true;
                                   }
                                 }
-                                var microphoneStatus = await Permission.microphone.status;
-                                if(microphoneStatus == PermissionStatus.granted) {
+                                var microphoneStatus =
+                                    await Permission.microphone.status;
+                                if (microphoneStatus ==
+                                    PermissionStatus.granted) {
                                   microphone = true;
-                                } else if(microphoneStatus == PermissionStatus.undetermined) {
+                                } else if (microphoneStatus ==
+                                    PermissionStatus.undetermined) {
                                   Map<Permission, PermissionStatus> statuses =
-                                  await [
+                                      await [
                                     Permission.microphone,
                                   ].request();
                                   if (statuses[Permission.microphone] ==
@@ -1571,10 +751,16 @@ class CompanyInstructions extends StatelessWidget {
                                     microphone = true;
                                   }
                                 }
-                                if(storage && camera && microphone)
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => JobQuestions()));
+                                if (storage && camera && microphone)
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => JobQuestions(
+                                                cameras: cameras,
+                                              )));
                                 else
-                                  showToast('Permission denied', context, color: Colors.red);
+                                  showToast('Permission denied', context,
+                                      color: Colors.red);
                               }),
                         ),
                       )
@@ -1587,6 +773,3 @@ class CompanyInstructions extends StatelessWidget {
     );
   }
 }
-
-
-

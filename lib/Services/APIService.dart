@@ -226,7 +226,7 @@ class APIService {
     }
   }
 
-  Future handleJobData() async{
+  Future handleJobData() async {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
@@ -244,7 +244,24 @@ class APIService {
           result = -2;
       });
       return result;
-    } catch(e) {
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  Future getCompanyIntro(String id) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(companyIntroURL,
+            data: {"secret": "$passHashSecret", "job_id": "$id"});
+        if (response.statusCode == 200) {
+          result = response.data;
+        } else
+          result = -2;
+      });
+      return result;
+    } catch (e) {
       return 0;
     }
   }
