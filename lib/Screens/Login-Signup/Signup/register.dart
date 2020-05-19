@@ -229,8 +229,6 @@ class _RegisterState extends State<Register> {
                                       keyboardType:
                                           TextInputType.visiblePassword,
                                       textInputAction: TextInputAction.done,
-                                      onFieldSubmitted: (_) =>
-                                          FocusScope.of(context).nextFocus(),
                                       decoration: loginFormField.copyWith(
                                           hintText: 'Password',
                                           suffixIcon: IconButton(

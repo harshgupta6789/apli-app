@@ -253,8 +253,10 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(companyIntroURL,
-            data: {"secret": "$passHashSecret", "job_id": "$id"});
+        Response response = await Dio().post(companyIntroURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id"
+        });
         if (response.statusCode == 200) {
           result = response.data;
         } else
@@ -262,6 +264,7 @@ class APIService {
       });
       return result;
     } catch (e) {
+      print(e.toString());
       return 0;
     }
   }

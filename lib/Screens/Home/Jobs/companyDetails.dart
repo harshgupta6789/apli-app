@@ -83,10 +83,7 @@ class CompanyProfile extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     AutoSizeText(
-                                      company['deadline'] != null
-                                          ? "Deadline : " +
-                                              company['deadline'].toString()
-                                          : "No Deadline" ?? "No Deadline",
+                                      'Deadline: ' + company['deadline'] ?? "No Deadline",
                                       maxLines: 2,
                                       style: TextStyle(
                                           color: Colors.black,
@@ -275,7 +272,7 @@ class CompanyProfile extends StatelessWidget {
                                 child: ListView.builder(
                                     shrinkWrap: true,
                                     itemCount:
-                                        company['requirements'].length ?? 1,
+                                        (company['requirements'] ?? []).length ?? 1,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Text(
@@ -317,8 +314,7 @@ class CompanyProfile extends StatelessWidget {
                                               builder: (context) =>
                                                   CompanyVideo(
                                                       job: company,
-                                                      jobID:
-                                                          company['job_id'])));
+                                                      )));
                                     }),
                               ),
                             )
@@ -334,10 +330,9 @@ class CompanyProfile extends StatelessWidget {
 }
 
 class CompanyVideo extends StatefulWidget {
-  final String jobID;
   final Map job;
 
-  CompanyVideo({Key key, this.jobID, this.job}) : super(key: key);
+  CompanyVideo({Key key, this.job}) : super(key: key);
 
   @override
   _CompanyVideoState createState() => _CompanyVideoState();
@@ -348,7 +343,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
   final _APIService = APIService();
 
   Future<dynamic> getInfo() async {
-    dynamic result = await _APIService.getCompanyIntro(widget.jobID);
+    dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
     print(result);
     return result;
   }
@@ -398,72 +393,65 @@ class _CompanyVideoState extends State<CompanyVideo> {
                   snapshot.connectionState == ConnectionState.done) {
                 return ScrollConfiguration(
                   behavior: MyBehavior(),
-                  child: RefreshIndicator(
-                    onRefresh: ref,
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        children: [
-                          snapshot.data['video'] ??
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: AwsomeVideoPlayer(
-                                  snapshot.data['video'],
-                                  playOptions: VideoPlayOptions(
-                                    aspectRatio: 1 / 1,
-                                    loop: false,
-                                    autoplay: false,
-                                  ),
-                                  videoStyle: VideoStyle(
-                                      videoControlBarStyle:
-                                          VideoControlBarStyle(
-                                              fullscreenIcon: SizedBox(),
-                                              forwardIcon: SizedBox(),
-                                              rewindIcon: SizedBox()),
-                                      videoTopBarStyle: VideoTopBarStyle(
-                                          popIcon: Container())),
-                                ),
-                              ),
-                          SizedBox(
-                            height: 20,
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: snapshot.data['video'] != null ? AwsomeVideoPlayer(
+                          snapshot.data['video'],
+                          playOptions: VideoPlayOptions(
+                            aspectRatio: 1 / 1,
+                            loop: false,
+                            autoplay: false,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                            child: Text(
-                              snapshot.data['text'] ??
-                                  "No Info Specified",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(
-                            height: height * 0.05,
-                          ),
-                          RaisedButton(
-                              color: basicColor,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 40, right: 40),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'PROCEED',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CompanyInstructions(
-                                              job: widget.job,
-                                            )));
-                              }),
-                        ],
+                          videoStyle: VideoStyle(
+                              videoControlBarStyle:
+                              VideoControlBarStyle(
+                                  fullscreenIcon: SizedBox(),
+                                  forwardIcon: SizedBox(),
+                                  rewindIcon: SizedBox()),
+                              videoTopBarStyle: VideoTopBarStyle(
+                                  popIcon: Container())),
+                        ) : Container(),
                       ),
-                    ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        child: Text(
+                          snapshot.data['text'] ??
+                              "No Info Specified",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      SizedBox(
+                        height: height * 0.05,
+                      ),
+                      RaisedButton(
+                          color: basicColor,
+                          elevation: 0,
+                          padding: EdgeInsets.only(left: 40, right: 40),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                            side: BorderSide(color: basicColor, width: 1.2),
+                          ),
+                          child: Text(
+                            'PROCEED',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        CompanyInstructions(
+                                          job: widget.job,
+                                        )));
+                          }),
+                    ],
                   ),
                 );
               } else if (snapshot.hasError)
@@ -487,7 +475,7 @@ class CompanyInstructions extends StatefulWidget {
 }
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
-  double fontSize = 12;
+  double fontSize = 14;
   List<CameraDescription> cameras;
   camInit() async {
     cameras = await availableCameras();
@@ -613,7 +601,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                 "Please read the following instructions carefully.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 13,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.bold,
                                 )),
                             alignment: Alignment.center),
