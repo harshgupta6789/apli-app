@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
-  final int type;
+  final int profileType;
 
-  APIService({this.type});
+  APIService({this.profileType});
 
   Future sendProfileData(Map<dynamic, dynamic> map) async {
     try {
       int result;
       await SharedPreferences.getInstance().then((value) async {
-        switch (type) {
+        switch (profileType) {
           case 8:
             Response response = await Dio().post(basic_infoURL, data: {
               "email": "${value.getString('email')}",
@@ -227,14 +227,34 @@ class APIService {
   }
 
   Future handleJobData() async{
-
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(allJobsURL, data: {
+          "secret": "$passHashSecret",
+          "userid": "${value.getString('email')}"
+        });
+        if (response.statusCode == 200) {
+          var frozen = response.data['frozen'];
+          if (frozen == true) {
+            result = 'frozen';
+          } else
+            result = response.data['jobs'];
+        } else
+          result = -2;
+      });
+      return result;
+    } catch(e) {
+      return 0;
+    }
   }
 }
 
-// NOTE: result =     1 = true
+// NOTE: result =     1 = success
 //       result =    -1 = false
 //       result =    -2 = could not connect to server
 //       result =     0 = failed
-// TYPE 0 = ALLJOBS
-// TYPE 1 = APPLIED
-// TYPE 2 = INCOMPLETE
+// NOTE: result =     List<dynamic> = true
+//       result =          'frozen' = frozen
+//       result =                -2 = could not connect to server
+//       result =                 0 = failed

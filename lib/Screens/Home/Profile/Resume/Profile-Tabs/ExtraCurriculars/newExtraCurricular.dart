@@ -38,7 +38,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
-  final _APIService = APIService(type: 4);
+  final _APIService = APIService(profileType: 4);
   StorageUploadTask uploadTask;
 
   Future<void> _uploadFile(File file, String filename) async {

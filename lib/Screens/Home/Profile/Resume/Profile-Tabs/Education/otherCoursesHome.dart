@@ -156,7 +156,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
     });
   }
 
-  final _APIService = APIService(type: 7);
+  final _APIService = APIService(profileType: 7);
 
   @override
   void initState() {

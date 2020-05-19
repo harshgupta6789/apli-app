@@ -11,7 +11,7 @@ class Loading extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SpinKitFadingCircle(
+            SpinKitWave(
               color: basicColor,
               size: 50.0,
             )

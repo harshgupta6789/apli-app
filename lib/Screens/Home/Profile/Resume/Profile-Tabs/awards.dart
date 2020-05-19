@@ -99,7 +99,7 @@ class _AwardsFormState extends State<AwardsForm> {
   Map<String, TextEditingController> temp = {}, temp2 = {};
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("MM-yyyy");
-  final _APIService = APIService(type: 3);
+  final _APIService = APIService(profileType: 3);
 
   @override
   void initState() {

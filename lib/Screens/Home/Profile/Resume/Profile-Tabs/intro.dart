@@ -42,7 +42,7 @@ class _BasicIntroState extends State<BasicIntro> {
   List languagesList = [];
   Timestamp dob;
   Map<String, TextEditingController> temp = {};
-  final _APIService = APIService(type: 8);
+  final _APIService = APIService(profileType: 8);
   final fnameFocus = FocusNode();
   final dobFocus = FocusNode();
   final roll_noFocus = FocusNode();

@@ -309,16 +309,6 @@ class _LoginState extends State<Login> {
                                             'Failed, try again later', context,
                                             color: Colors.red);
                                       }
-                                      var net = await Connectivity()
-                                          .checkConnectivity();
-                                      if (net == ConnectivityResult.none) {
-                                        showToast(
-                                            'No Internet Connection', context,
-                                            color: Colors.red);
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                      }
                                     }
                                   }),
                             )),

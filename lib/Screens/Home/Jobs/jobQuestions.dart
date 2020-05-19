@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:apli/Shared/animations.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -32,19 +31,35 @@ class _JobQuestionsState extends State<JobQuestions> {
   bool isUploaded = true, error = false;
   StorageUploadTask uploadTask;
   int Status;
+  List<CameraDescription> cameras;
+
+  camInit() async {
+    cameras = await availableCameras();
+    controller = CameraController(cameras[1], ResolutionPreset.low);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+    startTimer();
+  }
 
   void startTimer() {
     const oneSec = const Duration(seconds: 1);
     _timer = new Timer.periodic(
       oneSec,
-          (Timer timer) => setState(
-            () {
-          seconds = seconds + 1;
-          if (seconds >= 60) {
-            stopTimer();
-          }
-        },
-      ),
+          (Timer timer) {
+        if(mounted)
+          setState(() {
+            seconds = seconds + 1;
+            print('abcd');
+            if (seconds >= 60) {
+              stopTimer();
+            }
+          });
+        else return;
+          },
     );
   }
 
@@ -55,17 +70,11 @@ class _JobQuestionsState extends State<JobQuestions> {
 
   @override
   void initState() {
+    camInit();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-    controller = CameraController(widget.cameras[1], ResolutionPreset.medium);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
-    startTimer();
+
     super.initState();
   }
 
@@ -74,9 +83,10 @@ class _JobQuestionsState extends State<JobQuestions> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     final size = MediaQuery.of(context).size;
-    if (!controller.value.isInitialized) {
+    if (controller == null) {
       return Container();
-    }
+    } else if(!controller.value.isInitialized)
+      return Container();
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(

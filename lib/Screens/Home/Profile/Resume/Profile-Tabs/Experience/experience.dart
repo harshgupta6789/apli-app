@@ -102,7 +102,7 @@ class _ExperiencesState extends State<Experiences> {
 
   List experiences;
 
-  final _APIService = APIService(type: 6);
+  final _APIService = APIService(profileType: 6);
 
   @override
   void initState() {

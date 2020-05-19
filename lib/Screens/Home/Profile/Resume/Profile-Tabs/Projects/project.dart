@@ -102,7 +102,7 @@ class _ProjectsState extends State<Projects> {
 
   List projects;
 
-  final _APIService = APIService(type: 5);
+  final _APIService = APIService(profileType: 5);
 
   @override
   void initState() {

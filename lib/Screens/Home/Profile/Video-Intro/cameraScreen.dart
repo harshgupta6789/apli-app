@@ -510,7 +510,7 @@ class _CameraState extends State<Camera> {
       DeviceOrientation.portraitUp,
     ]);
     controller.dispose();
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 }

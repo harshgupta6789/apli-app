@@ -102,7 +102,7 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
 
   List extraCurriculars;
 
-  final _APIService = APIService(type: 4);
+  final _APIService = APIService(profileType: 4);
 
   @override
   void initState() {

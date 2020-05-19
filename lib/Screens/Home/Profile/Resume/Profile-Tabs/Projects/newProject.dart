@@ -39,7 +39,7 @@ class _NewProjectState extends State<NewProject> {
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   StorageUploadTask uploadTask;
-  final _APIService = APIService(type: 5);
+  final _APIService = APIService(profileType: 5);
 
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {

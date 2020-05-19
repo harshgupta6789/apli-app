@@ -45,7 +45,7 @@ class _NewExperienceState extends State<NewExperience> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
-  final _APIService = APIService(type: 6);
+  final _APIService = APIService(profileType: 6);
   StorageUploadTask uploadTask;
 
   Future<void> _uploadFile(File file, String filename) async {

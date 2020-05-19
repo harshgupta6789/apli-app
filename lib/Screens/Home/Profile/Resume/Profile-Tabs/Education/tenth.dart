@@ -51,7 +51,7 @@ class _TenthState extends State<Tenth> {
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
   List filenames;
-  final _APIService = APIService(type: 7);
+  final _APIService = APIService(profileType: 7);
 
   Future<List> upload() async {
     List temp = [[]];
