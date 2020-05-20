@@ -438,31 +438,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                             Icon(Icons.error),
                                       ),
                               )),
-                          Positioned(
-                            top: height * 0.15,
-                            left: width * 0.1,
-                            child: Padding(
-                              padding: const EdgeInsets.all(0.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text("Trending",
-                                      style: TextStyle(color: Colors.yellow)),
-                                  Text("Startup 101",
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                      )),
-                                  Text("By Harvard",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w100,
-                                          fontSize: 18,
-                                          color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                          )
+                        
                         ],
                       ),
                     ),

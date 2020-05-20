@@ -9,6 +9,7 @@ import 'package:apli/Shared/constants.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CompanyProfile extends StatelessWidget {
   final Map company;
@@ -83,7 +84,8 @@ class CompanyProfile extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     AutoSizeText(
-                                      'Deadline: ' + company['deadline'] ?? "No Deadline",
+                                      'Deadline: ' + company['deadline'] ??
+                                          "No Deadline",
                                       maxLines: 2,
                                       style: TextStyle(
                                           color: Colors.black,
@@ -212,6 +214,7 @@ class CompanyProfile extends StatelessWidget {
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount:
                                         company['soft_skills'].length ?? 1,
@@ -241,6 +244,7 @@ class CompanyProfile extends StatelessWidget {
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount:
                                         company['tech_skills'].length ?? 1,
@@ -270,9 +274,11 @@ class CompanyProfile extends StatelessWidget {
                               subtitle: Padding(
                                 padding: const EdgeInsets.only(top: 10.0),
                                 child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
-                                    itemCount:
-                                        (company['requirements'] ?? []).length ?? 1,
+                                    itemCount: (company['requirements'] ?? [])
+                                            .length ??
+                                        1,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Text(
@@ -313,8 +319,8 @@ class CompanyProfile extends StatelessWidget {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   CompanyVideo(
-                                                      job: company,
-                                                      )));
+                                                    job: company,
+                                                  )));
                                     }),
                               ),
                             )
@@ -340,12 +346,48 @@ class CompanyVideo extends StatefulWidget {
 
 class _CompanyVideoState extends State<CompanyVideo> {
   double width, height, scale;
+  YoutubePlayerController _controller;
   final _APIService = APIService();
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
     print(result);
     return result;
+  }
+
+  Widget videoPlayer(String link) {
+    if (link.contains("https://www.youtube.com/")) {
+      _controller = YoutubePlayerController(
+        initialVideoId: YoutubePlayer.convertUrlToId(link),
+        flags: YoutubePlayerFlags(
+            autoPlay: true,
+            mute: false,
+          
+            forceHD: true,
+            loop: false,
+            disableDragSeek: true),
+      );
+      return YoutubePlayer(
+        controller: _controller,
+        showVideoProgressIndicator: true,
+        liveUIColor: basicColor,
+      );
+    }
+    return AwsomeVideoPlayer(
+                                link,
+                                playOptions: VideoPlayOptions(
+                                  aspectRatio: 1 / 1,
+                                  loop: false,
+                                  autoplay: false,
+                                ),
+                                videoStyle: VideoStyle(
+                                    videoControlBarStyle: VideoControlBarStyle(
+                                        fullscreenIcon: SizedBox(),
+                                        forwardIcon: SizedBox(),
+                                        rewindIcon: SizedBox()),
+                                    videoTopBarStyle:
+                                        VideoTopBarStyle(popIcon: Container())),
+                              );
   }
 
   Future ref() async {
@@ -384,6 +426,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
         preferredSize: Size.fromHeight(50),
       ),
       body: Container(
+        color: Colors.white,
         padding:
             EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
         child: FutureBuilder(
@@ -397,22 +440,9 @@ class _CompanyVideoState extends State<CompanyVideo> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(20),
-                        child: snapshot.data['video'] != null ? AwsomeVideoPlayer(
-                          snapshot.data['video'],
-                          playOptions: VideoPlayOptions(
-                            aspectRatio: 1 / 1,
-                            loop: false,
-                            autoplay: false,
-                          ),
-                          videoStyle: VideoStyle(
-                              videoControlBarStyle:
-                              VideoControlBarStyle(
-                                  fullscreenIcon: SizedBox(),
-                                  forwardIcon: SizedBox(),
-                                  rewindIcon: SizedBox()),
-                              videoTopBarStyle: VideoTopBarStyle(
-                                  popIcon: Container())),
-                        ) : Container(),
+                        child: snapshot.data['video'] != null
+                            ? videoPlayer(snapshot.data['video'])
+                            : Container(),
                       ),
                       SizedBox(
                         height: 20,
@@ -420,8 +450,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                         child: Text(
-                          snapshot.data['text'] ??
-                              "No Info Specified",
+                          snapshot.data['text'] ?? "No Info Specified",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                               fontSize: 18, fontWeight: FontWeight.w500),
@@ -446,8 +475,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) =>
-                                        CompanyInstructions(
+                                    builder: (context) => CompanyInstructions(
                                           job: widget.job,
                                         )));
                           }),

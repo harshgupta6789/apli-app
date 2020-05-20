@@ -157,6 +157,7 @@ class _CoursesLiveState extends State<CoursesLive>
                   .orderBy("timestamp")
                   .snapshots(),
               builder: (context, snapshot) {
+                if(snapshot.hasData)
                 return SingleChildScrollView(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -217,9 +218,17 @@ class _CoursesLiveState extends State<CoursesLive>
                             builder: (BuildContext context,
                                 AsyncSnapshot<int> snapshot2) {
                               var dateString;
+                              var dateToStart;
                               int now = DateTime.now().millisecondsSinceEpoch;
-                              int estimateTs = DateTime(2020, 5, 17, 16, 0, 0)
-                                  .millisecondsSinceEpoch;
+                              if (snapshot.data.documents[0]['timestamp'] != null) {
+                                dateToStart =
+                                  
+                                        snapshot.data.documents[0]['timestamp'].millisecondsSinceEpoch;
+                              }
+
+                              int estimateTs = dateToStart ??
+                                  DateTime(2020, 5, 17, 16, 0, 0)
+                                      .millisecondsSinceEpoch;
                               Duration remaining =
                                   Duration(milliseconds: estimateTs - now);
                               if (remaining.inDays > 0) {
@@ -329,6 +338,7 @@ class _CoursesLiveState extends State<CoursesLive>
                             child: _overView())
                       ]),
                 );
+                return Loading();
               }),
         ));
   }
