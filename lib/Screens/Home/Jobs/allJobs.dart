@@ -25,7 +25,6 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.handleJobData();
-    print(result);
     return result;
   }
 
@@ -53,11 +52,15 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == 'frozen')
+            if(snapshot.data == null)
+              return Center(
+                child: Text('Error occurred, try again later'),
+              );
+            else if (snapshot.data == 'frozen')
               return Center(
                 child: Text("Your account is set on 'freeze' by your college"),
               );
-            else if ((snapshot.data ?? []).length == 0)
+            else if ((snapshot.data ?? {}).length == 0)
               return Center(
                   child: ScrollConfiguration(
                 behavior: MyBehavior(),
@@ -112,7 +115,7 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-                          child: AllJobsList(myJobs: snapshot.data,))),
+                          child: AllJobsList(myJobs: snapshot.data['jobs'] ?? [], status: snapshot.data['profile_status'] ?? 0,))),
                 ),
               );
           } else if (snapshot.hasError)
@@ -128,7 +131,8 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
 class AllJobsList extends StatefulWidget {
 
   List<dynamic> myJobs = [];
-  AllJobsList({this.myJobs});
+  int status = 0;
+  AllJobsList({this.myJobs, this.status});
 
   @override
   _AllJobsListState createState() => _AllJobsListState();
@@ -189,6 +193,7 @@ class _AllJobsListState extends State<AllJobsList> {
                                           CompanyProfile(
                                             company: myJobs[
                                             index],
+                                            status: widget.status,
                                           )));
                             },
                             title: AutoSizeText(
@@ -227,7 +232,7 @@ class _AllJobsListState extends State<AllJobsList> {
                                       .ellipsis,
                                 ),
                                 AutoSizeText(
-                                  myJobs[index][
+                                  'Deadline: ' + myJobs[index][
                                   'deadline'] ?? "No Deadline",
                                   maxLines: 2,
                                   style: TextStyle(

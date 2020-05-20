@@ -1,7 +1,8 @@
+import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
 import 'package:apli/Services/APIService.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
@@ -11,8 +12,9 @@ import 'pdfResume.dart';
 
 class CompanyProfile extends StatelessWidget {
   final Map company;
+  final int status;
 
-  const CompanyProfile({Key key, this.company}) : super(key: key);
+  const CompanyProfile({Key key, this.company, this.status}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -312,13 +314,31 @@ class CompanyProfile extends StatelessWidget {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CompanyVideo(
-                                                    job: company,
-                                                  )));
+                                      bool videoIntro = true, resume = true;
+                                      if(company['requirements'].contains('Video Introduction')) {
+                                        String temp = decimalToBinary(status).toString();
+                                        while (temp.length != 9) {
+                                          temp = '0' + temp;
+                                        }
+                                        if(temp.substring(7, 8) != "1")
+                                          if(tempProfileStatus != true)
+                                            videoIntro = false;
+                                      }
+                                      if(company['requirements'].contains('Resume'))
+                                        if(status < 384)
+                                          resume = false;
+                                      if(!videoIntro)
+                                        showToast('Complete your video intro first!!!', context);
+                                      else if(!resume)
+                                        showToast('Complete your resume first!!!', context);
+                                      else
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompanyVideo(
+                                                      job: company,
+                                                    )));
                                     }),
                               ),
                             )
@@ -335,8 +355,9 @@ class CompanyProfile extends StatelessWidget {
 
 class CompanyVideo extends StatefulWidget {
   final Map job;
+  final int status;
 
-  CompanyVideo({Key key, this.job}) : super(key: key);
+  CompanyVideo({Key key, this.job, this.status}) : super(key: key);
 
   @override
   _CompanyVideoState createState() => _CompanyVideoState();
@@ -358,16 +379,18 @@ class _CompanyVideoState extends State<CompanyVideo> {
       _controller = YoutubePlayerController(
         initialVideoId: YoutubePlayer.convertUrlToId(link),
         flags: YoutubePlayerFlags(
-            autoPlay: true,
+            autoPlay: false,
             mute: false,
             forceHD: true,
             loop: false,
-            disableDragSeek: true),
+            disableDragSeek: false),
       );
       return YoutubePlayer(
         controller: _controller,
         showVideoProgressIndicator: true,
         liveUIColor: basicColor,
+        aspectRatio: 1 / 1,
+        bottomActions: <Widget>[],
       );
     }
     return AwsomeVideoPlayer(
@@ -421,71 +444,71 @@ class _CompanyVideoState extends State<CompanyVideo> {
             )),
         preferredSize: Size.fromHeight(50),
       ),
-      body: Container(
-        color: Colors.white,
-        padding:
-            EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
-        child: FutureBuilder(
-            future: getInfo(),
-            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.connectionState == ConnectionState.done) {
-                return ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: Column(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: snapshot.data['video'] != null
-                            ? videoPlayer(snapshot.data['video'])
-                            : Container(),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Text(
-                          snapshot.data['text'] ?? "No Info Specified",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
+      body: FutureBuilder(
+          future: getInfo(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData &&
+                snapshot.connectionState == ConnectionState.done) {
+              return ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
+                    child: Column(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: snapshot.data['video'] != null
+                              ? videoPlayer(snapshot.data['video'])
+                              : Container(),
                         ),
-                      ),
-                      SizedBox(
-                        height: height * 0.05,
-                      ),
-                      RaisedButton(
-                          color: basicColor,
-                          elevation: 0,
-                          padding: EdgeInsets.only(left: 40, right: 40),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                            side: BorderSide(color: basicColor, width: 1.2),
-                          ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                           child: Text(
-                            'PROCEED',
-                            style: TextStyle(color: Colors.white),
+                            snapshot.data['text'] ?? "No Info Specified",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.w500),
                           ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CompanyInstructions(
-                                          job: widget.job,
-                                        )));
-                          }),
-                    ],
+                        ),
+                        SizedBox(
+                          height: height * 0.05,
+                        ),
+                        RaisedButton(
+                            color: basicColor,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 40, right: 40),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              'PROCEED',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompanyInstructions(
+                                        job: widget.job,
+                                      )));
+                            }),
+                      ],
+                    ),
                   ),
-                );
-              } else if (snapshot.hasError)
-                return Center(
-                  child: Text('Error occured, try again later'),
-                );
-              else
-                return Loading();
-            }),
-      ),
+                ),
+              );
+            } else if (snapshot.hasError)
+              return Center(
+                child: Text('Error occured, try again later'),
+              );
+            else
+              return Loading();
+          }),
     );
   }
 }

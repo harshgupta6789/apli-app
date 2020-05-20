@@ -25,6 +25,7 @@ class VideoIntro extends StatefulWidget {
 }
 
 double width, height;
+bool tempProfileStatus;
 
 class _VideoIntroState extends State<VideoIntro>
     with SingleTickerProviderStateMixin {
@@ -63,6 +64,7 @@ class _VideoIntroState extends State<VideoIntro>
         setState(() {
           Status = binaryToDecimal(int.parse(temp));
           x = currentState.success;
+          tempProfileStatus = true;
         });
       });
     });
@@ -91,6 +93,8 @@ class _VideoIntroState extends State<VideoIntro>
         .collection('candidates')
         .document(email)
         .setData({'video_resume': null, 'profile_status': Status}, merge: true);
+    tempProfileStatus = false;
+
   }
 
   double _bytesTransferred(StorageTaskSnapshot snapshot) {

@@ -239,7 +239,7 @@ class APIService {
           if (frozen == true) {
             result = 'frozen';
           } else
-            result = response.data['jobs'];
+            result = response.data;
         } else
           result = -2;
       });
