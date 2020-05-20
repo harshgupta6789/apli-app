@@ -1,6 +1,4 @@
-import 'package:apli/Screens/Home/Jobs/jobQuestions.dart';
 import 'package:apli/Services/APIService.dart';
-import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:camera/camera.dart';
@@ -8,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'pdfResume.dart';
 
 class CompanyProfile extends StatelessWidget {
   final Map company;
@@ -362,7 +360,6 @@ class _CompanyVideoState extends State<CompanyVideo> {
         flags: YoutubePlayerFlags(
             autoPlay: true,
             mute: false,
-          
             forceHD: true,
             loop: false,
             disableDragSeek: true),
@@ -374,20 +371,19 @@ class _CompanyVideoState extends State<CompanyVideo> {
       );
     }
     return AwsomeVideoPlayer(
-                                link,
-                                playOptions: VideoPlayOptions(
-                                  aspectRatio: 1 / 1,
-                                  loop: false,
-                                  autoplay: false,
-                                ),
-                                videoStyle: VideoStyle(
-                                    videoControlBarStyle: VideoControlBarStyle(
-                                        fullscreenIcon: SizedBox(),
-                                        forwardIcon: SizedBox(),
-                                        rewindIcon: SizedBox()),
-                                    videoTopBarStyle:
-                                        VideoTopBarStyle(popIcon: Container())),
-                              );
+      link,
+      playOptions: VideoPlayOptions(
+        aspectRatio: 1 / 1,
+        loop: false,
+        autoplay: false,
+      ),
+      videoStyle: VideoStyle(
+          videoControlBarStyle: VideoControlBarStyle(
+              fullscreenIcon: SizedBox(),
+              forwardIcon: SizedBox(),
+              rewindIcon: SizedBox()),
+          videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
+    );
   }
 
   Future ref() async {
@@ -504,16 +500,7 @@ class CompanyInstructions extends StatefulWidget {
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
   double fontSize = 14;
-  List<CameraDescription> cameras;
-  camInit() async {
-    cameras = await availableCameras();
-  }
-
-  @override
-  void initState() {
-    camInit();
-    super.initState();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -714,69 +701,15 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                 side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
-                                'START',
+                                'NEXT',
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
-                                bool storage = false,
-                                    camera = false,
-                                    microphone = false;
-                                var storageStatus =
-                                    await Permission.storage.status;
-                                if (storageStatus == PermissionStatus.granted) {
-                                  storage = true;
-                                } else if (storageStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.storage,
-                                  ].request();
-                                  if (statuses[Permission.storage] ==
-                                      PermissionStatus.granted) {
-                                    storage = true;
-                                  }
-                                }
-                                var cameraeStatus =
-                                    await Permission.camera.status;
-                                if (cameraeStatus == PermissionStatus.granted) {
-                                  camera = true;
-                                } else if (cameraeStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.camera,
-                                  ].request();
-                                  if (statuses[Permission.camera] ==
-                                      PermissionStatus.granted) {
-                                    camera = true;
-                                  }
-                                }
-                                var microphoneStatus =
-                                    await Permission.microphone.status;
-                                if (microphoneStatus ==
-                                    PermissionStatus.granted) {
-                                  microphone = true;
-                                } else if (microphoneStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.microphone,
-                                  ].request();
-                                  if (statuses[Permission.microphone] ==
-                                      PermissionStatus.granted) {
-                                    microphone = true;
-                                  }
-                                }
-                                if (storage && camera && microphone)
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => JobQuestions(
-                                                cameras: cameras,
-                                              )));
-                                else
-                                  showToast('Permission denied', context,
-                                      color: Colors.red);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            UploadResumeScreen()));
                               }),
                         ),
                       )
