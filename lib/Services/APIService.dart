@@ -11,10 +11,11 @@ class APIService {
   Future sendProfileData(Map<dynamic, dynamic> map) async {
     try {
       int result;
+      Response response;
       await SharedPreferences.getInstance().then((value) async {
         switch (profileType) {
           case 8:
-            Response response = await Dio().post(basic_infoURL, data: {
+            response = await Dio().post(basic_infoURL, data: {
               "email": "${value.getString('email')}",
               "secret": "$passHashSecret",
               "Address": {
@@ -35,34 +36,16 @@ class APIService {
               "profile_picture": "${map['profile_picture']}",
               "roll_no": "${map['roll_no']}",
             });
-            print(response.statusCode);
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           case 7:
             {
               String eduToPass = json.encode(map);
-              print(eduToPass);
-              Response response = await Dio().post(educationURL, data: {
+              response = await Dio().post(educationURL, data: {
                 "email": "${value.getString('email')}",
                 "secret": "$passHashSecret",
                 'education': eduToPass
               });
-              if (response.statusCode == 200) {
-                var temp = response.data['success'];
-                if (temp == true) {
-                  result = 1;
-                } else
-                  result = -1;
-              } else
-                result = -2;
               break;
             }
 
@@ -89,19 +72,11 @@ class APIService {
               }
             }
             String expToPass = jsonEncode(map['experience']);
-            Response response = await Dio().post(expURL, data: {
+            response = await Dio().post(expURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
               "data": expToPass
             });
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           case 5:
@@ -125,19 +100,11 @@ class APIService {
               }
             }
             String expToPass = jsonEncode(map['project']);
-            Response response = await Dio().post(projectsURL, data: {
+            response = await Dio().post(projectsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
               "data": expToPass
             });
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           case 4:
@@ -161,19 +128,11 @@ class APIService {
               }
             }
             String expToPass = jsonEncode(map['extra_curricular']);
-            Response response = await Dio().post(extraCURL, data: {
+            response = await Dio().post(extraCURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
               "data": expToPass
             });
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           case 3:
@@ -183,36 +142,20 @@ class APIService {
                       " 00:00:00+0000";
             }
             String expToPass = jsonEncode(map['award']);
-            Response response = await Dio().post(awardsURL, data: {
+            response = await Dio().post(awardsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
               "data": expToPass
             });
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           case 2:
             String expToPass = jsonEncode(map['skill']);
-            Response response = await Dio().post(skillsURL, data: {
+            response = await Dio().post(skillsURL, data: {
               "secret": "$passHashSecret",
               "email": "${value.getString('email')}",
               "data": expToPass
             });
-            if (response.statusCode == 200) {
-              var temp = response.data['success'];
-              if (temp == true) {
-                result = 1;
-              } else
-                result = -1;
-            } else
-              result = -2;
             break;
 
           default:
@@ -220,6 +163,14 @@ class APIService {
             break;
         }
       });
+      if (response.statusCode == 200) {
+        var temp = response.data['success'];
+        if (temp == true) {
+          result = 1;
+        } else
+          result = -1;
+      } else
+        result = -2;
       return result;
     } catch (e) {
       return 0;
@@ -262,7 +213,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e.toString());
       return 0;
     }
   }
@@ -287,7 +237,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e.toString());
       return 0;
     }
   }

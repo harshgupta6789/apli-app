@@ -13,7 +13,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../HomeLoginWrapper.dart';
-import 'pdfResume.dart';
 
 class CompanyProfile extends StatelessWidget {
   final Map company;
@@ -65,7 +64,7 @@ class CompanyProfile extends StatelessWidget {
                             ListTile(
                               onTap: () {},
                               title: AutoSizeText(
-                                company['role'] ?? "Role not provided",
+                                company['role'] ?? "Role not declared",
                                 maxLines: 2,
                                 style: TextStyle(
                                     color: basicColor,
@@ -81,7 +80,7 @@ class CompanyProfile extends StatelessWidget {
                                   children: [
                                     AutoSizeText(
                                       company['location'] ??
-                                          "Location not provided",
+                                          "Location not declared",
                                       maxLines: 2,
                                       style: TextStyle(
                                           color: Colors.black,
@@ -90,7 +89,7 @@ class CompanyProfile extends StatelessWidget {
                                     ),
                                     AutoSizeText(
                                       'Deadline: ' + company['deadline'] ??
-                                          "No Deadline",
+                                          "No Deadline yet",
                                       maxLines: 2,
                                       style: TextStyle(
                                           color: Colors.black,
@@ -100,13 +99,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              // trailing: IconButton(
-                              //   icon: Icon(Icons.bookmark,
-                              //       color: Color(0xffebd234)),
-                              //   onPressed: () {},
-                              // )),
                             ),
-                            company['ctc']!=null?ListTile(
+                            company['ctc'] != null ? ListTile(
                               dense: true,
                               title: RichText(
                                 text: TextSpan(
@@ -125,15 +119,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              // title: AutoSizeText(
-                              //   // company['ctc']!=null?"Job's CTC" + company['ctc']??,
-                              //   maxLines: 2,
-                              //   style: TextStyle(
-                              //       fontSize: 18, fontWeight: FontWeight.w600),
-                              //   overflow: TextOverflow.ellipsis,
-                              // ),
-                            ):null,
-                            company['notice_period']!=null?ListTile(
+                            ) : SizedBox(),
+                            company['notice_period'] != null ? ListTile(
                               dense: true,
                               title: RichText(
                                 text: TextSpan(
@@ -153,8 +140,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ):null,
-                            company['description']!=null?ListTile(
+                            ) : SizedBox(),
+                            company['description']!= null ? ListTile(
                               title: AutoSizeText(
                                 "Role Description : ",
                                 maxLines: 2,
@@ -180,8 +167,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ):null,
-                           company['key_resp']!=null? ListTile(
+                            ) : SizedBox(),
+                           company['key_resp']!= null ? ListTile(
                               title: AutoSizeText(
                                 "Key Responsibilities : ",
                                 maxLines: 2,
@@ -207,8 +194,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ):null,
-                            company['soft_skills']!=null?ListTile(
+                            ) : SizedBox(),
+                            company['soft_skills'] != null?ListTile(
                               title: AutoSizeText(
                                 "Soft Skills : ",
                                 maxLines: 2,
@@ -226,8 +213,7 @@ class CompanyProfile extends StatelessWidget {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Text(
-                                        company['soft_skills'][index] ??
-                                            "Not Specified",
+                                        company['soft_skills'][index] ?? "None",
                                         //maxLines: 4,
                                         style: TextStyle(
                                             fontSize: 15,
@@ -237,8 +223,8 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ):null,
-                             company['tech_skills']!=null?ListTile(
+                            ) : SizedBox(),
+                             company['tech_skills'] != null ? ListTile(
                               title: AutoSizeText(
                                 "Technical Skills  : ",
                                 maxLines: 2,
@@ -256,8 +242,7 @@ class CompanyProfile extends StatelessWidget {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return Text(
-                                        company['tech_skills'][index] ??
-                                            "Not Specified",
+                                        company['tech_skills'][index] ?? "None",
                                         //maxLines: 4,
                                         style: TextStyle(
                                             fontSize: 15,
@@ -267,8 +252,8 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ):null,
-                             company['requirements']!=null?ListTile(
+                            ) : SizedBox(),
+                             company['requirements']!= null ? ListTile(
                               title: AutoSizeText(
                                 "Requirements : ",
                                 maxLines: 2,
@@ -288,7 +273,7 @@ class CompanyProfile extends StatelessWidget {
                                         (BuildContext context, int index) {
                                       return Text(
                                         company['requirements'][index] ??
-                                            "Not Specified",
+                                            "No specific requirements",
                                         //maxLines: 4,
                                         style: TextStyle(
                                             fontSize: 15,
@@ -298,7 +283,7 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ):null,
+                            ) : SizedBox(),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -330,17 +315,20 @@ class CompanyProfile extends StatelessWidget {
                                         if (temp.substring(7, 8) !=
                                             "1") if (tempProfileStatus != true)
                                           videoIntro = false;
+                                        if (tempProfileStatus == false) {
+                                          videoIntro = false;
+                                        }
                                       }
                                       if (company['requirements']
                                           .contains('Resume')) if (status < 384)
                                         resume = false;
                                       if (!videoIntro)
                                         showToast(
-                                            'Complete your video intro first!!!',
+                                            'Complete your video intro first !!!',
                                             context);
                                       else if (!resume)
                                         showToast(
-                                            'Complete your resume first!!!',
+                                            'Complete your resume first !!!',
                                             context);
                                       else
                                         Navigator.push(
@@ -382,64 +370,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
-    print(result);
     return result;
-  }
-
-  void submitJob() async {
-    setState(() {
-      isPressed = true;
-    });
-    if (widget.job['requirements'].contains("Video Interview")) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CompanyInstructions(
-                    job: widget.job,
-                  )));
-    } else {
-      showToast("Submitting Job", context, duration: 5);
-      dynamic result = await _APIService.applyJob(widget.job['job_id']);
-      print(result);
-      if (result == -2 || result == 0 || result == -1) {
-        AwesomeDialog(
-          dismissOnTouchOutside: false,
-          context: context,
-          animType: AnimType.TOPSLIDE,
-          dialogType: DialogType.ERROR,
-          tittle: "Error Submitting Job",
-          desc: "Please Try Again!" ?? "This is Body",
-          btnOkIcon: Icons.check_circle,
-          btnCancelText: "Cancel",
-          btnOkText: "Take Me!",
-          btnOkColor: basicColor,
-          btnOkOnPress: () {
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => Wrapper()),
-                (Route<dynamic> route) => false);
-          },
-        ).show();
-      } else {
-        AwesomeDialog(
-          dismissOnTouchOutside: false,
-          context: context,
-          animType: AnimType.TOPSLIDE,
-          dialogType: DialogType.SUCCES,
-          tittle: "Succesfully Submitted Job",
-          desc: "Thank You For Applying!" ?? "This is Body",
-          btnOkIcon: Icons.check_circle,
-          btnCancelText: "Cancel",
-          btnOkText: "Okay!",
-          btnOkColor: basicColor,
-          btnOkOnPress: () {
-            Navigator.pop(context);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => Wrapper()),
-                (Route<dynamic> route) => false);
-          },
-        ).show();
-      }
-    }
   }
 
   Widget videoPlayer(String link) {
@@ -475,11 +406,6 @@ class _CompanyVideoState extends State<CompanyVideo> {
               rewindIcon: SizedBox()),
           videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
     );
-  }
-
-  Future ref() async {
-    setState(() {});
-    return null;
   }
 
   @override
@@ -532,7 +458,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                 borderRadius: BorderRadius.circular(20),
                                 child: snapshot.data['video'] != null
                                     ? videoPlayer(snapshot.data['video'])
-                                    : Container(),
+                                    : SizedBox(),
                               ),
                               SizedBox(
                                 height: 20,
@@ -542,7 +468,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                     const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                 child: Text(
                                   snapshot.data['text'] ?? "No Info Specified",
-                                  textAlign: TextAlign.left,
+                                  textAlign: TextAlign.justify,
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500),
@@ -563,11 +489,36 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                 child: Text(
                                   widget.job['requirements']
                                           .contains("Video Interview")
-                                      ? 'PROCEED'
+                                      ? 'PROCEED TO VIDEO INTERVIEW'
                                       : 'SUBMIT',
                                   style: TextStyle(color: Colors.white),
                                 ),
-                                onPressed: isPressed ? null : () => submitJob(),
+                                onPressed: () async {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  if (widget.job['requirements'].contains("Video Interview")) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CompanyInstructions(
+                                              job: widget.job,
+                                            )));
+                                  } else {
+                                    showToast("Submitting Job", context, duration: 5);
+                                    dynamic result = await _APIService.applyJob(widget.job['job_id']);
+                                    if(result == 1) {
+                                      showToast('Your application has been submitted', context);
+                                    } else {
+                                      showToast('Error occurred, try again later', context);
+                                    }
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  }
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                },
                               ),
                             ],
                           ),
@@ -576,7 +527,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
                     );
                   } else if (snapshot.hasError)
                     return Center(
-                      child: Text('Error occured, try again later'),
+                      child: Text('Error occurred, try again later'),
                     );
                   else
                     return Loading();

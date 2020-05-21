@@ -137,7 +137,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
           });
         } catch (e) {
           print(e.toString());
-          setState(() {
+          if(mounted) setState(() {
             error = true;
           });
         }

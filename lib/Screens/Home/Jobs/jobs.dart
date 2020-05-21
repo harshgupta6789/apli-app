@@ -130,7 +130,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                       textAlign: TextAlign.center,
                       text: TextSpan(
                           text:
-                              "I know you are interested in job \nbut first build your ",
+                              "We know you are interested in jobs \nbut first build your ",
                           style: TextStyle(color: Colors.black, fontSize: 18),
                           children: [
                             TextSpan(

@@ -64,7 +64,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
             setState(() {
               loading = true;
             });
-            showToast('Verified Successfully', context, gravity: Toast.TOP);
+            showToast('Verified Successfully', context);
             await Future.delayed(Duration(seconds: 1));
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) => Register(phoneNo)));
@@ -74,8 +74,7 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
           },
           verificationFailed: (AuthException exceptio) {
             print(exceptio.message);
-            showToast('Unexpected error', context,
-                gravity: Toast.TOP, color: Colors.red);
+            showToast('Unexpected error', context, color: Colors.red);
             setState(() {
               loading = false;
             });
@@ -318,7 +317,6 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
                                           .checkConnectivity();
                                       if (net == ConnectivityResult.none) {
                                         showToast('No Internet', context,
-                                            gravity: Toast.TOP,
                                             color: Colors.red);
                                       } else {
                                         setState(() {

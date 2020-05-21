@@ -200,84 +200,66 @@ class _CameraState extends State<Camera> {
     if (isRecordingStopped)
       switch (x) {
         case currentState.none:
-          return Container(
-            color: Colors.black,
-            height: height,
-            width: width,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: MaterialButton(
-                  //       color: Colors.white,
-                  //       child: Text(
-                  //         "Play Video",
-                  //         style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600),
-                  //       ),
-                  //       onPressed: () {
-                  //         if (path != null) {
-                  //           File temp = File(path);
-
-                  //           Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //               builder: (BuildContext context) => VideoApp(
-                  //                     videoUrl: null,
-                  //                     title: "My Resume",
-                  //                     isCourse: false,
-                  //                     file: temp,
-                  //                   )));
-                  //         } else {
-                  //           Navigator.pop(context);
-                  //         }
-                  //       }),
-                  // ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MaterialButton(
-                              color: Colors.white,
-                              child: Text(
-                                "Upload",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () {
-                                if (path != null) {
-                                  videoPicker(path);
-                                }
-                              }),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: MaterialButton(
-                              color: Colors.white,
-                              child: Text(
-                                "Re-Take",
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              onPressed: () {
-                                final dir =
-                                    Directory('storage/emulated/0/apli/');
-                                try {
-                                  dir.deleteSync(recursive: true);
-                                  setState(() {
-                                    isRecordingStopped = false;
-                                  });
-                                } on Exception catch (e) {
-                                  print(e);
-                                  setState(() {
-                                    isRecordingStopped = false;
-                                  });
-                                }
-                              }),
-                        ),
-                      ])
-                ]),
+          return WillPopScope(
+            onWillPop: () {
+              deleteDirectory();
+              Navigator.pop(context);
+            },
+            child: Container(
+              color: Colors.black,
+              height: height,
+              width: width,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MaterialButton(
+                                color: Colors.white,
+                                child: Text(
+                                  "Upload",
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                onPressed: () {
+                                  if (path != null) {
+                                    videoPicker(path);
+                                  }
+                                }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: MaterialButton(
+                                color: Colors.white,
+                                child: Text(
+                                  "Re-Take",
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                onPressed: () {
+                                  final dir =
+                                      Directory('storage/emulated/0/apli/');
+                                  try {
+                                    dir.deleteSync(recursive: true);
+                                    setState(() {
+                                      isRecordingStopped = false;
+                                    });
+                                  } on Exception catch (e) {
+                                    print(e);
+                                    setState(() {
+                                      isRecordingStopped = false;
+                                    });
+                                  }
+                                }),
+                          ),
+                        ])
+                  ]),
+            ),
           );
           break;
         case currentState.uploading:
@@ -285,47 +267,57 @@ class _CameraState extends State<Camera> {
             onWillPop: () {
               return null;
             },
-            child: Container(
-              color: Colors.white,
-              height: height,
-              width: width,
-              child: Column(
+            child: Scaffold(
+              body: Center(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    StreamBuilder<StorageTaskEvent>(
-                        stream: uploadTask.events,
-                        builder: (context,
-                            AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                          if (asyncSnapshot.hasData) {
-                            final StorageTaskEvent event = asyncSnapshot.data;
-                            final StorageTaskSnapshot snapshot = event.snapshot;
-                            return Column(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(20.0),
-                                  child: CircularProgressIndicator(
-                                    value: _bytesTransferred(snapshot),
-                                  ),
-                                ),
-                                Padding(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.cloud_upload),
+                        StreamBuilder<StorageTaskEvent>(
+                            stream: uploadTask.events,
+                            builder: (context,
+                                AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                              if (asyncSnapshot.hasData) {
+                                final StorageTaskEvent event = asyncSnapshot.data;
+                                final StorageTaskSnapshot snapshot = event.snapshot;
+
+                                return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                      '${_bytesProgress(snapshot)} % Uploaded...',
+                                      ' Uploading  ${_bytesProgress(snapshot)} %',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 15,
                                         color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                       )),
-                                ),
-                              ],
-                            );
-                          }
-                          return Align(
-                              child: Text("Uploading Your Resume!..."));
-                        }),
-                  ]),
-            ),
+                                );
+                              }
+                              return Container();
+                            }),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          width * 0.1, height * 0.04, width * 0.1, height*0.04),
+                      child: Text(
+                        'Wait while we upload your Video Intro',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            letterSpacing: 1.2),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
           );
           break;
         case currentState.success:
@@ -491,13 +483,20 @@ class _CameraState extends State<Camera> {
     if (!controller.value.isInitialized) {
       return Container();
     }
-    return Scaffold(
-      key: _scaffoldKey,
-      extendBody: true,
-      bottomNavigationBar:
-          isRecordingStopped ? SizedBox() : _buildBottomNavigationBar(),
-      body: Stack(
-        children: <Widget>[_buildCameraPreview(), _options()],
+    return WillPopScope(
+      onWillPop: () {
+        if(_isRecording)
+          return null;
+        else Navigator.pop(context);
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        extendBody: true,
+        bottomNavigationBar:
+            isRecordingStopped ? SizedBox() : _buildBottomNavigationBar(),
+        body: Stack(
+          children: <Widget>[_buildCameraPreview(), _options()],
+        ),
       ),
     );
   }

@@ -5,9 +5,15 @@ import 'package:toast/toast.dart';
 
 showToast(String msg, BuildContext context,
     {int duration, Color color, int gravity}) {
- Toast.show(msg, context,
-      backgroundColor: basicColor, duration: duration ?? 3);
-
+  Toast.show(msg, context,
+      backgroundColor: color ?? basicColor,
+      duration: duration ?? 3,
+//      border: Border.all(
+//        color: color ?? basicColor,
+//      ),
+      textColor: Colors.white,
+      backgroundRadius: 4,
+      gravity: gravity ?? Toast.BOTTOM);
 }
 
 bool validateEmail(String value) {

@@ -1,6 +1,7 @@
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -52,7 +53,7 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            if(snapshot.data == null)
+            if (snapshot.data == null)
               return Center(
                 child: Text('Error occurred, try again later'),
               );
@@ -115,7 +116,10 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Padding(
                           padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-                          child: AllJobsList(myJobs: snapshot.data['jobs'] ?? [], status: snapshot.data['profile_status'] ?? 0,))),
+                          child: AllJobsList(
+                            myJobs: snapshot.data['jobs'] ?? [],
+                            status: snapshot.data['profile_status'] ?? 0,
+                          ))),
                 ),
               );
           } else if (snapshot.hasError)
@@ -129,7 +133,6 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
 }
 
 class AllJobsList extends StatefulWidget {
-
   List<dynamic> myJobs = [];
   int status = 0;
   AllJobsList({this.myJobs, this.status});
@@ -139,14 +142,13 @@ class AllJobsList extends StatefulWidget {
 }
 
 class _AllJobsListState extends State<AllJobsList> {
-
   double width, height, scale;
   List<dynamic> myJobs;
   int count = 15;
 
   @override
   void initState() {
-    if(mounted)
+    if (mounted)
       setState(() {
         myJobs = widget.myJobs;
       });
@@ -162,103 +164,106 @@ class _AllJobsListState extends State<AllJobsList> {
     } else {
       scale = 0.7;
     }
+    int length = (myJobs.length < count) ? myJobs.length : count;
     return ListView.builder(
         shrinkWrap: true,
-        itemCount: myJobs.length,
+        itemCount: length + 1,
         physics: ScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          return Container(
-            padding: EdgeInsets.only(bottom: 1),
-            child: Card(
-                elevation: 0.2,
-                shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.circular(7.0),
-                    side: BorderSide(
-                        color: Colors.black54)),
-                child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: 10 * scale,
-                            bottom: 13 * scale),
-                        child: ListTile(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CompanyProfile(
-                                            company: myJobs[
-                                            index],
-                                            status: widget.status,
-                                          )));
-                            },
-                            title: AutoSizeText(
-                              myJobs[index]
-                              ['role'] ??
-                                  "Role not provided",
-                              maxLines: 2,
-                              style: TextStyle(
-                                  color: basicColor,
-                                  fontSize: 18 * scale,
-                                  fontWeight:
-                                  FontWeight.w500),
-                              overflow:
-                              TextOverflow.ellipsis,
+          return index != length
+              ? Container(
+                  padding: EdgeInsets.only(bottom: 1),
+                  child: Card(
+                      elevation: 0.2,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(7.0),
+                          side: BorderSide(color: Colors.black54)),
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10 * scale, bottom: 13 * scale),
+                              child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CompanyProfile(
+                                                  company: myJobs[index],
+                                                  status: widget.status,
+                                                )));
+                                  },
+                                  title: AutoSizeText(
+                                    myJobs[index]['role'] ??
+                                        "Role not provided",
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        color: basicColor,
+                                        fontSize: 18 * scale,
+                                        fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  subtitle: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      AutoSizeText(
+                                        myJobs[index]['location'] ??
+                                            "Location not provided",
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12 * scale,
+                                            fontWeight: FontWeight.w500),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      AutoSizeText(
+                                        'Deadline: ' +
+                                                myJobs[index]['deadline'] ??
+                                            "No Deadline",
+                                        maxLines: 2,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 12 * scale,
+                                            fontWeight: FontWeight.w500),
+                                        overflow: TextOverflow.ellipsis,
+                                      )
+                                    ],
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(
+                                      EvaIcons.bookmarkOutline,
+                                    ),
+                                    onPressed: () async {},
+                                  )),
                             ),
-                            subtitle: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.start,
-                              crossAxisAlignment:
-                              CrossAxisAlignment
-                                  .start,
-                              children: [
-                                AutoSizeText(
-                                  myJobs[index]
-                                  ['location'] ??
-                                      "Location not provided",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize:
-                                      12 * scale,
-                                      fontWeight:
-                                      FontWeight
-                                          .w500),
-                                  overflow: TextOverflow
-                                      .ellipsis,
-                                ),
-                                AutoSizeText(
-                                  'Deadline: ' + myJobs[index][
-                                  'deadline'] ?? "No Deadline",
-                                  maxLines: 2,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize:
-                                      12 * scale,
-                                      fontWeight:
-                                      FontWeight
-                                          .w500),
-                                  overflow: TextOverflow
-                                      .ellipsis,
-                                )
-                              ],
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.bookmark,
-                                  color:
-                                  Color(0xffebd234)),
-                              onPressed: () async {
-
-                              },
-                            )),
+                          ])),
+                )
+              : length == myJobs.length
+                  ? Container()
+                  : FlatButton(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            'Load More',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Icon(
+                            Icons.refresh,
+                            size: 15,
+                          )
+                        ],
                       ),
-                    ])),
-          );
+                      onPressed: () {
+                        setState(() {
+                          count = count + 10;
+                        });
+                      },
+                    );
         });
   }
 }
-

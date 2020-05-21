@@ -198,7 +198,6 @@ class _JobQuestionsState extends State<JobQuestions> {
         if (mounted)
           setState(() {
             seconds = seconds + 1;
-            print('abcd');
             if (seconds >= 60) {
               stopVideoRecording();
             }
