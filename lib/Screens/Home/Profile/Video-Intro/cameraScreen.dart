@@ -286,7 +286,7 @@ class _CameraState extends State<Camera> {
               return null;
             },
             child: Container(
-              color: Colors.black,
+              color: Colors.white,
               height: height,
               width: width,
               child: Column(
@@ -314,7 +314,7 @@ class _CameraState extends State<Camera> {
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 18,
-                                        color: Colors.white,
+                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
                                       )),
                                 ),

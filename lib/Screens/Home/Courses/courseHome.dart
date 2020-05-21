@@ -113,6 +113,7 @@ class _CourseMainState extends State<CourseMain> {
                                                               .documents[index]
                                                               .documentID,
                                                           email: 'user',
+                                                          didEnd: snapshot.data.documents[index]['ended']?? false,
                                                           imageUrl: snapshot
                                                                       .data
                                                                       .documents[

@@ -16,13 +16,15 @@ class CoursesLive extends StatefulWidget {
   final String email;
   final String imageUrl;
   final String title;
+  final bool didEnd;
 
   const CoursesLive(
       {Key key,
       @required this.documentId,
       @required this.email,
       this.imageUrl,
-      this.title})
+      this.title,
+      this.didEnd})
       : super(key: key);
 
   @override
@@ -157,187 +159,220 @@ class _CoursesLiveState extends State<CoursesLive>
                   .orderBy("timestamp")
                   .snapshots(),
               builder: (context, snapshot) {
-                if(snapshot.hasData)
-                return SingleChildScrollView(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: height * 0.02,
-                              left: orientation == Orientation.portrait
-                                  ? width * 0.05
-                                  : 100,
-                              right: orientation == Orientation.portrait
-                                  ? width * 0.05
-                                  : 100),
-                          child: Center(
-                            child: Stack(
-                              alignment: Alignment.centerLeft,
-                              children: <Widget>[
-                                SizedBox(
-                                    width: double.infinity,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: widget.imageUrl == null
-                                          ? Image.asset(
-                                              "Assets/Images/course.png",
-                                              fit: BoxFit.cover,
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl: widget.imageUrl,
-                                              placeholder: (context, url) =>
-                                                  Loading(),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      Icon(Icons.error),
-                                            ),
-                                    ))
-                              ],
+                if (snapshot.hasData)
+                  return SingleChildScrollView(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: height * 0.02,
+                                left: orientation == Orientation.portrait
+                                    ? width * 0.05
+                                    : 100,
+                                right: orientation == Orientation.portrait
+                                    ? width * 0.05
+                                    : 100),
+                            child: Center(
+                              child: Stack(
+                                alignment: Alignment.centerLeft,
+                                children: <Widget>[
+                                  SizedBox(
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: widget.imageUrl == null
+                                            ? Image.asset(
+                                                "Assets/Images/course.png",
+                                                fit: BoxFit.cover,
+                                              )
+                                            : CachedNetworkImage(
+                                                imageUrl: widget.imageUrl,
+                                                placeholder: (context, url) =>
+                                                    Loading(),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
+                                      ))
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: orientation == Orientation.portrait
-                                  ? 30
-                                  : 100,
-                              top: 20.0,
-                              bottom: 20),
-                          child: Text(widget.title ?? "No Title Specified",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 18)),
-                        ),
-                        StreamBuilder(
-                            stream:
-                                Stream.periodic(Duration(seconds: 1), (i) => i),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<int> snapshot2) {
-                              var dateString;
-                              var dateToStart;
-                              int now = DateTime.now().millisecondsSinceEpoch;
-                              if (snapshot.data.documents[0]['timestamp'] != null) {
-                                dateToStart =
-                                  
-                                        snapshot.data.documents[0]['timestamp'].millisecondsSinceEpoch;
-                              }
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: orientation == Orientation.portrait
+                                    ? 30
+                                    : 100,
+                                top: 20.0,
+                                bottom: 10),
+                            child: Text(widget.title ?? "No Title Specified",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18)),
+                          ),
+                          widget.didEnd
+                              ? Padding(
+                                padding: const EdgeInsets.only(top:10.0),
+                                child: Align(
+                                    child: Text("Live Webinar Has Ended!",
+                                    textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w700,
+                                            
+                                            fontSize: 18)),
+                                  ),
+                              )
+                              : StreamBuilder(
+                                  stream: Stream.periodic(
+                                      Duration(seconds: 1), (i) => i),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<int> snapshot2) {
+                                    var dateString;
+                                    var dateToStart;
+                                    int now =
+                                        DateTime.now().millisecondsSinceEpoch;
+                                    if (snapshot.data.documents[0]
+                                            ['timestamp'] !=
+                                        null) {
+                                      dateToStart = snapshot
+                                          .data
+                                          .documents[0]['timestamp']
+                                          .millisecondsSinceEpoch;
+                                    }
 
-                              int estimateTs = dateToStart ??
-                                  DateTime(2020, 5, 17, 16, 0, 0)
-                                      .millisecondsSinceEpoch;
-                              Duration remaining =
-                                  Duration(milliseconds: estimateTs - now);
-                              if (remaining.inDays > 0) {
-                                if (remaining.inDays == 1) {
-                                  dateString =
-                                      remaining.inDays.toString() + ' day';
-                                } else
-                                  dateString =
-                                      remaining.inDays.toString() + ' days';
-                              } else {
-                                if (remaining.inHours > 0) {
-                                  if (remaining.inHours == 1)
-                                    dateString =
-                                        remaining.inHours.toString() + ' hour';
-                                  else
-                                    dateString =
-                                        remaining.inHours.toString() + ' hours';
-                                } else if (remaining.inMinutes >
-                                    0) if (remaining.inMinutes == 1)
-                                  dateString =
-                                      remaining.inMinutes.toString() + ' min';
-                                else
-                                  dateString =
-                                      remaining.inMinutes.toString() + ' mins';
-                                else if (remaining.inSeconds == 1)
-                                  dateString =
-                                      remaining.inSeconds.toString() + ' sec';
-                                else
-                                  dateString =
-                                      remaining.inSeconds.toString() + ' sec';
-                              }
-                              if (remaining.isNegative) {
-                                return Column(
-                                  children: <Widget>[
-                                    Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(top: 20.0),
-                                        child: RaisedButton(
+                                    int estimateTs = dateToStart ??
+                                        DateTime(2020, 5, 17, 16, 0, 0)
+                                            .millisecondsSinceEpoch;
+                                    Duration remaining = Duration(
+                                        milliseconds: estimateTs - now);
+                                    if (remaining.inDays > 0) {
+                                      if (remaining.inDays == 1) {
+                                        dateString =
+                                            remaining.inDays.toString() +
+                                                ' day';
+                                      } else
+                                        dateString =
+                                            remaining.inDays.toString() +
+                                                ' days';
+                                    } else {
+                                      if (remaining.inHours > 0) {
+                                        if (remaining.inHours == 1)
+                                          dateString =
+                                              remaining.inHours.toString() +
+                                                  ' hour';
+                                        else
+                                          dateString =
+                                              remaining.inHours.toString() +
+                                                  ' hours';
+                                      } else if (remaining.inMinutes >
+                                          0) if (remaining.inMinutes == 1)
+                                        dateString =
+                                            remaining.inMinutes.toString() +
+                                                ' min';
+                                      else
+                                        dateString =
+                                            remaining.inMinutes.toString() +
+                                                ' mins';
+                                      else if (remaining.inSeconds == 1)
+                                        dateString =
+                                            remaining.inSeconds.toString() +
+                                                ' sec';
+                                      else
+                                        dateString =
+                                            remaining.inSeconds.toString() +
+                                                ' sec';
+                                    }
+                                    if (remaining.isNegative) {
+                                      return Column(
+                                        children: <Widget>[
+                                          Center(
+                                            child: Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 20.0),
+                                              child: RaisedButton(
+                                                  color: Colors.transparent,
+                                                  elevation: 0,
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0),
+                                                    side: BorderSide(
+                                                        color: basicColor,
+                                                        width: 1.2),
+                                                  ),
+                                                  child: Text(
+                                                    'Start',
+                                                    style: TextStyle(
+                                                        color: basicColor),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder:
+                                                                (context) =>
+                                                                    CourseLive(
+                                                                      link: snapshot
+                                                                          .data
+                                                                          .documents[0]['link'],
+                                                                    )));
+                                                  }),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                    return Column(
+                                      children: <Widget>[
+                                        Container(
+                                          height: 50,
+                                          color: Colors.greenAccent
+                                              .withOpacity(0.3),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                              dateString + ' remaining ' ?? ""),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 20.0),
+                                          child: RaisedButton(
+                                            disabledColor: Colors.grey,
                                             color: Colors.transparent,
                                             elevation: 0,
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(5.0),
                                               side: BorderSide(
-                                                  color: basicColor,
+                                                  color: Colors.grey,
                                                   width: 1.2),
                                             ),
                                             child: Text(
                                               'Start',
-                                              style:
-                                                  TextStyle(color: basicColor),
+                                              style: TextStyle(
+                                                  color: Colors.white),
                                             ),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CourseLive(
-                                                            link: snapshot.data
-                                                                    .documents[
-                                                                0]['link'],
-                                                          )));
-                                            }),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
-                              return Column(
-                                children: <Widget>[
-                                  Container(
-                                    height: 50,
-                                    color: Colors.greenAccent.withOpacity(0.3),
-                                    alignment: Alignment.center,
-                                    child:
-                                        Text(dateString + ' remaining ' ?? ""),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 20.0),
-                                    child: RaisedButton(
-                                      disabledColor: Colors.grey,
-                                      color: Colors.transparent,
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(5.0),
-                                        side: BorderSide(
-                                            color: Colors.grey, width: 1.2),
-                                      ),
-                                      child: Text(
-                                        'Start',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              );
-                            }),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: orientation == Orientation.portrait
-                                    ? 30
-                                    : 100,
-                                top: 20.0,
-                                bottom: 20,
-                                right: 20.0),
-                            child: _overView())
-                      ]),
-                );
+                                          ),
+                                        )
+                                      ],
+                                    );
+                                  }),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: orientation == Orientation.portrait
+                                      ? 30
+                                      : 100,
+                                  top: 10.0,
+                                  bottom: 20,
+                                  right: 20.0),
+                              child: _overView())
+                        ]),
+                  );
                 return Loading();
               }),
         ));

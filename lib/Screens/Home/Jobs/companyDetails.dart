@@ -106,7 +106,7 @@ class CompanyProfile extends StatelessWidget {
                               //   onPressed: () {},
                               // )),
                             ),
-                            ListTile(
+                            company['ctc']!=null?ListTile(
                               dense: true,
                               title: RichText(
                                 text: TextSpan(
@@ -132,8 +132,8 @@ class CompanyProfile extends StatelessWidget {
                               //       fontSize: 18, fontWeight: FontWeight.w600),
                               //   overflow: TextOverflow.ellipsis,
                               // ),
-                            ),
-                            ListTile(
+                            ):null,
+                            company['notice_period']!=null?ListTile(
                               dense: true,
                               title: RichText(
                                 text: TextSpan(
@@ -153,8 +153,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ),
-                            ListTile(
+                            ):null,
+                            company['description']!=null?ListTile(
                               title: AutoSizeText(
                                 "Role Description : ",
                                 maxLines: 2,
@@ -180,8 +180,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ),
-                            ListTile(
+                            ):null,
+                           company['key_resp']!=null? ListTile(
                               title: AutoSizeText(
                                 "Key Responsibilities : ",
                                 maxLines: 2,
@@ -207,8 +207,8 @@ class CompanyProfile extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                            ),
-                            ListTile(
+                            ):null,
+                            company['soft_skills']!=null?ListTile(
                               title: AutoSizeText(
                                 "Soft Skills : ",
                                 maxLines: 2,
@@ -237,8 +237,8 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ),
-                            ListTile(
+                            ):null,
+                             company['tech_skills']!=null?ListTile(
                               title: AutoSizeText(
                                 "Technical Skills  : ",
                                 maxLines: 2,
@@ -267,8 +267,8 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ),
-                            ListTile(
+                            ):null,
+                             company['requirements']!=null?ListTile(
                               title: AutoSizeText(
                                 "Requirements : ",
                                 maxLines: 2,
@@ -298,7 +298,7 @@ class CompanyProfile extends StatelessWidget {
                                       );
                                     }),
                               ),
-                            ),
+                            ):null,
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../HomeLoginWrapper.dart';
+
 enum currentState { none, uploading, success, failure }
 
 class JobQuestions extends StatefulWidget {
@@ -80,6 +82,41 @@ class _JobQuestionsState extends State<JobQuestions> {
     return round;
     // return double.parse(res.toStringAsFixed(2)) /
     //     double.parse(res2.toStringAsFixed(2));
+  }
+
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text(
+              'Leaving the window will mark the job as incomplete',
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  stopVideoRecording();
+                  Navigator.of(context).pop(true);
+                 Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Wrapper()),
+                (Route<dynamic> route) => false);
+                },
+                child: new Text(
+                  'Yes',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text(
+                  'No',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        )) ??
+        false;
   }
 
   Future<void> _uploadFile(File file, String filename) async {
@@ -262,80 +299,83 @@ class _JobQuestionsState extends State<JobQuestions> {
         ),
       );
     }
-    return SafeArea(
-      child: Scaffold(
-          body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                  width * 0.1, height * 0.07, width * 0.1, 0),
-              child: Text(
-                '1. Tell me about your educationTell me about your education',
-                style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 14,
-                    letterSpacing: 1.2),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: AspectRatio(
-                    aspectRatio: controller.value.aspectRatio,
-                    child: CameraPreview(controller),
-                  ),
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(Icons.timer),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '00:' +
-                      ((seconds.toString().length == 1)
-                          ? ('0' + seconds.toString())
-                          : (seconds.toString())),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 5,
-            ),
-            Container(
-                padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1),
-                child: MyLinearProgressIndicator(
-                  milliSeconds: 60000,
-                )),
-            SizedBox(
-              height: 5,
-            ),
-            RaisedButton(
-                color: Colors.red,
-                elevation: 0,
-                padding: EdgeInsets.only(left: 30, right: 30),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(width: 0),
-                ),
+    return WillPopScope(
+          onWillPop:()=> _onWillPop(),
+          child: SafeArea(
+        child: Scaffold(
+            body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    width * 0.1, height * 0.07, width * 0.1, 0),
                 child: Text(
-                  'DONE',
-                  style: TextStyle(color: Colors.white),
+                  '1. Tell me about your educationTell me about your education',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                      letterSpacing: 1.2),
+                  textAlign: TextAlign.left,
                 ),
-                onPressed: () {
-                  stopVideoRecording();
-                }),
-          ],
-        ),
-      )),
+              ),
+              Padding(
+                  padding: EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: AspectRatio(
+                      aspectRatio: controller.value.aspectRatio,
+                      child: CameraPreview(controller),
+                    ),
+                  )),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.timer),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    '00:' +
+                        ((seconds.toString().length == 1)
+                            ? ('0' + seconds.toString())
+                            : (seconds.toString())),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Container(
+                  padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1),
+                  child: MyLinearProgressIndicator(
+                    milliSeconds: 60000,
+                  )),
+              SizedBox(
+                height: 5,
+              ),
+              RaisedButton(
+                  color: Colors.red,
+                  elevation: 0,
+                  padding: EdgeInsets.only(left: 30, right: 30),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    side: BorderSide(width: 0),
+                  ),
+                  child: Text(
+                    'DONE',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    stopVideoRecording();
+                  }),
+            ],
+          ),
+        )),
+      ),
     );
   }
 }
