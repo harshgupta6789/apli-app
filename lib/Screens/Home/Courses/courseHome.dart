@@ -148,9 +148,6 @@ class _CourseMainState extends State<CourseMain> {
                                                                   .data
                                                                   .documents[
                                                               index]['image'],
-                                                          placeholder:
-                                                              (context, url) =>
-                                                                  Loading(),
                                                           errorWidget: (context,
                                                                   url, error) =>
                                                               Icon(Icons.error),
@@ -184,8 +181,14 @@ class _CourseMainState extends State<CourseMain> {
                   ),
                 ),
               );
-            } else
+            } else if (snapshot.data == null) {
               return Loading();
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('No Courses Available Right Now!'),
+              );
+            }
+            return Loading();
           }),
     );
   }

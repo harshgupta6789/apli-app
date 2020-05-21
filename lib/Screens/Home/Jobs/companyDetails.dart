@@ -1,13 +1,18 @@
+import 'package:apli/Screens/Home/Jobs/jobQuestions.dart';
 import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../../HomeLoginWrapper.dart';
 import 'pdfResume.dart';
 
 class CompanyProfile extends StatelessWidget {
@@ -315,22 +320,28 @@ class CompanyProfile extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       bool videoIntro = true, resume = true;
-                                      if(company['requirements'].contains('Video Introduction')) {
-                                        String temp = decimalToBinary(status).toString();
+                                      if (company['requirements']
+                                          .contains('Video Introduction')) {
+                                        String temp =
+                                            decimalToBinary(status).toString();
                                         while (temp.length != 9) {
                                           temp = '0' + temp;
                                         }
-                                        if(temp.substring(7, 8) != "1")
-                                          if(tempProfileStatus != true)
-                                            videoIntro = false;
+                                        if (temp.substring(7, 8) !=
+                                            "1") if (tempProfileStatus != true)
+                                          videoIntro = false;
                                       }
-                                      if(company['requirements'].contains('Resume'))
-                                        if(status < 384)
-                                          resume = false;
-                                      if(!videoIntro)
-                                        showToast('Complete your video intro first!!!', context);
-                                      else if(!resume)
-                                        showToast('Complete your resume first!!!', context);
+                                      if (company['requirements']
+                                          .contains('Resume')) if (status < 384)
+                                        resume = false;
+                                      if (!videoIntro)
+                                        showToast(
+                                            'Complete your video intro first!!!',
+                                            context);
+                                      else if (!resume)
+                                        showToast(
+                                            'Complete your resume first!!!',
+                                            context);
                                       else
                                         Navigator.push(
                                             context,
@@ -366,12 +377,69 @@ class CompanyVideo extends StatefulWidget {
 class _CompanyVideoState extends State<CompanyVideo> {
   double width, height, scale;
   YoutubePlayerController _controller;
+  bool loading = false, isPressed = false;
   final _APIService = APIService();
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
     print(result);
     return result;
+  }
+
+  void submitJob() async {
+    setState(() {
+      isPressed = true;
+    });
+    if (widget.job['requirements'].contains("Video Interview")) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => CompanyInstructions(
+                    job: widget.job,
+                  )));
+    } else {
+      showToast("Submitting Job", context, duration: 5);
+      dynamic result = await _APIService.applyJob(widget.job['job_id']);
+      print(result);
+      if (result == -2 || result == 0 || result == -1) {
+        AwesomeDialog(
+          dismissOnTouchOutside: false,
+          context: context,
+          animType: AnimType.TOPSLIDE,
+          dialogType: DialogType.ERROR,
+          tittle: "Error Submitting Job",
+          desc: "Please Try Again!" ?? "This is Body",
+          btnOkIcon: Icons.check_circle,
+          btnCancelText: "Cancel",
+          btnOkText: "Take Me!",
+          btnOkColor: basicColor,
+          btnOkOnPress: () {
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Wrapper()),
+                (Route<dynamic> route) => false);
+          },
+        ).show();
+      } else {
+        AwesomeDialog(
+          dismissOnTouchOutside: false,
+          context: context,
+          animType: AnimType.TOPSLIDE,
+          dialogType: DialogType.SUCCES,
+          tittle: "Succesfully Submitted Job",
+          desc: "Thank You For Applying!" ?? "This is Body",
+          btnOkIcon: Icons.check_circle,
+          btnCancelText: "Cancel",
+          btnOkText: "Okay!",
+          btnOkColor: basicColor,
+          btnOkOnPress: () {
+            Navigator.pop(context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => Wrapper()),
+                (Route<dynamic> route) => false);
+          },
+        ).show();
+      }
+    }
   }
 
   Widget videoPlayer(String link) {
@@ -418,98 +486,102 @@ class _CompanyVideoState extends State<CompanyVideo> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-            backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: EdgeInsets.only(bottom: 5.0),
-              child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
+    return loading
+        ? Loading()
+        : Scaffold(
+            appBar: PreferredSize(
+              child: AppBar(
+                  backgroundColor: basicColor,
+                  automaticallyImplyLeading: false,
+                  leading: Padding(
+                    padding: EdgeInsets.only(bottom: 5.0),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.pop(context)),
                   ),
-                  onPressed: () => Navigator.pop(context)),
+                  title: Padding(
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: Text(
+                      "Apply",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              preferredSize: Size.fromHeight(50),
             ),
-            title: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                "Apply",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-            )),
-        preferredSize: Size.fromHeight(50),
-      ),
-      body: FutureBuilder(
-          future: getInfo(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              return ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1, top: 15),
-                    child: Column(
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: snapshot.data['video'] != null
-                              ? videoPlayer(snapshot.data['video'])
-                              : Container(),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          child: Text(
-                            snapshot.data['text'] ?? "No Info Specified",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w500),
+            body: FutureBuilder(
+                future: getInfo(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    return ScrollConfiguration(
+                      behavior: MyBehavior(),
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              left: width * 0.1, right: width * 0.1, top: 15),
+                          child: Column(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: snapshot.data['video'] != null
+                                    ? videoPlayer(snapshot.data['video'])
+                                    : Container(),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                                child: Text(
+                                  snapshot.data['text'] ?? "No Info Specified",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                              SizedBox(
+                                height: height * 0.05,
+                              ),
+                              RaisedButton(
+                                color: basicColor,
+                                elevation: 0,
+                                padding: EdgeInsets.only(left: 40, right: 40),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  side:
+                                      BorderSide(color: basicColor, width: 1.2),
+                                ),
+                                child: Text(
+                                  widget.job['requirements']
+                                          .contains("Video Interview")
+                                      ? 'PROCEED'
+                                      : 'SUBMIT',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                onPressed: isPressed ? null : () => submitJob(),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(
-                          height: height * 0.05,
-                        ),
-                        RaisedButton(
-                            color: basicColor,
-                            elevation: 0,
-                            padding: EdgeInsets.only(left: 40, right: 40),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                              side: BorderSide(color: basicColor, width: 1.2),
-                            ),
-                            child: Text(
-                              'PROCEED',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CompanyInstructions(
-                                        job: widget.job,
-                                      )));
-                            }),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            } else if (snapshot.hasError)
-              return Center(
-                child: Text('Error occured, try again later'),
-              );
-            else
-              return Loading();
-          }),
-    );
+                      ),
+                    );
+                  } else if (snapshot.hasError)
+                    return Center(
+                      child: Text('Error occured, try again later'),
+                    );
+                  else
+                    return Loading();
+                }),
+          );
   }
 }
 
@@ -523,7 +595,16 @@ class CompanyInstructions extends StatefulWidget {
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
   double fontSize = 14;
-  
+  List<CameraDescription> cameras;
+  camInit() async {
+    cameras = await availableCameras();
+  }
+
+  @override
+  void initState() {
+    camInit();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -724,15 +805,69 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                 side: BorderSide(color: basicColor, width: 1.2),
                               ),
                               child: Text(
-                                'NEXT',
+                                'START',
                                 style: TextStyle(color: Colors.white),
                               ),
                               onPressed: () async {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            UploadResumeScreen()));
+                                bool storage = false,
+                                    camera = false,
+                                    microphone = false;
+                                var storageStatus =
+                                    await Permission.storage.status;
+                                if (storageStatus == PermissionStatus.granted) {
+                                  storage = true;
+                                } else if (storageStatus ==
+                                    PermissionStatus.undetermined) {
+                                  Map<Permission, PermissionStatus> statuses =
+                                      await [
+                                    Permission.storage,
+                                  ].request();
+                                  if (statuses[Permission.storage] ==
+                                      PermissionStatus.granted) {
+                                    storage = true;
+                                  }
+                                }
+                                var cameraeStatus =
+                                    await Permission.camera.status;
+                                if (cameraeStatus == PermissionStatus.granted) {
+                                  camera = true;
+                                } else if (cameraeStatus ==
+                                    PermissionStatus.undetermined) {
+                                  Map<Permission, PermissionStatus> statuses =
+                                      await [
+                                    Permission.camera,
+                                  ].request();
+                                  if (statuses[Permission.camera] ==
+                                      PermissionStatus.granted) {
+                                    camera = true;
+                                  }
+                                }
+                                var microphoneStatus =
+                                    await Permission.microphone.status;
+                                if (microphoneStatus ==
+                                    PermissionStatus.granted) {
+                                  microphone = true;
+                                } else if (microphoneStatus ==
+                                    PermissionStatus.undetermined) {
+                                  Map<Permission, PermissionStatus> statuses =
+                                      await [
+                                    Permission.microphone,
+                                  ].request();
+                                  if (statuses[Permission.microphone] ==
+                                      PermissionStatus.granted) {
+                                    microphone = true;
+                                  }
+                                }
+                                if (storage && camera && microphone)
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => JobQuestions(
+                                                cameras: cameras,
+                                              )));
+                                else
+                                  showToast('Permission denied', context,
+                                      color: Colors.red);
                               }),
                         ),
                       )
