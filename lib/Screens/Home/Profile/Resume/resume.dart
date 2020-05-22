@@ -292,68 +292,68 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                           color: Colors.black,
                                                         ),
                                                         onPressed: () async {
-                                                          var status =
+                                                          bool allowed = false;
+                                                          var storageStatus =
                                                               await Permission
                                                                   .storage
                                                                   .status;
-                                                          switch (status) {
-                                                            case PermissionStatus
-                                                                .undetermined:
-                                                              Map<Permission,
-                                                                      PermissionStatus>
-                                                                  statuses =
-                                                                  await [
-                                                                Permission
-                                                                    .storage,
-                                                              ].request();
-                                                              break;
-                                                            case PermissionStatus
-                                                                .granted:
-                                                              if (pdfUrl !=
-                                                                  null) {
-                                                                String
-                                                                    firebaseUrl =
-                                                                    pdfUrl.replaceAll(
-                                                                        pdfUrltoBeReplaced,
-                                                                        pdfUrltoreplacedWith);
-                                                                firebaseUrl =
-                                                                    firebaseUrl
-                                                                        .replaceAll(
-                                                                            "%40",
-                                                                            "@");
-                                                                print(
-                                                                    firebaseUrl);
+                                                          if (storageStatus ==
+                                                              PermissionStatus
+                                                                  .granted) {
+                                                            allowed = true;
+                                                          } else if (storageStatus ==
+                                                              PermissionStatus
+                                                                  .undetermined) {
+                                                            Map<Permission,
+                                                                    PermissionStatus>
+                                                                statuses =
+                                                                await [
+                                                              Permission
+                                                                  .storage,
+                                                            ].request();
+                                                            if (statuses[Permission
+                                                                    .storage] ==
+                                                                PermissionStatus
+                                                                    .granted) {
+                                                              allowed = true;
+                                                            }
+                                                          }
+                                                          if (allowed) {
+                                                            if (pdfUrl !=
+                                                                null) {
+                                                              String
+                                                                  firebaseUrl =
+                                                                  pdfUrl.replaceAll(
+                                                                      pdfUrltoBeReplaced,
+                                                                      pdfUrltoreplacedWith);
+                                                              firebaseUrl =
+                                                                  firebaseUrl
+                                                                      .replaceAll(
+                                                                          "%40",
+                                                                          "@");
+                                                              print(
+                                                                  firebaseUrl);
 
-                                                                var ref = FirebaseStorage
-                                                                    .instance
-                                                                    .getReferenceFromUrl(
-                                                                        firebaseUrl);
+                                                              var ref = FirebaseStorage
+                                                                  .instance
+                                                                  .getReferenceFromUrl(
+                                                                      firebaseUrl);
 
-                                                                await ref.then(
-                                                                    (reference) {
-                                                                  showToast(
-                                                                      "Downloading",
-                                                                      context,
-                                                                      duration:
-                                                                          1);
-                                                                  downloadFile(
-                                                                      reference);
-                                                                });
-                                                              } else {
+                                                              await ref.then(
+                                                                  (reference) {
                                                                 showToast(
-                                                                    "Please Complete Your Profile First!",
-                                                                    context);
-                                                              }
-                                                              break;
-                                                            case PermissionStatus
-                                                                .denied:
-                                                              break;
-                                                            case PermissionStatus
-                                                                .restricted:
-                                                              break;
-                                                            case PermissionStatus
-                                                                .permanentlyDenied:
-                                                              break;
+                                                                    "Downloading",
+                                                                    context,
+                                                                    duration:
+                                                                        1);
+                                                                downloadFile(
+                                                                    reference);
+                                                              });
+                                                            } else {
+                                                              showToast(
+                                                                  "Please Complete Your Profile First!",
+                                                                  context);
+                                                            }
                                                           }
                                                         }),
                                                   )

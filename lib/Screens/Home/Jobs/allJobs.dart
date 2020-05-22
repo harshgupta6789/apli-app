@@ -25,7 +25,7 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
       new GlobalKey<RefreshIndicatorState>();
 
   Future<dynamic> getInfo() async {
-    dynamic result = await _APIService.handleJobData();
+    dynamic result = await _APIService.getJobs();
     return result;
   }
 

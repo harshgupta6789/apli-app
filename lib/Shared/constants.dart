@@ -31,6 +31,8 @@ const String skillsURL = "https://dev.apli.ai/candidate/api/skills";
 const String educationURL = "https://dev.apli.ai/candidate/api/education";
 const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
 const String allJobsURL = "https://dev.apli.ai/candidate/api/get_jobs";
+const String appliedJobsURL = "https://dev.apli.ai/candidate/api/get_submitted_jobs";
+const String incompleteJobsURL = "https://dev.apli.ai/candidate/api/get_pending_jobs";
 const String companyIntroURL =
     "https://dev.apli.ai/candidate/api/get_company_info";
 const String jobApplyURL =
