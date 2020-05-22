@@ -7,6 +7,7 @@ import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:async/async.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -22,16 +23,20 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _currentTab = 1;
   SharedPreferences prefs;
+  Future _prevent;
   final _APIService = APIService();
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.handleJobData();
-    print(result);
+
     return result;
   }
 
   Future ref() async {
-    setState(() {});
+    setState(() {
+      _prevent = getInfo();
+    });
     return null;
   }
 
@@ -46,6 +51,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
+    _prevent = getInfo();
     getTab();
     _tabController =
         TabController(length: 3, vsync: this, initialIndex: _currentTab);
@@ -137,7 +143,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
         preferredSize: Size.fromHeight(100),
       ),
       body: FutureBuilder(
-          future: getInfo(),
+          future: _prevent,
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
@@ -198,7 +204,19 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                 ));
               else
                 return TabBarView(
-                  children: [AppliedJobs(), AllJobs(), IncompleteJobs()],
+                  children: [
+                    AppliedJobs(
+                        allJobs: snapshot.data['submitted_jobs'],
+                        status: snapshot.data['profile_status']),
+                    AllJobs(
+                      allJobs: snapshot.data['all_jobs'],
+                      status: snapshot.data['profile_status'],
+                    ),
+                    IncompleteJobs(
+                      allJobs: snapshot.data['pending_jobs'],
+                      status: snapshot.data['profile_status'],
+                    )
+                  ],
                   controller: _tabController,
                 );
             } else if (snapshot.hasError)

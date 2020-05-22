@@ -11,6 +11,10 @@ import '../../HomeLoginWrapper.dart';
 import 'companyDetails.dart';
 
 class AllJobs extends StatefulWidget {
+  final List allJobs;
+  final int status;
+
+  const AllJobs({Key key, this.allJobs, this.status}) : super(key: key);
   @override
   _AllJobsState createState() => _AllJobsState();
 }
@@ -21,18 +25,6 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
 
   double height, width, scale;
   final _APIService = APIService();
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
-
-  Future<dynamic> getInfo() async {
-    dynamic result = await _APIService.getJobs();
-    return result;
-  }
-
-  Future ref() async {
-    setState(() {});
-    return null;
-  }
 
   @override
   void initState() {
@@ -48,223 +40,94 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
     } else {
       scale = 0.7;
     }
-    return FutureBuilder<Object>(
-        future: getInfo(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == null)
-              return Center(
-                child: Text('Error occurred, try again later'),
-              );
-            else if (snapshot.data == 'frozen')
-              return Center(
-                child: Text("Your account is set on 'freeze' by your college"),
-              );
-            else if ((snapshot.data ?? {}).length == 0)
-              return Center(
-                  child: ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: RefreshIndicator(
-                  onRefresh: ref,
-                  child: SingleChildScrollView(
-                    physics: AlwaysScrollableScrollPhysics(),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Image.asset("Assets/Images/job.png"),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                                text:
-                                    "I know you are interested in job \nbut first build your ",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 18),
-                                children: [
-                                  TextSpan(
-                                      text: "Profile",
-                                      style: TextStyle(color: basicColor),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          Navigator.of(context)
-                                              .pushAndRemoveUntil(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          Wrapper(
-                                                            currentTab: 3,
-                                                          )),
-                                                  (Route<dynamic> route) =>
-                                                      false);
-                                          setState(() {});
-                                        }),
-                                ]),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ));
-            else
-              return ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: RefreshIndicator(
-                  onRefresh: ref,
-                  child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-                          child: AllJobsList(
-                            myJobs: snapshot.data['jobs'] ?? [],
-                            status: snapshot.data['profile_status'] ?? 0,
-                          ))),
-                ),
-              );
-          } else if (snapshot.hasError)
-            return Center(
-              child: Text('Error occured, try again later'),
-            );
-          else
-            return Loading();
-        });
-  }
-}
 
-class AllJobsList extends StatefulWidget {
-  List<dynamic> myJobs = [];
-  int status = 0;
-  AllJobsList({this.myJobs, this.status});
-
-  @override
-  _AllJobsListState createState() => _AllJobsListState();
-}
-
-class _AllJobsListState extends State<AllJobsList> {
-  double width, height, scale;
-  List<dynamic> myJobs;
-  int count = 15;
-
-  @override
-  void initState() {
-    if (mounted)
-      setState(() {
-        myJobs = widget.myJobs;
-      });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    if (width >= 360) {
-      scale = 1.0;
-    } else {
-      scale = 0.7;
-    }
-    int length = (myJobs.length < count) ? myJobs.length : count;
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: length + 1,
-        physics: ScrollPhysics(),
-        itemBuilder: (BuildContext context, int index) {
-          return index != length
-              ? Container(
-                  padding: EdgeInsets.only(bottom: 1),
-                  child: Card(
-                      elevation: 0.2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7.0),
-                          side: BorderSide(color: Colors.black54)),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 10 * scale, bottom: 13 * scale),
-                              child: ListTile(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CompanyProfile(
-                                                  isApplied: false,
-                                                  company: myJobs[index],
-                                                  status: widget.status,
-                                                )));
-                                  },
-                                  title: AutoSizeText(
-                                    myJobs[index]['role'] ??
-                                        "Role not provided",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                        color: basicColor,
-                                        fontSize: 18 * scale,
-                                        fontWeight: FontWeight.w500),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      AutoSizeText(
-                                        myJobs[index]['location'] ??
-                                            "Location not provided",
+    return ScrollConfiguration(
+      behavior: MyBehavior(),
+      child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.allJobs.length,
+                  physics: ScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      padding: EdgeInsets.only(bottom: 1),
+                      child: Card(
+                          elevation: 0.2,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7.0),
+                              side: BorderSide(color: Colors.black54)),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10 * scale, bottom: 13 * scale),
+                                  child: ListTile(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    CompanyProfile(
+                                                      isApplied: false,
+                                                      company:
+                                                          widget.allJobs[index],
+                                                      status: widget.status,
+                                                    )));
+                                      },
+                                      title: AutoSizeText(
+                                        widget.allJobs[index]['role'] ??
+                                            "Role not provided",
                                         maxLines: 2,
                                         style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12 * scale,
+                                            color: basicColor,
+                                            fontSize: 18 * scale,
                                             fontWeight: FontWeight.w500),
                                         overflow: TextOverflow.ellipsis,
                                       ),
-                                      AutoSizeText(
-                                        'Deadline: ' +
-                                                myJobs[index]['deadline'] ??
-                                            "No Deadline",
-                                        maxLines: 2,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12 * scale,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
-                                  ),
-                                  trailing: IconButton(
-                                    icon: Icon(
-                                      EvaIcons.bookmarkOutline,
-                                    ),
-                                    onPressed: () async {},
-                                  )),
-                            ),
-                          ])),
-                )
-              : length == myJobs.length
-                  ? Container()
-                  : FlatButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Load More',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Icon(
-                            Icons.refresh,
-                            size: 15,
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          count = count + 10;
-                        });
-                      },
+                                      subtitle: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          AutoSizeText(
+                                            widget.allJobs[index]['location'] ??
+                                                "Location not provided",
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12 * scale,
+                                                fontWeight: FontWeight.w500),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          AutoSizeText(
+                                            'Deadline: ' +
+                                                    widget.allJobs[index]
+                                                        ['deadline'] ??
+                                                "No Deadline",
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12 * scale,
+                                                fontWeight: FontWeight.w500),
+                                            overflow: TextOverflow.ellipsis,
+                                          )
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                        icon: Icon(
+                                          EvaIcons.bookmarkOutline,
+                                        ),
+                                        onPressed: () async {},
+                                      )),
+                                ),
+                              ])),
                     );
-        });
+                  }))),
+    );
   }
 }
