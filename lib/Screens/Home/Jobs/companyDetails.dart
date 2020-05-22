@@ -100,190 +100,224 @@ class CompanyProfile extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            company['ctc'] != null ? ListTile(
-                              dense: true,
-                              title: RichText(
-                                text: TextSpan(
-                                  text: 'Jobs CTC : ',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: company['ctc'] ?? "Not Specified",
+                            company['ctc'] != null
+                                ? ListTile(
+                                    dense: true,
+                                    title: RichText(
+                                      text: TextSpan(
+                                        text: 'Jobs CTC : ',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ) : SizedBox(),
-                            company['notice_period'] != null ? ListTile(
-                              dense: true,
-                              title: RichText(
-                                text: TextSpan(
-                                  text: 'Notice Period : ',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: company['notice_period'] ??
-                                            "Not Specified",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            ) : SizedBox(),
-                            company['description']!= null ? ListTile(
-                              title: AutoSizeText(
-                                "Role Description : ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      company['description'] ?? "Not Specified",
-                                      maxLines: 4,
-                                      style: TextStyle(
-                                          fontSize: 15,
                                           color: Colors.black,
-                                          fontWeight: FontWeight.w500),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: company['ctc'] ??
+                                                  "Not Specified",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['notice_period'] != null
+                                ? ListTile(
+                                    dense: true,
+                                    title: RichText(
+                                      text: TextSpan(
+                                        text: 'Notice Period : ',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: company['notice_period'] ??
+                                                  "Not Specified",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w400,
+                                              )),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['description'] != null
+                                ? ListTile(
+                                    title: AutoSizeText(
+                                      "Role Description : ",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ) : SizedBox(),
-                           company['key_resp']!= null ? ListTile(
-                              title: AutoSizeText(
-                                "Key Responsibilities : ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      company['key_resp'] ?? "Not Specified",
-                                      // maxLines: 4,
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            company['description'] ??
+                                                "Not Specified",
+                                            maxLines: 4,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['key_resp'] != null
+                                ? ListTile(
+                                    title: AutoSizeText(
+                                      "Key Responsibilities : ",
+                                      maxLines: 2,
                                       style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w500),
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
                                       overflow: TextOverflow.ellipsis,
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ) : SizedBox(),
-                            company['soft_skills'] != null?ListTile(
-                              title: AutoSizeText(
-                                "Soft Skills : ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount:
-                                        company['soft_skills'].length ?? 1,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Text(
-                                        company['soft_skills'][index] ?? "None",
-                                        //maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      );
-                                    }),
-                              ),
-                            ) : SizedBox(),
-                             company['tech_skills'] != null ? ListTile(
-                              title: AutoSizeText(
-                                "Technical Skills  : ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount:
-                                        company['tech_skills'].length ?? 1,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Text(
-                                        company['tech_skills'][index] ?? "None",
-                                        //maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      );
-                                    }),
-                              ),
-                            ) : SizedBox(),
-                             company['requirements']!= null ? ListTile(
-                              title: AutoSizeText(
-                                "Requirements : ",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 10.0),
-                                child: ListView.builder(
-                                    physics: NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: (company['requirements'] ?? [])
-                                            .length ??
-                                        1,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Text(
-                                        company['requirements'][index] ??
-                                            "No specific requirements",
-                                        //maxLines: 4,
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500),
-                                        overflow: TextOverflow.ellipsis,
-                                      );
-                                    }),
-                              ),
-                            ) : SizedBox(),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            company['key_resp'] ??
+                                                "Not Specified",
+                                            // maxLines: 4,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w500),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['soft_skills'] != null
+                                ? ListTile(
+                                    title: AutoSizeText(
+                                      "Soft Skills : ",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              company['soft_skills'].length ??
+                                                  1,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Text(
+                                              company['soft_skills'][index] ??
+                                                  "None",
+                                              //maxLines: 4,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          }),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['tech_skills'] != null
+                                ? ListTile(
+                                    title: AutoSizeText(
+                                      "Technical Skills  : ",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              company['tech_skills'].length ??
+                                                  1,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Text(
+                                              company['tech_skills'][index] ??
+                                                  "None",
+                                              //maxLines: 4,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          }),
+                                    ),
+                                  )
+                                : SizedBox(),
+                            company['requirements'] != null
+                                ? ListTile(
+                                    title: AutoSizeText(
+                                      "Requirements : ",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: ListView.builder(
+                                          physics:
+                                              NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount:
+                                              (company['requirements'] ?? [])
+                                                      .length ??
+                                                  1,
+                                          itemBuilder: (BuildContext context,
+                                              int index) {
+                                            return Text(
+                                              company['requirements'][index] ??
+                                                  "No specific requirements",
+                                              //maxLines: 4,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w500),
+                                              overflow: TextOverflow.ellipsis,
+                                            );
+                                          }),
+                                    ),
+                                  )
+                                : SizedBox(),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Padding(
@@ -370,6 +404,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
+    print(result);
     return result;
   }
 
@@ -497,20 +532,28 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                   setState(() {
                                     loading = true;
                                   });
-                                  if (widget.job['requirements'].contains("Video Interview")) {
+                                  if (widget.job['requirements']
+                                      .contains("Video Interview")) {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => CompanyInstructions(
-                                              job: widget.job,
-                                            )));
+                                            builder: (context) =>
+                                                CompanyInstructions(
+                                                  job: widget.job,
+                                                )));
                                   } else {
-                                    showToast("Submitting Job", context, duration: 5);
-                                    dynamic result = await _APIService.applyJob(widget.job['job_id']);
-                                    if(result == 1) {
-                                      showToast('Your application has been submitted', context);
+                                    showToast("Submitting Job", context,
+                                        duration: 5);
+                                    dynamic result = await _APIService.applyJob(
+                                        widget.job['job_id']);
+                                    if (result == 1) {
+                                      showToast(
+                                          'Your application has been submitted',
+                                          context);
                                     } else {
-                                      showToast('Error occurred, try again later', context);
+                                      showToast(
+                                          'Error occurred, try again later',
+                                          context);
                                     }
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -529,8 +572,12 @@ class _CompanyVideoState extends State<CompanyVideo> {
                     return Center(
                       child: Text('Error occurred, try again later'),
                     );
-                  else
-                    return Loading();
+                  else if (snapshot.data == null) {
+                    return Center(
+                      child: Text('Error occurred, try again later'),
+                    );
+                  }
+                  return Loading();
                 }),
           );
   }

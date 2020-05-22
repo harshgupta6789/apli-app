@@ -217,17 +217,21 @@ class _CoursesLiveState extends State<CoursesLive>
                           ),
                           widget.didEnd
                               ? Padding(
-                                padding: const EdgeInsets.only(top:10.0),
-                                child: Align(
-                                    child: Text("Live Webinar Has Ended!",
-                                    textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w700,
-                                            
-                                            fontSize: 18)),
+                                  padding: const EdgeInsets.only(top: 10.0),
+                                  child: Align(
+                                    child: Container(
+                                      height: 50,
+                                      color: Colors.redAccent.withOpacity(0.3),
+                                      alignment: Alignment.center,
+                                      child: Text("Live Webinar Has Ended!",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 18)),
+                                    ),
                                   ),
-                              )
+                                )
                               : StreamBuilder(
                                   stream: Stream.periodic(
                                       Duration(seconds: 1), (i) => i),
@@ -247,8 +251,8 @@ class _CoursesLiveState extends State<CoursesLive>
                                     }
 
                                     int estimateTs = dateToStart ??
-                                        DateTime(2020, 5, 17, 16, 0, 0)
-                                            .millisecondsSinceEpoch;
+                                        DateTime.now().millisecondsSinceEpoch -
+                                            100;
                                     Duration remaining = Duration(
                                         milliseconds: estimateTs - now);
                                     if (remaining.inDays > 0) {

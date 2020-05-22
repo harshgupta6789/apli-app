@@ -196,7 +196,7 @@ class APIService {
       });
       return result;
     } catch (e) {
-      return 0;
+      return;
     }
   }
 
@@ -213,7 +213,7 @@ class APIService {
       });
       return result;
     } catch (e) {
-      return 0;
+      return;
     }
   }
 
@@ -237,7 +237,7 @@ class APIService {
       });
       return result;
     } catch (e) {
-      return 0;
+      return;
     }
   }
 }
