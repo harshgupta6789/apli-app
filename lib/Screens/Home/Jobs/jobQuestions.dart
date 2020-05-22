@@ -97,9 +97,9 @@ class _JobQuestionsState extends State<JobQuestions> {
                 onPressed: () {
                   stopVideoRecording();
                   Navigator.of(context).pop(true);
-                 Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => Wrapper()),
-                (Route<dynamic> route) => false);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => Wrapper()),
+                      (Route<dynamic> route) => false);
                 },
                 child: new Text(
                   'Yes',
@@ -270,7 +270,7 @@ class _JobQuestionsState extends State<JobQuestions> {
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.04, width * 0.1, height*0.04),
+                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
                 child: Text(
                   '1. Tell me about your education',
                   style: TextStyle(
@@ -283,7 +283,10 @@ class _JobQuestionsState extends State<JobQuestions> {
               RaisedButton(
                   color: Colors.grey,
                   elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30 ,),
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
                     side: BorderSide(width: 0),
@@ -299,8 +302,8 @@ class _JobQuestionsState extends State<JobQuestions> {
       );
     }
     return WillPopScope(
-          onWillPop:()=> _onWillPop(),
-          child: SafeArea(
+      onWillPop: () => _onWillPop(),
+      child: SafeArea(
         child: Scaffold(
             body: SingleChildScrollView(
           child: Column(
@@ -318,7 +321,8 @@ class _JobQuestionsState extends State<JobQuestions> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
+                  padding:
+                      EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10),
                     child: AspectRatio(
@@ -349,7 +353,8 @@ class _JobQuestionsState extends State<JobQuestions> {
                 height: 5,
               ),
               Container(
-                  padding: EdgeInsets.only(left: width * 0.1, right: width * 0.1),
+                  padding:
+                      EdgeInsets.only(left: width * 0.1, right: width * 0.1),
                   child: MyLinearProgressIndicator(
                     milliSeconds: 60000,
                   )),

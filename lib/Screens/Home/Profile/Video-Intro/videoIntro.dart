@@ -94,7 +94,6 @@ class _VideoIntroState extends State<VideoIntro>
         .document(email)
         .setData({'video_resume': null, 'profile_status': Status}, merge: true);
     tempProfileStatus = false;
-
   }
 
   double _bytesTransferred(StorageTaskSnapshot snapshot) {
@@ -146,9 +145,10 @@ class _VideoIntroState extends State<VideoIntro>
           });
         } catch (e) {
           print(e.toString());
-          if(mounted)setState(() {
-            error = true;
-          });
+          if (mounted)
+            setState(() {
+              error = true;
+            });
         }
       }
     });
@@ -302,12 +302,14 @@ class _VideoIntroState extends State<VideoIntro>
                             side: BorderSide(color: basicColor, width: 1.5),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 5.0),
                             child: Text(
                               'Upload From Gallery',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: basicColor, fontWeight: FontWeight.bold),
+                                  color: basicColor,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           onPressed: () {
@@ -342,13 +344,17 @@ class _VideoIntroState extends State<VideoIntro>
                               ),
                             ),
                             onPressed: () async {
-                              bool storage = false, camera = false, microphone = false;
-                              var storageStatus = await Permission.storage.status;
-                              if(storageStatus == PermissionStatus.granted) {
+                              bool storage = false,
+                                  camera = false,
+                                  microphone = false;
+                              var storageStatus =
+                                  await Permission.storage.status;
+                              if (storageStatus == PermissionStatus.granted) {
                                 storage = true;
-                              } else if(storageStatus == PermissionStatus.undetermined) {
+                              } else if (storageStatus ==
+                                  PermissionStatus.undetermined) {
                                 Map<Permission, PermissionStatus> statuses =
-                                await [
+                                    await [
                                   Permission.storage,
                                 ].request();
                                 if (statuses[Permission.storage] ==
@@ -356,12 +362,14 @@ class _VideoIntroState extends State<VideoIntro>
                                   storage = true;
                                 }
                               }
-                              var cameraeStatus = await Permission.camera.status;
-                              if(cameraeStatus == PermissionStatus.granted) {
+                              var cameraeStatus =
+                                  await Permission.camera.status;
+                              if (cameraeStatus == PermissionStatus.granted) {
                                 camera = true;
-                              } else if(cameraeStatus == PermissionStatus.undetermined) {
+                              } else if (cameraeStatus ==
+                                  PermissionStatus.undetermined) {
                                 Map<Permission, PermissionStatus> statuses =
-                                await [
+                                    await [
                                   Permission.camera,
                                 ].request();
                                 if (statuses[Permission.camera] ==
@@ -369,12 +377,15 @@ class _VideoIntroState extends State<VideoIntro>
                                   camera = true;
                                 }
                               }
-                              var microphoneStatus = await Permission.microphone.status;
-                              if(microphoneStatus == PermissionStatus.granted) {
+                              var microphoneStatus =
+                                  await Permission.microphone.status;
+                              if (microphoneStatus ==
+                                  PermissionStatus.granted) {
                                 microphone = true;
-                              } else if(microphoneStatus == PermissionStatus.undetermined) {
+                              } else if (microphoneStatus ==
+                                  PermissionStatus.undetermined) {
                                 Map<Permission, PermissionStatus> statuses =
-                                await [
+                                    await [
                                   Permission.microphone,
                                 ].request();
                                 if (statuses[Permission.microphone] ==
@@ -382,21 +393,20 @@ class _VideoIntroState extends State<VideoIntro>
                                   microphone = true;
                                 }
                               }
-                              if(storage && camera && microphone) {
-                                urlFromCamera =
-                                await Navigator.push(
+                              if (storage && camera && microphone) {
+                                urlFromCamera = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Camera(
-                                        cameras: cameras,
-                                        status: Status,
-                                      )),
+                                            cameras: cameras,
+                                            status: Status,
+                                          )),
                                 );
                                 print(urlFromCamera);
                                 if (urlFromCamera != null) {}
-                              }
-                              else
-                                showToast('Permission denied', context, color: Colors.red);
+                              } else
+                                showToast('Permission denied', context,
+                                    color: Colors.red);
                             }),
                         alignment: Alignment.center,
                       ),
@@ -417,7 +427,9 @@ class _VideoIntroState extends State<VideoIntro>
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 40,),
+              SizedBox(
+                height: 40,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -449,7 +461,7 @@ class _VideoIntroState extends State<VideoIntro>
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.04, width * 0.1, height*0.04),
+                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
                 child: Text(
                   'Wait while we upload your Video Intro',
                   style: TextStyle(
@@ -483,7 +495,8 @@ class _VideoIntroState extends State<VideoIntro>
                             fullscreenIcon: SizedBox(),
                             forwardIcon: SizedBox(),
                             rewindIcon: SizedBox()),
-                        videoTopBarStyle: VideoTopBarStyle(popIcon: Container())),
+                        videoTopBarStyle:
+                            VideoTopBarStyle(popIcon: Container())),
                   ),
                 ),
                 Icon(
@@ -552,7 +565,8 @@ class _VideoIntroState extends State<VideoIntro>
                                 ),
                               ),
                               FlatButton(
-                                onPressed: () => Navigator.of(context).pop(false),
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
                                 child: new Text(
                                   'No',
                                   style: TextStyle(color: Colors.black),

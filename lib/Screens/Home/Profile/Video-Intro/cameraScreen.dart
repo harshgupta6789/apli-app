@@ -264,61 +264,63 @@ class _CameraState extends State<Camera> {
           break;
         case currentState.uploading:
           return WillPopScope(
-            onWillPop: () {
-              return null;
-            },
-            child: Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.cloud_upload),
-                        StreamBuilder<StorageTaskEvent>(
-                            stream: uploadTask.events,
-                            builder: (context,
-                                AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                              if (asyncSnapshot.hasData) {
-                                final StorageTaskEvent event = asyncSnapshot.data;
-                                final StorageTaskSnapshot snapshot = event.snapshot;
+              onWillPop: () {
+                return null;
+              },
+              child: Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload),
+                          StreamBuilder<StorageTaskEvent>(
+                              stream: uploadTask.events,
+                              builder: (context,
+                                  AsyncSnapshot<StorageTaskEvent>
+                                      asyncSnapshot) {
+                                if (asyncSnapshot.hasData) {
+                                  final StorageTaskEvent event =
+                                      asyncSnapshot.data;
+                                  final StorageTaskSnapshot snapshot =
+                                      event.snapshot;
 
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      ' Uploading  ${_bytesProgress(snapshot)} %',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                );
-                              }
-                              return Container();
-                            }),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(
-                          width * 0.1, height * 0.04, width * 0.1, height*0.04),
-                      child: Text(
-                        'Wait while we upload your Video Intro',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 14,
-                            letterSpacing: 1.2),
-                        textAlign: TextAlign.left,
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                        ' Uploading  ${_bytesProgress(snapshot)} %',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        )),
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
+                            width * 0.1, height * 0.04),
+                        child: Text(
+                          'Wait while we upload your Video Intro',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 14,
+                              letterSpacing: 1.2),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            )
-          );
+              ));
           break;
         case currentState.success:
           return Container();
@@ -485,9 +487,10 @@ class _CameraState extends State<Camera> {
     }
     return WillPopScope(
       onWillPop: () {
-        if(_isRecording)
+        if (_isRecording)
           return null;
-        else Navigator.pop(context);
+        else
+          Navigator.pop(context);
       },
       child: Scaffold(
         key: _scaffoldKey,

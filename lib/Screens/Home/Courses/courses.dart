@@ -438,7 +438,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                                             Icon(Icons.error),
                                       ),
                               )),
-                        
                         ],
                       ),
                     ),

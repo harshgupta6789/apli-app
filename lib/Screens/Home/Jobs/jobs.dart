@@ -21,10 +21,11 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
 
   void getTab() async {
     prefs = await SharedPreferences.getInstance();
-    if(mounted)setState(() {
-      _currentTab = prefs.getInt("jobTab") ?? 1;
-      _tabController.index = _currentTab;
-    });
+    if (mounted)
+      setState(() {
+        _currentTab = prefs.getInt("jobTab") ?? 1;
+        _tabController.index = _currentTab;
+      });
   }
 
   @override
