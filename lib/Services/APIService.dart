@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
-  final int profileType;
+  final int profileType, jobType;
 
-  APIService({this.profileType});
+  APIService({this.profileType, this.jobType});
 
   Future sendProfileData(Map<dynamic, dynamic> map) async {
     try {
@@ -177,14 +177,37 @@ class APIService {
     }
   }
 
-  Future handleJobData() async {
+  Future getJobs() async {
     try {
       dynamic result;
+      Response response;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(allJobsURL, data: {
-          "secret": "$passHashSecret",
-          "userid": "${value.getString('email')}"
-        });
+        switch(jobType) {
+          case 1:
+            response = await Dio().post(appliedJobsURL, data: {
+              "secret": "$passHashSecret",
+              "userid": "${value.getString('email')}"
+            });
+            break;
+
+          case 2:
+            response = await Dio().post(allJobsURL, data: {
+              "secret": "$passHashSecret",
+              "userid": "${value.getString('email')}"
+            });
+            break;
+
+          case 3:
+            response = await Dio().post(incompleteJobsURL, data: {
+              "secret": "$passHashSecret",
+              "userid": "${value.getString('email')}"
+            });
+            break;
+
+          default:
+            result = -2;
+            break;
+        }
         if (response.statusCode == 200) {
           var frozen = response.data['frozen'];
           if (frozen == true) {
@@ -196,9 +219,32 @@ class APIService {
       });
       return result;
     } catch (e) {
-      return;
+      return 0;
     }
   }
+
+//  Future handleJobData() async {
+//    try {
+//      dynamic result;
+//      await SharedPreferences.getInstance().then((value) async {
+//        Response response = await Dio().post(allJobsURL, data: {
+//          "secret": "$passHashSecret",
+//          "userid": "${value.getString('email')}"
+//        });
+//        if (response.statusCode == 200) {
+//          var frozen = response.data['frozen'];
+//          if (frozen == true) {
+//            result = 'frozen';
+//          } else
+//            result = response.data;
+//        } else
+//          result = -2;
+//      });
+//      return result;
+//    } catch (e) {
+//      return;
+//    }
+//  }
 
   Future getCompanyIntro(String id) async {
     try {
