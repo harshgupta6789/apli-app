@@ -17,8 +17,11 @@ import '../../HomeLoginWrapper.dart';
 class CompanyProfile extends StatelessWidget {
   final Map company;
   final int status;
+  final bool isApplied;
 
-  const CompanyProfile({Key key, this.company, this.status}) : super(key: key);
+  const CompanyProfile(
+      {Key key, this.company, this.status, @required this.isApplied})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -318,63 +321,71 @@ class CompanyProfile extends StatelessWidget {
                                     ),
                                   )
                                 : SizedBox(),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20.0, right: 20.0, top: 10.0),
-                                child: RaisedButton(
-                                    color: basicColor,
-                                    elevation: 0,
-                                    padding:
-                                        EdgeInsets.only(left: 30, right: 30),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: basicColor, width: 1.2),
+                            isApplied
+                                ? Container()
+                                : Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 20.0, right: 20.0, top: 10.0),
+                                      child: RaisedButton(
+                                          color: basicColor,
+                                          elevation: 0,
+                                          padding: EdgeInsets.only(
+                                              left: 30, right: 30),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            side: BorderSide(
+                                                color: basicColor, width: 1.2),
+                                          ),
+                                          child: Text(
+                                            'APPLY NOW',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: () {
+                                            bool videoIntro = true,
+                                                resume = true;
+                                            if (company['requirements']
+                                                .contains(
+                                                    'Video Introduction')) {
+                                              String temp =
+                                                  decimalToBinary(status)
+                                                      .toString();
+                                              while (temp.length != 9) {
+                                                temp = '0' + temp;
+                                              }
+                                              if (temp.substring(7, 8) !=
+                                                  "1") if (tempProfileStatus != true)
+                                                videoIntro = false;
+                                              if (tempProfileStatus == false) {
+                                                videoIntro = false;
+                                              }
+                                            }
+                                            if (company['requirements']
+                                                .contains(
+                                                    'Resume')) if (status < 384)
+                                              resume = false;
+                                            if (!videoIntro)
+                                              showToast(
+                                                  'Complete your video intro first !!!',
+                                                  context);
+                                            else if (!resume)
+                                              showToast(
+                                                  'Complete your resume first !!!',
+                                                  context);
+                                            else
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          CompanyVideo(
+                                                            job: company,
+                                                          )));
+                                          }),
                                     ),
-                                    child: Text(
-                                      'APPLY NOW',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () {
-                                      bool videoIntro = true, resume = true;
-                                      if (company['requirements']
-                                          .contains('Video Introduction')) {
-                                        String temp =
-                                            decimalToBinary(status).toString();
-                                        while (temp.length != 9) {
-                                          temp = '0' + temp;
-                                        }
-                                        if (temp.substring(7, 8) !=
-                                            "1") if (tempProfileStatus != true)
-                                          videoIntro = false;
-                                        if (tempProfileStatus == false) {
-                                          videoIntro = false;
-                                        }
-                                      }
-                                      if (company['requirements']
-                                          .contains('Resume')) if (status < 384)
-                                        resume = false;
-                                      if (!videoIntro)
-                                        showToast(
-                                            'Complete your video intro first !!!',
-                                            context);
-                                      else if (!resume)
-                                        showToast(
-                                            'Complete your resume first !!!',
-                                            context);
-                                      else
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    CompanyVideo(
-                                                      job: company,
-                                                    )));
-                                    }),
-                              ),
-                            )
+                                  )
                           ]),
                     ),
                   ),

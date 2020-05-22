@@ -191,6 +191,7 @@ class _AllJobsListState extends State<AllJobsList> {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 CompanyProfile(
+                                                  isApplied: false,
                                                   company: myJobs[index],
                                                   status: widget.status,
                                                 )));
