@@ -1,5 +1,3 @@
-import 'package:apli/Services/APIService.dart';
-import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
@@ -19,12 +17,9 @@ class AllJobs extends StatefulWidget {
   _AllJobsState createState() => _AllJobsState();
 }
 
-class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class _AllJobsState extends State<AllJobs> {
 
   double height, width, scale;
-  final _APIService = APIService();
 
   @override
   void initState() {
@@ -41,7 +36,46 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
       scale = 0.7;
     }
 
-    return ScrollConfiguration(
+    if((widget.allJobs ?? []).length == 0) {
+      return Center(
+          child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                          "I know you are interested in job \nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                                text: "Profile",
+                                style: TextStyle(color: basicColor),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                              currentTab: 3,
+                                            )),
+                                            (Route<dynamic> route) => false);
+                                    setState(() {});
+                                  }),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ));
+    }
+    else return ScrollConfiguration(
       behavior: MyBehavior(),
       child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
@@ -49,7 +83,7 @@ class _AllJobsState extends State<AllJobs> with AutomaticKeepAliveClientMixin {
               padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
               child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: widget.allJobs.length,
+                  itemCount: (widget.allJobs ?? []).length,
                   physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
