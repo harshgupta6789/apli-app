@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/loading.dart';
@@ -216,11 +217,15 @@ class _JobQuestionsState extends State<JobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
+            setState(() {
+              loading = true;
+            });
             dynamic result = await _APIService.submitInterView(
                 widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
               print(result);
               setState(() {
+                loading = false;
                 indexOfQuestions = indexOfQuestions + 1;
                 x = currentState.none;
                 startVideoRecording();
@@ -244,10 +249,26 @@ class _JobQuestionsState extends State<JobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
+            setState(() {
+              loading = true;
+            });
             dynamic result = await _APIService.submitInterView(
-                widget.jobID, "final", null, null);
+                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
+              showToast("Submitting..", context);
               print(result);
+              dynamic finalResult = await _APIService.submitInterView(
+                  widget.jobID, "final", null, null);
+              if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
+                showToast("Submitted Succesfully..", context);
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => Wrapper(
+                              currentTab: 1,
+                            )),
+                    (Route<dynamic> route) => false);
+                print(finalResult);
+              }
             }
           });
     }
@@ -318,74 +339,78 @@ class _JobQuestionsState extends State<JobQuestions> {
       return Loading();
     else if (_isRecording == false && x == currentState.uploading) {
       return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload),
-                  StreamBuilder<StorageTaskEvent>(
-                      stream: uploadTask.events,
-                      builder: (context,
-                          AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                        if (asyncSnapshot.hasData) {
-                          final StorageTaskEvent event = asyncSnapshot.data;
-                          final StorageTaskSnapshot snapshot = event.snapshot;
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.cloud_upload),
+                        StreamBuilder<StorageTaskEvent>(
+                            stream: uploadTask.events,
+                            builder: (context,
+                                AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                              if (asyncSnapshot.hasData) {
+                                final StorageTaskEvent event =
+                                    asyncSnapshot.data;
+                                final StorageTaskSnapshot snapshot =
+                                    event.snapshot;
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                ' Uploading  ${_bytesProgress(snapshot)} %',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          );
-                        }
-                        return Container();
-                      }),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
-                child: Text(
-                  qs[indexOfQuestions]['question'] ?? "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14,
-                      letterSpacing: 1.2),
-                  textAlign: TextAlign.left,
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      ' Uploading  ${_bytesProgress(snapshot)} %',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                );
+                              }
+                              return Container();
+                            }),
+                      ],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
+                          width * 0.1, height * 0.04),
+                      child: Text(
+                        qs[indexOfQuestions]['question'] ?? "",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            letterSpacing: 1.2),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    RaisedButton(
+                        color: Colors.grey,
+                        elevation: 0,
+                        padding: EdgeInsets.only(
+                          left: 30,
+                          right: 30,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          side: BorderSide(width: 0),
+                        ),
+                        child: Text(
+                          'WAIT',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {}),
+                  ],
                 ),
               ),
-              RaisedButton(
-                  color: Colors.grey,
-                  elevation: 0,
-                  padding: EdgeInsets.only(
-                    left: 30,
-                    right: 30,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(width: 0),
-                  ),
-                  child: Text(
-                    'WAIT',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {}),
-            ],
-          ),
-        ),
-      );
+            );
     } else if (_isRecording == false && x == currentState.success) {
-      return Scaffold(
+      return  loading
+          ? Loading()
+          : Scaffold(
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -424,7 +449,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                 padding: EdgeInsets.fromLTRB(
                     width * 0.1, height * 0.07, width * 0.1, 0),
                 child: Text(
-                  qs[indexOfQuestions]['question'] ?? "",
+                   indexOfQuestions.toString() + ". " +  qs[indexOfQuestions]['question'] ?? "",
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 14,

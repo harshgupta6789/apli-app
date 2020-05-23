@@ -11,8 +11,9 @@ import 'companyDetails.dart';
 class AllJobs extends StatefulWidget {
   final List allJobs;
   final int status;
+  final bool alreadyAccepted;
 
-  const AllJobs({Key key, this.allJobs, this.status}) : super(key: key);
+  const AllJobs({Key key, this.allJobs, this.status, this.alreadyAccepted}) : super(key: key);
   @override
   _AllJobsState createState() => _AllJobsState();
 }

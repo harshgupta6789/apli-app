@@ -759,7 +759,6 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                   bottom: 18.0, left: 10.0, right: 10.0),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                 
                                   children: <Widget>[
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
@@ -806,7 +805,13 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                           EdgeInsets.fromLTRB(10.0, 5, 0, 8),
                                       child: Align(
                                           child: Text(
-                                              "1. There will be a total of 15 questions in the interview.",
+                                              snapshot.data['questions'] != null
+                                                  ? "1. There will be a total of  " +
+                                                      snapshot.data['questions']
+                                                          .length
+                                                          .toString() +
+                                                      " questions in the interview."
+                                                  : "1. There will be a total of 15 questions in the interview.",
                                               style: TextStyle(
                                                 fontSize: fontSize,
                                                 fontWeight: FontWeight.bold,

@@ -14,8 +14,8 @@ class Jobs extends StatefulWidget {
   _JobsState createState() => _JobsState();
 }
 
-class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
+class _JobsState extends State<Jobs>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -31,7 +31,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, Automa
       jobs = result;
       loading = false;
     });
-    print(result);
+    print(result['cand_accepted_job']);
   }
 
   @override
@@ -46,27 +46,27 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, Automa
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      key: _scaffoldKey,
-      floatingActionButton: Visibility(
-        visible: !loading,
-        child: FloatingActionButton(
-          backgroundColor: basicColor,
-          child: Icon(Icons.refresh),
-          onPressed: () {
-            setState(() {
-            loading = true;
-          });
-            getInfo();
-          },
-        ),
-      ),
-      endDrawer: customDrawer(context, _scaffoldKey),
-      backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        child: AppBar(
+        key: _scaffoldKey,
+        floatingActionButton: Visibility(
+          visible: !loading,
+          child: FloatingActionButton(
             backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            actions: <Widget>[
+            child: Icon(Icons.refresh),
+            onPressed: () {
+              setState(() {
+                loading = true;
+              });
+              getInfo();
+            },
+          ),
+        ),
+        endDrawer: customDrawer(context, _scaffoldKey),
+        backgroundColor: Colors.white,
+        appBar: PreferredSize(
+          child: AppBar(
+              backgroundColor: basicColor,
+              automaticallyImplyLeading: false,
+              actions: <Widget>[
 //              Padding(
 //                padding: const EdgeInsets.only(bottom: 10.0),
 //                child: IconButton(
@@ -85,71 +85,77 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, Automa
 //                    ),
 //                    onPressed: null),
 //              ),
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: IconButton(
-                      icon: Icon(
-                        EvaIcons.moreVerticalOutline,
-                        color: Colors.white,
+                Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: IconButton(
+                        icon: Icon(
+                          EvaIcons.moreVerticalOutline,
+                          color: Colors.white,
+                        ),
+                        onPressed: () =>
+                            _scaffoldKey.currentState.openEndDrawer())),
+              ],
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Text(
+                  jobsAvailable,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              bottom: ColoredTabBar(
+                  Colors.white,
+                  TabBar(
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(width: 3.0, color: basicColor),
+                    ),
+                    unselectedLabelColor: Colors.grey,
+                    labelColor: basicColor,
+                    tabs: [
+                      Tab(
+                        text: applied,
                       ),
-                      onPressed: () =>
-                          _scaffoldKey.currentState.openEndDrawer())),
-            ],
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                jobsAvailable,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            bottom: ColoredTabBar(
-                Colors.white,
-                TabBar(
-                  indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 3.0, color: basicColor),
-                  ),
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: basicColor,
-                  tabs: [
-                    Tab(
-                      text: applied,
-                    ),
-                    Tab(
-                      text: allJobs,
-                    ),
-                    Tab(
-                      text: incomplete,
-                    )
-                  ],
-                  controller: _tabController,
-                ))),
-        preferredSize: Size.fromHeight(100),
-      ),
-      body: loading ? Loading() :
-          jobs == null ? Center(
-            child: Text('Error occurred, try again later'),
-          ) : jobs == 'frozen' ? Center(
-            child:
-            Text("Your account is set on 'freeze' by your college"),
-          ) : TabBarView(
-            children: [
-              AppliedJobs(
-                  appliedJobs: jobs['submitted_jobs'],
-                  status: jobs['profile_status']),
-              AllJobs(
-                allJobs: jobs['all_jobs'],
-                status: jobs['profile_status'],
-              ),
-              IncompleteJobs(
-                incompleteJobs: jobs['pending_jobs'],
-                status: jobs['profile_status'],
-              )
-            ],
-            controller: _tabController,
-          )
-    );
+                      Tab(
+                        text: allJobs,
+                      ),
+                      Tab(
+                        text: incomplete,
+                      )
+                    ],
+                    controller: _tabController,
+                  ))),
+          preferredSize: Size.fromHeight(100),
+        ),
+        body: loading
+            ? Loading()
+            : jobs == null
+                ? Center(
+                    child: Text('Error occurred, try again later'),
+                  )
+                : jobs == 'frozen'
+                    ? Center(
+                        child: Text(
+                            "Your account is set on 'freeze' by your college"),
+                      )
+                    : TabBarView(
+                        children: [
+                          AppliedJobs(
+                              appliedJobs: jobs['submitted_jobs'],
+                              status: jobs['profile_status']),
+                          AllJobs(
+                            alreadyAccepted: jobs['cand_accepted_job'],
+                            allJobs: jobs['all_jobs'],
+                            status: jobs['profile_status'],
+                          ),
+                          IncompleteJobs(
+                            alreadyAccepted: jobs['cand_accepted_job'],
+                            incompleteJobs: jobs['pending_jobs'],
+                            status: jobs['profile_status'],
+                          )
+                        ],
+                        controller: _tabController,
+                      ));
   }
 }

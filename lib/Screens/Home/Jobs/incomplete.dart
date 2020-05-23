@@ -13,8 +13,9 @@ import 'companyDetails.dart';
 class IncompleteJobs extends StatefulWidget {
   final List incompleteJobs;
   final int status;
+  final bool alreadyAccepted;
 
-  const IncompleteJobs({Key key, this.incompleteJobs, this.status}) : super(key: key);
+  const IncompleteJobs({Key key, this.incompleteJobs, this.status, this.alreadyAccepted}) : super(key: key);
   @override
   _IncompleteJobsState createState() => _IncompleteJobsState();
 }

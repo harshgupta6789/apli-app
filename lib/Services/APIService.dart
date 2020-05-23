@@ -319,7 +319,7 @@ class APIService {
         Response response = await Dio().post(submitVideoInterviewURL, data: {
           "secret": "$passHashSecret",
           "job_id": "$id",
-          "userid": "${value.getString('email')}",
+          "user_id": "${value.getString('email')}",
           'question_id': "$questionID",
           'video_url': "$videoURL",
           'type': "$type"
