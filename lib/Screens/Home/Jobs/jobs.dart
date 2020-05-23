@@ -6,62 +6,39 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:apli/Shared/loading.dart';
-import 'package:apli/Shared/scroll.dart';
-import 'package:async/async.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../HomeLoginWrapper.dart';
 
 class Jobs extends StatefulWidget {
   @override
   _JobsState createState() => _JobsState();
 }
 
-class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
+class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   TabController _tabController;
   int _currentTab = 1;
-  SharedPreferences prefs;
-  Future _prevent;
   final _APIService = APIService();
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
+  bool loading = true;
+  dynamic jobs;
 
-  Future<dynamic> getInfo() async {
+  getInfo() async {
     dynamic result = await _APIService.handleJobData();
-
-    return result;
-  }
-
-  Future ref() async {
     setState(() {
-      _prevent = getInfo();
+      jobs = result;
+      loading = false;
     });
-    return null;
-  }
-
-  void getTab() async {
-    prefs = await SharedPreferences.getInstance();
-    if (mounted)
-      setState(() {
-        _currentTab = prefs.getInt("jobTab") ?? 1;
-        _tabController.index = _currentTab;
-      });
   }
 
   @override
   void initState() {
-    _prevent = getInfo();
-    getTab();
+    getInfo();
     _tabController =
         TabController(length: 3, vsync: this, initialIndex: _currentTab);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    //prefs.setInt("jobTab", 1);
-    super.dispose();
   }
 
   @override
@@ -69,10 +46,18 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: basicColor,
-        child: Icon(Icons.refresh),
-        onPressed: () => ref(),
+      floatingActionButton: Visibility(
+        visible: !loading,
+        child: FloatingActionButton(
+          backgroundColor: basicColor,
+          child: Icon(Icons.refresh),
+          onPressed: () {
+            setState(() {
+            loading = true;
+          });
+            getInfo();
+          },
+        ),
       ),
       endDrawer: customDrawer(context, _scaffoldKey),
       backgroundColor: Colors.white,
@@ -142,90 +127,28 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin {
                 ))),
         preferredSize: Size.fromHeight(100),
       ),
-      body: FutureBuilder(
-          future: _prevent,
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data == null)
-                return Center(
-                  child: Text('Error occurred, try again later'),
-                );
-              else if (snapshot.data == 'frozen')
-                return Center(
-                  child:
-                      Text("Your account is set on 'freeze' by your college"),
-                );
-              else if ((snapshot.data ?? {}).length == 0)
-                return Center(
-                    child: ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: RefreshIndicator(
-                    onRefresh: ref,
-                    child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Image.asset("Assets/Images/job.png"),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                  text:
-                                      "I know you are interested in job \nbut first build your ",
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18),
-                                  children: [
-                                    TextSpan(
-                                        text: "Profile",
-                                        style: TextStyle(color: basicColor),
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            Wrapper(
-                                                              currentTab: 3,
-                                                            )),
-                                                    (Route<dynamic> route) =>
-                                                        false);
-                                            setState(() {});
-                                          }),
-                                  ]),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ));
-              else
-                return TabBarView(
-                  children: [
-                    AppliedJobs(
-                        allJobs: snapshot.data['submitted_jobs'],
-                        status: snapshot.data['profile_status']),
-                    AllJobs(
-                      allJobs: snapshot.data['all_jobs'],
-                      status: snapshot.data['profile_status'],
-                    ),
-                    IncompleteJobs(
-                      allJobs: snapshot.data['pending_jobs'],
-                      status: snapshot.data['profile_status'],
-                    )
-                  ],
-                  controller: _tabController,
-                );
-            } else if (snapshot.hasError)
-              return Center(
-                child: Text('Error occured, try again later'),
-              );
-            else
-              return Loading();
-          }),
+      body: loading ? Loading() :
+          jobs == null ? Center(
+            child: Text('Error occurred, try again later'),
+          ) : jobs == 'frozen' ? Center(
+            child:
+            Text("Your account is set on 'freeze' by your college"),
+          ) : TabBarView(
+            children: [
+              AppliedJobs(
+                  appliedJobs: jobs['submitted_jobs'],
+                  status: jobs['profile_status']),
+              AllJobs(
+                allJobs: jobs['all_jobs'],
+                status: jobs['profile_status'],
+              ),
+              IncompleteJobs(
+                incompleteJobs: jobs['pending_jobs'],
+                status: jobs['profile_status'],
+              )
+            ],
+            controller: _tabController,
+          )
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:apli/Shared/constants.dart';
@@ -12,6 +11,7 @@ import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+
 import '../../HomeLoginWrapper.dart';
 
 class CompanyProfile extends StatefulWidget {
