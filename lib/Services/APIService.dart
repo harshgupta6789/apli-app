@@ -242,6 +242,7 @@ class APIService {
       });
       return result;
     } catch (e) {
+      print(e);
       return;
     }
   }
@@ -259,7 +260,6 @@ class APIService {
       });
       print(result);
       return result;
-      
     } catch (e) {
       return;
     }
@@ -286,7 +286,54 @@ class APIService {
 
       return result;
     } catch (e) {
+      return 0;
+    }
+  }
+
+  Future fetchInterviewQ(String id) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(interViewQuestionsURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id",
+          "user_id": "${value.getString('email')}",
+        });
+        if (response.statusCode == 200) {
+          result = response.data;
+        } else
+          result = null;
+      });
+
+      return result;
+    } catch (e) {
       return;
+    }
+  }
+
+  Future submitInterView(
+      String id, String type, String questionID, String videoURL) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(submitVideoInterviewURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id",
+          "userid": "${value.getString('email')}",
+          'question_id': "$questionID",
+          'video_url': "$videoURL",
+          'type': "$type"
+        });
+        if (response.statusCode == 200) {
+          result = response.data;
+        } else
+          result = -2;
+      });
+     
+      return result;
+    } catch (e) {
+      print(e);
+      return 0;
     }
   }
 }

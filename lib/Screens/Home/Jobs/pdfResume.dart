@@ -186,16 +186,16 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
                         }
                       }
                       if (storage && camera && microphone)
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => JobQuestions(
-                                      cameras: cameras,
-                                    )));
-
+                        // Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //         builder: (context) => JobQuestions(
+                        //               cameras: cameras,
+                        //             )));
+                  
                       // showToast('Permission denied', context,
                       //     color: Colors.red);
-                    }),
+                    ;}),
               ),
             ]),
       );

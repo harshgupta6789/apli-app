@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:apli/Services/APIService.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:path/path.dart' as p;
 import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/loading.dart';
@@ -16,8 +18,16 @@ enum currentState { none, uploading, success, failure }
 
 class JobQuestions extends StatefulWidget {
   final List<CameraDescription> cameras;
-
-  const JobQuestions({Key key, this.cameras}) : super(key: key);
+  final List questions;
+  final String jobID;
+  final int whereToStart;
+  const JobQuestions(
+      {Key key,
+      this.cameras,
+      @required this.questions,
+      this.whereToStart,
+      this.jobID})
+      : super(key: key);
   @override
   _JobQuestionsState createState() => _JobQuestionsState();
 }
@@ -38,12 +48,18 @@ class _JobQuestionsState extends State<JobQuestions> {
   bool loading = false;
   bool isUploaded = true, error = false;
   StorageUploadTask uploadTask;
+  String tempURL;
+  int indexOfQuestions;
   int Status;
   currentState x = currentState.none;
+  List qs = [];
   List<CameraDescription> cameras;
   String name = Timestamp.now().toString();
+  APIService _APIService = APIService();
 
   camInit() async {
+    qs = widget.questions;
+    indexOfQuestions = widget.whereToStart ?? 0;
     cameras = await availableCameras();
     controller = CameraController(cameras[1], ResolutionPreset.low);
     controller.initialize().then((_) {
@@ -54,6 +70,8 @@ class _JobQuestionsState extends State<JobQuestions> {
       setState(() {});
     });
     //startTimer();
+    print(qs.length);
+    print(indexOfQuestions);
   }
 
   Future videoPicker(String path) async {
@@ -95,10 +113,13 @@ class _JobQuestionsState extends State<JobQuestions> {
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
-                  stopVideoRecording();
+                  stopVideoRecording(true);
                   Navigator.of(context).pop(true);
                   Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(builder: (context) => Wrapper()),
+                      MaterialPageRoute(
+                          builder: (context) => Wrapper(
+                                currentTab: 1,
+                              )),
                       (Route<dynamic> route) => false);
                 },
                 child: new Text(
@@ -122,9 +143,8 @@ class _JobQuestionsState extends State<JobQuestions> {
   Future<void> _uploadFile(File file, String filename) async {
     SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child("resumeVideos/${value.getString('email')}");
+      storageReference = FirebaseStorage.instance.ref().child(
+          "jobInterviews/${widget.jobID}/${value.getString('email')}/$filename");
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       final String url = (await downloadUrl.ref.getDownloadURL());
@@ -136,9 +156,16 @@ class _JobQuestionsState extends State<JobQuestions> {
       }
 
       if (url != null) {
+        setState(() {
+          x = currentState.success;
+          tempURL = url;
+        });
+
         // MOVE TO NEXT QUESTION
       } else if (url == null) {
-        x = currentState.failure;
+        setState(() {
+          x = currentState.failure;
+        });
       }
     });
   }
@@ -171,7 +198,62 @@ class _JobQuestionsState extends State<JobQuestions> {
     return filePath;
   }
 
-  Future<void> stopVideoRecording() async {
+  Widget buttonToShow() {
+    if (indexOfQuestions + 1 < qs.length) {
+      return RaisedButton(
+          color: basicColor,
+          elevation: 0,
+          padding: EdgeInsets.only(
+            left: 30,
+            right: 30,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            side: BorderSide(width: 0),
+          ),
+          child: Text(
+            'NEXT',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async {
+            dynamic result = await _APIService.submitInterView(
+                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+            if (result != -1 || result != -2 || result != 0) {
+              print(result);
+              setState(() {
+                indexOfQuestions = indexOfQuestions + 1;
+                x = currentState.none;
+                startVideoRecording();
+              });
+            }
+          });
+    } else {
+      return RaisedButton(
+          color: basicColor,
+          elevation: 0,
+          padding: EdgeInsets.only(
+            left: 30,
+            right: 30,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+            side: BorderSide(width: 0),
+          ),
+          child: Text(
+            'SUBMIT',
+            style: TextStyle(color: Colors.white),
+          ),
+          onPressed: () async {
+            dynamic result = await _APIService.submitInterView(
+                widget.jobID, "final", null, null);
+            if (result != -1 || result != -2 || result != 0) {
+              print(result);
+            }
+          });
+    }
+  }
+
+  Future<void> stopVideoRecording(bool backPressed) async {
     if (!controller.value.isRecordingVideo) {
       return null;
     }
@@ -183,7 +265,9 @@ class _JobQuestionsState extends State<JobQuestions> {
         _isRecording = false;
         isRecordingStopped = true;
       });
-      videoPicker(path);
+      if (backPressed != true) {
+        videoPicker(path);
+      }
     } on CameraException catch (e) {
       print(e);
       return null;
@@ -198,8 +282,8 @@ class _JobQuestionsState extends State<JobQuestions> {
         if (mounted)
           setState(() {
             seconds = seconds + 1;
-            if (seconds >= 60) {
-              stopVideoRecording();
+            if (seconds >= 59) {
+              stopVideoRecording(false);
             }
           });
         else
@@ -272,7 +356,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                 padding: EdgeInsets.fromLTRB(
                     width * 0.1, height * 0.04, width * 0.1, height * 0.04),
                 child: Text(
-                  '1. Tell me about your education',
+                  qs[indexOfQuestions]['question'] ?? "",
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 14,
@@ -300,6 +384,34 @@ class _JobQuestionsState extends State<JobQuestions> {
           ),
         ),
       );
+    } else if (_isRecording == false && x == currentState.success) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.cloud_upload),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(' Uploaded !',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ))),
+                ],
+              ),
+              buttonToShow()
+            ],
+          ),
+        ),
+      );
     }
     return WillPopScope(
       onWillPop: () => _onWillPop(),
@@ -312,7 +424,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                 padding: EdgeInsets.fromLTRB(
                     width * 0.1, height * 0.07, width * 0.1, 0),
                 child: Text(
-                  '1. Tell me about your educationTell me about your education',
+                  qs[indexOfQuestions]['question'] ?? "",
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 14,
@@ -374,7 +486,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                     style: TextStyle(color: Colors.white),
                   ),
                   onPressed: () {
-                    stopVideoRecording();
+                    stopVideoRecording(false);
                   }),
             ],
           ),

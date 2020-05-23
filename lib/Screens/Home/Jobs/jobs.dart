@@ -31,6 +31,7 @@ class _JobsState extends State<Jobs> with SingleTickerProviderStateMixin, Automa
       jobs = result;
       loading = false;
     });
+    print(result);
   }
 
   @override

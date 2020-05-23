@@ -33,10 +33,10 @@ const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
 const String allJobsURL = "https://dev.apli.ai/candidate/api/get_jobs";
 const String appliedJobsURL = "https://dev.apli.ai/candidate/api/get_submitted_jobs";
 const String incompleteJobsURL = "https://dev.apli.ai/candidate/api/get_pending_jobs";
-const String companyIntroURL =
-    "https://dev.apli.ai/candidate/api/get_company_info";
-const String jobApplyURL =
-    "https://dev.apli.ai/candidate/api/new_job_application";
+const String companyIntroURL = "https://dev.apli.ai/candidate/api/get_company_info";
+const String jobApplyURL = "https://dev.apli.ai/candidate/api/new_job_application";
+const String interViewQuestionsURL = "https://dev.apli.ai/candidate/api/get_job_interview_questions";
+const String submitVideoInterviewURL = "https://dev.apli.ai/candidate/api/submit_question_video_interview,";
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';
 const defaultPic =

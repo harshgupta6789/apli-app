@@ -18,7 +18,6 @@ class AppliedJobs extends StatefulWidget {
 }
 
 class _AppliedJobsState extends State<AppliedJobs> {
-
   double height, width, scale;
 
   @override
@@ -37,67 +36,67 @@ class _AppliedJobsState extends State<AppliedJobs> {
       scale = 0.7;
     }
 
-    if((widget.appliedJobs ?? []).length == 0) {
+    if ((widget.appliedJobs ?? []).length == 0) {
       return Center(
           child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("Assets/Images/job.png"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text:
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset("Assets/Images/job.png"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      text:
                           "I know you are interested in job \nbut first build your ",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(
-                                text: "Profile",
-                                style: TextStyle(color: basicColor),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => Wrapper(
+                      style: TextStyle(color: Colors.black, fontSize: 18),
+                      children: [
+                        TextSpan(
+                            text: "Profile",
+                            style: TextStyle(color: basicColor),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    MaterialPageRoute(
+                                        builder: (context) => Wrapper(
                                               currentTab: 3,
                                             )),
-                                            (Route<dynamic> route) => false);
-                                    setState(() {});
-                                  }),
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ));
-    }
-    else return ScrollConfiguration(
-      behavior: MyBehavior(),
-      child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
-          child: Padding(
-              padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-              child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: (widget.appliedJobs ?? []).length,
-                      physics: ScrollPhysics(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          padding: EdgeInsets.only(bottom: 1),
-                          child: Card(
-                              elevation: 0.2,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(7.0),
-                                  side: BorderSide(color: Colors.black54)),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
+                                    (Route<dynamic> route) => false);
+                                setState(() {});
+                              }),
+                      ]),
+                ),
+              )
+            ],
+          ),
+        ),
+      ));
+    } else
+      return ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: (widget.appliedJobs ?? []).length,
+                    physics: ScrollPhysics(),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        padding: EdgeInsets.only(bottom: 1),
+                        child: Card(
+                            elevation: 0.2,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7.0),
+                                side: BorderSide(color: Colors.black54)),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Padding(
                                       padding: EdgeInsets.only(
                                           top: 10 * scale, bottom: 13 * scale),
                                       child: ListTile(
@@ -109,7 +108,8 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                                         CompanyProfile(
                                                           isApplied: true,
                                                           company: widget
-                                                              .appliedJobs[index],
+                                                                  .appliedJobs[
+                                                              index],
                                                           status: widget.status,
                                                         )));
                                           },
@@ -143,7 +143,8 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                               ),
                                               AutoSizeText(
                                                 'Deadline: ' +
-                                                        widget.appliedJobs[index]
+                                                        widget.appliedJobs[
+                                                                index]
                                                             ['deadline'] ??
                                                     "No Deadline",
                                                 maxLines: 2,
@@ -156,17 +157,15 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                               )
                                             ],
                                           ),
-                                          trailing: IconButton(
-                                            icon: Icon(
-                                              EvaIcons.bookmarkOutline,
-                                            ),
-                                            onPressed: () async {},
-                                          )),
-                                    ),
-                                  ])),
-                        );
-                      })
-                )),
-    );
+                                          trailing: widget.appliedJobs[index]
+                                                      ['status'] !=
+                                                  null
+                                              ? Text(widget.appliedJobs[index]
+                                                  ['status'])
+                                              : Container())),
+                                ])),
+                      );
+                    }))),
+      );
   }
 }

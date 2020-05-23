@@ -445,7 +445,9 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                             .applyJob(
                                                                 widget.company[
                                                                     'job_id']);
-                                                    if (result == 1) {
+                                                    if (result != -1 ||
+                                                        result != -2 ||
+                                                        result != 0) {
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -471,7 +473,9 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                             .applyJob(
                                                                 widget.company[
                                                                     'job_id']);
-                                                    if (result == 1) {
+                                                    if (result != -1 ||
+                                                        result != -2 ||
+                                                        result != 0) {
                                                       showToast(
                                                           'Your application has been submitted',
                                                           context);
@@ -522,6 +526,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
   YoutubePlayerController _controller;
   bool loading = false, isPressed = false;
   final _APIService = APIService();
+  Future _fetch;
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
@@ -565,6 +570,12 @@ class _CompanyVideoState extends State<CompanyVideo> {
   }
 
   @override
+  void initState() {
+    _fetch = getInfo();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
@@ -597,7 +608,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
               preferredSize: Size.fromHeight(50),
             ),
             body: FutureBuilder(
-                future: getInfo(),
+                future: _fetch,
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.hasData &&
@@ -633,28 +644,30 @@ class _CompanyVideoState extends State<CompanyVideo> {
                               SizedBox(
                                 height: height * 0.05,
                               ),
-                              RaisedButton(
-                                color: basicColor,
-                                elevation: 0,
-                                padding: EdgeInsets.only(left: 40, right: 40),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                  side:
-                                      BorderSide(color: basicColor, width: 1.2),
+                              Align(
+                                child: RaisedButton(
+                                  color: basicColor,
+                                  elevation: 0,
+                                  padding: EdgeInsets.only(left: 40, right: 40),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
+                                    side: BorderSide(
+                                        color: basicColor, width: 1.2),
+                                  ),
+                                  child: Text(
+                                    'PROCEED TO VIDEO INTERVIEW',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CompanyInstructions(
+                                                  job: widget.job,
+                                                )));
+                                  },
                                 ),
-                                child: Text(
-                                  'PROCEED TO VIDEO INTERVIEW',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CompanyInstructions(
-                                                job: widget.job,
-                                              )));
-                                },
                               ),
                             ],
                           ),
@@ -682,7 +695,15 @@ class CompanyInstructions extends StatefulWidget {
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
   double fontSize = 14;
+  bool loading = false;
   List<CameraDescription> cameras;
+  APIService _APIService = APIService();
+  Future<dynamic> getInfo() async {
+    dynamic result = await _APIService.fetchInterviewQ(widget.job['job_id']);
+    print(result['questions']);
+    return result;
+  }
+
   camInit() async {
     cameras = await availableCameras();
   }
@@ -695,275 +716,285 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        child: AppBar(
-            backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: EdgeInsets.only(bottom: 5.0),
-              child: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pop(context)),
-            ),
-            title: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                "Apply",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-            )),
-        preferredSize: Size.fromHeight(50),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: 18.0, left: 10.0, right: 10.0),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      ListTile(
-                        onTap: () {},
-                        title: AutoSizeText(
-                          widget.job['role'] ?? "No Role Sepcified",
-                          maxLines: 2,
-                          style: TextStyle(
-                              color: basicColor,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                          overflow: TextOverflow.ellipsis,
+    return loading
+        ? Loading()
+        : Scaffold(
+            appBar: PreferredSize(
+              child: AppBar(
+                  backgroundColor: basicColor,
+                  automaticallyImplyLeading: false,
+                  leading: Padding(
+                    padding: EdgeInsets.only(bottom: 5.0),
+                    child: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
                         ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 10.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                widget.job['location'] ??
-                                    "Location not provided",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              AutoSizeText(
-                                widget.job['deadline'] != null
-                                    ? "Deadline : " +
-                                        widget.job['deadline'].toString()
-                                    : "No Deadline" ?? "No Deadline",
-                                maxLines: 2,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500),
-                                overflow: TextOverflow.ellipsis,
-                              )
-                            ],
+                        onPressed: () => Navigator.pop(context)),
+                  ),
+                  title: Padding(
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: Text(
+                      "Apply",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )),
+              preferredSize: Size.fromHeight(50),
+            ),
+            body: FutureBuilder(
+                future: getInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      snapshot.connectionState == ConnectionState.done) {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: 18.0, left: 10.0, right: 10.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                 
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 20, 0, 4),
+                                      child: Align(
+                                          child: RichText(
+                                            text: TextSpan(
+                                              text: 'Click ',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              children: <TextSpan>[
+                                                TextSpan(
+                                                    text: ' "Start" ',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: basicColor)),
+                                                TextSpan(
+                                                    text:
+                                                        ' when you are ready! '),
+                                              ],
+                                            ),
+                                          ),
+                                          alignment: Alignment.center),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 10, 0.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "Please read the following instructions carefully.",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.center),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "1. There will be a total of 15 questions in the interview.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "2. You will be given 60 seconds for answering each question.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "3. You have to attempt all the questions.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "4. You cannot pause the interview in between.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "5. Don’t close or reload the window during the interview.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
+                                      child: Align(
+                                          child: Text(
+                                              "6. Strict action will be taken if any abusive or offensive language is used.",
+                                              style: TextStyle(
+                                                fontSize: fontSize,
+                                                fontWeight: FontWeight.bold,
+                                              )),
+                                          alignment: Alignment.centerLeft),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 20.0, right: 20.0, top: 30.0),
+                                        child: RaisedButton(
+                                            color: basicColor,
+                                            elevation: 0,
+                                            padding: EdgeInsets.only(
+                                                left: 30, right: 30),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                              side: BorderSide(
+                                                  color: basicColor,
+                                                  width: 1.2),
+                                            ),
+                                            child: Text(
+                                              'START',
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                            onPressed: () async {
+                                              bool storage = false,
+                                                  camera = false,
+                                                  microphone = false;
+                                              var storageStatus =
+                                                  await Permission
+                                                      .storage.status;
+                                              if (storageStatus ==
+                                                  PermissionStatus.granted) {
+                                                storage = true;
+                                              } else if (storageStatus ==
+                                                  PermissionStatus
+                                                      .undetermined) {
+                                                Map<Permission,
+                                                        PermissionStatus>
+                                                    statuses = await [
+                                                  Permission.storage,
+                                                ].request();
+                                                if (statuses[
+                                                        Permission.storage] ==
+                                                    PermissionStatus.granted) {
+                                                  storage = true;
+                                                }
+                                              }
+                                              var cameraeStatus =
+                                                  await Permission
+                                                      .camera.status;
+                                              if (cameraeStatus ==
+                                                  PermissionStatus.granted) {
+                                                camera = true;
+                                              } else if (cameraeStatus ==
+                                                  PermissionStatus
+                                                      .undetermined) {
+                                                Map<Permission,
+                                                        PermissionStatus>
+                                                    statuses = await [
+                                                  Permission.camera,
+                                                ].request();
+                                                if (statuses[
+                                                        Permission.camera] ==
+                                                    PermissionStatus.granted) {
+                                                  camera = true;
+                                                }
+                                              }
+                                              var microphoneStatus =
+                                                  await Permission
+                                                      .microphone.status;
+                                              if (microphoneStatus ==
+                                                  PermissionStatus.granted) {
+                                                microphone = true;
+                                              } else if (microphoneStatus ==
+                                                  PermissionStatus
+                                                      .undetermined) {
+                                                Map<Permission,
+                                                        PermissionStatus>
+                                                    statuses = await [
+                                                  Permission.microphone,
+                                                ].request();
+                                                if (statuses[Permission
+                                                        .microphone] ==
+                                                    PermissionStatus.granted) {
+                                                  microphone = true;
+                                                }
+                                              }
+                                              if (storage &&
+                                                  camera &&
+                                                  microphone)
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            JobQuestions(
+                                                              cameras: cameras,
+                                                              questions: snapshot
+                                                                      .data[
+                                                                  'questions'],
+                                                              whereToStart:
+                                                                  snapshot.data[
+                                                                      'startFrom'],
+                                                              jobID: widget.job[
+                                                                  'job_id'],
+                                                            )));
+                                              else
+                                                showToast('Permission denied',
+                                                    context,
+                                                    color: Colors.red);
+                                            }),
+                                      ),
+                                    )
+                                  ]),
+                            ),
                           ),
                         ),
-                        // trailing: IconButton(
-                        //   icon:
-                        //       Icon(Icons.bookmark, color: Color(0xffebd234)),
-                        //   onPressed: () {},
-                        // )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 4),
-                        child: Align(
-                            child: RichText(
-                              text: TextSpan(
-                                text: 'Click ',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: ' "Start" ',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: basicColor)),
-                                  TextSpan(text: ' when you are ready! '),
-                                ],
-                              ),
-                            ),
-                            alignment: Alignment.center),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 10, 0.0, 8),
-                        child: Align(
-                            child: Text(
-                                "Please read the following instructions carefully.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.center),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 0, 8),
-                        child: Align(
-                            child: Text(
-                                "1. There will be a total of 15 questions in the interview.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "2. You will be given 60 seconds for answering each question.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "3. You have to attempt all the questions.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "4. You cannot pause the interview in between.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "5. Don’t close or reload the window during the interview.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                        child: Align(
-                            child: Text(
-                                "6. Strict action will be taken if any abusive or offensive language is used.",
-                                style: TextStyle(
-                                  fontSize: fontSize,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                            alignment: Alignment.centerLeft),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20.0, right: 20.0, top: 30.0),
-                          child: RaisedButton(
-                              color: basicColor,
-                              elevation: 0,
-                              padding: EdgeInsets.only(left: 30, right: 30),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                side: BorderSide(color: basicColor, width: 1.2),
-                              ),
-                              child: Text(
-                                'START',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              onPressed: () async {
-                                bool storage = false,
-                                    camera = false,
-                                    microphone = false;
-                                var storageStatus =
-                                    await Permission.storage.status;
-                                if (storageStatus == PermissionStatus.granted) {
-                                  storage = true;
-                                } else if (storageStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.storage,
-                                  ].request();
-                                  if (statuses[Permission.storage] ==
-                                      PermissionStatus.granted) {
-                                    storage = true;
-                                  }
-                                }
-                                var cameraeStatus =
-                                    await Permission.camera.status;
-                                if (cameraeStatus == PermissionStatus.granted) {
-                                  camera = true;
-                                } else if (cameraeStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.camera,
-                                  ].request();
-                                  if (statuses[Permission.camera] ==
-                                      PermissionStatus.granted) {
-                                    camera = true;
-                                  }
-                                }
-                                var microphoneStatus =
-                                    await Permission.microphone.status;
-                                if (microphoneStatus ==
-                                    PermissionStatus.granted) {
-                                  microphone = true;
-                                } else if (microphoneStatus ==
-                                    PermissionStatus.undetermined) {
-                                  Map<Permission, PermissionStatus> statuses =
-                                      await [
-                                    Permission.microphone,
-                                  ].request();
-                                  if (statuses[Permission.microphone] ==
-                                      PermissionStatus.granted) {
-                                    microphone = true;
-                                  }
-                                }
-                                if (storage && camera && microphone)
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => JobQuestions(
-                                                cameras: cameras,
-                                              )));
-                                else
-                                  showToast('Permission denied', context,
-                                      color: Colors.red);
-                              }),
-                        ),
-                      )
-                    ]),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+                      ],
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Error Occured"));
+                  }
+                  return Loading();
+                }),
+          );
   }
 }
