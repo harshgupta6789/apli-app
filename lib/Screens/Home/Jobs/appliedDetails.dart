@@ -19,11 +19,11 @@ import '../../HomeLoginWrapper.dart';
 enum currentState { none, uploading, success, failure }
 
 class AppliedDetails extends StatefulWidget {
-  final Map company;
+  final Map job;
   final int status;
   final String st;
 
-  const AppliedDetails({Key key, this.company, this.status, @required this.st})
+  const AppliedDetails({Key key, this.job, this.status, @required this.st})
       : super(key: key);
 
   @override
@@ -112,10 +112,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         });
         print(url);
         dynamic result = await _APIService.updateJobOfferLetter(
-            widget.company['job_id'], tempURL);
+            widget.job['job_id'], tempURL);
         print(result);
         if (result == 1) {
-          showToast("Succesfully Uploaded", context);
+          showToast("Successfully Uploaded", context);
         } else {
           showToast("Error", context);
         }
@@ -134,11 +134,11 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     });
   }
 
-  Widget button(String status, Map company) {
+  Widget button(String status, Map job) {
     switch (status) {
       case "OFFERED":
-        bool deadlineOver = company['accept_deadline_passed'] ?? false;
-        bool candAccepted = company[' cand_accepted_job'] ?? false;
+        bool deadlineOver = job['accept_deadline_passed'] ?? true;
+        bool candAccepted = job['cand_accepted_job'] ?? true;
         if (deadlineOver || candAccepted) {
           return Padding(
               padding:
@@ -149,7 +149,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   padding: EdgeInsets.only(left: 30, right: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
+                    side: BorderSide(color: Colors.grey, width: 1.2),
                   ),
                   child: Text(
                     'APPLY NOW',
@@ -162,10 +162,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               child: RaisedButton(
                   onPressed: () async {
                     dynamic result = await _APIService.acceptJobOffer(
-                        widget.company['job_id']);
+                        widget.job['job_id']);
                     print(result);
                     if (result == 1) {
-                      showToast("Succesfully Accepted", context);
+                      showToast("Successfully Accepted", context);
                     } else {
                       showToast("Error", context);
                     }
@@ -176,7 +176,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                 )),
                         (Route<dynamic> route) => false);
                   },
-                  color: Colors.grey,
+                  color: basicColor,
                   elevation: 0,
                   padding: EdgeInsets.only(left: 30, right: 30),
                   shape: RoundedRectangleBorder(
@@ -191,18 +191,18 @@ class _AppliedDetailsState extends State<AppliedDetails> {
 
         break;
       case "INTERVIEW":
-        if (company['schedule']['is_online'] != true) {
+        if (job['schedule']['is_online'] != true) {
           return Padding(
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: Column(
                 children: [
-                  Text("Where :" + company['schedule']['where'].toString()),
+                  Text("Where :" + job['schedule']['where'].toString()),
                   //Text("When :" + company['schedule']['when'].toString())
                 ],
               ));
-        } else if (company['interview_date_passed'] ||
-            company['schedule']['cand_accepted']) {
+        } else if (job['interview_date_passed'] ||
+            job['schedule']['cand_accepted']) {
           return Padding(
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
@@ -218,15 +218,15 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     'ACCEPT INTERVIEW',
                     style: TextStyle(color: Colors.white),
                   )));
-        } else if (company['interview_room_link'] != null &&
-            company['schedule']['cand_accepted']) {
+        } else if (job['interview_room_link'] != null &&
+            job['schedule']['cand_accepted']) {
           return Padding(
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
                   onPressed: () async {
                     var url =
-                        company['interview_room_link'] ?? 'https://flutter.dev';
+                        job['interview_room_link'] ?? 'https://flutter.dev';
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {
@@ -251,10 +251,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               child: RaisedButton(
                   onPressed: () async {
                     dynamic result = await _APIService.acceptInterView(
-                        widget.company['job_id']);
+                        widget.job['job_id']);
                     print(result);
                     if (result == 1) {
-                      showToast("Succesfully Accepted", context);
+                      showToast("Successfully Accepted", context);
                     } else {
                       showToast("Error", context);
                     }
@@ -278,7 +278,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         }
         break;
       case "LETTER SENT":
-        if (company['offer_letter'] != null) {
+        if (job['offer_letter'] != null) {
           return Column(
             children: [
               Padding(
@@ -301,8 +301,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                           }
                         }
                         if (allowed) {
-                          if (company['offer_letter'] != null) {
-                            String firebaseUrl = company['offer_letter']
+                          if (job['offer_letter'] != null) {
+                            String firebaseUrl = job['offer_letter']
                                 .replaceAll(
                                     pdfUrltoBeReplaced, pdfUrltoreplacedWith);
                             firebaseUrl = firebaseUrl.replaceAll("%40", "@");
@@ -315,11 +315,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                               showToast("Downloading", context, duration: 1);
                               downloadFile(reference);
                             });
-                          } else {
-                            showToast(
-                                "Please Complete Your Profile First!", context);
                           }
-                        }
+                        } else showToast('Permission denied', context);
                       },
                       color: Colors.green,
                       elevation: 0,
@@ -424,7 +421,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
 
   @override
   void initState() {
-    print(widget.company);
+    print(widget.job);
     super.initState();
   }
 
@@ -475,7 +472,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                   ListTile(
                                     onTap: () {},
                                     title: AutoSizeText(
-                                      widget.company['role'] ??
+                                      widget.job['role'] ??
                                           "Role not declared",
                                       maxLines: 2,
                                       style: TextStyle(
@@ -493,7 +490,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           AutoSizeText(
-                                            widget.company['location'] ??
+                                            widget.job['location'] ??
                                                 "Location not declared",
                                             maxLines: 2,
                                             style: TextStyle(
@@ -504,7 +501,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           AutoSizeText(
                                             'Deadline: ' +
                                                     widget
-                                                        .company['deadline'] ??
+                                                        .job['deadline'] ??
                                                 "No Deadline yet",
                                             maxLines: 2,
                                             style: TextStyle(
@@ -516,7 +513,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                       ),
                                     ),
                                   ),
-                                  widget.company['ctc'] != null
+                                  widget.job['ctc'] != null
                                       ? ListTile(
                                           dense: true,
                                           title: RichText(
@@ -530,7 +527,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               children: <TextSpan>[
                                                 TextSpan(
                                                     text:
-                                                        widget.company['ctc'] ??
+                                                        widget.job['ctc'] ??
                                                             "Not Specified",
                                                     style: TextStyle(
                                                       fontWeight:
@@ -541,7 +538,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['notice_period'] != null
+                                  widget.job['notice_period'] != null
                                       ? ListTile(
                                           dense: true,
                                           title: RichText(
@@ -554,7 +551,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               ),
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                    text: widget.company[
+                                                    text: widget.job[
                                                             'notice_period'] ??
                                                         "Not Specified",
                                                     style: TextStyle(
@@ -566,7 +563,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['description'] != null
+                                  widget.job['description'] != null
                                       ? ListTile(
                                           title: AutoSizeText(
                                             "Role Description : ",
@@ -586,10 +583,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  widget.company[
+                                                  widget.job[
                                                           'description'] ??
                                                       "Not Specified",
-                                                  maxLines: 4,
+                                                  maxLines: 999999,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.black,
@@ -603,7 +600,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['key_resp'] != null
+                                  widget.job['key_resp'] != null
                                       ? ListTile(
                                           title: AutoSizeText(
                                             "Key Responsibilities : ",
@@ -623,9 +620,9 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  widget.company['key_resp'] ??
+                                                  widget.job['key_resp'] ??
                                                       "Not Specified",
-                                                  // maxLines: 4,
+                                                   maxLines: 999999,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.black,
@@ -639,7 +636,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['soft_skills'] != null
+                                  widget.job['soft_skills'] != null
                                       ? ListTile(
                                           title: AutoSizeText(
                                             "Soft Skills : ",
@@ -657,14 +654,14 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
                                                 itemCount: widget
-                                                        .company['soft_skills']
+                                                        .job['soft_skills']
                                                         .length ??
                                                     1,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.company[
+                                                    widget.job[
                                                                 'soft_skills']
                                                             [index] ??
                                                         "None",
@@ -681,7 +678,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['tech_skills'] != null
+                                  widget.job['tech_skills'] != null
                                       ? ListTile(
                                           title: AutoSizeText(
                                             "Technical Skills  : ",
@@ -699,14 +696,14 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
                                                 itemCount: widget
-                                                        .company['tech_skills']
+                                                        .job['tech_skills']
                                                         .length ??
                                                     1,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.company[
+                                                    widget.job[
                                                                 'tech_skills']
                                                             [index] ??
                                                         "None",
@@ -723,7 +720,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  widget.company['requirements'] != null
+                                  widget.job['requirements'] != null
                                       ? ListTile(
                                           title: AutoSizeText(
                                             "Requirements : ",
@@ -740,7 +737,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                 physics:
                                                     NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
-                                                itemCount: (widget.company[
+                                                itemCount: (widget.job[
                                                                 'requirements'] ??
                                                             [])
                                                         .length ??
@@ -749,7 +746,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.company[
+                                                    widget.job[
                                                                 'requirements']
                                                             [index] ??
                                                         "No specific requirements",
@@ -767,7 +764,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                         )
                                       : SizedBox(),
                                   button(
-                                      widget.company['status'], widget.company)
+                                      widget.job['status'], widget.job)
                                 ]),
                           ),
                         ),

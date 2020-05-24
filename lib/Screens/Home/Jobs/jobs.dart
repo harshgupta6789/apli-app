@@ -26,7 +26,7 @@ class _JobsState extends State<Jobs>
   dynamic jobs;
 
   getInfo() async {
-    dynamic result = await _APIService.handleJobData();
+    dynamic result = await _APIService.getJobs();
     setState(() {
       jobs = result;
       loading = false;
@@ -139,7 +139,7 @@ class _JobsState extends State<Jobs>
                         child: Text(
                             "Your account is set on 'freeze' by your college"),
                       )
-                    : TabBarView(
+                    : jobs == 0 ? Center(child: Text('Error occurred, try again later'),) : TabBarView(
                         children: [
                           AppliedJobs(
                               appliedJobs: jobs['submitted_jobs'],

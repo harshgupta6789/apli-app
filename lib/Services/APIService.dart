@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:apli/Shared/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class APIService {
   final int profileType, jobType;
@@ -177,53 +178,7 @@ class APIService {
     }
   }
 
-  // Future getJobs() async {
-  //   try {
-  //     dynamic result;
-  //     Response response;
-  //     await SharedPreferences.getInstance().then((value) async {
-  //       switch(jobType) {
-  //         case 1:
-  //           response = await Dio().post(appliedJobsURL, data: {
-  //             "secret": "$passHashSecret",
-  //             "userid": "${value.getString('email')}"
-  //           });
-  //           break;
-
-  //         case 2:
-  //           response = await Dio().post(allJobsURL, data: {
-  //             "secret": "$passHashSecret",
-  //             "userid": "${value.getString('email')}"
-  //           });
-  //           break;
-
-  //         case 3:
-  //           response = await Dio().post(incompleteJobsURL, data: {
-  //             "secret": "$passHashSecret",
-  //             "userid": "${value.getString('email')}"
-  //           });
-  //           break;
-
-  //         default:
-  //           result = -2;
-  //           break;
-  //       }
-  //       if (response.statusCode == 200) {
-  //         var frozen = response.data['frozen'];
-  //         if (frozen == true) {
-  //           result = 'frozen';
-  //         } else
-  //           result = response.data;
-  //       } else
-  //         result = -2;
-  //     });
-  //     return result;
-  //   } catch (e) {
-  //     return 0;
-  //   }
-  // }
-
-  Future handleJobData() async {
+  Future getJobs() async {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
@@ -269,19 +224,24 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(jobApplyURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "userid": "${value.getString('email')}",
-        });
+        http.Response response = await http.post(
+          jobApplyURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"userid": "${value.getString('email')}"'
+              '}'),
+        );
         if (response.statusCode == 200) {
-          var temp = response.data['success'];
+          var decodedData = jsonDecode(response.body);
+          var temp = decodedData["success"];
           if (temp == true) {
-            result = response.data;
+            result = 1;
           } else
             result = -1;
-        } else
-          result = -2;
+        } else {
+          result = {'error' : jsonDecode(response.body)["error"]};
+        }
       });
 
       return result;
@@ -294,15 +254,19 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(interViewQuestionsURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "user_id": "${value.getString('email')}",
-        });
+        http.Response response = await http.post(
+          interViewQuestionsURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"user_id": "${value.getString('email')}"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
         if (response.statusCode == 200) {
-          result = response.data;
+          result = decodedData;
         } else
-          result = null;
+          result = {'error' : decodedData["error"]};
       });
 
       return result;
@@ -311,7 +275,7 @@ class APIService {
     }
   }
 
-  Future submitInterView(
+  Future submitInterViewQ(
       String id, String type, String questionID, String videoURL) async {
     try {
       dynamic result;
