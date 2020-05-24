@@ -60,7 +60,13 @@ class _JobQuestionsState extends State<JobQuestions> {
 
   camInit() async {
     qs = widget.questions;
-    indexOfQuestions = widget.whereToStart ?? 0;
+    if (widget.whereToStart != null) {
+      indexOfQuestions = widget.whereToStart;
+    } else {
+      indexOfQuestions = 0;
+    }
+
+    print(indexOfQuestions);
     cameras = await availableCameras();
     controller = CameraController(cameras[1], ResolutionPreset.low);
     controller.initialize().then((_) {
@@ -71,8 +77,6 @@ class _JobQuestionsState extends State<JobQuestions> {
       setState(() {});
     });
     //startTimer();
-    print(qs.length);
-    print(indexOfQuestions);
   }
 
   Future videoPicker(String path) async {
@@ -338,105 +342,108 @@ class _JobQuestionsState extends State<JobQuestions> {
     } else if (!controller.value.isInitialized && _isRecording == false)
       return Loading();
     else if (_isRecording == false && x == currentState.uploading) {
-      return Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.cloud_upload),
-                        StreamBuilder<StorageTaskEvent>(
-                            stream: uploadTask.events,
-                            builder: (context,
-                                AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                              if (asyncSnapshot.hasData) {
-                                final StorageTaskEvent event =
-                                    asyncSnapshot.data;
-                                final StorageTaskSnapshot snapshot =
-                                    event.snapshot;
-
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                      ' Uploading  ${_bytesProgress(snapshot)} %',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                      )),
-                                );
-                              }
-                              return Container();
-                            }),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
-                          width * 0.1, height * 0.04),
-                      child: Text(
-                        qs[indexOfQuestions]['question'] ?? "",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 14,
-                            letterSpacing: 1.2),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                    RaisedButton(
-                        color: Colors.grey,
-                        elevation: 0,
-                        padding: EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(width: 0),
-                        ),
-                        child: Text(
-                          'WAIT',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {}),
-                  ],
-                ),
-              ),
-            );
-    } else if (_isRecording == false && x == currentState.success) {
-      return  loading
-          ? Loading()
-          : Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
+      return WillPopScope(
+          onWillPop: () => _onWillPop(),
+          child: Scaffold(
+            body: Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.cloud_upload),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.cloud_upload),
+                      StreamBuilder<StorageTaskEvent>(
+                          stream: uploadTask.events,
+                          builder: (context,
+                              AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                            if (asyncSnapshot.hasData) {
+                              final StorageTaskEvent event = asyncSnapshot.data;
+                              final StorageTaskSnapshot snapshot =
+                                  event.snapshot;
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    ' Uploading  ${_bytesProgress(snapshot)} %',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              );
+                            }
+                            return Container();
+                          }),
+                    ],
+                  ),
                   Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(' Uploaded !',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ))),
+                    padding: EdgeInsets.fromLTRB(
+                        width * 0.1, height * 0.04, width * 0.1, height * 0.04),
+                    child: Text(
+                      qs[indexOfQuestions]['question'] ?? "",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          letterSpacing: 1.2),
+                      textAlign: TextAlign.left,
+                    ),
+                  ),
+                  RaisedButton(
+                      color: Colors.grey,
+                      elevation: 0,
+                      padding: EdgeInsets.only(
+                        left: 30,
+                        right: 30,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(width: 0),
+                      ),
+                      child: Text(
+                        'WAIT',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {}),
                 ],
               ),
-              buttonToShow()
-            ],
-          ),
-        ),
-      );
+            ),
+          ));
+    } else if (_isRecording == false && x == currentState.success) {
+      return loading
+          ? Loading()
+          : WillPopScope(
+              onWillPop: () => _onWillPop(),
+              child: Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(' Uploaded !',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ))),
+                        ],
+                      ),
+                      buttonToShow()
+                    ],
+                  ),
+                ),
+              ));
     }
     return WillPopScope(
       onWillPop: () => _onWillPop(),
@@ -449,7 +456,10 @@ class _JobQuestionsState extends State<JobQuestions> {
                 padding: EdgeInsets.fromLTRB(
                     width * 0.1, height * 0.07, width * 0.1, 0),
                 child: Text(
-                   indexOfQuestions.toString() + ". " +  qs[indexOfQuestions]['question'] ?? "",
+                  (indexOfQuestions + 1).toString() +
+                          ". " +
+                          qs[indexOfQuestions]['question'] ??
+                      "",
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 14,

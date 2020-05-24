@@ -966,7 +966,9 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                               }
                                               if (storage &&
                                                   camera &&
-                                                  microphone)
+                                                  microphone) {
+                                                print(
+                                                    snapshot.data['startFrom']);
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -982,7 +984,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                               jobID: widget.job[
                                                                   'job_id'],
                                                             )));
-                                              else
+                                              } else
                                                 showToast('Permission denied',
                                                     context,
                                                     color: Colors.red);
