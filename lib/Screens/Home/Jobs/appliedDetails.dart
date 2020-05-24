@@ -14,6 +14,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../HomeLoginWrapper.dart';
+
 enum currentState { none, uploading, success, failure }
 
 class AppliedDetails extends StatefulWidget {
@@ -33,6 +35,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   StorageUploadTask uploadTask;
   currentState x = currentState.none;
   File fileToUpload;
+  final _APIService = APIService();
 
   Future<void> downloadFile(StorageReference ref) async {
     final String url = await ref.getDownloadURL();
@@ -108,7 +111,20 @@ class _AppliedDetailsState extends State<AppliedDetails> {
           tempURL = url;
         });
         print(url);
-
+        dynamic result = await _APIService.updateJobOfferLetter(
+            widget.company['job_id'], tempURL);
+        print(result);
+        if (result == 1) {
+          showToast("Succesfully Uploaded", context);
+        } else {
+          showToast("Error", context);
+        }
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Wrapper(
+                      currentTab: 1,
+                    )),
+            (Route<dynamic> route) => false);
         // MOVE TO NEXT QUESTION
       } else if (url == null) {
         setState(() {
@@ -144,8 +160,21 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
-                  onPressed: () {
-                    print("CALL ME");
+                  onPressed: () async {
+                    dynamic result = await _APIService.acceptJobOffer(
+                        widget.company['job_id']);
+                    print(result);
+                    if (result == 1) {
+                      showToast("Succesfully Accepted", context);
+                    } else {
+                      showToast("Error", context);
+                    }
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => Wrapper(
+                                  currentTab: 1,
+                                )),
+                        (Route<dynamic> route) => false);
                   },
                   color: Colors.grey,
                   elevation: 0,
@@ -220,8 +249,21 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
-                  onPressed: () {
-                    print("CALL ME");
+                  onPressed: () async {
+                    dynamic result = await _APIService.acceptInterView(
+                        widget.company['job_id']);
+                    print(result);
+                    if (result == 1) {
+                      showToast("Succesfully Accepted", context);
+                    } else {
+                      showToast("Error", context);
+                    }
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => Wrapper(
+                                  currentTab: 1,
+                                )),
+                        (Route<dynamic> route) => false);
                   },
                   elevation: 0,
                   padding: EdgeInsets.only(left: 30, right: 30),
@@ -378,7 +420,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     }
   }
 
-  final _APIService = APIService();
   bool loading = false;
 
   @override

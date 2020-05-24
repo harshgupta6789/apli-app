@@ -329,7 +329,74 @@ class APIService {
         } else
           result = -2;
       });
-     
+
+      return result;
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  Future acceptInterView(String id) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(acceptInterviewURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id",
+          "email": "${value.getString('email')}",
+        });
+        if (response.statusCode == 200) {
+          result = response.data;
+        } else
+          result = -2;
+      });
+
+      return result;
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  Future acceptJobOffer(String id) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(acceptJobOfferURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id",
+          "email": "${value.getString('email')}",
+        });
+        if (response.statusCode == 200) {
+          result = 1;
+        } else
+          result = -2;
+      });
+
+      return result;
+    } catch (e) {
+      print(e);
+      return 0;
+    }
+  }
+
+  Future updateJobOfferLetter(String id, String link) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        Response response = await Dio().post(uploadLetterURL, data: {
+          "secret": "$passHashSecret",
+          "job_id": "$id",
+          "email": "${value.getString('email')}",
+          'signed_letter': "$link",
+        });
+        if (response.statusCode == 200) {
+          result = 1;
+        } else
+          result = -2;
+      });
+
       return result;
     } catch (e) {
       print(e);
