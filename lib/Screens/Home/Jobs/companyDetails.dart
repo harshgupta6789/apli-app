@@ -521,23 +521,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                           route) =>
                                                                       false);
                                                         }
-                                                      } else {
-                                                        showToast(
-                                                            'Error occurred, try again later',
-                                                            context);
-                                                        Navigator.of(context)
-                                                            .pushAndRemoveUntil(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                    Wrapper(
-                                                                      currentTab:
-                                                                      2,
-                                                                    )),
-                                                                (Route<dynamic>
-                                                            route) =>
-                                                            false);
-                                                      }
+                                                      } 
                                                     }),
                                               ),
                                             )
