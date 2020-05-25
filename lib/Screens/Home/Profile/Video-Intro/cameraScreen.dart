@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:apli/Screens/HomeLoginWrapper.dart';
-import 'package:path/path.dart' as p;
+
 import 'package:apli/Shared/functions.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 
 enum currentState { none, uploading, success, failure }
 
@@ -462,6 +463,7 @@ class _CameraState extends State<Camera> {
 
   @override
   void initState() {
+    Wakelock.enable();
     Status = widget.status;
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -506,6 +508,7 @@ class _CameraState extends State<Camera> {
 
   @override
   void dispose() {
+    Wakelock.disable();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,

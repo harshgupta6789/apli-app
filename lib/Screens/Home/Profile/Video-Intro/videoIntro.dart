@@ -1,20 +1,21 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:apli/Screens/Home/Profile/Video-Intro/cameraScreen.dart';
+import 'package:apli/Shared/constants.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path/path.dart' as p;
-import 'package:apli/Shared/constants.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as p;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:apli/Shared/functions.dart';
 import 'package:video_player/video_player.dart';
 
 enum currentState { none, uploading, success, failure }
@@ -487,20 +488,23 @@ class _VideoIntroState extends State<VideoIntro>
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: AwsomeVideoPlayer(
-                    fetchUrl ?? "",
-                    playOptions: VideoPlayOptions(
-                      aspectRatio: 1 / 1,
-                      loop: false,
-                      autoplay: false,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: AwsomeVideoPlayer(
+                      fetchUrl ?? "",
+                      playOptions: VideoPlayOptions(
+                        aspectRatio: 1 / 1,
+                        loop: false,
+                        autoplay: false,
+                      ),
+                      videoStyle: VideoStyle(
+                          videoControlBarStyle: VideoControlBarStyle(
+                              fullscreenIcon: SizedBox(),
+                              forwardIcon: SizedBox(),
+                              rewindIcon: SizedBox()),
+                          videoTopBarStyle:
+                              VideoTopBarStyle(popIcon: Container())),
                     ),
-                    videoStyle: VideoStyle(
-                        videoControlBarStyle: VideoControlBarStyle(
-                            fullscreenIcon: SizedBox(),
-                            forwardIcon: SizedBox(),
-                            rewindIcon: SizedBox()),
-                        videoTopBarStyle:
-                            VideoTopBarStyle(popIcon: Container())),
                   ),
                 ),
                 Icon(

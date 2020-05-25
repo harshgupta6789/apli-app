@@ -1,15 +1,10 @@
 import 'package:apli/Screens/Home/Jobs/appliedDetails.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:apli/Shared/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../HomeLoginWrapper.dart';
-import 'companyDetails.dart';
 
 class AppliedJobs extends StatefulWidget {
   final List appliedJobs;
@@ -31,113 +26,114 @@ class _AppliedJobsState extends State<AppliedJobs> {
     super.initState();
   }
 
-  // Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
-  //   switch (status) {
-  //     case "OFFERED":
-  //       return StreamBuilder(
-  //           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-  //           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-  //             // var dateString;
+  Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
+    print(deadlineTimer);
+    switch (status) {
+      case "OFFERED":
+        return StreamBuilder(
+            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+              // var dateString;
 
-  //             // int now = DateTime.now().millisecondsSinceEpoch;
+              // int now = DateTime.now().millisecondsSinceEpoch;
 
-  //             // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-  //             // Duration remaining = Duration(milliseconds: estimateTs - now);
-  //             // if(remaining.isNegative)
-  //             //   dateString = 'Deadline is over';
-  //             // else if (remaining.inDays > 0) {
-  //             //   if (remaining.inDays == 1) {
-  //             //     dateString = remaining.inDays.toString() + ' day';
-  //             //   } else
-  //             //     dateString = remaining.inDays.toString() + ' days';
-  //             // } else {
-  //             //   if (remaining.inHours > 0) {
-  //             //     if (remaining.inHours == 1)
-  //             //       dateString = remaining.inHours.toString() + ' hour';
-  //             //     else
-  //             //       dateString = remaining.inHours.toString() + ' hours';
-  //             //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-  //             //       1)
-  //             //     dateString = remaining.inMinutes.toString() + ' min';
-  //             //   else
-  //             //     dateString = remaining.inMinutes.toString() + ' mins';
-  //             //   else if (remaining.inSeconds == 1)
-  //             //     dateString = remaining.inSeconds.toString() + ' sec';
-  //             //   else
-  //             //     dateString = remaining.inSeconds.toString() + ' sec';
-  //             // }
+              // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
+              // Duration remaining = Duration(milliseconds: estimateTs - now);
+              // if(remaining.isNegative)
+              //   dateString = 'Deadline is over';
+              // else if (remaining.inDays > 0) {
+              //   if (remaining.inDays == 1) {
+              //     dateString = remaining.inDays.toString() + ' day';
+              //   } else
+              //     dateString = remaining.inDays.toString() + ' days';
+              // } else {
+              //   if (remaining.inHours > 0) {
+              //     if (remaining.inHours == 1)
+              //       dateString = remaining.inHours.toString() + ' hour';
+              //     else
+              //       dateString = remaining.inHours.toString() + ' hours';
+              //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+              //       1)
+              //     dateString = remaining.inMinutes.toString() + ' min';
+              //   else
+              //     dateString = remaining.inMinutes.toString() + ' mins';
+              //   else if (remaining.inSeconds == 1)
+              //     dateString = remaining.inSeconds.toString() + ' sec';
+              //   else
+              //     dateString = remaining.inSeconds.toString() + ' sec';
+              // }
 
-  //             return AutoSizeText(
-  //               "Deadline to accept : " + deadlineTimer,
-  //               maxLines: 2,
-  //               style: TextStyle(
-  //                   //color: Colors.red,
-  //                   fontSize: 12 * scale,
-  //                   fontWeight: FontWeight.w500),
-  //               overflow: TextOverflow.ellipsis,
-  //             );
-  //           });
-  //       break;
+              return AutoSizeText(
+                "Deadline to accept : " + deadlineTimer,
+                maxLines: 2,
+                style: TextStyle(
+                    //color: Colors.red,
+                    fontSize: 12 * scale,
+                    fontWeight: FontWeight.w500),
+                overflow: TextOverflow.ellipsis,
+              );
+            });
+        break;
 
-  //     case "LETTER SENT":
-  //       return StreamBuilder(
-  //           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-  //           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-  //             var dateString;
+      case "LETTER SENT":
+        return StreamBuilder(
+            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+              var dateString;
 
-  //             // int now = DateTime.now().millisecondsSinceEpoch;
+              // int now = DateTime.now().millisecondsSinceEpoch;
 
-  //             // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-  //             // Duration remaining = Duration(milliseconds: estimateTs - now);
-  //             // if(remaining.isNegative)
-  //             //   dateString = 'Deadline is over';
-  //             // else if (remaining.inDays > 0) {
-  //             //   if (remaining.inDays == 1) {
-  //             //     dateString = remaining.inDays.toString() + ' day';
-  //             //   } else
-  //             //     dateString = remaining.inDays.toString() + ' days';
-  //             // } else {
-  //             //   if (remaining.inHours > 0) {
-  //             //     if (remaining.inHours == 1)
-  //             //       dateString = remaining.inHours.toString() + ' hour';
-  //             //     else
-  //             //       dateString = remaining.inHours.toString() + ' hours';
-  //             //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-  //             //       1)
-  //             //     dateString = remaining.inMinutes.toString() + ' min';
-  //             //   else
-  //             //     dateString = remaining.inMinutes.toString() + ' mins';
-  //             //   else if (remaining.inSeconds == 1)
-  //             //     dateString = remaining.inSeconds.toString() + ' sec';
-  //             //   else
-  //             //     dateString = remaining.inSeconds.toString() + ' sec';
-  //             // }
+              // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
+              // Duration remaining = Duration(milliseconds: estimateTs - now);
+              // if(remaining.isNegative)
+              //   dateString = 'Deadline is over';
+              // else if (remaining.inDays > 0) {
+              //   if (remaining.inDays == 1) {
+              //     dateString = remaining.inDays.toString() + ' day';
+              //   } else
+              //     dateString = remaining.inDays.toString() + ' days';
+              // } else {
+              //   if (remaining.inHours > 0) {
+              //     if (remaining.inHours == 1)
+              //       dateString = remaining.inHours.toString() + ' hour';
+              //     else
+              //       dateString = remaining.inHours.toString() + ' hours';
+              //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+              //       1)
+              //     dateString = remaining.inMinutes.toString() + ' min';
+              //   else
+              //     dateString = remaining.inMinutes.toString() + ' mins';
+              //   else if (remaining.inSeconds == 1)
+              //     dateString = remaining.inSeconds.toString() + ' sec';
+              //   else
+              //     dateString = remaining.inSeconds.toString() + ' sec';
+              // }
 
-  //             return AutoSizeText(
-  //               "Deadline to accept : " + dateString ??
-  //                   "No Deadline" + 'remaining',
-  //               maxLines: 2,
-  //               style: TextStyle(
-  //                   //color: Colors.red,
-  //                   fontSize: 12 * scale,
-  //                   fontWeight: FontWeight.w500),
-  //               overflow: TextOverflow.ellipsis,
-  //             );
-  //           });
-  //       break;
+              return AutoSizeText(
+                "Deadline to accept : " + dateString ??
+                    "No Deadline" + 'remaining',
+                maxLines: 2,
+                style: TextStyle(
+                    //color: Colors.red,
+                    fontSize: 12 * scale,
+                    fontWeight: FontWeight.w500),
+                overflow: TextOverflow.ellipsis,
+              );
+            });
+        break;
 
-  //     default:
-  //       return AutoSizeText(
-  //         'Deadline: ' + deadline ?? "No Deadline",
-  //         maxLines: 2,
-  //         style: TextStyle(
-  //             color: Colors.black,
-  //             fontSize: 12 * scale,
-  //             fontWeight: FontWeight.w500),
-  //         overflow: TextOverflow.ellipsis,
-  //       );
-  //   }
-  // }
+      default:
+        return AutoSizeText(
+          'Deadline: ' + deadline ?? "No Deadline",
+          maxLines: 2,
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 12 * scale,
+              fontWeight: FontWeight.w500),
+          overflow: TextOverflow.ellipsis,
+        );
+    }
+  }
 
   Widget differentBackground(String status) {
     Color temp;
@@ -171,7 +167,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
       child: Container(
         color: temp,
         child: Padding(
-          padding: const EdgeInsets.all(4.0),
+          padding: const EdgeInsets.fromLTRB(10, 4, 10, 4),
           child: Text(status ?? "", style: TextStyle(color: Colors.white)),
         ),
       ),
@@ -291,15 +287,15 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                                         FontWeight.w500),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              // deadlineToShow(
-                                              //     widget.appliedJobs[index]
-                                              //         ['status'],
-                                              //     widget.appliedJobs[index]
-                                              //             ['accept_deadline'] ??
-                                              //         '',
-                                              //     widget.appliedJobs[index]
-                                              //             ['deadline'] ??
-                                              //         "")
+                                              deadlineToShow(
+                                                  widget.appliedJobs[index]
+                                                  ['status'],
+                                                  widget.appliedJobs[index]
+                                                  ['accept_deadline'] ??
+                                                      '',
+                                                  widget.appliedJobs[index]
+                                                  ['deadline'] ??
+                                                      "")
                                             ],
                                           ),
                                           trailing: differentBackground(widget
