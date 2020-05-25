@@ -24,7 +24,6 @@ class _AppliedJobsState extends State<AppliedJobs> {
 
   @override
   void initState() {
-    print(widget.appliedJobs[1]);
     super.initState();
   }
 
@@ -41,7 +40,9 @@ class _AppliedJobsState extends State<AppliedJobs> {
 
               int estimateTs = deadlineTimer.millisecondsSinceEpoch;
               Duration remaining = Duration(milliseconds: estimateTs - now);
-              if (remaining.inDays > 0) {
+              if(remaining.isNegative)
+                dateString = 'Deadline is over';
+              else if (remaining.inDays > 0) {
                 if (remaining.inDays == 1) {
                   dateString = remaining.inDays.toString() + ' day';
                 } else
@@ -68,7 +69,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
                     "No Deadline" + 'remaining',
                 maxLines: 2,
                 style: TextStyle(
-                    color: Colors.red,
+                    //color: Colors.red,
                     fontSize: 12 * scale,
                     fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
@@ -86,7 +87,9 @@ class _AppliedJobsState extends State<AppliedJobs> {
 
               int estimateTs = deadlineTimer.millisecondsSinceEpoch;
               Duration remaining = Duration(milliseconds: estimateTs - now);
-              if (remaining.inDays > 0) {
+              if(remaining.isNegative)
+                dateString = 'Deadline is over';
+              else if (remaining.inDays > 0) {
                 if (remaining.inDays == 1) {
                   dateString = remaining.inDays.toString() + ' day';
                 } else
@@ -113,7 +116,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
                     "No Deadline" + 'remaining',
                 maxLines: 2,
                 style: TextStyle(
-                    color: Colors.red,
+                    //color: Colors.red,
                     fontSize: 12 * scale,
                     fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
@@ -135,102 +138,43 @@ class _AppliedJobsState extends State<AppliedJobs> {
   }
 
   Widget differentBackground(String status) {
+    Color temp;
     switch (status) {
       case "OFFERED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.green;
         break;
       case "INTERVIEW":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.blue,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.blue;
         break;
       case "LETTER SENT":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.green;
         break;
       case "ACCEPTED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.green;
         break;
       case "UNREVIEWED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.grey,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.grey;
         break;
       case "REJECTED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.red,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.red;
+        break;
       case "HIRED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.green;
         break;
       default:
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        temp = Colors.green;
+
     }
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4.0),
+      child: Container(
+        color: temp,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Text(status ?? "", style: TextStyle(color: Colors.white)),
+        ),
+      ),
+    );
   }
 
   @override
@@ -244,43 +188,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
     }
 
     if ((widget.appliedJobs ?? []).length == 0) {
-      return Center(
-          child: ScrollConfiguration(
-        behavior: MyBehavior(),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset("Assets/Images/job.png"),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                      text:
-                          "I know you are interested in job \nbut first build your ",
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                      children: [
-                        TextSpan(
-                            text: "Profile",
-                            style: TextStyle(color: basicColor),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => Wrapper(
-                                              currentTab: 3,
-                                            )),
-                                    (Route<dynamic> route) => false);
-                                setState(() {});
-                              }),
-                      ]),
-                ),
-              )
-            ],
-          ),
-        ),
-      ));
+      return Center(child: Text('You have not applied for any jobs yet'),);
     } else
       return ScrollConfiguration(
         behavior: MyBehavior(),
@@ -313,7 +221,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         AppliedDetails(
-                                                          company: widget
+                                                          job: widget
                                                                   .appliedJobs[
                                                               index],
                                                           status: widget.status,

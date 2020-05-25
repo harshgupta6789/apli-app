@@ -15,16 +15,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../HomeLoginWrapper.dart';
 
-enum currentState { none, uploading, success, failure }
+enum currentState { recording, uploading, success, failure }
 
 class JobQuestions extends StatefulWidget {
-  final List<CameraDescription> cameras;
   final List questions;
   final String jobID;
   final int whereToStart;
   const JobQuestions(
       {Key key,
-      this.cameras,
       @required this.questions,
       this.whereToStart,
       this.jobID})
@@ -52,7 +50,7 @@ class _JobQuestionsState extends State<JobQuestions> {
   String tempURL;
   int indexOfQuestions;
   int Status;
-  currentState x = currentState.none;
+  currentState x = currentState.recording;
   List qs = [];
   List<CameraDescription> cameras;
   String name = Timestamp.now().toString();
@@ -65,8 +63,6 @@ class _JobQuestionsState extends State<JobQuestions> {
     } else {
       indexOfQuestions = 0;
     }
-
-    print(indexOfQuestions);
     cameras = await availableCameras();
     controller = CameraController(cameras[1], ResolutionPreset.low);
     controller.initialize().then((_) {
@@ -224,14 +220,14 @@ class _JobQuestionsState extends State<JobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.submitInterView(
+            dynamic result = await _APIService.submitInterViewQ(
                 widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
               print(result);
               setState(() {
                 loading = false;
                 indexOfQuestions = indexOfQuestions + 1;
-                x = currentState.none;
+                x = currentState.recording;
                 startVideoRecording();
               });
             }
@@ -256,12 +252,12 @@ class _JobQuestionsState extends State<JobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.submitInterView(
+            dynamic result = await _APIService.submitInterViewQ(
                 widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
               showToast("Submitting..", context);
               print(result);
-              dynamic finalResult = await _APIService.submitInterView(
+              dynamic finalResult = await _APIService.submitInterViewQ(
                   widget.jobID, "final", null, null);
               if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
                 showToast("Submitted Succesfully..", context);
@@ -307,7 +303,7 @@ class _JobQuestionsState extends State<JobQuestions> {
         if (mounted)
           setState(() {
             seconds = seconds + 1;
-            if (seconds >= 59) {
+            if (seconds > 59) {
               stopVideoRecording(false);
             }
           });
@@ -320,6 +316,19 @@ class _JobQuestionsState extends State<JobQuestions> {
   void stopTimer() {
     seconds = 0;
     _timer?.cancel();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+    ]);
+    controller.dispose();
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
@@ -342,108 +351,116 @@ class _JobQuestionsState extends State<JobQuestions> {
     } else if (!controller.value.isInitialized && _isRecording == false)
       return Loading();
     else if (_isRecording == false && x == currentState.uploading) {
-      return WillPopScope(
-          onWillPop: () => _onWillPop(),
-          child: Scaffold(
-            body: Center(
-              child: Column(
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.cloud_upload),
-                      StreamBuilder<StorageTaskEvent>(
-                          stream: uploadTask.events,
-                          builder: (context,
-                              AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                            if (asyncSnapshot.hasData) {
-                              final StorageTaskEvent event = asyncSnapshot.data;
-                              final StorageTaskSnapshot snapshot =
-                                  event.snapshot;
+                  Icon(Icons.cloud_upload),
+                  StreamBuilder<StorageTaskEvent>(
+                      stream: uploadTask.events,
+                      builder: (context,
+                          AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                        if (asyncSnapshot.hasData) {
+                          final StorageTaskEvent event = asyncSnapshot.data;
+                          final StorageTaskSnapshot snapshot =
+                              event.snapshot;
 
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    ' Uploading  ${_bytesProgress(snapshot)} %',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                              );
-                            }
-                            return Container();
-                          }),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        width * 0.1, height * 0.04, width * 0.1, height * 0.04),
-                    child: Text(
-                      qs[indexOfQuestions]['question'] ?? "",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 14,
-                          letterSpacing: 1.2),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
-                  RaisedButton(
-                      color: Colors.grey,
-                      elevation: 0,
-                      padding: EdgeInsets.only(
-                        left: 30,
-                        right: 30,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(width: 0),
-                      ),
-                      child: Text(
-                        'WAIT',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {}),
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                ' Uploading  ${_bytesProgress(snapshot)} %',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                          );
+                        }
+                        return Container();
+                      }),
                 ],
               ),
-            ),
-          ));
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
+                child: Text(
+                  (indexOfQuestions + 1).toString() + ". " + qs[indexOfQuestions]['question'] ?? "",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                      letterSpacing: 1.2),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              RaisedButton(
+                  color: Colors.grey,
+                  elevation: 0,
+                  padding: EdgeInsets.only(
+                    left: 30,
+                    right: 30,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                    side: BorderSide(width: 0),
+                  ),
+                  child: Text(
+                    'WAIT',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {}),
+            ],
+          ),
+        ),
+      );
     } else if (_isRecording == false && x == currentState.success) {
       return loading
           ? Loading()
-          : WillPopScope(
-              onWillPop: () => _onWillPop(),
-              child: Scaffold(
-                body: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(Icons.cloud_upload),
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(' Uploaded !',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ))),
-                        ],
-                      ),
-                      buttonToShow()
-                    ],
-                  ),
+          : Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.cloud_upload),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(' Uploading 100 %',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ))),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
+                child: Text(
+                  (indexOfQuestions + 1).toString() + ". " + qs[indexOfQuestions]['question'] ?? "",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                      letterSpacing: 1.2),
+                  textAlign: TextAlign.center,
                 ),
-              ));
+              ),
+              buttonToShow()
+            ],
+          ),
+        ),
+      );
     }
     return WillPopScope(
       onWillPop: () => _onWillPop(),
