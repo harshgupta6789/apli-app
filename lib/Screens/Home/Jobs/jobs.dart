@@ -15,27 +15,34 @@ class Jobs extends StatefulWidget {
 }
 
 class _JobsState extends State<Jobs>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   TabController _tabController;
+  AnimationController _controller;
   int _currentTab = 1;
   final _APIService = APIService();
   bool loading = true;
   dynamic jobs;
+  double angle = 0;
 
   getInfo() async {
     dynamic result = await _APIService.getJobs();
     if(mounted) setState(() {
       jobs = result;
       loading = false;
-    });
-    print(result['cand_accepted_job']);
+        angle = 0;
+        _controller.reset();
+      });
   }
 
   @override
   void initState() {
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
     getInfo();
     _tabController =
         TabController(length: 3, vsync: this, initialIndex: _currentTab);
@@ -43,20 +50,30 @@ class _JobsState extends State<Jobs>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
-        floatingActionButton: Visibility(
-          visible: !loading,
+        floatingActionButton: RotationTransition(
+          turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
           child: FloatingActionButton(
             backgroundColor: basicColor,
             child: Icon(Icons.refresh),
             onPressed: () {
-              setState(() {
-                loading = true;
-              });
-              getInfo();
+              if (!loading) {
+                _controller.forward();
+                getInfo();
+                setState(() {
+                  loading = true;
+                });
+              }
             },
           ),
         ),

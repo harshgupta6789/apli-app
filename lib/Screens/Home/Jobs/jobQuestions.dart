@@ -1,17 +1,19 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:apli/Services/APIService.dart';
+import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
-import 'package:path/path.dart' as p;
-import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../HomeLoginWrapper.dart';
 
@@ -321,6 +323,7 @@ class _JobQuestionsState extends State<JobQuestions> {
   @override
   void dispose() {
     // TODO: implement dispose
+    Wakelock.disable();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -333,6 +336,7 @@ class _JobQuestionsState extends State<JobQuestions> {
 
   @override
   void initState() {
+    Wakelock.enable();
     camInit();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
