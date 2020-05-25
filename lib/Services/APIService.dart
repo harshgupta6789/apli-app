@@ -240,7 +240,7 @@ class APIService {
           } else
             result = -1;
         } else {
-          result = {'error' : jsonDecode(response.body)["error"]};
+          result = {'error': jsonDecode(response.body)["error"]};
         }
       });
 
@@ -266,7 +266,7 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error' : decodedData["error"]};
+          result = {'error': decodedData["error"]};
       });
 
       return result;
@@ -305,15 +305,20 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(acceptInterviewURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "email": "${value.getString('email')}",
-        });
+        http.Response response = await http.post(
+          acceptInterviewURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"email": "${value.getString('email')}"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
         if (response.statusCode == 200) {
-          result = response.data;
+          result = decodedData;
         } else
-          result = -2;
+          result = {'error': decodedData["error"]};
       });
 
       return result;
@@ -327,15 +332,20 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(acceptJobOfferURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "email": "${value.getString('email')}",
-        });
+        http.Response response = await http.post(
+          acceptJobOfferURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"email": "${value.getString('email')}"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
         if (response.statusCode == 200) {
-          result = 1;
+          result = decodedData;
         } else
-          result = -2;
+          result = {'error': decodedData["error"]};
       });
 
       return result;
@@ -349,16 +359,21 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-        Response response = await Dio().post(uploadLetterURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "email": "${value.getString('email')}",
-          'signed_letter': "$link",
-        });
+        http.Response response = await http.post(
+          uploadLetterURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"email": "${value.getString('email')}", '
+              '"signed_letter": "$link"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
         if (response.statusCode == 200) {
-          result = 1;
+          result = decodedData;
         } else
-          result = -2;
+          result = {'error': decodedData["error"]};
       });
 
       return result;

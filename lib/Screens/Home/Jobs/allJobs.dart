@@ -1,3 +1,4 @@
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
@@ -102,6 +103,10 @@ class _AllJobsState extends State<AllJobs> {
                                       top: 10 * scale, bottom: 13 * scale),
                                   child: ListTile(
                                       onTap: () {
+                                         if (widget.alreadyAccepted!=null && widget.alreadyAccepted) {
+                                              showToast(
+                                                  "Already Accepted!", context);
+                                            } else {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -112,7 +117,7 @@ class _AllJobsState extends State<AllJobs> {
                                                           widget.allJobs[index],
                                                       status: widget.status,
                                                     )));
-                                      },
+                                      }},
                                       title: AutoSizeText(
                                         widget.allJobs[index]['role'] ??
                                             "Role not provided",

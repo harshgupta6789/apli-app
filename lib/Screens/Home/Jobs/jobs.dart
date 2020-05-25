@@ -142,6 +142,7 @@ class _JobsState extends State<Jobs>
                     : jobs == 0 ? Center(child: Text('Error occurred, try again later'),) : TabBarView(
                         children: [
                           AppliedJobs(
+                            alreadyAccepted: jobs['cand_accepted_job'],
                               appliedJobs: jobs['submitted_jobs'],
                               status: jobs['profile_status']),
                           AllJobs(

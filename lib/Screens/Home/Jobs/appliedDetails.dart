@@ -77,6 +77,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
           //currentFileNames[index] = p.basename(file.path);
         });
         _uploadFile(file, "offerletter");
+         showToast("Uploading..", context);
       } else {}
     } catch (e) {
       AwesomeDialog(
@@ -114,10 +115,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         dynamic result = await _APIService.updateJobOfferLetter(
             widget.job['job_id'], tempURL);
         print(result);
-        if (result == 1) {
-          showToast("Successfully Uploaded", context);
+        if (result['error']!=null) {
+          showToast("error", context);
         } else {
-          showToast("Error", context);
+         showToast("Successfully Uploaded", context);
         }
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -137,8 +138,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   Widget button(String status, Map job) {
     switch (status) {
       case "OFFERED":
-        bool deadlineOver = job['accept_deadline_passed'] ?? true;
-        bool candAccepted = job['cand_accepted_job'] ?? true;
+        bool deadlineOver = job['accept_deadline_passed'] ?? false;
+        bool candAccepted = job['cand_accepted_job'] ?? false;
         if (deadlineOver || candAccepted) {
           return Padding(
               padding:
@@ -161,13 +162,13 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
                   onPressed: () async {
-                    dynamic result = await _APIService.acceptJobOffer(
-                        widget.job['job_id']);
+                    dynamic result =
+                        await _APIService.acceptJobOffer(widget.job['job_id']);
                     print(result);
-                    if (result == 1) {
-                      showToast("Successfully Accepted", context);
+                    if (result['error'] != null) {
+                      showToast(result['error'].toString(), context);
                     } else {
-                      showToast("Error", context);
+                      showToast("Accepted Job Offer!", context);
                     }
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
@@ -192,16 +193,74 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         break;
       case "INTERVIEW":
         if (job['schedule']['is_online'] != true) {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-              child: Column(
-                children: [
-                  Text("Where :" + job['schedule']['where'].toString()),
-                  //Text("When :" + company['schedule']['when'].toString())
-                ],
-              ));
-        } else if (job['interview_date_passed'] ||
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Divider(
+                thickness: 2,
+              ),
+              ListTile(
+                dense: true,
+                title: AutoSizeText(
+                  "Where : " + widget.job['schedule']['where'] ??
+                      "Location Not Specified",
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              ListTile(
+                dense: true,
+                title: AutoSizeText(
+                  "When : " + widget.job['schedule']['when'] ??
+                      "Time Not Specified",
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                  child: RaisedButton(
+                      color: basicColor,
+                      onPressed: () async {
+                        showToast("Accepting..", context);
+                        dynamic result = await _APIService.acceptInterView(
+                            widget.job['job_id']);
+                        print(result);
+                        if (result['error'] != null) {
+                          showToast(result['error'].toString(), context);
+                        } else {
+                          showToast("Accepted Interview!", context);
+                        }
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => Wrapper(
+                                      currentTab: 1,
+                                    )),
+                            (Route<dynamic> route) => false);
+                      },
+                      elevation: 0,
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: basicColor, width: 1.2),
+                      ),
+                      child: Text(
+                        'ACCEPT INTERVIEW',
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            ],
+          );
+        } else if (job['interview_date_passed'] &&
             job['schedule']['cand_accepted']) {
           return Padding(
               padding:
@@ -212,21 +271,23 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   padding: EdgeInsets.only(left: 30, right: 30),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
+                    side: BorderSide(color: Colors.grey, width: 1.2),
                   ),
                   child: Text(
                     'ACCEPT INTERVIEW',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   )));
         } else if (job['interview_room_link'] != null &&
             job['schedule']['cand_accepted']) {
+          print(job['interview_room_link']);
           return Padding(
               padding:
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
                   onPressed: () async {
                     var url =
-                        job['interview_room_link'] ?? 'https://flutter.dev';
+                        "https://dev.apli.ai" + job['interview_room_link'] ??
+                            'https://flutter.dev';
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {
@@ -234,6 +295,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     }
                     print("INTERVIEW ");
                   },
+                  color: basicColor,
                   elevation: 0,
                   padding: EdgeInsets.only(left: 30, right: 30),
                   shape: RoundedRectangleBorder(
@@ -245,36 +307,75 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     style: TextStyle(color: Colors.white),
                   )));
         } else {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-              child: RaisedButton(
-                  onPressed: () async {
-                    dynamic result = await _APIService.acceptInterView(
-                        widget.job['job_id']);
-                    print(result);
-                    if (result == 1) {
-                      showToast("Successfully Accepted", context);
-                    } else {
-                      showToast("Error", context);
-                    }
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => Wrapper(
-                                  currentTab: 1,
-                                )),
-                        (Route<dynamic> route) => false);
-                  },
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
-                  ),
-                  child: Text(
-                    'ACCEPT INTERVIEW',
-                    style: TextStyle(color: Colors.white),
-                  )));
+          String temp = widget.job['schedule']['when'];
+          print(temp.split("T"));
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Divider(
+                thickness: 2,
+              ),
+              ListTile(
+                dense: true,
+                title: AutoSizeText(
+                  "Where : " + widget.job['schedule']['where'] ??
+                      "Location Not Specified",
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              ListTile(
+                dense: true,
+                title: AutoSizeText(
+                  "When : " + widget.job['schedule']['when'] ??
+                      "Time Not Specified",
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                  child: RaisedButton(
+                      color: basicColor,
+                      onPressed: () async {
+                        showToast("Accepting..", context);
+                        dynamic result = await _APIService.acceptInterView(
+                            widget.job['job_id']);
+                        print(result);
+                        if (result['error'] != null) {
+                          showToast(result['error'].toString(), context);
+                        } else {
+                          showToast("Check Interview link!", context);
+                        }
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (context) => Wrapper(
+                                      currentTab: 1,
+                                    )),
+                            (Route<dynamic> route) => false);
+                      },
+                      elevation: 0,
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: basicColor, width: 1.2),
+                      ),
+                      child: Text(
+                        'ACCEPT INTERVIEW',
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            ],
+          );
         }
         break;
       case "LETTER SENT":
@@ -302,9 +403,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         }
                         if (allowed) {
                           if (job['offer_letter'] != null) {
-                            String firebaseUrl = job['offer_letter']
-                                .replaceAll(
-                                    pdfUrltoBeReplaced, pdfUrltoreplacedWith);
+                            String firebaseUrl = job['offer_letter'].replaceAll(
+                                pdfUrltoBeReplaced, pdfUrltoreplacedWith);
                             firebaseUrl = firebaseUrl.replaceAll("%40", "@");
                             print(firebaseUrl);
 
@@ -316,14 +416,15 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                               downloadFile(reference);
                             });
                           }
-                        } else showToast('Permission denied', context);
+                        } else
+                          showToast('Permission denied', context);
                       },
                       color: Colors.green,
                       elevation: 0,
                       padding: EdgeInsets.only(left: 30, right: 30),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: basicColor, width: 1.2),
+                        side: BorderSide(color: Colors.green, width: 1.2),
                       ),
                       child: Text(
                         'DOWNLOAD LETTER',
@@ -341,7 +442,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                       padding: EdgeInsets.only(left: 30, right: 30),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: basicColor, width: 1.2),
+                        side: BorderSide(color: Colors.green, width: 1.2),
                       ),
                       child: Text(
                         'UPLOAD LETTER',
@@ -354,16 +455,20 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         }
         break;
       case "ACCEPTED":
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(4.0),
-          child: Container(
-            color: Colors.green,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(status ?? "", style: TextStyle(color: Colors.white)),
-            ),
-          ),
-        );
+        return Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            child: RaisedButton(
+                onPressed: null,
+                elevation: 0,
+                padding: EdgeInsets.only(left: 30, right: 30),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
+                  side: BorderSide(color: Colors.grey, width: 1.2),
+                ),
+                child: Text(
+                  'APPLY NOW',
+                  style: TextStyle(color: Colors.white),
+                )));
         break;
       case "UNREVIEWED":
         return Padding(
@@ -374,7 +479,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                 padding: EdgeInsets.only(left: 30, right: 30),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
-                  side: BorderSide(color: basicColor, width: 1.2),
+                  side: BorderSide(color: Colors.grey, width: 1.2),
                 ),
                 child: Text(
                   'APPLY NOW',
@@ -422,6 +527,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   @override
   void initState() {
     print(widget.job);
+
+    print(widget.job['schedule']['where']);
     super.initState();
   }
 
@@ -472,8 +579,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                   ListTile(
                                     onTap: () {},
                                     title: AutoSizeText(
-                                      widget.job['role'] ??
-                                          "Role not declared",
+                                      widget.job['role'] ?? "Role not declared",
                                       maxLines: 2,
                                       style: TextStyle(
                                           color: basicColor,
@@ -500,8 +606,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                           AutoSizeText(
                                             'Deadline: ' +
-                                                    widget
-                                                        .job['deadline'] ??
+                                                    widget.job['deadline'] ??
                                                 "No Deadline yet",
                                             maxLines: 2,
                                             style: TextStyle(
@@ -526,9 +631,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               ),
                                               children: <TextSpan>[
                                                 TextSpan(
-                                                    text:
-                                                        widget.job['ctc'] ??
-                                                            "Not Specified",
+                                                    text: widget.job['ctc'] ??
+                                                        "Not Specified",
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w400,
@@ -583,8 +687,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  widget.job[
-                                                          'description'] ??
+                                                  widget.job['description'] ??
                                                       "Not Specified",
                                                   maxLines: 999999,
                                                   style: TextStyle(
@@ -622,7 +725,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                 Text(
                                                   widget.job['key_resp'] ??
                                                       "Not Specified",
-                                                   maxLines: 999999,
+                                                  maxLines: 999999,
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       color: Colors.black,
@@ -661,8 +764,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.job[
-                                                                'soft_skills']
+                                                    widget.job['soft_skills']
                                                             [index] ??
                                                         "None",
                                                     //maxLines: 4,
@@ -703,8 +805,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.job[
-                                                                'tech_skills']
+                                                    widget.job['tech_skills']
                                                             [index] ??
                                                         "None",
                                                     //maxLines: 4,
@@ -737,17 +838,16 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                 physics:
                                                     NeverScrollableScrollPhysics(),
                                                 shrinkWrap: true,
-                                                itemCount: (widget.job[
-                                                                'requirements'] ??
-                                                            [])
-                                                        .length ??
-                                                    1,
+                                                itemCount:
+                                                    (widget.job['requirements'] ??
+                                                                [])
+                                                            .length ??
+                                                        1,
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         int index) {
                                                   return Text(
-                                                    widget.job[
-                                                                'requirements']
+                                                    widget.job['requirements']
                                                             [index] ??
                                                         "No specific requirements",
                                                     //maxLines: 4,
@@ -763,8 +863,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                           ),
                                         )
                                       : SizedBox(),
-                                  button(
-                                      widget.job['status'], widget.job)
+                                  button(widget.job['status'], widget.job)
                                 ]),
                           ),
                         ),
