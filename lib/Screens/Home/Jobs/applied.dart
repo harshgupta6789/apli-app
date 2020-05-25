@@ -1,4 +1,5 @@
 import 'package:apli/Screens/Home/Jobs/appliedDetails.dart';
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -13,8 +14,11 @@ import 'companyDetails.dart';
 class AppliedJobs extends StatefulWidget {
   final List appliedJobs;
   final int status;
+  final bool alreadyAccepted;
 
-  const AppliedJobs({Key key, this.appliedJobs, this.status}) : super(key: key);
+  const AppliedJobs(
+      {Key key, this.appliedJobs, this.status, this.alreadyAccepted})
+      : super(key: key);
   @override
   _AppliedJobsState createState() => _AppliedJobsState();
 }
@@ -27,115 +31,113 @@ class _AppliedJobsState extends State<AppliedJobs> {
     super.initState();
   }
 
-  Widget deadlineToShow(
-      String status, Timestamp deadlineTimer, String deadline) {
-    switch (status) {
-      case "OFFERED":
-        return StreamBuilder(
-            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-              var dateString;
+  // Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
+  //   switch (status) {
+  //     case "OFFERED":
+  //       return StreamBuilder(
+  //           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+  //           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+  //             // var dateString;
 
-              int now = DateTime.now().millisecondsSinceEpoch;
+  //             // int now = DateTime.now().millisecondsSinceEpoch;
 
-              int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-              Duration remaining = Duration(milliseconds: estimateTs - now);
-              if(remaining.isNegative)
-                dateString = 'Deadline is over';
-              else if (remaining.inDays > 0) {
-                if (remaining.inDays == 1) {
-                  dateString = remaining.inDays.toString() + ' day';
-                } else
-                  dateString = remaining.inDays.toString() + ' days';
-              } else {
-                if (remaining.inHours > 0) {
-                  if (remaining.inHours == 1)
-                    dateString = remaining.inHours.toString() + ' hour';
-                  else
-                    dateString = remaining.inHours.toString() + ' hours';
-                } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-                    1)
-                  dateString = remaining.inMinutes.toString() + ' min';
-                else
-                  dateString = remaining.inMinutes.toString() + ' mins';
-                else if (remaining.inSeconds == 1)
-                  dateString = remaining.inSeconds.toString() + ' sec';
-                else
-                  dateString = remaining.inSeconds.toString() + ' sec';
-              }
+  //             // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
+  //             // Duration remaining = Duration(milliseconds: estimateTs - now);
+  //             // if(remaining.isNegative)
+  //             //   dateString = 'Deadline is over';
+  //             // else if (remaining.inDays > 0) {
+  //             //   if (remaining.inDays == 1) {
+  //             //     dateString = remaining.inDays.toString() + ' day';
+  //             //   } else
+  //             //     dateString = remaining.inDays.toString() + ' days';
+  //             // } else {
+  //             //   if (remaining.inHours > 0) {
+  //             //     if (remaining.inHours == 1)
+  //             //       dateString = remaining.inHours.toString() + ' hour';
+  //             //     else
+  //             //       dateString = remaining.inHours.toString() + ' hours';
+  //             //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+  //             //       1)
+  //             //     dateString = remaining.inMinutes.toString() + ' min';
+  //             //   else
+  //             //     dateString = remaining.inMinutes.toString() + ' mins';
+  //             //   else if (remaining.inSeconds == 1)
+  //             //     dateString = remaining.inSeconds.toString() + ' sec';
+  //             //   else
+  //             //     dateString = remaining.inSeconds.toString() + ' sec';
+  //             // }
 
-              return AutoSizeText(
-                "Deadline to accept : " + dateString ??
-                    "No Deadline" + 'remaining',
-                maxLines: 2,
-                style: TextStyle(
-                    //color: Colors.red,
-                    fontSize: 12 * scale,
-                    fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-              );
-            });
-        break;
+  //             return AutoSizeText(
+  //               "Deadline to accept : " + deadlineTimer,
+  //               maxLines: 2,
+  //               style: TextStyle(
+  //                   //color: Colors.red,
+  //                   fontSize: 12 * scale,
+  //                   fontWeight: FontWeight.w500),
+  //               overflow: TextOverflow.ellipsis,
+  //             );
+  //           });
+  //       break;
 
-      case "LETTER SENT":
-        return StreamBuilder(
-            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-              var dateString;
+  //     case "LETTER SENT":
+  //       return StreamBuilder(
+  //           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+  //           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+  //             var dateString;
 
-              int now = DateTime.now().millisecondsSinceEpoch;
+  //             // int now = DateTime.now().millisecondsSinceEpoch;
 
-              int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-              Duration remaining = Duration(milliseconds: estimateTs - now);
-              if(remaining.isNegative)
-                dateString = 'Deadline is over';
-              else if (remaining.inDays > 0) {
-                if (remaining.inDays == 1) {
-                  dateString = remaining.inDays.toString() + ' day';
-                } else
-                  dateString = remaining.inDays.toString() + ' days';
-              } else {
-                if (remaining.inHours > 0) {
-                  if (remaining.inHours == 1)
-                    dateString = remaining.inHours.toString() + ' hour';
-                  else
-                    dateString = remaining.inHours.toString() + ' hours';
-                } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-                    1)
-                  dateString = remaining.inMinutes.toString() + ' min';
-                else
-                  dateString = remaining.inMinutes.toString() + ' mins';
-                else if (remaining.inSeconds == 1)
-                  dateString = remaining.inSeconds.toString() + ' sec';
-                else
-                  dateString = remaining.inSeconds.toString() + ' sec';
-              }
+  //             // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
+  //             // Duration remaining = Duration(milliseconds: estimateTs - now);
+  //             // if(remaining.isNegative)
+  //             //   dateString = 'Deadline is over';
+  //             // else if (remaining.inDays > 0) {
+  //             //   if (remaining.inDays == 1) {
+  //             //     dateString = remaining.inDays.toString() + ' day';
+  //             //   } else
+  //             //     dateString = remaining.inDays.toString() + ' days';
+  //             // } else {
+  //             //   if (remaining.inHours > 0) {
+  //             //     if (remaining.inHours == 1)
+  //             //       dateString = remaining.inHours.toString() + ' hour';
+  //             //     else
+  //             //       dateString = remaining.inHours.toString() + ' hours';
+  //             //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+  //             //       1)
+  //             //     dateString = remaining.inMinutes.toString() + ' min';
+  //             //   else
+  //             //     dateString = remaining.inMinutes.toString() + ' mins';
+  //             //   else if (remaining.inSeconds == 1)
+  //             //     dateString = remaining.inSeconds.toString() + ' sec';
+  //             //   else
+  //             //     dateString = remaining.inSeconds.toString() + ' sec';
+  //             // }
 
-              return AutoSizeText(
-                "Deadline to accept : " + dateString ??
-                    "No Deadline" + 'remaining',
-                maxLines: 2,
-                style: TextStyle(
-                    //color: Colors.red,
-                    fontSize: 12 * scale,
-                    fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-              );
-            });
-        break;
+  //             return AutoSizeText(
+  //               "Deadline to accept : " + dateString ??
+  //                   "No Deadline" + 'remaining',
+  //               maxLines: 2,
+  //               style: TextStyle(
+  //                   //color: Colors.red,
+  //                   fontSize: 12 * scale,
+  //                   fontWeight: FontWeight.w500),
+  //               overflow: TextOverflow.ellipsis,
+  //             );
+  //           });
+  //       break;
 
-      default:
-        return AutoSizeText(
-          'Deadline: ' + deadline ?? "No Deadline",
-          maxLines: 2,
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: 12 * scale,
-              fontWeight: FontWeight.w500),
-          overflow: TextOverflow.ellipsis,
-        );
-    }
-  }
+  //     default:
+  //       return AutoSizeText(
+  //         'Deadline: ' + deadline ?? "No Deadline",
+  //         maxLines: 2,
+  //         style: TextStyle(
+  //             color: Colors.black,
+  //             fontSize: 12 * scale,
+  //             fontWeight: FontWeight.w500),
+  //         overflow: TextOverflow.ellipsis,
+  //       );
+  //   }
+  // }
 
   Widget differentBackground(String status) {
     Color temp;
@@ -163,7 +165,6 @@ class _AppliedJobsState extends State<AppliedJobs> {
         break;
       default:
         temp = Colors.green;
-
     }
     return ClipRRect(
       borderRadius: BorderRadius.circular(4.0),
@@ -188,7 +189,9 @@ class _AppliedJobsState extends State<AppliedJobs> {
     }
 
     if ((widget.appliedJobs ?? []).length == 0) {
-      return Center(child: Text('You have not applied for any jobs yet'),);
+      return Center(
+        child: Text('You have not applied for any jobs yet'),
+      );
     } else
       return ScrollConfiguration(
         behavior: MyBehavior(),
@@ -216,19 +219,49 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                           top: 10 * scale, bottom: 13 * scale),
                                       child: ListTile(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AppliedDetails(
-                                                          job: widget
-                                                                  .appliedJobs[
-                                                              index],
-                                                          status: widget.status,
-                                                          st: widget
-                                                                  .appliedJobs[
-                                                              index]['status'],
-                                                        )));
+                                            if (widget.appliedJobs[index]
+                                                        ['status'] ==
+                                                    'LETTER SENT' ||
+                                                widget.appliedJobs[index]
+                                                        ['status'] ==
+                                                    'ACCEPTED') {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AppliedDetails(
+                                                            job: widget
+                                                                    .appliedJobs[
+                                                                index],
+                                                            status:
+                                                                widget.status,
+                                                            st: widget
+                                                                    .appliedJobs[
+                                                                index]['status'],
+                                                          )));
+                                            } else {
+                                              if (widget.alreadyAccepted !=
+                                                      null &&
+                                                  widget.alreadyAccepted) {
+                                                showToast("Already Accepted!",
+                                                    context);
+                                              } else {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            AppliedDetails(
+                                                              job: widget
+                                                                      .appliedJobs[
+                                                                  index],
+                                                              status:
+                                                                  widget.status,
+                                                              st: widget.appliedJobs[
+                                                                      index]
+                                                                  ['status'],
+                                                            )));
+                                              }
+                                            }
                                           },
                                           title: AutoSizeText(
                                             widget.appliedJobs[index]['role'] ??
@@ -258,19 +291,20 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                                         FontWeight.w500),
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              deadlineToShow(
-                                                  widget.appliedJobs[index]
-                                                      ['status'],
-                                                  widget.appliedJobs[index]
-                                                          ['accept_deadline'] ??
-                                                      Timestamp(0, 100000000),
-                                                  widget.appliedJobs[index]
-                                                          ['deadline'] ??
-                                                      "")
+                                              // deadlineToShow(
+                                              //     widget.appliedJobs[index]
+                                              //         ['status'],
+                                              //     widget.appliedJobs[index]
+                                              //             ['accept_deadline'] ??
+                                              //         '',
+                                              //     widget.appliedJobs[index]
+                                              //             ['deadline'] ??
+                                              //         "")
                                             ],
                                           ),
                                           trailing: differentBackground(widget
-                                              .appliedJobs[index]['status']))),
+                                              .appliedJobs[index]['status'])
+                                          )),
                                 ])),
                       );
                     }))),
