@@ -354,7 +354,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                                   "Please Complete Your Profile First!",
                                                                   context);
                                                             }
-                                                          }
+                                                          } else showToast('Permission denied', context);
                                                         }),
                                                   )
                                                 ],

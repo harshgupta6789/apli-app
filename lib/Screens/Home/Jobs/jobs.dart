@@ -27,7 +27,7 @@ class _JobsState extends State<Jobs>
 
   getInfo() async {
     dynamic result = await _APIService.getJobs();
-    setState(() {
+    if(mounted) setState(() {
       jobs = result;
       loading = false;
     });

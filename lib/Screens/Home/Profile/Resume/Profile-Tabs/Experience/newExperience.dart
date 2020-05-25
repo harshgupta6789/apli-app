@@ -390,8 +390,8 @@ class _NewExperienceState extends State<NewExperience> {
                                           value,
                                           style: TextStyle(
                                               fontSize: (width < 400)
-                                                  ? (width < 350) ? 10 : 11
-                                                  : 14),
+                                                  ? (width < 350) ? 9 : 10
+                                                  : 13),
                                         ),
                                       );
                                     }).toList(),

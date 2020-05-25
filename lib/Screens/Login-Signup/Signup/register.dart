@@ -37,10 +37,11 @@ class _RegisterState extends State<Register> {
           context: context,
           builder: (context) => AlertDialog(
             title: new Text(
-                'Your details will not be saved and you will have to start over again !!!'),
-            content: new Text(
-              'Are you sure you want to leave?',
-            ),
+                'Your details will not be saved and you will have to start over again !!!\n\nAre you sure you want to leave?', style: TextStyle(fontSize: 14), textAlign: TextAlign.justify,),
+//            content: new Text(
+//              'Are you sure you want to leave?',
+//              style: TextStyle(fontSize: 12),
+//            ),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
@@ -226,6 +227,8 @@ class _RegisterState extends State<Register> {
                                     ),
                                     TextFormField(
                                       obscureText: obscure,
+                                      enableInteractiveSelection: false,
+                                      toolbarOptions: ToolbarOptions(copy: false, paste: false, selectAll: false, cut: false),
                                       keyboardType:
                                           TextInputType.visiblePassword,
                                       textInputAction: TextInputAction.done,
@@ -797,7 +800,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
                       itemCount: items.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text('${items[index]}'),
+                          title: Text('${items[index]}', textAlign: TextAlign.justify,),
                           onTap: () {
                             Navigator.pop(context, '${items[index]}');
                           },

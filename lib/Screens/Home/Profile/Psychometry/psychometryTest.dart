@@ -178,7 +178,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Text(remainingQuestions[position][1],
-                                    textAlign: TextAlign.left,
+                                    textAlign: TextAlign.justify,
                                     style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -335,7 +335,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
           builder: (context) => new AlertDialog(
             title: new Text(
               'Leaving the test midway will not save your answers! You will have to reattempt the test later. Are you sure you want to leave the test?',
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             actions: <Widget>[
               FlatButton(

@@ -247,6 +247,7 @@ class _VideoIntroState extends State<VideoIntro>
                 child: Align(
                     child: Text(
                         "1. Say something which is not mentioned in your resume",
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: fontSize,
                           fontWeight: FontWeight.bold,
@@ -257,6 +258,7 @@ class _VideoIntroState extends State<VideoIntro>
                 padding: EdgeInsets.fromLTRB(width * 0.1, 5, width * 0.1, 8),
                 child: Align(
                     child: Text("2. Please be well dressed for the video",
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: fontSize,
                           fontWeight: FontWeight.bold,
@@ -268,6 +270,7 @@ class _VideoIntroState extends State<VideoIntro>
                 child: Align(
                     child: Text(
                         "3. Please Keep your script limited to 60 seconds and be well prepared",
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: fontSize,
                           fontWeight: FontWeight.bold,
@@ -279,6 +282,7 @@ class _VideoIntroState extends State<VideoIntro>
                 child: Align(
                     child: Text(
                         "4. Don't worry you can have as many takes as you want",
+                        textAlign: TextAlign.justify,
                         style: TextStyle(
                           fontSize: fontSize,
                           fontWeight: FontWeight.bold,
@@ -506,7 +510,7 @@ class _VideoIntroState extends State<VideoIntro>
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 20.0),
                   child: Text(
-                    "Your Video Intro Has Been Uploaded Succesfully!",
+                    "Your Video Intro Has Been Uploaded Successfully!",
                     textAlign: TextAlign.center,
                   ),
                 ),

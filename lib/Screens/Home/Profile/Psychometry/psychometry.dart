@@ -148,6 +148,7 @@ class _PsychometryState extends State<Psychometry>
                       child: Align(
                           child: Text(
                               "1. You will get only one chance to complete this test",
+                              textAlign: TextAlign.justify,
                               style: TextStyle(
                                 fontSize: fontSize,
                                 fontWeight: FontWeight.bold,
@@ -160,6 +161,7 @@ class _PsychometryState extends State<Psychometry>
                       child: Align(
                           child: Text(
                               "2. Completing the test will increase your hiring chances.",
+                              textAlign: TextAlign.justify,
                               style: TextStyle(
                                 fontSize: fontSize,
                                 fontWeight: FontWeight.bold,
@@ -172,6 +174,7 @@ class _PsychometryState extends State<Psychometry>
                       child: Align(
                           child: Text(
                               "3. Please check your internet connection before you start the test,",
+                              textAlign: TextAlign.justify,
                               style: TextStyle(
                                 fontSize: fontSize,
                                 fontWeight: FontWeight.bold,
@@ -227,7 +230,7 @@ class _PsychometryState extends State<Psychometry>
                   Padding(
                     padding: const EdgeInsets.fromLTRB(8.0, 20, 8, 4),
                     child: Align(
-                        child: Text("Finish your psychometic test!",
+                        child: Text("Finish your psychometric test!",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 18,

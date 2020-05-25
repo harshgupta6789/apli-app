@@ -11,6 +11,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../Services/auth.dart';
 
@@ -44,7 +45,12 @@ class _LoginState extends State<Login> {
                 setState(() {
                   forgotPassword = false;
                 });
-//        else SystemChannels.platform.invokeMethod('SystemNavigator.pop', true);
+              else {
+                if (Theme.of(context).platform == TargetPlatform.android) {
+                  SystemChannels.platform
+                      .invokeMethod('SystemNavigator.pop', true);
+                }
+              }
             },
             child: Scaffold(
               resizeToAvoidBottomInset: true,
@@ -115,6 +121,8 @@ class _LoginState extends State<Login> {
                                   left: width * 0.1,
                                   right: width * 0.1),
                               child: TextFormField(
+                                enableInteractiveSelection: false,
+                                toolbarOptions: ToolbarOptions(copy: false, paste: false, selectAll: false, cut: false),
                                 obscureText: obscure,
                                 decoration: loginFormField.copyWith(
                                     hintText: 'Password',

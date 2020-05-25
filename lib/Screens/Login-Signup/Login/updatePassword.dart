@@ -58,6 +58,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               left: width * 0.1,
                               right: width * 0.1),
                           child: TextFormField(
+                            enableInteractiveSelection: false,
+                            toolbarOptions: ToolbarOptions(copy: false, paste: false, selectAll: false, cut: false),
                             obscureText: obscure,
                             textInputAction: TextInputAction.next,
                             keyboardType: TextInputType.visiblePassword,
@@ -100,6 +102,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               left: width * 0.1,
                               right: width * 0.1),
                           child: TextFormField(
+                            enableInteractiveSelection: false,
+                            toolbarOptions: ToolbarOptions(copy: false, paste: false, selectAll: false, cut: false),
                             obscureText: obscure,
                             focusNode: focus,
                             decoration: loginFormField.copyWith(
