@@ -254,23 +254,15 @@ class APIService {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
-<<<<<<< HEAD
-        Response response = await Dio().post(interViewQuestionsURL, data: {
-          "secret": "$passHashSecret",
-          "job_id": "$id",
-          "email": "${value.getString('email')}",
-        });
-=======
         http.Response response = await http.post(
           interViewQuestionsURL,
           body: json.decode('{'
               '"secret" : "$passHashSecret", '
               '"job_id" : "$id", '
-              '"user_id": "${value.getString('email')}"'
+              '"email": "${value.getString('email')}"'
               '}'),
         );
         var decodedData = jsonDecode(response.body);
->>>>>>> f490e9e280940ed0eeeeef55f099e66f39583bc4
         if (response.statusCode == 200) {
           result = decodedData;
         } else
