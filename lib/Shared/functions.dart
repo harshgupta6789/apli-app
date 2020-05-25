@@ -61,6 +61,65 @@ String getFileNameFromURL(String url) {
   return regExp.stringMatch(url);
 }
 
+String dateToReadableTimeConverter(DateTime dt) {
+  String time, monthString;
+  switch (dt.month) {
+    case 1:
+      monthString = "Jan";
+      break;
+    case 2:
+      monthString = "Feb";
+      break;
+    case 3:
+      monthString = "March";
+      break;
+    case 4:
+      monthString = "April";
+      break;
+    case 5:
+      monthString = "May";
+      break;
+    case 6:
+      monthString = "June";
+      break;
+    case 7:
+      monthString = "July";
+      break;
+    case 8:
+      monthString = "Aug";
+      break;
+    case 9:
+      monthString = "Sep";
+      break;
+    case 10:
+      monthString = "Oct";
+      break;
+    case 11:
+      monthString = "Nov";
+      break;
+    case 12:
+      monthString = "Dec";
+      break;
+    default:
+      monthString = "Invalid month";
+      break;
+  }
+  time = dt.day.toString() + ' ' + monthString + ' ' + dt.year.toString();
+  TimeOfDay timeOfDay = TimeOfDay.fromDateTime(dt);
+  time = time +
+      ', ' +
+      (timeOfDay.hour.toString().length == 1
+          ? '0' + timeOfDay.hour.toString()
+          : timeOfDay.hour.toString()) +
+      ':' +
+      (timeOfDay.minute.toString().length == 1
+          ? '0' + timeOfDay.minute.toString()
+          : timeOfDay.minute.toString()) +
+      ' ' +
+      ((timeOfDay.period == DayPeriod.am) ? 'am' : 'pm');
+  return time;
+}
+
 InputDecoration x(String t) {
   return InputDecoration(
       prefixIcon: Padding(

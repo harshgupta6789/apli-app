@@ -79,7 +79,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
           //currentFileNames[index] = p.basename(file.path);
         });
         _uploadFile(file, "offerletter");
-         showToast("Uploading..", context);
+        showToast("Uploading..", context);
       } else {}
     } catch (e) {
       AwesomeDialog(
@@ -117,10 +117,10 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         dynamic result = await _APIService.updateJobOfferLetter(
             widget.job['job_id'], tempURL);
         print(result);
-        if (result['error']!=null) {
+        if (result['error'] != null) {
           showToast("error", context);
         } else {
-         showToast("Successfully Uploaded", context);
+          showToast("Successfully Uploaded", context);
         }
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -155,7 +155,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     side: BorderSide(color: Colors.grey, width: 1.2),
                   ),
                   child: Text(
-                    'APPLY NOW',
+                    'ACCEPT',
                     style: TextStyle(color: Colors.white),
                   )));
         } else {
@@ -187,206 +187,234 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     side: BorderSide(color: basicColor, width: 1.2),
                   ),
                   child: Text(
-                    'APPLY NOW',
+                    'ACCEPT',
                     style: TextStyle(color: Colors.white),
                   )));
         }
 
         break;
       case "INTERVIEW":
-        if (job['schedule']['is_online'] != true) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(
-                thickness: 2,
-              ),
-              ListTile(
-                dense: true,
-                title: AutoSizeText(
-                  "Where : " + widget.job['schedule']['where'] ??
-                      "Location Not Specified",
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
+        if (job['schedule'] != null) {
+          if (job['schedule']['is_online'] != true) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Divider(
+                  thickness: 2,
                 ),
-              ),
-              ListTile(
-                dense: true,
-                title: AutoSizeText(
-                  "When : " + widget.job['schedule']['when'] ??
-                      "Time Not Specified",
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-                  child: RaisedButton(
-                      color: basicColor,
-                      onPressed: () async {
-                        showToast("Accepting..", context);
-                        dynamic result = await _APIService.acceptInterView(
-                            widget.job['job_id']);
-                        print(result);
-                        if (result['error'] != null) {
-                          showToast(result['error'].toString(), context);
-                        } else {
-                          showToast("Accepted Interview!", context);
-                        }
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => Wrapper(
-                                      currentTab: 2,
-                                    )),
-                            (Route<dynamic> route) => false);
-                      },
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 30, right: 30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: basicColor, width: 1.2),
-                      ),
-                      child: Text(
-                        'ACCEPT INTERVIEW',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-            ],
-          );
-        } else if (job['interview_date_passed'] &&
-            job['schedule']['cand_accepted']) {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-              child: RaisedButton(
-                  onPressed: null,
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: Colors.grey, width: 1.2),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Where : " + widget.job['schedule']['where'] ??
+                        "Location Not Specified",
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  child: Text(
-                    'ACCEPT INTERVIEW',
-                    style: TextStyle(color: Colors.black),
-                  )));
-        } else if (job['interview_room_link'] != null &&
-            job['schedule']['cand_accepted']) {
-          print(job['interview_room_link']);
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-              child: RaisedButton(
-                  onPressed: () async {
-                    var url =
-                        "https://dev.apli.ai" + job['interview_room_link'] ??
-                            'https://flutter.dev';
-                    if (await canLaunch(url)) {
-                      await launch(url);
-                    } else {
-                      throw 'Could not launch $url';
-                    }
-                    print("INTERVIEW ");
-                  },
-                  color: basicColor,
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "When : " +
+                        dateToReadableTimeConverter(DateTime.parse(
+                            widget.job['schedule']['when'] ??
+                                '2020-01-01T00:00:00Z')),
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  child: Text(
-                    'OPEN INTERVIEW',
-                    style: TextStyle(color: Colors.white),
-                  )));
-        } else {
-          String temp = widget.job['schedule']['when'];
-          print(temp.split("T"));
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Divider(
-                thickness: 2,
-              ),
-              ListTile(
-                dense: true,
-                title: AutoSizeText(
-                  "Where : " + widget.job['schedule']['where'] ??
-                      "Location Not Specified",
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              ListTile(
-                dense: true,
-                title: AutoSizeText(
-                  "When : " + widget.job['schedule']['when'] ??
-                      "Time Not Specified",
-                  maxLines: 2,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
+                Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, top: 10.0),
+                    child: RaisedButton(
+                        color: job['schedule']['cand_accepted']
+                            ? Colors.grey
+                            : basicColor,
+                        onPressed: () async {
+                          if (job['schedule']['cand_accepted']) {
+                            showToast("Accepting..", context);
+                            dynamic result = await _APIService.acceptInterView(
+                                widget.job['job_id']);
+                            print(result);
+                            if (result['error'] != null) {
+                              showToast(result['error'].toString(), context);
+                            } else {
+                              showToast("Accepted Interview!", context);
+                            }
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (context) => Wrapper(
+                                          currentTab: 2,
+                                        )),
+                                (Route<dynamic> route) => false);
+                          }
+                        },
+                        elevation: 0,
+                        padding: EdgeInsets.only(left: 30, right: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          side: BorderSide(
+                              color: job['schedule']['cand_accepted']
+                                  ? Colors.grey
+                                  : basicColor,
+                              width: 1.2),
+                        ),
+                        child: Text(
+                          'ACCEPT INTERVIEW',
+                          style: TextStyle(color: Colors.white),
+                        ))),
+              ],
+            );
+          } else if (job['interview_date_passed'] &&
+              job['schedule']['cand_accepted']) {
+            return Padding(
+                padding:
+                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                child: RaisedButton(
+                    onPressed: null,
+                    elevation: 0,
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(color: Colors.grey, width: 1.2),
+                    ),
+                    child: Text(
+                      'ACCEPT INTERVIEW',
+                      style: TextStyle(color: Colors.black),
+                    )));
+          } else if (job['interview_room_link'] != null &&
+              job['schedule']['cand_accepted']) {
+            return Padding(
+                padding:
+                    const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                child: RaisedButton(
+                    onPressed: () async {
+                      var url =
+                          "https://dev.apli.ai" + job['interview_room_link'] ??
+                              'https://flutter.dev';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                      print("INTERVIEW ");
+                    },
+                    color: basicColor,
+                    elevation: 0,
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(color: basicColor, width: 1.2),
+                    ),
+                    child: Text(
+                      'OPEN INTERVIEW',
+                      style: TextStyle(color: Colors.white),
+                    )));
+          } else {
+            String temp = widget.job['schedule']['when'];
+            print(temp.split("T"));
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Divider(
+                  thickness: 2,
                 ),
-              ),
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-                  child: RaisedButton(
-                      color: basicColor,
-                      onPressed: () async {
-                        showToast("Accepting..", context);
-                        dynamic result = await _APIService.acceptInterView(
-                            widget.job['job_id']);
-                        print(result);
-                        if (result['error'] != null) {
-                          showToast(result['error'].toString(), context);
-                        } else {
-                          showToast("Check Interview link!", context);
-                        }
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => Wrapper(
-                                      currentTab: 2,
-                                    )),
-                            (Route<dynamic> route) => false);
-                      },
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 30, right: 30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: basicColor, width: 1.2),
-                      ),
-                      child: Text(
-                        'ACCEPT INTERVIEW',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-            ],
-          );
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Where : " + widget.job['schedule']['where'] ??
+                        "Location Not Specified",
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "When : " +
+                        dateToReadableTimeConverter(DateTime.parse(
+                            widget.job['schedule']['when'] ??
+                                '2020-01-01T00:00:00Z')),
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20.0, right: 20.0, top: 10.0),
+                    child: RaisedButton(
+                        color: basicColor,
+                        onPressed: () async {
+                          showToast("Accepting..", context);
+                          dynamic result = await _APIService.acceptInterView(
+                              widget.job['job_id']);
+                          print(result);
+                          if (result['error'] != null) {
+                            showToast(result['error'].toString(), context);
+                          } else {
+                            showToast("Check Interview link!", context);
+                          }
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => Wrapper(
+                                        currentTab: 2,
+                                      )),
+                              (Route<dynamic> route) => false);
+                        },
+                        elevation: 0,
+                        padding: EdgeInsets.only(left: 30, right: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                          side: BorderSide(color: basicColor, width: 1.2),
+                        ),
+                        child: Text(
+                          'ACCEPT INTERVIEW',
+                          style: TextStyle(color: Colors.white),
+                        ))),
+              ],
+            );
+          }
         }
         break;
       case "LETTER SENT":
         if (job['offer_letter'] != null) {
           return Column(
             children: [
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+              Center(
+                child: RaisedButton(
+                    onPressed: () {
+                      filePicker(context);
+                    },
+                    color: Colors.green,
+                    elevation: 0,
+                    padding: EdgeInsets.only(left: 43, right: 43),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(color: Colors.green, width: 1.2),
+                    ),
+                    child: Text(
+                      'UPLOAD LETTER',
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ),
+              Center(
                   child: RaisedButton(
                       onPressed: () async {
                         bool allowed = false;
@@ -430,24 +458,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                       ),
                       child: Text(
                         'DOWNLOAD LETTER',
-                        style: TextStyle(color: Colors.white),
-                      ))),
-              Padding(
-                  padding:
-                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-                  child: RaisedButton(
-                      onPressed: () {
-                        filePicker(context);
-                      },
-                      color: Colors.green,
-                      elevation: 0,
-                      padding: EdgeInsets.only(left: 30, right: 30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0),
-                        side: BorderSide(color: Colors.green, width: 1.2),
-                      ),
-                      child: Text(
-                        'UPLOAD LETTER',
                         style: TextStyle(color: Colors.white),
                       ))),
             ],

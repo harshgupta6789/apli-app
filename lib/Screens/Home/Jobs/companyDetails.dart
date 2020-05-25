@@ -35,21 +35,15 @@ class _CompanyProfileState extends State<CompanyProfile> {
     return loading
         ? Loading()
         : WillPopScope(
-      onWillPop: () {
-        Navigator.of(context)
-            .pushAndRemoveUntil(
-            MaterialPageRoute(
-                builder:
-                    (context) =>
-                    Wrapper(
-                      currentTab:
-                      2,
-                    )),
-                (Route<dynamic>
-            route) =>
-            false);
-      },
-          child: Scaffold(
+            onWillPop: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => Wrapper(
+                            currentTab: 2,
+                          )),
+                  (Route<dynamic> route) => false);
+            },
+            child: Scaffold(
               appBar: PreferredSize(
                 child: AppBar(
                     backgroundColor: basicColor,
@@ -400,116 +394,119 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.isApplied
-                                          ? Container()
-                                          : Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 20.0,
-                                                    right: 20.0,
-                                                    top: 10.0),
-                                                child: RaisedButton(
-                                                    color: basicColor,
-                                                    elevation: 0,
-                                                    padding: EdgeInsets.only(
-                                                        left: 30, right: 30),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5.0),
-                                                      side: BorderSide(
-                                                          color: basicColor,
-                                                          width: 1.2),
-                                                    ),
-                                                    child: Text(
-                                                      'APPLY NOW',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    onPressed: () async {
-                                                      bool videoIntro = true,
-                                                          resume = true;
-                                                      if (widget.company[
-                                                              'requirements']
-                                                          .contains(
-                                                              'Video Introduction')) {
-                                                        String temp =
-                                                            decimalToBinary(
-                                                                    widget
-                                                                        .status)
-                                                                .toString();
-                                                        while (
-                                                            temp.length != 9) {
-                                                          temp = '0' + temp;
-                                                        }
-                                                        if (temp.substring(
-                                                                7, 8) !=
-                                                            "1") if (tempProfileStatus != true)
-                                                          videoIntro = false;
-                                                        if (tempProfileStatus ==
-                                                            false) {
-                                                          videoIntro = false;
-                                                        }
-                                                      }
-                                                      if (widget.company[
-                                                              'requirements']
-                                                          .contains('Resume')) if (widget
-                                                              .status <
-                                                          384) resume = false;
-                                                      if (!videoIntro)
-                                                        showToast(
-                                                            'Complete your video intro first !!!',
-                                                            context);
-                                                      else if (!resume)
-                                                        showToast(
-                                                            'Complete your resume first !!!',
-                                                            context);
-                                                      else {
-                                                        setState(() {
-                                                          loading = true;
-                                                        });
-                                                        dynamic result =
-                                                            await _APIService
-                                                                .applyJob(widget
-                                                                        .company[
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20.0,
+                                              right: 20.0,
+                                              top: 10.0),
+                                          child: RaisedButton(
+                                              color: widget.isApplied == true
+                                                  ? Colors.grey
+                                                  : basicColor,
+                                              elevation: 0,
+                                              padding: EdgeInsets.only(
+                                                  left: 30, right: 30),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(5.0),
+                                                side: BorderSide(
+                                                    color: widget.isApplied ==
+                                                        true
+                                                        ? Colors.grey
+                                                        : basicColor,
+                                                    width: 1.2),
+                                              ),
+                                              child: Text(
+                                                'APPLY NOW',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () async {
+                                                if (widget.isApplied == false) {
+                                                  bool videoIntro = true,
+                                                      resume = true;
+                                                  if (widget
+                                                      .company['requirements']
+                                                      .contains(
+                                                      'Video Introduction')) {
+                                                    String temp =
+                                                    decimalToBinary(
+                                                        widget.status)
+                                                        .toString();
+                                                    while (temp.length != 9) {
+                                                      temp = '0' + temp;
+                                                    }
+                                                    if (temp.substring(7, 8) !=
+                                                        "1")
+                                                      if (tempProfileStatus !=
+                                                          true)
+                                                        videoIntro = false;
+                                                    if (tempProfileStatus ==
+                                                        false) {
+                                                      videoIntro = false;
+                                                    }
+                                                  }
+                                                  if (widget
+                                                      .company['requirements']
+                                                      .contains('Resume'))
+                                                    if (widget
+                                                        .status <
+                                                        384) resume = false;
+                                                  if (!videoIntro)
+                                                    showToast(
+                                                        'Complete your video intro first !!!',
+                                                        context);
+                                                  else if (!resume)
+                                                    showToast(
+                                                        'Complete your resume first !!!',
+                                                        context);
+                                                  else {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    dynamic result =
+                                                    await _APIService
+                                                        .applyJob(
+                                                        widget.company[
                                                                     'job_id']);
-                                                        if (result == 1) {
-                                                          if (widget.company[
-                                                                  'requirements']
-                                                              .contains(
-                                                                  'Video Interview')) {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            CompanyVideo(
-                                                                              job: widget.company,
-                                                                            )));
-                                                          } else {
-                                                            showToast(
-                                                                'Your application has been submitted',
-                                                                context);
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pushAndRemoveUntil(
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) =>
+                                                    if (result == 1) {
+                                                      if (widget.company[
+                                                      'requirements']
+                                                          .contains(
+                                                          'Video Interview')) {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                    CompanyVideo(
+                                                                      job: widget
+                                                                          .company,
+                                                                    )));
+                                                      } else {
+                                                        showToast(
+                                                            'Your application has been submitted',
+                                                            context);
+                                                        Navigator.of(context)
+                                                            .pushAndRemoveUntil(
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
                                                                             Wrapper(
-                                                                              currentTab: 1,
+                                                                              currentTab: 2,
                                                                             )),
-                                                                    (Route<dynamic>
-                                                                            route) =>
-                                                                        false);
-                                                          }
-                                                        } else {
-                                                          showToast(
-                                                              'Error occurred, try again later',
-                                                              context);
-                                                          Navigator.of(context)
-                                                              .pushAndRemoveUntil(
+                                                                (Route<dynamic>
+                                                            route) =>
+                                                            false);
+                                                      }
+                                                    } else {
+                                                      showToast(
+                                                          'Error occurred, try again later',
+                                                          context);
+                                                      Navigator.of(context)
+                                                          .pushAndRemoveUntil(
                                                               MaterialPageRoute(
                                                                   builder:
                                                                       (context) =>
@@ -517,14 +514,15 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                         currentTab:
                                                                         2,
                                                                       )),
-                                                                  (Route<dynamic>
-                                                                          route) =>
-                                                                      false);
-                                                        }
-                                                      } 
-                                                    }),
-                                              ),
-                                            )
+                                                              (Route<dynamic>
+                                                          route) =>
+                                                          false);
+                                                    }
+                                                  }
+                                                }
+                                              }),
+                                        ),
+                                      )
                                     ]),
                               ),
                             ),
@@ -534,7 +532,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                 ),
               ),
             ),
-        );
+    );
   }
 }
 
@@ -773,263 +771,276 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
-                    if(snapshot.data['error'] != null)
-                      return Center(child: Text(snapshot.data['error']),);
-                    else return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Container(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  bottom: 18.0, left: 10.0, right: 10.0),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.fromLTRB(
-                                          0, height * 0.1, 0, 0),
-                                      child: Align(
-                                          child: RichText(
-                                            textAlign: TextAlign.center,
-                                            text: TextSpan(
-                                              text: 'Click ',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 19,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                    text: ' "START" ',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold,
-                                                        color: basicColor)),
-                                                TextSpan(
-                                                    text:
-                                                    ' when you are ready! '),
-                                              ],
-                                            ),
-                                          ),
-                                          alignment: Alignment.center),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0.0, 10, 0.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "Please read the following instructions carefully.",
+                    if (snapshot.data['error'] != null)
+                      return Center(
+                        child: Text(snapshot.data['error']),
+                      );
+                    else
+                      return Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: 18.0, left: 10.0, right: 10.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            0, height * 0.1, 0, 0),
+                                        child: Align(
+                                            child: RichText(
                                               textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 13,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.center),
-                                    ),
-                                    SizedBox(height: height * 0.05),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              snapshot.data['questions'] != null
-                                                  ? "1. There will be a total of  " +
-                                                      snapshot.data['questions']
-                                                          .length
-                                                          .toString() +
-                                                      " questions in the interview."
-                                                  : "1. There will be a total of 15 questions in the interview.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "2. You will be given 60 seconds for answering each question.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "3. You have to attempt all the questions.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "4. You cannot pause the interview in between.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "5. Don’t close or reload the window during the interview.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(10.0, 5, 10.0, 8),
-                                      child: Align(
-                                          child: Text(
-                                              "6. Strict action will be taken if any abusive or offensive language is used.",
-                                              textAlign: TextAlign.justify,
-                                              style: TextStyle(
-                                                fontSize: fontSize,
-                                                fontWeight: FontWeight.bold,
-                                              )),
-                                          alignment: Alignment.centerLeft),
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 20.0, right: 20.0, top: 30.0),
-                                        child: RaisedButton(
-                                            color: basicColor,
-                                            elevation: 0,
-                                            padding: EdgeInsets.only(
-                                                left: 30, right: 30),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(5.0),
-                                              side: BorderSide(
-                                                  color: basicColor,
-                                                  width: 1.2),
+                                              text: TextSpan(
+                                                text: 'Click ',
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 19,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                      text: ' "START" ',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                          FontWeight.bold,
+                                                          color: basicColor)),
+                                                  TextSpan(
+                                                      text:
+                                                      ' when you are ready! '),
+                                                ],
+                                              ),
                                             ),
+                                            alignment: Alignment.center),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            0.0, 10, 0.0, 8),
+                                        child: Align(
                                             child: Text(
-                                              'START',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            onPressed: () async {
-                                              bool storage = false,
-                                                  camera = false,
-                                                  microphone = false;
-                                              var storageStatus =
-                                                  await Permission
-                                                      .storage.status;
-                                              if (storageStatus ==
-                                                  PermissionStatus.granted) {
-                                                storage = true;
-                                              } else if (storageStatus ==
-                                                  PermissionStatus
-                                                      .undetermined) {
-                                                Map<Permission,
-                                                        PermissionStatus>
-                                                    statuses = await [
-                                                  Permission.storage,
-                                                ].request();
-                                                if (statuses[
-                                                        Permission.storage] ==
+                                                "Please read the following instructions carefully.",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.center),
+                                      ),
+                                      SizedBox(height: height * 0.05),
+                                      Padding(
+                                        padding:
+                                        EdgeInsets.fromLTRB(10.0, 5, 0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                snapshot.data['questions'] !=
+                                                    null
+                                                    ? "1. There will be a total of  " +
+                                                    snapshot
+                                                        .data['questions']
+                                                        .length
+                                                        .toString() +
+                                                    " questions in the interview."
+                                                    : "1. There will be a total of 15 questions in the interview.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 5, 10.0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                "2. You will be given 60 seconds for answering each question.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 5, 10.0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                "3. You have to attempt all the questions.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 5, 10.0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                "4. You cannot pause the interview in between.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 5, 10.0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                "5. Don’t close or reload the window during the interview.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 5, 10.0, 8),
+                                        child: Align(
+                                            child: Text(
+                                                "6. Strict action will be taken if any abusive or offensive language is used.",
+                                                textAlign: TextAlign.justify,
+                                                style: TextStyle(
+                                                  fontSize: fontSize,
+                                                  fontWeight: FontWeight.bold,
+                                                )),
+                                            alignment: Alignment.centerLeft),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 20.0,
+                                              right: 20.0,
+                                              top: 30.0),
+                                          child: RaisedButton(
+                                              color: basicColor,
+                                              elevation: 0,
+                                              padding: EdgeInsets.only(
+                                                  left: 30, right: 30),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(5.0),
+                                                side: BorderSide(
+                                                    color: basicColor,
+                                                    width: 1.2),
+                                              ),
+                                              child: Text(
+                                                'START',
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              onPressed: () async {
+                                                bool storage = false,
+                                                    camera = false,
+                                                    microphone = false;
+                                                var storageStatus =
+                                                await Permission
+                                                    .storage.status;
+                                                if (storageStatus ==
                                                     PermissionStatus.granted) {
                                                   storage = true;
+                                                } else if (storageStatus ==
+                                                    PermissionStatus
+                                                        .undetermined) {
+                                                  Map<Permission,
+                                                      PermissionStatus>
+                                                  statuses = await [
+                                                    Permission.storage,
+                                                  ].request();
+                                                  if (statuses[
+                                                  Permission.storage] ==
+                                                      PermissionStatus
+                                                          .granted) {
+                                                    storage = true;
+                                                  }
                                                 }
-                                              }
-                                              var cameraeStatus =
-                                                  await Permission
-                                                      .camera.status;
-                                              if (cameraeStatus ==
-                                                  PermissionStatus.granted) {
-                                                camera = true;
-                                              } else if (cameraeStatus ==
-                                                  PermissionStatus
-                                                      .undetermined) {
-                                                Map<Permission,
-                                                        PermissionStatus>
-                                                    statuses = await [
-                                                  Permission.camera,
-                                                ].request();
-                                                if (statuses[
-                                                        Permission.camera] ==
+                                                var cameraeStatus =
+                                                await Permission
+                                                    .camera.status;
+                                                if (cameraeStatus ==
                                                     PermissionStatus.granted) {
                                                   camera = true;
+                                                } else if (cameraeStatus ==
+                                                    PermissionStatus
+                                                        .undetermined) {
+                                                  Map<Permission,
+                                                      PermissionStatus>
+                                                  statuses = await [
+                                                    Permission.camera,
+                                                  ].request();
+                                                  if (statuses[
+                                                  Permission.camera] ==
+                                                      PermissionStatus
+                                                          .granted) {
+                                                    camera = true;
+                                                  }
                                                 }
-                                              }
-                                              var microphoneStatus =
-                                                  await Permission
-                                                      .microphone.status;
-                                              if (microphoneStatus ==
-                                                  PermissionStatus.granted) {
-                                                microphone = true;
-                                              } else if (microphoneStatus ==
-                                                  PermissionStatus
-                                                      .undetermined) {
-                                                Map<Permission,
-                                                        PermissionStatus>
-                                                    statuses = await [
-                                                  Permission.microphone,
-                                                ].request();
-                                                if (statuses[Permission
-                                                        .microphone] ==
+                                                var microphoneStatus =
+                                                await Permission
+                                                    .microphone.status;
+                                                if (microphoneStatus ==
                                                     PermissionStatus.granted) {
                                                   microphone = true;
+                                                } else if (microphoneStatus ==
+                                                    PermissionStatus
+                                                        .undetermined) {
+                                                  Map<Permission,
+                                                      PermissionStatus>
+                                                  statuses = await [
+                                                    Permission.microphone,
+                                                  ].request();
+                                                  if (statuses[Permission
+                                                      .microphone] ==
+                                                      PermissionStatus
+                                                          .granted) {
+                                                    microphone = true;
+                                                  }
                                                 }
-                                              }
-                                              if (storage &&
-                                                  camera &&
-                                                  microphone) {
-                                                print(
-                                                    snapshot.data['startFrom']);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            JobQuestions(
-                                                              questions: snapshot
-                                                                      .data[
-                                                                  'questions'],
-                                                              whereToStart:
-                                                                  snapshot.data[
-                                                                      'startFrom'],
-                                                              jobID: widget.job[
-                                                                  'job_id'],
-                                                            )));
-                                              } else
-                                                showToast('Permission denied',
-                                                    context,
-                                                    color: Colors.red);
-                                            }),
-                                      ),
-                                    )
-                                  ]),
+                                                if (storage &&
+                                                    camera &&
+                                                    microphone) {
+                                                  print(snapshot
+                                                      .data['startFrom']);
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder:
+                                                              (context) =>
+                                                              JobQuestions(
+                                                                questions: snapshot
+                                                                    .data[
+                                                                'questions'],
+                                                                whereToStart:
+                                                                snapshot
+                                                                    .data['startFrom'],
+                                                                jobID: widget
+                                                                    .job[
+                                                                'job_id'],
+                                                              )));
+                                                } else
+                                                  showToast('Permission denied',
+                                                      context,
+                                                      color: Colors.red);
+                                              }),
+                                        ),
+                                      )
+                                    ]),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    );
+                        ],
+                      );
                   } else if (snapshot.hasError) {
                     return Center(child: Text("Error Occured"));
                   }

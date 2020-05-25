@@ -40,7 +40,7 @@ class _JobsState extends State<Jobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
     getInfo();

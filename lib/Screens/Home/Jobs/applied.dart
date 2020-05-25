@@ -1,6 +1,5 @@
 import 'package:apli/Screens/Home/Jobs/appliedDetails.dart';
 import 'package:apli/Shared/constants.dart';
-import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -62,12 +61,11 @@ class _AppliedJobsState extends State<AppliedJobs> {
               //   else
               //     dateString = remaining.inSeconds.toString() + ' sec';
               // }
-
               return AutoSizeText(
                 "Deadline to accept : " + deadlineTimer,
                 maxLines: 2,
                 style: TextStyle(
-                    //color: Colors.red,
+                    color: Colors.red,
                     fontSize: 12 * scale,
                     fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
@@ -110,7 +108,7 @@ class _AppliedJobsState extends State<AppliedJobs> {
               // }
 
               return AutoSizeText(
-                "Deadline to accept : " + dateString ??
+                "Deadline to accept : " + deadlineTimer ??
                     "No Deadline" + 'remaining',
                 maxLines: 2,
                 style: TextStyle(
@@ -215,49 +213,62 @@ class _AppliedJobsState extends State<AppliedJobs> {
                                           top: 10 * scale, bottom: 13 * scale),
                                       child: ListTile(
                                           onTap: () {
-                                            if (widget.appliedJobs[index]
-                                                        ['status'] ==
-                                                    'LETTER SENT' ||
-                                                widget.appliedJobs[index]
-                                                        ['status'] ==
-                                                    'ACCEPTED') {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          AppliedDetails(
-                                                            job: widget
-                                                                    .appliedJobs[
-                                                                index],
-                                                            status:
-                                                                widget.status,
-                                                            st: widget
-                                                                    .appliedJobs[
-                                                                index]['status'],
-                                                          )));
-                                            } else {
-                                              if (widget.alreadyAccepted !=
-                                                      null &&
-                                                  widget.alreadyAccepted) {
-                                                showToast("Already Accepted!",
-                                                    context);
-                                              } else {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            AppliedDetails(
-                                                              job: widget
-                                                                      .appliedJobs[
-                                                                  index],
-                                                              status:
-                                                                  widget.status,
-                                                              st: widget.appliedJobs[
-                                                                      index]
-                                                                  ['status'],
-                                                            )));
-                                              }
-                                            }
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AppliedDetails(
+                                                          job: widget
+                                                                  .appliedJobs[
+                                                              index],
+                                                          status: widget.status,
+                                                          st: widget
+                                                                  .appliedJobs[
+                                                              index]['status'],
+                                                        )));
+//                                            if (widget.appliedJobs[index]
+//                                                        ['status'] ==
+//                                                    'LETTER SENT' ||
+//                                                widget.appliedJobs[index]
+//                                                        ['status'] ==
+//                                                    'ACCEPTED' || widget.appliedJobs[index]['status'] == 'HIRED') {
+//                                              Navigator.push(
+//                                                  context,
+//                                                  MaterialPageRoute(
+//                                                      builder: (context) =>
+//                                                          AppliedDetails(
+//                                                            job: widget
+//                                                                    .appliedJobs[
+//                                                                index],
+//                                                            status:
+//                                                                widget.status,
+//                                                            st: widget
+//                                                                    .appliedJobs[
+//                                                                index]['status'],
+//                                                          )));
+//                                            } else {
+//                                              if (widget.alreadyAccepted !=
+//                                                      null &&
+//                                                  widget.alreadyAccepted) {
+//                                                showToast("Already Accepted!",
+//                                                    context);
+//                                              } else {
+//                                                Navigator.push(
+//                                                    context,
+//                                                    MaterialPageRoute(
+//                                                        builder: (context) =>
+//                                                            AppliedDetails(
+//                                                              job: widget
+//                                                                      .appliedJobs[
+//                                                                  index],
+//                                                              status:
+//                                                                  widget.status,
+//                                                              st: widget.appliedJobs[
+//                                                                      index]
+//                                                                  ['status'],
+//                                                            )));
+//                                              }
+//                                            }
                                           },
                                           title: AutoSizeText(
                                             widget.appliedJobs[index]['role'] ??

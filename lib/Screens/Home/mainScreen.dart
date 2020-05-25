@@ -1,18 +1,19 @@
 import 'dart:io';
+
 import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../HomeLoginWrapper.dart';
 import 'Courses/courseHome.dart';
 import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
-import 'package:toast/toast.dart';
 
 class MainScreen extends StatefulWidget {
   int currentTab;
@@ -257,7 +258,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 jobs,
                 style: TextStyle(
-                    color: _currentTab == 1 ? basicColor : Colors.grey),
+                    color: _currentTab == 2 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
             activeIcon: Icon(
@@ -271,7 +272,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             title: Text(
               updates,
               style:
-                  TextStyle(color: _currentTab == 2 ? basicColor : Colors.grey),
+                  TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
             ),
           ),
           BottomNavigationBarItem(
@@ -286,7 +287,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 profile,
                 style: TextStyle(
-                    color: _currentTab == 3 ? basicColor : Colors.grey),
+                    color: _currentTab == 4 ? basicColor : Colors.grey),
               )),
         ]);
   }

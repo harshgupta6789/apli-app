@@ -1,11 +1,11 @@
-import 'package:apli/Shared/functions.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:flutter/rendering.dart';
+
 import '../../HomeLoginWrapper.dart';
 import 'companyDetails.dart';
 
@@ -64,7 +64,7 @@ class _AllJobsState extends State<AllJobs> {
                                     Navigator.of(context).pushAndRemoveUntil(
                                         MaterialPageRoute(
                                             builder: (context) => Wrapper(
-                                              currentTab: 3,
+                                              currentTab: 4,
                                             )),
                                             (Route<dynamic> route) => false);
                                     setState(() {});
@@ -103,21 +103,18 @@ class _AllJobsState extends State<AllJobs> {
                                       top: 10 * scale, bottom: 13 * scale),
                                   child: ListTile(
                                       onTap: () {
-                                         if (widget.alreadyAccepted!=null && widget.alreadyAccepted) {
-                                              showToast(
-                                                  "Already Accepted!", context);
-                                            } else {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     CompanyProfile(
-                                                      isApplied: false,
-                                                      company:
-                                                          widget.allJobs[index],
+                                                        isApplied: widget
+                                                            .alreadyAccepted,
+                                                        company:
+                                                      widget.allJobs[index],
                                                       status: widget.status,
                                                     )));
-                                      }},
+                                      },
                                       title: AutoSizeText(
                                         widget.allJobs[index]['role'] ??
                                             "Role not provided",

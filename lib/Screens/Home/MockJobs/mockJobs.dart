@@ -25,7 +25,6 @@ class _MockJobsState extends State<MockJobs> {
         mockJobs = result;
         loading = false;
       });
-    print(result['cand_accepted_job']);
   }
 
   @override
