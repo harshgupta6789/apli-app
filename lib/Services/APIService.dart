@@ -229,7 +229,7 @@ class APIService {
       await SharedPreferences.getInstance().then((value) async {
         Response response = await Dio().post(allJobsURL, data: {
           "secret": "$passHashSecret",
-          "userid": "${value.getString('email')}"
+          "email": "${value.getString('email')}"
         });
         if (response.statusCode == 200) {
           var frozen = response.data['frozen'];
@@ -272,7 +272,7 @@ class APIService {
         Response response = await Dio().post(jobApplyURL, data: {
           "secret": "$passHashSecret",
           "job_id": "$id",
-          "userid": "${value.getString('email')}",
+          "email": "${value.getString('email')}",
         });
         if (response.statusCode == 200) {
           var temp = response.data['success'];
@@ -297,7 +297,7 @@ class APIService {
         Response response = await Dio().post(interViewQuestionsURL, data: {
           "secret": "$passHashSecret",
           "job_id": "$id",
-          "user_id": "${value.getString('email')}",
+          "email": "${value.getString('email')}",
         });
         if (response.statusCode == 200) {
           result = response.data;
@@ -319,7 +319,7 @@ class APIService {
         Response response = await Dio().post(submitVideoInterviewURL, data: {
           "secret": "$passHashSecret",
           "job_id": "$id",
-          "user_id": "${value.getString('email')}",
+          "email": "${value.getString('email')}",
           'question_id': "$questionID",
           'video_url': "$videoURL",
           'type': "$type"
