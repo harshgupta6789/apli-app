@@ -43,7 +43,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                     (context) =>
                     Wrapper(
                       currentTab:
-                      1,
+                      2,
                     )),
                 (Route<dynamic>
             route) =>
@@ -476,7 +476,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                       (context) =>
                                                                       Wrapper(
                                                                         currentTab:
-                                                                        1,
+                                                                        2,
                                                                       )),
                                                                   (Route<dynamic>
                                                               route) =>
@@ -493,7 +493,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                     (context) =>
                                                                     Wrapper(
                                                                       currentTab:
-                                                                      1,
+                                                                      2,
                                                                     )),
                                                                 (Route<dynamic>
                                                             route) =>

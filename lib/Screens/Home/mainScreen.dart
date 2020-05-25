@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apli/Screens/Home/MockJobs/mockJobs.dart';
 import 'package:apli/Screens/Home/Updates/updates.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
@@ -67,7 +68,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        if (_currentTab == 1) {
+        if (_currentTab == 2) {
           showAlertDialog(message['notification']['title'],
               message['notification']['body'], DialogType.INFO, context, () {
             if (message['data']['type'] != null) {
@@ -107,7 +108,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           //     backgroundRadius: 4,
           //     gravity: Toast.BOTTOM);
 
-        } else if (_currentTab != 1) {
+        } else if (_currentTab != 2) {
           showAlertDialog(message['notification']['title'],
               message['notification']['body'], DialogType.INFO, context, () {
             if (message['data']['type'] != null) {
@@ -141,14 +142,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       // onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
         setState(() {
-          _currentTab = 2;
-          _tabController.animateTo(2);
+          _currentTab = 3;
+          _tabController.animateTo(3);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
         setState(() {
-          _currentTab = 2;
-          _tabController.animateTo(2);
+          _currentTab = 3;
+          _tabController.animateTo(3);
         });
       },
     );
@@ -194,7 +195,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [CourseMain(), Jobs(), Updates(), Profile()];
+  final List<Widget> _listTabs = [
+    CourseMain(),
+    MockJobs(),
+    Jobs(),
+    Updates(),
+    Profile()
+  ];
 
   Widget _bottomNavigationBar() {
     return BottomNavigationBar(
@@ -223,6 +230,20 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 courses,
                 style: TextStyle(
                     color: _currentTab == 0 ? basicColor : Colors.grey),
+              )),
+          BottomNavigationBarItem(
+              activeIcon: Icon(
+                EvaIcons.headphonesOutline,
+                color: basicColor,
+              ),
+              icon: Icon(
+                EvaIcons.headphonesOutline,
+                color: Colors.grey,
+              ),
+              title: Text(
+                mockJobs,
+                style: TextStyle(
+                    color: _currentTab == 1 ? basicColor : Colors.grey),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(

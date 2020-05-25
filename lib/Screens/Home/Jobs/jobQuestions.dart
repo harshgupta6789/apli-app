@@ -119,7 +119,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder: (context) => Wrapper(
-                                currentTab: 1,
+                                currentTab: 2,
                               )),
                       (Route<dynamic> route) => false);
                 },
@@ -264,7 +264,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => Wrapper(
-                              currentTab: 1,
+                              currentTab: 2,
                             )),
                     (Route<dynamic> route) => false);
                 print(finalResult);

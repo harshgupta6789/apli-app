@@ -123,7 +123,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
                 builder: (context) => Wrapper(
-                      currentTab: 1,
+                      currentTab: 2,
                     )),
             (Route<dynamic> route) => false);
         // MOVE TO NEXT QUESTION
@@ -173,7 +173,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => Wrapper(
-                                  currentTab: 1,
+                                  currentTab: 2,
                                 )),
                         (Route<dynamic> route) => false);
                   },
@@ -244,7 +244,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => Wrapper(
-                                      currentTab: 1,
+                                      currentTab: 2,
                                     )),
                             (Route<dynamic> route) => false);
                       },
@@ -360,7 +360,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (context) => Wrapper(
-                                      currentTab: 1,
+                                      currentTab: 2,
                                     )),
                             (Route<dynamic> route) => false);
                       },
