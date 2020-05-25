@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 // ---------------Colors---------------------
 
 Color basicColor = Color(0xff1643CD);
@@ -23,6 +20,10 @@ const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 const String pdfUrltoBeReplaced =
     "https://storage.googleapis.com/aplidotai.appspot.com/";
 const String pdfUrltoreplacedWith = "gs://aplidotai.appspot.com/";
+
+                                                                                // PROFILE SECTION APIS  //
+
+
 const String basic_infoURL = "https://dev.apli.ai/candidate/api/basic_info";
 const String projectsURL = "https://dev.apli.ai/candidate/api/projects";
 const String expURL = "https://dev.apli.ai/candidate/api/experience";
@@ -30,6 +31,10 @@ const String awardsURL = "https://dev.apli.ai/candidate/api/awards";
 const String skillsURL = "https://dev.apli.ai/candidate/api/skills";
 const String educationURL = "https://dev.apli.ai/candidate/api/education";
 const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
+
+
+                                                                                // JOB SECTION APIS  //
+
 const String allJobsURL = "https://dev.apli.ai/candidate/api/get_jobs";
 const String appliedJobsURL = "https://dev.apli.ai/candidate/api/get_submitted_jobs";
 const String incompleteJobsURL = "https://dev.apli.ai/candidate/api/get_pending_jobs";
@@ -40,6 +45,14 @@ const String submitVideoInterviewURL = "https://dev.apli.ai/candidate/api/submit
 const String acceptInterviewURL = "https://dev.apli.ai/candidate/api/accept_interview";
 const String acceptJobOfferURL = "https://dev.apli.ai/candidate/api/accept_offer";
 const String uploadLetterURL = "https://dev.apli.ai/candidate/api/update_signed_letter";
+
+                                                                                // MOCKJOBS SECTION APIS  //
+const String mockJobsURL = "https://dev.apli.ai/candidate/api/get_mock_interview_packages";
+const String mockinterViewQuestionsURL = "https://dev.apli.ai/candidate/api/get_mock_interview_questions";
+const String addMockVideoURL = "https://dev.apli.ai/candidate/api/add_mock_interview_video";
+const String submitMockInterviewURL = "https://dev.apli.ai/candidate/api/submit_final_mock_interview";
+
+
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';
 const defaultPic =
