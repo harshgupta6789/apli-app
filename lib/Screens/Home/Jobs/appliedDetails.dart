@@ -18,8 +18,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../HomeLoginWrapper.dart';
 
-enum currentState { none, uploading, success, failure }
-
 class AppliedDetails extends StatefulWidget {
   final Map job;
   final int status;
@@ -35,7 +33,6 @@ class AppliedDetails extends StatefulWidget {
 class _AppliedDetailsState extends State<AppliedDetails> {
   String tempURL;
   StorageUploadTask uploadTask;
-  currentState x = currentState.none;
   File fileToUpload;
   final _APIService = APIService();
 
@@ -43,7 +40,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
     final Directory systemTempDir = Directory.systemTemp;
-    String tempPath = 'storage/emulated/0/Download/resume' +
+    String tempPath = 'storage/emulated/0/Download/offer-letter' +
         DateTime.now().toString() +
         '.pdf';
     final File tempFile = File(tempPath);
@@ -75,18 +72,17 @@ class _AppliedDetailsState extends State<AppliedDetails> {
       if (file != null) {
         setState(() {
           fileToUpload = file;
-
-          //currentFileNames[index] = p.basename(file.path);
+          loading = true;
         });
         _uploadFile(file, "offerletter");
-        showToast("Uploading..", context);
+        showToast("Uploading", context);
       } else {}
     } catch (e) {
       AwesomeDialog(
               context: context,
               dialogType: DialogType.WARNING,
               tittle: e,
-              body: Text("Error Has Occured"))
+              body: Text("Error Has Occurred"))
           .show();
     }
   }
@@ -101,22 +97,13 @@ class _AppliedDetailsState extends State<AppliedDetails> {
       uploadTask = storageReference.putFile(file);
       final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
       final String url = (await downloadUrl.ref.getDownloadURL());
-      if (uploadTask.isInProgress) {
-        if (mounted)
-          setState(() {
-            x = currentState.uploading;
-          });
-      }
 
       if (url != null) {
         setState(() {
-          x = currentState.success;
           tempURL = url;
         });
-        print(url);
         dynamic result = await _APIService.updateJobOfferLetter(
             widget.job['job_id'], tempURL);
-        print(result);
         if (result['error'] != null) {
           showToast("error", context);
         } else {
@@ -129,10 +116,14 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     )),
             (Route<dynamic> route) => false);
         // MOVE TO NEXT QUESTION
-      } else if (url == null) {
-        setState(() {
-          x = currentState.failure;
-        });
+      } else {
+        showToast("Error occurred, try again later", context);
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Wrapper(
+                      currentTab: 2,
+                    )),
+            (Route<dynamic> route) => false);
       }
     });
   }
@@ -140,8 +131,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   Widget button(String status, Map job) {
     switch (status) {
       case "OFFERED":
-        bool deadlineOver = job['accept_deadline_passed'] ?? false;
-        bool candAccepted = job['cand_accepted_job'] ?? false;
+        bool deadlineOver = job['accept_deadline_passed'] ?? true;
+        bool candAccepted = job['cand_accepted_job'] ?? true;
         if (deadlineOver || candAccepted) {
           return Padding(
               padding:
@@ -164,9 +155,11 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
                   onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
                     dynamic result =
                         await _APIService.acceptJobOffer(widget.job['job_id']);
-                    print(result);
                     if (result['error'] != null) {
                       showToast(result['error'].toString(), context);
                     } else {
@@ -240,10 +233,12 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                             : basicColor,
                         onPressed: () async {
                           if (job['schedule']['cand_accepted']) {
-                            showToast("Accepting..", context);
+                            setState(() {
+                              loading = true;
+                            });
+                            showToast("Accepting", context);
                             dynamic result = await _APIService.acceptInterView(
                                 widget.job['job_id']);
-                            print(result);
                             if (result['error'] != null) {
                               showToast(result['error'].toString(), context);
                             } else {
@@ -305,7 +300,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                       } else {
                         throw 'Could not launch $url';
                       }
-                      print("INTERVIEW ");
                     },
                     color: basicColor,
                     elevation: 0,
@@ -319,8 +313,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                       style: TextStyle(color: Colors.white),
                     )));
           } else {
-            String temp = widget.job['schedule']['when'];
-            print(temp.split("T"));
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,10 +354,12 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     child: RaisedButton(
                         color: basicColor,
                         onPressed: () async {
-                          showToast("Accepting..", context);
+                          setState(() {
+                            loading = true;
+                          });
+                          showToast("Accepting", context);
                           dynamic result = await _APIService.acceptInterView(
                               widget.job['job_id']);
-                          print(result);
                           if (result['error'] != null) {
                             showToast(result['error'].toString(), context);
                           } else {
@@ -391,7 +385,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               ],
             );
           }
-        }
+        } else
+          return Container();
         break;
       case "LETTER SENT":
         if (job['offer_letter'] != null) {
@@ -531,6 +526,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   'APPLY NOW',
                   style: TextStyle(color: Colors.white),
                 )));
+        break;
     }
   }
 

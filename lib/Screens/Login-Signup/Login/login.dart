@@ -13,6 +13,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../Services/auth.dart';
 
 double height, width;
@@ -122,7 +123,11 @@ class _LoginState extends State<Login> {
                                   right: width * 0.1),
                               child: TextFormField(
                                 enableInteractiveSelection: false,
-                                toolbarOptions: ToolbarOptions(copy: false, paste: false, selectAll: false, cut: false),
+                                toolbarOptions: ToolbarOptions(
+                                    copy: false,
+                                    paste: false,
+                                    selectAll: false,
+                                    cut: false),
                                 obscureText: obscure,
                                 decoration: loginFormField.copyWith(
                                     hintText: 'Password',

@@ -109,7 +109,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           //     backgroundRadius: 4,
           //     gravity: Toast.BOTTOM);
 
-        } else if (_currentTab != 2) {
+        } else {
           showAlertDialog(message['notification']['title'],
               message['notification']['body'], DialogType.INFO, context, () {
             if (message['data']['type'] != null) {
@@ -205,6 +205,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   ];
 
   Widget _bottomNavigationBar() {
+    double fontSize = 13;
     return BottomNavigationBar(
         backgroundColor: Colors.white,
         currentIndex: _currentTab,
@@ -230,7 +231,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 courses,
                 style: TextStyle(
-                    color: _currentTab == 0 ? basicColor : Colors.grey),
+                    color: _currentTab == 0 ? basicColor : Colors.grey,
+                    fontSize: fontSize),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
@@ -244,7 +246,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 mockJob,
                 style: TextStyle(
-                    color: _currentTab == 1 ? basicColor : Colors.grey),
+                    color: _currentTab == 1 ? basicColor : Colors.grey,
+                    fontSize: fontSize),
               )),
           BottomNavigationBarItem(
               activeIcon: Icon(
@@ -258,7 +261,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 jobs,
                 style: TextStyle(
-                    color: _currentTab == 2 ? basicColor : Colors.grey),
+                    color: _currentTab == 2 ? basicColor : Colors.grey,
+                    fontSize: fontSize),
               )),
           BottomNavigationBarItem(
             activeIcon: Icon(
@@ -271,8 +275,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             ),
             title: Text(
               updates,
-              style:
-                  TextStyle(color: _currentTab == 3 ? basicColor : Colors.grey),
+              style: TextStyle(
+                  color: _currentTab == 3 ? basicColor : Colors.grey,
+                  fontSize: fontSize),
             ),
           ),
           BottomNavigationBarItem(
@@ -287,7 +292,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 profile,
                 style: TextStyle(
-                    color: _currentTab == 4 ? basicColor : Colors.grey),
+                    color: _currentTab == 4 ? basicColor : Colors.grey,
+                    fontSize: fontSize),
               )),
         ]);
   }
@@ -295,7 +301,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: _bottomNavigationBar(),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 10)]),
+          padding: const EdgeInsets.only(bottom: 5),
+          child: _bottomNavigationBar(),
+        ),
         body: DoubleBackToCloseApp(
           child: TabBarView(
             children: _listTabs,

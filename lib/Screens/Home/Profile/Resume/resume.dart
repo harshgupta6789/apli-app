@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
@@ -10,13 +14,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'editResume.dart';
 
 class Resume extends StatefulWidget {
@@ -354,7 +356,10 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                                   "Please Complete Your Profile First!",
                                                                   context);
                                                             }
-                                                          } else showToast('Permission denied', context);
+                                                          } else
+                                                            showToast(
+                                                                'Permission denied',
+                                                                context);
                                                         }),
                                                   )
                                                 ],

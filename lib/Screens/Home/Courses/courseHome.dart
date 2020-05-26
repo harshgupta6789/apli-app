@@ -60,7 +60,7 @@ class _CourseMainState extends State<CourseMain> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: ScrollConfiguration(
                   behavior: MyBehavior(),
                   child: SingleChildScrollView(

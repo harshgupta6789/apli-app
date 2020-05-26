@@ -117,7 +117,7 @@ class _JobsTabssState extends State<JobsTabs> {
                     "No Deadline" + 'remaining',
                 maxLines: 2,
                 style: TextStyle(
-                    //color: Colors.red,
+                    color: Colors.red,
                     fontSize: 12 * scale,
                     fontWeight: FontWeight.w500),
                 overflow: TextOverflow.ellipsis,
@@ -128,8 +128,8 @@ class _JobsTabssState extends State<JobsTabs> {
       default:
         return AutoSizeText(
           'Deadline: ' +
-              dateToReadableTimeConverter(DateTime.parse(
-                  widget.jobs[0]['deadline'] ?? '2020-05-26 00:00:00')),
+              dateToReadableTimeConverter(
+                  DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
           maxLines: 2,
           style: TextStyle(
               color: Colors.black,
@@ -181,7 +181,6 @@ class _JobsTabssState extends State<JobsTabs> {
 
   @override
   Widget build(BuildContext context) {
-    print((widget.jobs[0]['deadline']));
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     if (width >= 360) {
@@ -195,8 +194,8 @@ class _JobsTabssState extends State<JobsTabs> {
           child: Text(widget.tabNo == 0
               ? 'You have not applied for any jobs yet'
               : widget.tabNo == 1
-              ? "There are no new jobs"
-              : "You don't have any incomplete jobs"));
+                  ? "There are no new jobs"
+                  : "You don't have any incomplete jobs"));
     } else
       return ScrollConfiguration(
         behavior: MyBehavior(),
@@ -204,139 +203,171 @@ class _JobsTabssState extends State<JobsTabs> {
             physics: AlwaysScrollableScrollPhysics(),
             child: Padding(
                 padding: const EdgeInsets.fromLTRB(15, 8, 15, 10),
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: widget.jobs.length,
-                    physics: ScrollPhysics(),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        padding: EdgeInsets.only(bottom: 1),
-                        child: Card(
-                            elevation: 0.2,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7.0),
-                                side: BorderSide(color: Colors.black54)),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: 10 * scale, bottom: 13 * scale),
-                                    child: ListTile(
-                                        onTap: () {
-                                          if (widget.tabNo == 0)
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        AppliedDetails(
-                                                          job: widget
-                                                              .jobs[index],
-                                                          status: widget
-                                                              .profileStatus,
-                                                          st: widget.jobs[index]
-                                                          ['status'],
-                                                        )));
-                                          else if (widget.tabNo == 1)
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CompanyProfile(
-                                                          isApplied: widget
-                                                              .alreadyAccepted,
-                                                          company: widget
-                                                              .jobs[index],
-                                                          status: widget
-                                                              .profileStatus,
-                                                        )));
-                                          else {
-                                            if (widget.alreadyAccepted !=
-                                                null &&
-                                                widget.alreadyAccepted) {
-                                              showToast(
-                                                  "You have already accepted a job",
-                                                  context);
-                                            } else {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          CompanyVideo(
-                                                            job: widget
-                                                                .jobs[index],
-                                                            status: widget
-                                                                .profileStatus,
-                                                          )));
-                                            }
-                                          }
-                                        },
-                                        title: AutoSizeText(
-                                          widget.jobs[index]['role'] ??
-                                              "Role not provided",
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              color: basicColor,
-                                              fontSize: 18 * scale,
-                                              fontWeight: FontWeight.w500),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        subtitle: Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                          children: [
-                                            AutoSizeText(
-                                              widget.jobs[index]['location'] ??
-                                                  "Location not provided",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12 * scale,
-                                                  fontWeight: FontWeight.w500),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            widget.tabNo == 0
-                                                ? deadlineToShow(
-                                                widget.jobs[index]
-                                                ['status'],
-                                                widget.jobs[index][
-                                                'accept_deadline'] ??
-                                                    '',
-                                                widget.jobs[index]
-                                                ['deadline'] ??
-                                                    "")
-                                                : AutoSizeText(
-                                              'Deadline: ' +
-                                                  dateToReadableTimeConverter(
-                                                      DateTime.parse(widget
-                                                          .jobs[0]['deadline'] ??
-                                                          '2020-05-26 00:00:00')),
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 12 * scale,
-                                                  fontWeight:
-                                                  FontWeight.w500),
-                                              overflow:
-                                              TextOverflow.ellipsis,
-                                            )
-                                          ],
-                                        ),
-                                        trailing: widget.tabNo == 0
-                                            ? differentBackground(
-                                            widget.jobs[index]['status'])
-                                            : IconButton(
-                                          icon: Icon(
-                                            EvaIcons.bookmarkOutline,
+                child: Column(
+                  children: <Widget>[
+                    ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: widget.jobs.length,
+                        physics: ScrollPhysics(),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.only(bottom: 1),
+                                child: Card(
+                                    elevation: 0.2,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(7.0),
+                                        side:
+                                            BorderSide(color: Colors.black54)),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                top: 10 * scale,
+                                                bottom: 13 * scale),
+                                            child: ListTile(
+                                                onTap: () {
+                                                  if (widget.tabNo == 0)
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                AppliedDetails(
+                                                                  job: widget
+                                                                          .jobs[
+                                                                      index],
+                                                                  status: widget
+                                                                      .profileStatus,
+                                                                  st: widget.jobs[
+                                                                          index]
+                                                                      [
+                                                                      'status'],
+                                                                )));
+                                                  else if (widget.tabNo == 1)
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                CompanyProfile(
+                                                                  isApplied: widget
+                                                                      .alreadyAccepted,
+                                                                  company: widget
+                                                                          .jobs[
+                                                                      index],
+                                                                  status: widget
+                                                                      .profileStatus,
+                                                                )));
+                                                  else {
+                                                    if (widget.alreadyAccepted !=
+                                                            null &&
+                                                        widget
+                                                            .alreadyAccepted) {
+                                                      showToast(
+                                                          "You have already accepted a job",
+                                                          context);
+                                                    } else {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      CompanyVideo(
+                                                                        job: widget
+                                                                            .jobs[index],
+                                                                        status:
+                                                                            widget.profileStatus,
+                                                                      )));
+                                                    }
+                                                  }
+                                                },
+                                                title: AutoSizeText(
+                                                  widget.jobs[index]['role'] ??
+                                                      "Role not provided",
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      color: basicColor,
+                                                      fontSize: 18 * scale,
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                subtitle: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      widget.jobs[index]
+                                                              ['location'] ??
+                                                          "Location not provided",
+                                                      maxLines: 2,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12 * scale,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    widget.tabNo == 0
+                                                        ? deadlineToShow(
+                                                            widget.jobs[index]
+                                                                ['status'],
+                                                            widget.jobs[index][
+                                                                    'accept_deadline'] ??
+                                                                '',
+                                                            widget.jobs[index][
+                                                                    'deadline'] ??
+                                                                "")
+                                                        : AutoSizeText(
+                                                            'Deadline: ' +
+                                                                dateToReadableTimeConverter(DateTime.parse(
+                                                                    widget.jobs[index]
+                                                                            [
+                                                                            'deadline'] ??
+                                                                        '2020-05-26 00:00:00')),
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black,
+                                                                fontSize:
+                                                                    12 * scale,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          )
+                                                  ],
+                                                ),
+                                                trailing: widget.tabNo == 0
+                                                    ? differentBackground(widget
+                                                        .jobs[index]['status'])
+                                                    : IconButton(
+                                                        icon: Icon(
+                                                          EvaIcons
+                                                              .bookmarkOutline,
+                                                        ),
+                                                        onPressed: () async {},
+                                                      )),
                                           ),
-                                          onPressed: () async {},
-                                        )),
-                                  ),
-                                ])),
-                      );
-                    }))),
+                                        ])),
+                              ),
+                            ],
+                          );
+                        }),
+                    SizedBox(
+                      height: height * 0.1,
+                    ),
+                  ],
+                ))),
       );
   }
 }

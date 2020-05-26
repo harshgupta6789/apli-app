@@ -26,9 +26,10 @@ class _JobsState extends State<Jobs>
 
   getInfo() async {
     dynamic result = await _APIService.getJobs();
-    if(mounted) setState(() {
-      jobs = result;
-      loading = false;
+    if (mounted)
+      setState(() {
+        jobs = result;
+        loading = false;
         _controller.reset();
       });
   }
@@ -36,7 +37,7 @@ class _JobsState extends State<Jobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
     getInfo();
@@ -152,27 +153,32 @@ class _JobsState extends State<Jobs>
                         child: Text(
                             "Your account is set on 'freeze' by your college"),
                       )
-                    : jobs == 0 ? Center(child: Text('Error occurred, try again later'),) : TabBarView(
-                        children: [
+                    : jobs == 0
+                        ? Center(
+                            child: Text('Error occurred, try again later'),
+                          )
+                        : TabBarView(
+                            children: [
                               JobsTabs(
                                 alreadyAccepted: jobs['cand_accepted_job'],
-                            jobs: jobs['submitted_jobs'],
-                            profileStatus: jobs['profile_status'],
-                            tabNo: 0,),
-                          JobsTabs(
-                            alreadyAccepted: jobs['cand_accepted_job'],
-                            jobs: jobs['all_jobs'],
-                            profileStatus: jobs['profile_status'],
-                            tabNo: 1,
-                          ),
-                          JobsTabs(
-                            alreadyAccepted: jobs['cand_accepted_job'],
-                            jobs: jobs['pending_jobs'],
-                            profileStatus: jobs['profile_status'],
-                            tabNo: 2,
-                          )
-                        ],
-                        controller: _tabController,
-                      ));
+                                jobs: jobs['submitted_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 0,
+                              ),
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                                jobs: jobs['all_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 1,
+                              ),
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                                jobs: jobs['pending_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 2,
+                              )
+                            ],
+                            controller: _tabController,
+                          ));
   }
 }

@@ -24,6 +24,7 @@ class _RandomDetailsState extends State<RandomDetails> {
     print(widget.package);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -502,7 +503,8 @@ class _MockCompanyInstructionsState extends State<MockCompanyInstructions> {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               MockJobQuestions(
-                                                                packName: widget.pack,
+                                                                packName:
+                                                                    widget.pack,
                                                                 questions:
                                                                     snapshot.data[
                                                                         'pack'],

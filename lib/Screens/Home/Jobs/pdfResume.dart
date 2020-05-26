@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:toast/toast.dart';
-import 'jobQuestions.dart';
-import 'package:camera/camera.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum currentState { none, uploading, success, failure }
@@ -192,10 +191,11 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
                         //         builder: (context) => JobQuestions(
                         //               cameras: cameras,
                         //             )));
-                  
-                      // showToast('Permission denied', context,
-                      //     color: Colors.red);
-                    ;}),
+
+                        // showToast('Permission denied', context,
+                        //     color: Colors.red);
+                        ;
+                    }),
               ),
             ]),
       );

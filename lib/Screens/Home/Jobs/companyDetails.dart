@@ -1,14 +1,14 @@
 import 'package:apli/Screens/Home/Jobs/jobQuestions.dart';
 import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
 import 'package:apli/Services/APIService.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:awsome_video_player/awsome_video_player.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:apli/Shared/constants.dart';
-import 'package:awsome_video_player/awsome_video_player.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -29,7 +29,7 @@ class CompanyProfile extends StatefulWidget {
 
 class _CompanyProfileState extends State<CompanyProfile> {
   final _APIService = APIService();
-  bool loading = false;
+  bool loading = false, applied = false;
   @override
   Widget build(BuildContext context) {
     return loading
@@ -55,7 +55,13 @@ class _CompanyProfileState extends State<CompanyProfile> {
                             Icons.arrow_back,
                             color: Colors.white,
                           ),
-                          onPressed: () => Navigator.pop(context)),
+                          onPressed: () =>
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => Wrapper(
+                                            currentTab: 2,
+                                          )),
+                                  (Route<dynamic> route) => false)),
                     ),
                     title: Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
@@ -119,9 +125,11 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                               AutoSizeText(
                                                 'Deadline: ' +
-                                                        widget.company[
-                                                            'deadline'] ??
-                                                    "No Deadline yet",
+                                                    dateToReadableTimeConverter(
+                                                        DateTime.parse(widget
+                                                                    .company[
+                                                                'deadline'] ??
+                                                            '2020-05-26 00:00:00')),
                                                 maxLines: 2,
                                                 style: TextStyle(
                                                     color: Colors.black,
@@ -402,18 +410,21 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               right: 20.0,
                                               top: 10.0),
                                           child: RaisedButton(
-                                              color: widget.isApplied == true
-                                                  ? Colors.grey
-                                                  : basicColor,
+                                              color:
+                                                  (widget.isApplied == true ||
+                                                          applied == true)
+                                                      ? Colors.grey
+                                                      : basicColor,
                                               elevation: 0,
                                               padding: EdgeInsets.only(
                                                   left: 30, right: 30),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(5.0),
+                                                    BorderRadius.circular(5.0),
                                                 side: BorderSide(
-                                                    color: widget.isApplied ==
-                                                        true
+                                                    color: (widget.isApplied ==
+                                                                true ||
+                                                            applied == true)
                                                         ? Colors.grey
                                                         : basicColor,
                                                     width: 1.2),
@@ -424,99 +435,103 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     color: Colors.white),
                                               ),
                                               onPressed: () async {
-                                                if (widget.isApplied == false) {
-                                                  bool videoIntro = true,
-                                                      resume = true;
-                                                  if (widget
-                                                      .company['requirements']
-                                                      .contains(
-                                                      'Video Introduction')) {
-                                                    String temp =
-                                                    decimalToBinary(
-                                                        widget.status)
-                                                        .toString();
-                                                    while (temp.length != 9) {
-                                                      temp = '0' + temp;
-                                                    }
-                                                    if (temp.substring(7, 8) !=
-                                                        "1")
-                                                      if (tempProfileStatus !=
-                                                          true)
-                                                        videoIntro = false;
-                                                    if (tempProfileStatus ==
-                                                        false) {
-                                                      videoIntro = false;
-                                                    }
-                                                  }
-                                                  if (widget
-                                                      .company['requirements']
-                                                      .contains('Resume'))
+                                                if (applied == false) {
+                                                  if (widget.isApplied ==
+                                                      false) {
+                                                    bool videoIntro = true,
+                                                        resume = true;
                                                     if (widget
-                                                        .status <
+                                                        .company['requirements']
+                                                        .contains(
+                                                            'Video Introduction')) {
+                                                      String temp =
+                                                          decimalToBinary(
+                                                                  widget.status)
+                                                              .toString();
+                                                      while (temp.length != 9) {
+                                                        temp = '0' + temp;
+                                                      }
+                                                      if (temp.substring(
+                                                              7, 8) !=
+                                                          "1") if (tempProfileStatus != true)
+                                                        videoIntro = false;
+                                                      if (tempProfileStatus ==
+                                                          false) {
+                                                        videoIntro = false;
+                                                      }
+                                                    }
+                                                    if (widget
+                                                        .company['requirements']
+                                                        .contains('Resume')) if (widget
+                                                            .status <
                                                         384) resume = false;
-                                                  if (!videoIntro)
-                                                    showToast(
-                                                        'Complete your video intro first !!!',
-                                                        context);
-                                                  else if (!resume)
-                                                    showToast(
-                                                        'Complete your resume first !!!',
-                                                        context);
-                                                  else {
-                                                    setState(() {
-                                                      loading = true;
-                                                    });
-                                                    dynamic result =
-                                                    await _APIService
-                                                        .applyJob(
-                                                        widget.company[
-                                                                    'job_id']);
-                                                    if (result == 1) {
-                                                      if (widget.company[
-                                                      'requirements']
-                                                          .contains(
-                                                          'Video Interview')) {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                    CompanyVideo(
-                                                                      job: widget
-                                                                          .company,
-                                                                    )));
+                                                    if (!videoIntro)
+                                                      showToast(
+                                                          'Complete your video intro first !!!',
+                                                          context);
+                                                    else if (!resume)
+                                                      showToast(
+                                                          'Complete your resume first !!!',
+                                                          context);
+                                                    else {
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
+                                                      dynamic result =
+                                                          await _APIService
+                                                              .applyJob(widget
+                                                                      .company[
+                                                                  'job_id']);
+                                                      setState(() {
+                                                        loading = false;
+                                                        applied = true;
+                                                      });
+                                                      if (result == 1) {
+                                                        if (widget.company[
+                                                                'requirements']
+                                                            .contains(
+                                                                'Video Interview')) {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          CompanyVideo(
+                                                                            job:
+                                                                                widget.company,
+                                                                          )));
+                                                        } else {
+                                                          showToast(
+                                                              'Your application has been submitted',
+                                                              context);
+                                                          Navigator.of(context)
+                                                              .pushAndRemoveUntil(
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Wrapper(
+                                                                                currentTab: 2,
+                                                                              )),
+                                                                  (Route<dynamic>
+                                                                          route) =>
+                                                                      false);
+                                                        }
                                                       } else {
                                                         showToast(
-                                                            'Your application has been submitted',
+                                                            'Error occurred, try again later',
                                                             context);
                                                         Navigator.of(context)
                                                             .pushAndRemoveUntil(
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
                                                                             Wrapper(
                                                                               currentTab: 2,
                                                                             )),
                                                                 (Route<dynamic>
-                                                            route) =>
-                                                            false);
+                                                                        route) =>
+                                                                    false);
                                                       }
-                                                    } else {
-                                                      showToast(
-                                                          'Error occurred, try again later',
-                                                          context);
-                                                      Navigator.of(context)
-                                                          .pushAndRemoveUntil(
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                      Wrapper(
-                                                                        currentTab:
-                                                                        2,
-                                                                      )),
-                                                              (Route<dynamic>
-                                                          route) =>
-                                                          false);
                                                     }
                                                   }
                                                 }
@@ -532,7 +547,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                 ),
               ),
             ),
-    );
+          );
   }
 }
 
@@ -786,7 +801,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                     bottom: 18.0, left: 10.0, right: 10.0),
                                 child: Column(
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Padding(
                                         padding: EdgeInsets.fromLTRB(
@@ -806,11 +821,11 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                       text: ' "START" ',
                                                       style: TextStyle(
                                                           fontWeight:
-                                                          FontWeight.bold,
+                                                              FontWeight.bold,
                                                           color: basicColor)),
                                                   TextSpan(
                                                       text:
-                                                      ' when you are ready! '),
+                                                          ' when you are ready! '),
                                                 ],
                                               ),
                                             ),
@@ -832,17 +847,17 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                       SizedBox(height: height * 0.05),
                                       Padding(
                                         padding:
-                                        EdgeInsets.fromLTRB(10.0, 5, 0, 8),
+                                            EdgeInsets.fromLTRB(10.0, 5, 0, 8),
                                         child: Align(
                                             child: Text(
                                                 snapshot.data['questions'] !=
-                                                    null
+                                                        null
                                                     ? "1. There will be a total of  " +
-                                                    snapshot
-                                                        .data['questions']
-                                                        .length
-                                                        .toString() +
-                                                    " questions in the interview."
+                                                        snapshot
+                                                            .data['questions']
+                                                            .length
+                                                            .toString() +
+                                                        " questions in the interview."
                                                     : "1. There will be a total of 15 questions in the interview.",
                                                 textAlign: TextAlign.justify,
                                                 style: TextStyle(
@@ -930,7 +945,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                   left: 30, right: 30),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(5.0),
+                                                    BorderRadius.circular(5.0),
                                                 side: BorderSide(
                                                     color: basicColor,
                                                     width: 1.2),
@@ -945,8 +960,8 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                     camera = false,
                                                     microphone = false;
                                                 var storageStatus =
-                                                await Permission
-                                                    .storage.status;
+                                                    await Permission
+                                                        .storage.status;
                                                 if (storageStatus ==
                                                     PermissionStatus.granted) {
                                                   storage = true;
@@ -954,20 +969,20 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                     PermissionStatus
                                                         .undetermined) {
                                                   Map<Permission,
-                                                      PermissionStatus>
-                                                  statuses = await [
+                                                          PermissionStatus>
+                                                      statuses = await [
                                                     Permission.storage,
                                                   ].request();
                                                   if (statuses[
-                                                  Permission.storage] ==
+                                                          Permission.storage] ==
                                                       PermissionStatus
                                                           .granted) {
                                                     storage = true;
                                                   }
                                                 }
                                                 var cameraeStatus =
-                                                await Permission
-                                                    .camera.status;
+                                                    await Permission
+                                                        .camera.status;
                                                 if (cameraeStatus ==
                                                     PermissionStatus.granted) {
                                                   camera = true;
@@ -975,20 +990,20 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                     PermissionStatus
                                                         .undetermined) {
                                                   Map<Permission,
-                                                      PermissionStatus>
-                                                  statuses = await [
+                                                          PermissionStatus>
+                                                      statuses = await [
                                                     Permission.camera,
                                                   ].request();
                                                   if (statuses[
-                                                  Permission.camera] ==
+                                                          Permission.camera] ==
                                                       PermissionStatus
                                                           .granted) {
                                                     camera = true;
                                                   }
                                                 }
                                                 var microphoneStatus =
-                                                await Permission
-                                                    .microphone.status;
+                                                    await Permission
+                                                        .microphone.status;
                                                 if (microphoneStatus ==
                                                     PermissionStatus.granted) {
                                                   microphone = true;
@@ -996,12 +1011,12 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                     PermissionStatus
                                                         .undetermined) {
                                                   Map<Permission,
-                                                      PermissionStatus>
-                                                  statuses = await [
+                                                          PermissionStatus>
+                                                      statuses = await [
                                                     Permission.microphone,
                                                   ].request();
                                                   if (statuses[Permission
-                                                      .microphone] ==
+                                                          .microphone] ==
                                                       PermissionStatus
                                                           .granted) {
                                                     microphone = true;
@@ -1017,17 +1032,17 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                       MaterialPageRoute(
                                                           builder:
                                                               (context) =>
-                                                              JobQuestions(
-                                                                questions: snapshot
-                                                                    .data[
-                                                                'questions'],
-                                                                whereToStart:
-                                                                snapshot
-                                                                    .data['startFrom'],
-                                                                jobID: widget
-                                                                    .job[
-                                                                'job_id'],
-                                                              )));
+                                                                  JobQuestions(
+                                                                    questions: snapshot
+                                                                            .data[
+                                                                        'questions'],
+                                                                    whereToStart:
+                                                                        snapshot
+                                                                            .data['startFrom'],
+                                                                    jobID: widget
+                                                                            .job[
+                                                                        'job_id'],
+                                                                  )));
                                                 } else
                                                   showToast('Permission denied',
                                                       context,

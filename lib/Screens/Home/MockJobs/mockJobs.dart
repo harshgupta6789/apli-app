@@ -36,52 +36,72 @@ class _MockJobsState extends State<MockJobs>
 
   Widget button(String package, List incomplete) {
     if (incomplete == null || incomplete == []) {
-      return null;
+      return Container();
     } else if (incomplete.contains(package)) {
-      return Align(
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      MockCompanyInstructions(pack: package)));
+        },
+        child: Align(
           alignment: Alignment.centerLeft,
-          child: Padding(
-              padding: const EdgeInsets.only(right: 20.0, top: 10.0),
-              child: RaisedButton(
-                  color: basicColor,
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
-                  ),
-                  child: Text(
-                    'Resume',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () async {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MockCompanyInstructions(pack: package)));
-                  })));
+          child: Text('Tap to resume'),
+        ),
+      );
+//          child: Padding(
+//              padding: const EdgeInsets.only(right: 20.0, top: 10.0),
+//              child: RaisedButton(
+//                  color: basicColor,
+//                  elevation: 0,
+//                  padding: EdgeInsets.only(left: 30, right: 30),
+//                  shape: RoundedRectangleBorder(
+//                    borderRadius: BorderRadius.circular(5.0),
+//                    side: BorderSide(color: basicColor, width: 1.2),
+//                  ),
+//                  child: Text(
+//                    'Resume',
+//                    style: TextStyle(color: Colors.white),
+//                  ),
+//                  onPressed: () async {
+//                    Navigator.push(
+//                        context,
+//                        MaterialPageRoute(
+//                            builder: (context) =>
+//                                MockCompanyInstructions(pack: package)));
+//                  })));
     } else {
       return null;
     }
   }
 
-    Widget tickmark(String package, List submitted) {
+  Widget tickmark(String package, List submitted) {
     if (submitted == null || submitted == []) {
-      return Container(height: 5, width: 5,);
+      return Container(
+        height: 5,
+        width: 5,
+      );
     } else if (submitted.contains(package)) {
-     return Padding(
-              padding: const EdgeInsets.only(right: 20.0, top: 10.0),
-              child: Icon(EvaIcons.checkmarkOutline , color: basicColor,));
+      return Padding(
+          padding: const EdgeInsets.only(right: 20.0, top: 10.0),
+          child: Icon(
+            EvaIcons.checkmarkOutline,
+            color: basicColor,
+          ));
     } else {
-      return Container(height: 5,width: 5,);
+      return Container(
+        height: 5,
+        width: 5,
+      );
     }
   }
 
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 600),
       vsync: this,
     );
     getInfo();
@@ -185,7 +205,7 @@ class _MockJobsState extends State<MockJobs>
                                 physics: AlwaysScrollableScrollPhysics(),
                                 child: Padding(
                                     padding: const EdgeInsets.fromLTRB(
-                                        15, 20, 15, 10),
+                                        15, 15, 15, 10),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -202,14 +222,14 @@ class _MockJobsState extends State<MockJobs>
                                         ),
                                         Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                5, 20, 15, 10),
+                                                5, 10, 15, 18),
                                             child: AutoSizeText(
                                               "Mock Interviews",
                                               maxLines: 2,
                                               style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 15,
-                                                  fontWeight: FontWeight.w700),
+                                                  fontWeight: FontWeight.w900),
                                               overflow: TextOverflow.ellipsis,
                                             )),
                                         ListView.builder(
@@ -223,8 +243,10 @@ class _MockJobsState extends State<MockJobs>
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               return Container(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 1),
+                                                padding: EdgeInsets.only(
+                                                    bottom: 4,
+                                                    left: 10,
+                                                    right: 10),
                                                 child: Card(
                                                   elevation: 0.2,
                                                   shape: RoundedRectangleBorder(
@@ -235,9 +257,9 @@ class _MockJobsState extends State<MockJobs>
                                                           color:
                                                               Colors.black54)),
                                                   child: Padding(
-                                                      padding: EdgeInsets.only(
-                                                          top: 10 * scale,
-                                                          bottom: 13 * scale),
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              0, 5, 0, 6),
                                                       child: ListTile(
                                                         onTap: () {
                                                           List mockTaken = mockJobs[
@@ -256,8 +278,9 @@ class _MockJobsState extends State<MockJobs>
                                                                       'interviewPackages']
                                                                   [index])) {
                                                             showToast(
-                                                                "Already Taken!",
-                                                                context);
+                                                                "Already Completed",
+                                                                context,
+                                                                duration: 1);
                                                           } else {
                                                             Navigator.push(
                                                                 context,
@@ -275,8 +298,7 @@ class _MockJobsState extends State<MockJobs>
                                                               "Interview 0",
                                                           maxLines: 2,
                                                           style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
+                                                              color: basicColor,
                                                               fontSize: 15,
                                                               fontWeight:
                                                                   FontWeight
@@ -290,7 +312,8 @@ class _MockJobsState extends State<MockJobs>
                                                                 [index],
                                                             mockJobs[
                                                                 'mockTaken']),
-                                                        trailing: tickmark(mockJobs[
+                                                        trailing: tickmark(
+                                                            mockJobs[
                                                                     'interviewPackages']
                                                                 [index],
                                                             mockJobs[
@@ -299,6 +322,9 @@ class _MockJobsState extends State<MockJobs>
                                                 ),
                                               );
                                             }),
+                                        SizedBox(
+                                          height: height * 0.1,
+                                        ),
                                       ],
                                     ))),
                           ));
