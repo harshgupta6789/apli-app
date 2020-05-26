@@ -15,7 +15,7 @@ class MockJobs extends StatefulWidget {
 }
 
 class _MockJobsState extends State<MockJobs>
-    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -30,6 +30,7 @@ class _MockJobsState extends State<MockJobs>
       setState(() {
         mockJobs = result;
         loading = false;
+        _controller.reset();
       });
   }
 
@@ -80,7 +81,7 @@ class _MockJobsState extends State<MockJobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
     getInfo();
@@ -99,22 +100,22 @@ class _MockJobsState extends State<MockJobs>
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
         key: _scaffoldKey,
-        floatingActionButton: Visibility(
-          visible: !loading,
-          child: RotationTransition(
-              turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
-              child: FloatingActionButton(
-                heroTag: 'avb',
-                backgroundColor: basicColor,
-                child: Icon(Icons.refresh),
-                onPressed: () {
+        floatingActionButton: RotationTransition(
+            turns: Tween(begin: 0.0, end: 2.0).animate(_controller),
+            child: FloatingActionButton(
+              heroTag: 'avb',
+              backgroundColor: basicColor,
+              child: Icon(Icons.refresh),
+              onPressed: () {
+                if (!loading) {
+                  _controller.forward();
+                  getInfo();
                   setState(() {
                     loading = true;
                   });
-                  getInfo();
-                },
-              )),
-        ),
+                }
+              },
+            )),
         endDrawer: customDrawer(context, _scaffoldKey),
         backgroundColor: Colors.white,
         appBar: PreferredSize(

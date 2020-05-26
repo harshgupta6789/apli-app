@@ -23,14 +23,12 @@ class _JobsState extends State<Jobs>
   final _APIService = APIService();
   bool loading = true;
   dynamic jobs;
-  double angle = 0;
 
   getInfo() async {
     dynamic result = await _APIService.getJobs();
     if(mounted) setState(() {
       jobs = result;
       loading = false;
-        angle = 0;
         _controller.reset();
       });
   }
@@ -38,7 +36,7 @@ class _JobsState extends State<Jobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
     getInfo();
@@ -60,7 +58,7 @@ class _JobsState extends State<Jobs>
     return Scaffold(
         key: _scaffoldKey,
         floatingActionButton: RotationTransition(
-          turns: Tween(begin: 0.0, end: 1.0).animate(_controller),
+          turns: Tween(begin: 0.0, end: 2.0).animate(_controller),
           child: FloatingActionButton(
             backgroundColor: basicColor,
             child: Icon(Icons.refresh),
