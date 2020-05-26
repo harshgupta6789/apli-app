@@ -15,7 +15,10 @@ class MockJobs extends StatefulWidget {
 }
 
 class _MockJobsState extends State<MockJobs>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   final _APIService = APIService();
   bool loading = true;
   dynamic mockJobs;

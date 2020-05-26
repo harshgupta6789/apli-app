@@ -116,7 +116,7 @@ String dateToReadableTimeConverter(DateTime dt) {
           ? '0' + timeOfDay.minute.toString()
           : timeOfDay.minute.toString()) +
       ' ' +
-      ((timeOfDay.period == DayPeriod.am) ? 'am' : 'pm');
+      ((timeOfDay.period == DayPeriod.am) ? 'AM' : 'PM');
   return time;
 }
 

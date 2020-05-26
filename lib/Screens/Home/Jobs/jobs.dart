@@ -1,6 +1,4 @@
-import 'package:apli/Screens/Home/Jobs/allJobs.dart';
-import 'package:apli/Screens/Home/Jobs/applied.dart';
-import 'package:apli/Screens/Home/Jobs/incomplete.dart';
+import 'package:apli/Screens/Home/Jobs/jobTabs.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
@@ -158,19 +156,22 @@ class _JobsState extends State<Jobs>
                       )
                     : jobs == 0 ? Center(child: Text('Error occurred, try again later'),) : TabBarView(
                         children: [
-                          AppliedJobs(
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                            jobs: jobs['submitted_jobs'],
+                            profileStatus: jobs['profile_status'],
+                            tabNo: 0,),
+                          JobsTabs(
                             alreadyAccepted: jobs['cand_accepted_job'],
-                              appliedJobs: jobs['submitted_jobs'],
-                              status: jobs['profile_status']),
-                          AllJobs(
-                            alreadyAccepted: jobs['cand_accepted_job'],
-                            allJobs: jobs['all_jobs'],
-                            status: jobs['profile_status'],
+                            jobs: jobs['all_jobs'],
+                            profileStatus: jobs['profile_status'],
+                            tabNo: 1,
                           ),
-                          IncompleteJobs(
+                          JobsTabs(
                             alreadyAccepted: jobs['cand_accepted_job'],
-                            incompleteJobs: jobs['pending_jobs'],
-                            status: jobs['profile_status'],
+                            jobs: jobs['pending_jobs'],
+                            profileStatus: jobs['profile_status'],
+                            tabNo: 2,
                           )
                         ],
                         controller: _tabController,
