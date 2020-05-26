@@ -62,6 +62,18 @@ class _MockJobsState extends State<MockJobs>
     }
   }
 
+    Widget tickmark(String package, List submitted) {
+    if (submitted == null || submitted == []) {
+      return Container(height: 5, width: 5,);
+    } else if (submitted.contains(package)) {
+     return Padding(
+              padding: const EdgeInsets.only(right: 20.0, top: 10.0),
+              child: Icon(EvaIcons.checkmarkOutline , color: basicColor,));
+    } else {
+      return Container(height: 5,width: 5,);
+    }
+  }
+
   @override
   void initState() {
     _controller = AnimationController(
@@ -249,7 +261,7 @@ class _MockJobsState extends State<MockJobs>
                                                                     builder: (context) =>
                                                                         RandomDetails(
                                                                             package:
-                                                                                mockJobs['interviewPackages'][index].toString())));
+                                                                                mockJobs['interviewPackages'][index])));
                                                           }
                                                         },
                                                         dense: true,
@@ -274,6 +286,11 @@ class _MockJobsState extends State<MockJobs>
                                                                 [index],
                                                             mockJobs[
                                                                 'mockTaken']),
+                                                        trailing: tickmark(mockJobs[
+                                                                    'interviewPackages']
+                                                                [index],
+                                                            mockJobs[
+                                                                'mockSubmitted']),
                                                       )),
                                                 ),
                                               );

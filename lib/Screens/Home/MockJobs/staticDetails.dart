@@ -20,6 +20,11 @@ class RandomDetails extends StatefulWidget {
 
 class _RandomDetailsState extends State<RandomDetails> {
   @override
+  void initState() {
+    print(widget.package);
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
