@@ -242,7 +242,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 color: Colors.grey,
               ),
               title: Text(
-                mockJobs,
+                mockJob,
                 style: TextStyle(
                     color: _currentTab == 1 ? basicColor : Colors.grey),
               )),

@@ -324,8 +324,9 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result =
-          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
       });
 
       return result;
@@ -352,8 +353,9 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result =
-          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
       });
 
       return result;
@@ -381,8 +383,9 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result =
-          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
       });
 
       return result;
@@ -392,15 +395,44 @@ class APIService {
     }
   }
 
-    Future getMockJobs() async {
+  Future getMockJobs() async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        final queryParameters = {
+          "secret": "$passHashSecret",
+          "email": "${value.getString('email')}",
+        };
+
+        final uri = Uri.http('dev.apli.ai',
+            '/candidate/api/get_mock_interview_packages', queryParameters);
+        http.Response response = await http.get(uri);
+        var decodedData = jsonDecode(response.body);
+        print(response.body);
+        if (response.statusCode == 200) {
+          result = decodedData;
+        } else
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
+      });
+      return result;
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future fetchMockInterviewQ(String packageName) async {
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
         http.Response response = await http.post(
-          uploadLetterURL,
+          mockinterViewQuestionsURL,
           body: json.decode('{'
               '"secret" : "$passHashSecret", '
-              '"email": "${value.getString('email')}", '
+              '"packName": "$packageName", '
+              '"email": "${value.getString('email')}"'
               '}'),
         );
         var decodedData = jsonDecode(response.body);
@@ -408,8 +440,69 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result =
-          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
+      });
+      return result;
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future submitMockInterview(String docID) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        http.Response response = await http.post(
+          submitMockInterviewURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"email": "${value.getString('email')}", '
+              '"docId": "$docID"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          result = decodedData;
+        } else
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
+      });
+      return result;
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future addMockVideo(
+      String link, String packageName, String docID, int questionID) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        http.Response response = await http.post(
+          addMockVideoURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"email": "${value.getString('email')}", '
+              '"video_link": "$link", '
+              '"pack": "$packageName", '
+              '"docId": "$docID", '
+              '"que": "$questionID"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          result = decodedData;
+        } else
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
       });
       return result;
     } catch (e) {
