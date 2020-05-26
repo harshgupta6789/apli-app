@@ -30,7 +30,7 @@ class _RegisterState extends State<Register> {
   bool obscure = true;
 
   String fname = '', lname = '', email = '', dateOfBirth = '', password = '';
-  String collegeText, courseText, branchText, batchText;
+  String collegeText, yearText, courseText, branchText, batchText;
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -52,8 +52,12 @@ class _RegisterState extends State<Register> {
               ),
               new FlatButton(
                 onPressed: () {
-                  Navigator.of(context).pop(true);
-                  Navigator.pop(context);
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder: (context) => Wrapper(
+                                currentTab: 2,
+                              )),
+                      (Route<dynamic> route) => false);
                 },
                 child: new Text(
                   'YES',
@@ -69,6 +73,7 @@ class _RegisterState extends State<Register> {
   Map<String, dynamic> map = {};
 
   bool collegeSet = false;
+  bool yearSet = false;
   bool courseSet = false;
   bool branchSet = false;
   bool batchSet = false;
@@ -98,6 +103,7 @@ class _RegisterState extends State<Register> {
                   if (snapshot.hasData) {
                     snapshot.data.documents.forEach((f) {
                       String collegeTemp = f.data['college'];
+                      String yearTemp = f.data['batch_year'];
                       String courseTemp = f.data['course'];
                       String branchTemp = f.data['branch'];
                       String batchTemp = f.data['batch_name'];
@@ -107,25 +113,32 @@ class _RegisterState extends State<Register> {
                         if (!map.containsKey(collegeTemp)) {
                           map[collegeTemp] = {};
                         }
-                        if (courseTemp != null) {
-                          var temp1 = map[collegeTemp];
-                          if (!temp1.containsKey(courseTemp)) {
-                            temp1[courseTemp] = {};
-                            map[collegeTemp] = temp1;
+                        if (yearTemp != null) {
+                          var temp = map[collegeTemp];
+                          if (!temp.containsKey(yearTemp)) {
+                            temp[yearTemp] = {};
+                            map[collegeTemp] = temp;
                           }
-                          if (branchTemp != null) {
-                            var temp2 = map[collegeTemp][courseTemp];
-                            if (!temp2.containsKey(branchTemp)) {
-                              temp2[branchTemp] = {};
-                              map[collegeTemp][courseTemp] = temp2;
+                          if (courseTemp != null) {
+                            var temp1 = map[collegeTemp][yearTemp];
+                            if (!temp1.containsKey(courseTemp)) {
+                              temp1[courseTemp] = {};
+                              map[collegeTemp][yearTemp] = temp1;
                             }
-                            if (batchTemp != null) {
-                              var temp3 =
-                                  map[collegeTemp][courseTemp][branchTemp];
-                              if (!temp3.containsKey(batchTemp)) {
-                                temp3[batchTemp] = batchIDTemp;
-                                map[collegeTemp][courseTemp][branchTemp] =
-                                    temp3;
+                            if (branchTemp != null) {
+                              var temp2 = map[collegeTemp][yearTemp][courseTemp];
+                              if (!temp2.containsKey(branchTemp)) {
+                                temp2[branchTemp] = {};
+                                map[collegeTemp][yearTemp][courseTemp] = temp2;
+                              }
+                              if (batchTemp != null) {
+                                var temp3 =
+                                map[collegeTemp][yearTemp][courseTemp][branchTemp];
+                                if (!temp3.containsKey(batchTemp)) {
+                                  temp3[batchTemp] = batchIDTemp;
+                                  map[collegeTemp][yearTemp][courseTemp][branchTemp] =
+                                      temp3;
+                                }
                               }
                             }
                           }
@@ -271,6 +284,8 @@ class _RegisterState extends State<Register> {
                                               setState(() {
                                                 collegeText = null;
                                                 collegeSet = false;
+                                                yearText = null;
+                                                yearSet = false;
                                                 courseText = null;
                                                 courseSet = false;
                                                 branchText = null;
@@ -344,79 +359,162 @@ class _RegisterState extends State<Register> {
                                     Visibility(
                                       visible: collegeSet,
                                       child: Container(
+                                        child: yearSet || yearText != null
+                                            ? InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              yearText = null;
+                                              yearSet = false;
+                                              courseText = null;
+                                              courseSet = false;
+                                              branchText = null;
+                                              branchSet = false;
+                                              batchText = null;
+                                              batchSet = false;
+                                              allSet = false;
+                                            });
+                                          },
+                                          child: TextFormField(
+                                            enabled: false,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[600]),
+                                            decoration:
+                                            loginFormField.copyWith(
+                                                hintText:
+                                                yearText ??
+                                                    "Year",
+                                                hintStyle: TextStyle(
+                                                    color:
+                                                    Colors.black),
+                                                prefixIcon: Icon(
+                                                    Icons
+                                                        .collections_bookmark,
+                                                    color:
+                                                    basicColor),
+                                                suffixIcon: Icon(
+                                                    Icons.delete)),
+                                          ),
+                                        )
+                                            : InkWell(
+                                          onTap: () async {
+                                            String x = await showDialog(
+                                                context: context,
+                                                builder: (_) {
+                                                  return MyDialogContent(
+                                                    listToSearch:
+                                                    map[collegeText]
+                                                        .keys
+                                                        .toList(),
+                                                  );
+                                                });
+                                            setState(() {
+                                              yearText = x;
+                                              if (yearText != null) {
+                                                yearSet = true;
+                                              }
+                                            });
+                                            print(x);
+                                          },
+                                          child: TextFormField(
+                                            enabled: false,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[600]),
+                                            decoration: loginFormField.copyWith(
+                                                hintText: "Year",
+                                                hintStyle: TextStyle(
+                                                    color:
+                                                    Colors.grey[600]),
+                                                prefixIcon: Icon(
+                                                    Icons
+                                                        .collections_bookmark,
+                                                    color: basicColor),
+                                                suffixIcon: Icon(Icons
+                                                    .keyboard_arrow_up)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * 0.01,
+                                    ),
+                                    Visibility(
+                                      visible: yearSet,
+                                      child: Container(
                                         child: courseSet || courseText != null
                                             ? InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    courseText = null;
-                                                    courseSet = false;
-                                                    branchText = null;
-                                                    branchSet = false;
-                                                    batchText = null;
-                                                    batchSet = false;
-                                                    allSet = false;
-                                                  });
-                                                },
-                                                child: TextFormField(
-                                                  enabled: false,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.grey[600]),
-                                                  decoration:
-                                                      loginFormField.copyWith(
-                                                          hintText:
-                                                              courseText ??
-                                                                  "Course",
-                                                          hintStyle: TextStyle(
-                                                              color:
-                                                                  Colors.black),
-                                                          prefixIcon: Icon(
-                                                              Icons
-                                                                  .collections_bookmark,
-                                                              color:
-                                                                  basicColor),
-                                                          suffixIcon: Icon(
-                                                              Icons.delete)),
-                                                ),
-                                              )
+                                          onTap: () {
+                                            setState(() {
+                                              courseText = null;
+                                              courseSet = false;
+                                              branchText = null;
+                                              branchSet = false;
+                                              batchText = null;
+                                              batchSet = false;
+                                              allSet = false;
+                                            });
+                                          },
+                                          child: TextFormField(
+                                            enabled: false,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[600]),
+                                            decoration:
+                                            loginFormField.copyWith(
+                                                hintText:
+                                                courseText ??
+                                                    "Course",
+                                                hintStyle: TextStyle(
+                                                    color:
+                                                    Colors.black),
+                                                prefixIcon: Icon(
+                                                    Icons
+                                                        .collections_bookmark,
+                                                    color:
+                                                    basicColor),
+                                                suffixIcon: Icon(
+                                                    Icons.delete)),
+                                          ),
+                                        )
                                             : InkWell(
-                                                onTap: () async {
-                                                  String x = await showDialog(
-                                                      context: context,
-                                                      builder: (_) {
-                                                        return MyDialogContent(
-                                                          listToSearch:
-                                                              map[collegeText]
-                                                                  .keys
-                                                                  .toList(),
-                                                        );
-                                                      });
-                                                  setState(() {
-                                                    courseText = x;
-                                                    if (courseText != null) {
-                                                      courseSet = true;
-                                                    }
-                                                  });
-                                                  print(x);
-                                                },
-                                                child: TextFormField(
-                                                  enabled: false,
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Colors.grey[600]),
-                                                  decoration: loginFormField.copyWith(
-                                                      hintText: "Course",
-                                                      hintStyle: TextStyle(
-                                                          color:
-                                                              Colors.grey[600]),
-                                                      prefixIcon: Icon(
-                                                          Icons
-                                                              .collections_bookmark,
-                                                          color: basicColor),
-                                                      suffixIcon: Icon(Icons
-                                                          .keyboard_arrow_up)),
-                                                ),
-                                              ),
+                                          onTap: () async {
+                                            String x = await showDialog(
+                                                context: context,
+                                                builder: (_) {
+                                                  return MyDialogContent(
+                                                    listToSearch:
+                                                    map[collegeText][yearText]
+                                                        .keys
+                                                        .toList(),
+                                                  );
+                                                });
+                                            setState(() {
+                                              courseText = x;
+                                              if (courseText != null) {
+                                                courseSet = true;
+                                              }
+                                            });
+                                            print(x);
+                                          },
+                                          child: TextFormField(
+                                            enabled: false,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.grey[600]),
+                                            decoration: loginFormField.copyWith(
+                                                hintText: "Course",
+                                                hintStyle: TextStyle(
+                                                    color:
+                                                    Colors.grey[600]),
+                                                prefixIcon: Icon(
+                                                    Icons
+                                                        .collections_bookmark,
+                                                    color: basicColor),
+                                                suffixIcon: Icon(Icons
+                                                    .keyboard_arrow_up)),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     SizedBox(
@@ -466,7 +564,7 @@ class _RegisterState extends State<Register> {
                                                         return MyDialogContent(
                                                           listToSearch:
                                                               map[collegeText][
-                                                                      courseText]
+                                                              yearText][courseText]
                                                                   .keys
                                                                   .toList(),
                                                         );
@@ -543,7 +641,7 @@ class _RegisterState extends State<Register> {
                                                       builder: (_) {
                                                         return MyDialogContent(
                                                           listToSearch:
-                                                              map[collegeText][
+                                                          map[collegeText][yearText][
                                                                           courseText]
                                                                       [
                                                                       branchText]
@@ -629,10 +727,11 @@ class _RegisterState extends State<Register> {
                                                               password,
                                                               widget.phoneNo,
                                                               collegeText,
+                                                          yearText,
                                                               courseText,
                                                               branchText,
                                                               batchText,
-                                                              map[collegeText][
+                                                          map[collegeText][yearText][
                                                                           courseText]
                                                                       [
                                                                       branchText]

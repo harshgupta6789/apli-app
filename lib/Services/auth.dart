@@ -82,6 +82,7 @@ class AuthService {
       String password,
       String phoneNo,
       String college,
+      String year,
       String course,
       String branch,
       String batch,
