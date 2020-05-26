@@ -1,8 +1,9 @@
 import 'dart:convert';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class APIService {
   final int profileType, jobType;
@@ -240,7 +241,10 @@ class APIService {
           } else
             result = -1;
         } else {
-          result = {'error': jsonDecode(response.body)["error"]};
+          result = {
+            'error': jsonDecode(response.body)["error"] ??
+                'Unexpected error occurred'
+          };
         }
       });
 
@@ -266,7 +270,9 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error': decodedData["error"]};
+          result = {
+            'error': decodedData["error"] ?? 'Unexpected error occurred'
+          };
       });
 
       return result;
@@ -318,7 +324,8 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error': decodedData["error"]};
+          result =
+          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
       });
 
       return result;
@@ -345,7 +352,8 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error': decodedData["error"]};
+          result =
+          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
       });
 
       return result;
@@ -373,7 +381,8 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error': decodedData["error"]};
+          result =
+          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
       });
 
       return result;
@@ -399,7 +408,8 @@ class APIService {
         if (response.statusCode == 200) {
           result = decodedData;
         } else
-          result = {'error': decodedData["error"]};
+          result =
+          {'error': decodedData["error"] ?? 'Unexpected error occurred'};
       });
       return result;
     } catch (e) {

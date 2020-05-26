@@ -332,7 +332,6 @@ class _RegisterState extends State<Register> {
                                                   collegeSet = true;
                                                 }
                                               });
-                                              print(x);
                                             },
                                             child: TextFormField(
                                               enabled: false,
@@ -414,7 +413,6 @@ class _RegisterState extends State<Register> {
                                                 yearSet = true;
                                               }
                                             });
-                                            print(x);
                                           },
                                           child: TextFormField(
                                             enabled: false,
@@ -495,7 +493,6 @@ class _RegisterState extends State<Register> {
                                                 courseSet = true;
                                               }
                                             });
-                                            print(x);
                                           },
                                           child: TextFormField(
                                             enabled: false,
@@ -575,7 +572,6 @@ class _RegisterState extends State<Register> {
                                                       branchSet = true;
                                                     }
                                                   });
-                                                  print(x);
                                                 },
                                                 child: TextFormField(
                                                   enabled: false,
@@ -656,7 +652,6 @@ class _RegisterState extends State<Register> {
                                                       allSet = true;
                                                     }
                                                   });
-                                                  print(x);
                                                 },
                                                 child: TextFormField(
                                                   enabled: false,
