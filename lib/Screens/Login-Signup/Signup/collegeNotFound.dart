@@ -207,7 +207,7 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                       } else {
                                         //add to excel sheet
                                         String body =
-                                            'Email = $email, College = $college, Field of Study = $fieldOfStudy, State = $state, City = $city';
+                                            'Email: $email, College: $college, Field of Study: $fieldOfStudy, State: $state, City: $city, Contact: ${widget.phoneNo}';
                                         final MailerService _mail =
                                             MailerService(
                                                 to_email: '$apliEmailID',
