@@ -40,11 +40,7 @@ class _MockJobsState extends State<MockJobs>
     } else if (incomplete.contains(package)) {
       return InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      MockCompanyInstructions(pack: package)));
+
         },
         child: Align(
           alignment: Alignment.centerLeft,
@@ -84,12 +80,10 @@ class _MockJobsState extends State<MockJobs>
         width: 5,
       );
     } else if (submitted.contains(package)) {
-      return Padding(
-          padding: const EdgeInsets.only(right: 20.0, top: 10.0),
-          child: Icon(
-            EvaIcons.checkmarkOutline,
-            color: basicColor,
-          ));
+      return Icon(
+        EvaIcons.checkmarkOutline,
+        color: basicColor,
+      );
     } else {
       return Container(
         height: 5,
@@ -121,7 +115,7 @@ class _MockJobsState extends State<MockJobs>
     return Scaffold(
         key: _scaffoldKey,
         floatingActionButton: RotationTransition(
-            turns: Tween(begin: 0.0, end: 2.0).animate(_controller),
+            turns: Tween(begin: 0.0, end: 3.0).animate(_controller),
             child: FloatingActionButton(
               heroTag: 'mockJobs',
               backgroundColor: basicColor,
@@ -273,6 +267,13 @@ class _MockJobsState extends State<MockJobs>
                                                               mockJobs[
                                                                       'interviewPackages']
                                                                   [index])) {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        MockCompanyInstructions(pack: mockJobs[
+                                                                        'interviewPackages']
+                                                                        [index])));
                                                           } else if (mockSubmitted
                                                               .contains(mockJobs[
                                                                       'interviewPackages']

@@ -23,8 +23,6 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-BuildContext mainContext;
-
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   static int _currentTab;
@@ -124,15 +122,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       },
     );
     _firebaseMessaging.subscribeToTopic(topic);
-//    prefs = await SharedPreferences.getInstance();
-//    if (prefs.getBool("isNotificationsEnabled") != null) {
-//      if (prefs.getBool("isNotificationsEnabled") == true) {
-//        _firebaseMessaging.subscribeToTopic(topic);
-//      }
-//    } else {
-//      _firebaseMessaging.subscribeToTopic(topic);
-//      prefs.setBool("isNotificationsEnabled", true);
-//    }
   }
 
   void iOSPermission() {
@@ -271,7 +260,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    mainContext = context;
     return Scaffold(
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
