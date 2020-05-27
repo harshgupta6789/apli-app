@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart' as p;
+
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/constants.dart';
@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
 
@@ -352,118 +353,124 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
     } else if (!controller.value.isInitialized && _isRecording == false)
       return Loading();
     else if (_isRecording == false && x == currentState.uploading) {
-      return Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.cloud_upload),
-                  StreamBuilder<StorageTaskEvent>(
-                      stream: uploadTask.events,
-                      builder: (context,
-                          AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
-                        if (asyncSnapshot.hasData) {
-                          final StorageTaskEvent event = asyncSnapshot.data;
-                          final StorageTaskSnapshot snapshot = event.snapshot;
+      return WillPopScope(
+        onWillPop: () => _onWillPop(),
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud_upload),
+                    StreamBuilder<StorageTaskEvent>(
+                        stream: uploadTask.events,
+                        builder: (context,
+                            AsyncSnapshot<StorageTaskEvent> asyncSnapshot) {
+                          if (asyncSnapshot.hasData) {
+                            final StorageTaskEvent event = asyncSnapshot.data;
+                            final StorageTaskSnapshot snapshot = event.snapshot;
 
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                ' Uploading  ${_bytesProgress(snapshot)} %',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          );
-                        }
-                        return Container();
-                      }),
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.04, width * 0.1, height * 0.04),
-                child: Text(
-                  (indexOfQuestions + 1).toString() +
-                          ". " +
-                          qs[indexOfQuestions][1] ??
-                      "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14,
-                      letterSpacing: 1.2),
-                  textAlign: TextAlign.center,
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                  ' Uploading  ${_bytesProgress(snapshot)} %',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  )),
+                            );
+                          }
+                          return Container();
+                        }),
+                  ],
                 ),
-              ),
-              RaisedButton(
-                  color: Colors.grey,
-                  elevation: 0,
-                  padding: EdgeInsets.only(
-                    left: 30,
-                    right: 30,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(width: 0),
-                  ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(
+                      width * 0.1, height * 0.04, width * 0.1, height * 0.04),
                   child: Text(
-                    'WAIT',
-                    style: TextStyle(color: Colors.white),
+                    (indexOfQuestions + 1).toString() +
+                            ". " +
+                            qs[indexOfQuestions][1] ??
+                        "",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 14,
+                        letterSpacing: 1.2),
+                    textAlign: TextAlign.center,
                   ),
-                  onPressed: () {}),
-            ],
+                ),
+                RaisedButton(
+                    color: Colors.grey,
+                    elevation: 0,
+                    padding: EdgeInsets.only(
+                      left: 30,
+                      right: 30,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(width: 0),
+                    ),
+                    child: Text(
+                      'WAIT',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () {}),
+              ],
+            ),
           ),
         ),
       );
     } else if (_isRecording == false && x == currentState.success) {
       return loading
           ? Loading()
-          : Scaffold(
-              body: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.cloud_upload),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(' Uploading 100 %',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ))),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
-                          width * 0.1, height * 0.04),
-                      child: Text(
-                        (indexOfQuestions + 1).toString() +
-                                ". " +
-                                qs[indexOfQuestions][1] ??
-                            "",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 14,
-                            letterSpacing: 1.2),
-                        textAlign: TextAlign.center,
+          : WillPopScope(
+              onWillPop: () => _onWillPop(),
+              child: Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.cloud_upload),
+                          Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(' Uploading 100 %',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ))),
+                        ],
                       ),
-                    ),
-                    buttonToShow()
-                  ],
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
+                            width * 0.1, height * 0.04),
+                        child: Text(
+                          (indexOfQuestions + 1).toString() +
+                                  ". " +
+                                  qs[indexOfQuestions][1] ??
+                              "",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 14,
+                              letterSpacing: 1.2),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      buttonToShow()
+                    ],
+                  ),
                 ),
               ),
             );

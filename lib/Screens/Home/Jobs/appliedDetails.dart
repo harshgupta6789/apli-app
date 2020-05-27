@@ -156,22 +156,50 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
               child: RaisedButton(
                   onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    dynamic result =
-                        await _APIService.acceptJobOffer(widget.job['job_id']);
-                    if (result['error'] != null) {
-                      showToast(result['error'].toString(), context);
-                    } else {
-                      showToast("Accepted Job Offer!", context);
-                    }
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => Wrapper(
-                                  currentTab: 2,
-                                )),
-                        (Route<dynamic> route) => false);
+                    await showDialog(
+                      context: context,
+                      builder: (context) => new AlertDialog(
+                        title: new Text(
+                          'Once you accept this job you will not be able to apply for any other jobs. Are you sure you want to accept this offer?',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop(true);
+                              setState(() {
+                                loading = true;
+                              });
+                              dynamic result = await _APIService.acceptJobOffer(
+                                  widget.job['job_id']);
+                              if (result['error'] != null) {
+                                showToast(result['error'].toString(), context);
+                              } else {
+                                showToast("Accepted Job Offer!", context);
+                              }
+                              Navigator.of(context).pushAndRemoveUntil(
+                                  MaterialPageRoute(
+                                      builder: (context) => Wrapper(
+                                            currentTab: 2,
+                                          )),
+                                  (Route<dynamic> route) => false);
+                            },
+                            child: new Text(
+                              'Yes',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: new Text(
+                              'No',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                   color: basicColor,
                   elevation: 0,
@@ -234,23 +262,56 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                             : basicColor,
                         onPressed: () async {
                           if (job['schedule']['cand_accepted']) {
-                            setState(() {
-                              loading = true;
-                            });
-                            showToast("Accepting", context);
-                            dynamic result = await _APIService.acceptInterView(
-                                widget.job['job_id']);
-                            if (result['error'] != null) {
-                              showToast(result['error'].toString(), context);
-                            } else {
-                              showToast("Accepted Interview!", context);
-                            }
-                            Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (context) => Wrapper(
-                                          currentTab: 2,
-                                        )),
-                                (Route<dynamic> route) => false);
+                            await showDialog(
+                              context: context,
+                              builder: (context) => new AlertDialog(
+                                title: new Text(
+                                  'Are you sure?',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () async {
+                                      Navigator.of(context).pop(true);
+                                      setState(() {
+                                        loading = true;
+                                      });
+                                      showToast("Accepting", context);
+                                      dynamic result =
+                                          await _APIService.acceptInterView(
+                                              widget.job['job_id']);
+                                      if (result['error'] != null) {
+                                        showToast(result['error'].toString(),
+                                            context);
+                                      } else {
+                                        showToast(
+                                            "Accepted Interview!", context);
+                                      }
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (context) => Wrapper(
+                                                    currentTab: 2,
+                                                  )),
+                                          (Route<dynamic> route) => false);
+                                    },
+                                    child: new Text(
+                                      'Yes',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                  FlatButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: new Text(
+                                      'No',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
                           }
                         },
                         elevation: 0,
@@ -355,23 +416,55 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     child: RaisedButton(
                         color: basicColor,
                         onPressed: () async {
-                          setState(() {
-                            loading = true;
-                          });
-                          showToast("Accepting", context);
-                          dynamic result = await _APIService.acceptInterView(
-                              widget.job['job_id']);
-                          if (result['error'] != null) {
-                            showToast(result['error'].toString(), context);
-                          } else {
-                            showToast("Check Interview link!", context);
-                          }
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (context) => Wrapper(
-                                        currentTab: 2,
-                                      )),
-                              (Route<dynamic> route) => false);
+                          await showDialog(
+                            context: context,
+                            builder: (context) => new AlertDialog(
+                              title: new Text(
+                                'Are you sure?',
+                                style: TextStyle(
+                                    fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              actions: <Widget>[
+                                FlatButton(
+                                  onPressed: () async {
+                                    Navigator.of(context).pop(true);
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    showToast("Accepting", context);
+                                    dynamic result =
+                                        await _APIService.acceptInterView(
+                                            widget.job['job_id']);
+                                    if (result['error'] != null) {
+                                      showToast(
+                                          result['error'].toString(), context);
+                                    } else {
+                                      showToast(
+                                          "Check Interview link!", context);
+                                    }
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (context) => Wrapper(
+                                                  currentTab: 2,
+                                                )),
+                                        (Route<dynamic> route) => false);
+                                  },
+                                  child: new Text(
+                                    'Yes',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                                FlatButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
+                                  child: new Text(
+                                    'No',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
                         },
                         elevation: 0,
                         padding: EdgeInsets.only(left: 30, right: 30),
@@ -617,9 +710,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             AutoSizeText(
                                               'Deadline: ' +
                                                   dateToReadableTimeConverter(
-                                                      DateTime.parse(widget
-                                                          .job[
-                                                      'deadline'] ??
+                                                      DateTime.parse(widget.job[
+                                                              'deadline'] ??
                                                           '2020-05-26 00:00:00')),
                                               maxLines: 2,
                                               style: TextStyle(

@@ -7,7 +7,6 @@ import 'package:apli/Shared/loading.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
-
 class Jobs extends StatefulWidget {
   @override
   _JobsState createState() => _JobsState();
@@ -38,7 +37,7 @@ class _JobsState extends State<Jobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
     getInfo();
@@ -60,7 +59,7 @@ class _JobsState extends State<Jobs>
     return Scaffold(
         key: _scaffoldKey,
         floatingActionButton: RotationTransition(
-          turns: Tween(begin: 0.0, end: 2.0).animate(_controller),
+          turns: Tween(begin: 0.0, end: 3.0).animate(_controller),
           child: FloatingActionButton(
             heroTag: 'jobs',
             backgroundColor: basicColor,

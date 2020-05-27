@@ -39,9 +39,7 @@ class _MockJobsState extends State<MockJobs>
       return Container();
     } else if (incomplete.contains(package)) {
       return InkWell(
-        onTap: () {
-
-        },
+        onTap: () {},
         child: Align(
           alignment: Alignment.centerLeft,
           child: Text('Tap to resume'),
@@ -95,7 +93,7 @@ class _MockJobsState extends State<MockJobs>
   @override
   void initState() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
     getInfo();
@@ -271,9 +269,9 @@ class _MockJobsState extends State<MockJobs>
                                                                 context,
                                                                 MaterialPageRoute(
                                                                     builder: (context) =>
-                                                                        MockCompanyInstructions(pack: mockJobs[
-                                                                        'interviewPackages']
-                                                                        [index])));
+                                                                        MockCompanyInstructions(
+                                                                            pack:
+                                                                                mockJobs['interviewPackages'][index])));
                                                           } else if (mockSubmitted
                                                               .contains(mockJobs[
                                                                       'interviewPackages']

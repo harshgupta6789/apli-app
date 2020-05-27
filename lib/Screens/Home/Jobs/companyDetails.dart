@@ -435,106 +435,152 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     color: Colors.white),
                                               ),
                                               onPressed: () async {
-                                                if (applied == false) {
-                                                  if (widget.isApplied ==
-                                                      false) {
-                                                    bool videoIntro = true,
-                                                        resume = true;
-                                                    if (widget
-                                                        .company['requirements']
-                                                        .contains(
-                                                            'Video Introduction')) {
-                                                      String temp =
-                                                          decimalToBinary(
-                                                                  widget.status)
-                                                              .toString();
-                                                      while (temp.length != 9) {
-                                                        temp = '0' + temp;
-                                                      }
-                                                      if (temp.substring(
-                                                              7, 8) !=
-                                                          "1") if (tempProfileStatus != true)
-                                                        videoIntro = false;
-                                                      if (tempProfileStatus ==
-                                                          false) {
-                                                        videoIntro = false;
-                                                      }
-                                                    }
-                                                    if (widget
-                                                        .company['requirements']
-                                                        .contains('Resume')) if (widget
-                                                            .status <
-                                                        384) resume = false;
-                                                    if (!videoIntro)
-                                                      showToast(
-                                                          'Complete your video intro first !!!',
-                                                          context);
-                                                    else if (!resume)
-                                                      showToast(
-                                                          'Complete your resume first !!!',
-                                                          context);
-                                                    else {
-                                                      setState(() {
-                                                        loading = true;
-                                                      });
-                                                      dynamic result =
-                                                          await _APIService
-                                                              .applyJob(widget
-                                                                      .company[
-                                                                  'job_id']);
-                                                      setState(() {
-                                                        loading = false;
-                                                        applied = true;
-                                                      });
-                                                      if (result == 1) {
-                                                        if (widget.company[
-                                                                'requirements']
-                                                            .contains(
-                                                                'Video Interview')) {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          CompanyVideo(
-                                                                            job:
-                                                                                widget.company,
-                                                                          )));
-                                                        } else {
-                                                          showToast(
-                                                              'Your application has been submitted',
-                                                              context);
-                                                          Navigator.of(context)
-                                                              .pushAndRemoveUntil(
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Wrapper(
-                                                                                currentTab: 2,
-                                                                              )),
-                                                                  (Route<dynamic>
-                                                                          route) =>
-                                                                      false);
-                                                        }
-                                                      } else {
-                                                        showToast(
-                                                            'Error occurred, try again later',
-                                                            context);
-                                                        Navigator.of(context)
-                                                            .pushAndRemoveUntil(
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            Wrapper(
-                                                                              currentTab: 2,
-                                                                            )),
-                                                                (Route<dynamic>
-                                                                        route) =>
-                                                                    false);
-                                                      }
-                                                    }
-                                                  }
-                                                }
+                                                if (applied == false) if (widget
+                                                        .isApplied ==
+                                                    false)
+                                                  await showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        new AlertDialog(
+                                                      title: new Text(
+                                                        'Are you sure you want to apply for this job?',
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        textAlign:
+                                                            TextAlign.justify,
+                                                      ),
+                                                      actions: <Widget>[
+                                                        FlatButton(
+                                                          onPressed: () async {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(true);
+                                                            bool videoIntro =
+                                                                    true,
+                                                                resume = true;
+                                                            if (widget.company[
+                                                                    'requirements']
+                                                                .contains(
+                                                                    'Video Introduction')) {
+                                                              String temp =
+                                                                  decimalToBinary(
+                                                                          widget
+                                                                              .status)
+                                                                      .toString();
+                                                              while (
+                                                                  temp.length !=
+                                                                      9) {
+                                                                temp =
+                                                                    '0' + temp;
+                                                              }
+                                                              if (temp.substring(
+                                                                      7, 8) !=
+                                                                  "1") if (tempProfileStatus != true)
+                                                                videoIntro =
+                                                                    false;
+                                                              if (tempProfileStatus ==
+                                                                  false) {
+                                                                videoIntro =
+                                                                    false;
+                                                              }
+                                                            }
+                                                            if (widget.company[
+                                                                    'requirements']
+                                                                .contains('Resume')) if (widget
+                                                                    .status <
+                                                                384)
+                                                              resume = false;
+                                                            if (!videoIntro)
+                                                              showToast(
+                                                                  'Complete your video intro first !!!',
+                                                                  context);
+                                                            else if (!resume)
+                                                              showToast(
+                                                                  'Complete your resume first !!!',
+                                                                  context);
+                                                            else {
+                                                              setState(() {
+                                                                loading = true;
+                                                              });
+                                                              dynamic result =
+                                                                  await _APIService
+                                                                      .applyJob(
+                                                                          widget
+                                                                              .company['job_id']);
+                                                              setState(() {
+                                                                loading = false;
+                                                                applied = true;
+                                                              });
+                                                              if (result == 1) {
+                                                                if (widget
+                                                                    .company[
+                                                                        'requirements']
+                                                                    .contains(
+                                                                        'Video Interview')) {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) => CompanyVideo(
+                                                                                job: widget.company,
+                                                                              )));
+                                                                } else {
+                                                                  showToast(
+                                                                      'Your application has been submitted',
+                                                                      context);
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushAndRemoveUntil(
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>
+                                                                                  Wrapper(
+                                                                                    currentTab: 2,
+                                                                                  )),
+                                                                          (Route<dynamic> route) =>
+                                                                              false);
+                                                                }
+                                                              } else {
+                                                                showToast(
+                                                                    'Error occurred, try again later',
+                                                                    context);
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pushAndRemoveUntil(
+                                                                        MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                Wrapper(
+                                                                                  currentTab: 2,
+                                                                                )),
+                                                                        (Route<dynamic>
+                                                                                route) =>
+                                                                            false);
+                                                              }
+                                                            }
+                                                          },
+                                                          child: new Text(
+                                                            'Yes',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                        FlatButton(
+                                                          onPressed: () =>
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop(false),
+                                                          child: new Text(
+                                                            'No',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  );
                                               }),
                                         ),
                                       )

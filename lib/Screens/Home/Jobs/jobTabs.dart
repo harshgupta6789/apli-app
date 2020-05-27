@@ -31,7 +31,7 @@ class _JobsTabssState extends State<JobsTabs> {
   double height, width, scale;
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
-    if(status == 'OFFERED' || status == 'LETTER SENT') {
+    if (status == 'OFFERED' || status == 'LETTER SENT') {
       return StreamBuilder(
           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
@@ -39,9 +39,11 @@ class _JobsTabssState extends State<JobsTabs> {
 
             int now = DateTime.now().millisecondsSinceEpoch;
 
-            int estimateTs = DateTime.parse(deadlineTimer ?? '2020-05-28 14:26:00+0000').millisecondsSinceEpoch;
+            int estimateTs =
+                DateTime.parse(deadlineTimer ?? '2020-05-28 14:26:00+0000')
+                    .millisecondsSinceEpoch;
             Duration remaining = Duration(milliseconds: estimateTs - now);
-            if(remaining.isNegative)
+            if (remaining.isNegative)
               dateString = 'Deadline is over';
             else if (remaining.inDays > 0) {
               if (remaining.inDays == 1) {
@@ -54,8 +56,7 @@ class _JobsTabssState extends State<JobsTabs> {
                   dateString = remaining.inHours.toString() + ' hour';
                 else
                   dateString = remaining.inHours.toString() + ' hours';
-              } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-                  1)
+              } else if (remaining.inMinutes > 0) if (remaining.inMinutes == 1)
                 dateString = remaining.inMinutes.toString() + ' min';
               else
                 dateString = remaining.inMinutes.toString() + ' mins';
@@ -74,17 +75,18 @@ class _JobsTabssState extends State<JobsTabs> {
               overflow: TextOverflow.ellipsis,
             );
           });
-    } else return AutoSizeText(
-      'Deadline: ' +
-          dateToReadableTimeConverter(
-              DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
-      maxLines: 2,
-      style: TextStyle(
-          color: Colors.black,
-          fontSize: 12 * scale,
-          fontWeight: FontWeight.w500),
-      overflow: TextOverflow.ellipsis,
-    );
+    } else
+      return AutoSizeText(
+        'Deadline: ' +
+            dateToReadableTimeConverter(
+                DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
+        maxLines: 2,
+        style: TextStyle(
+            color: Colors.black,
+            fontSize: 12 * scale,
+            fontWeight: FontWeight.w500),
+        overflow: TextOverflow.ellipsis,
+      );
   }
 
   Widget differentBackground(String status) {
