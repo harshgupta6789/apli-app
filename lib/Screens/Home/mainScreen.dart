@@ -7,6 +7,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,6 +22,8 @@ class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
 }
+
+BuildContext mainContext;
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -69,36 +72,49 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+        print('abcd');
         if (_currentTab == 2) {
-          showAlertDialog(message['notification']['title'],
-              message['notification']['body'], DialogType.INFO, context, () {
-            if (message['data']['type'] != null) {
-              switch (message['data']['type']) {
-                case 'AppliedJob':
-                  {
-                    prefs.setInt("jobTab", 0);
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => Wrapper(
-                                  currentTab: 1,
-                                )),
-                        (Route<dynamic> route) => false);
-                    setState(() {});
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Updates()),
-                    // );
-                  }
-                  break;
-                case 'Alert':
-                  {}
-                  break;
-                default:
-                  {}
-                  break;
-              }
-            }
-          });
+          print('abcd');
+          Flushbar( //ignored since titleText != null
+            message: "New content is available,",
+            messageText: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[Text('New content is available, click to refresh', style: TextStyle(color: Colors.white)), Icon(Icons.arrow_upward, color: Colors.white,)],),
+            duration: Duration(seconds: 1),
+          )..show(mainContext);
+          print('abcd');//          showAlertDialog(message['notification']['title'],
+//              message['notification']['body'], DialogType.INFO, context, () {
+//            if (message['data']['type'] != null) {
+//              switch (message['data']['type']) {
+//                case 'AppliedJob':
+//                  {
+//                    final scaffold = Scaffold.of(context);
+//                    scaffold.showSnackBar(
+//                      SnackBar(
+//                        content: const Text('New content is available'),
+//                      ),
+//                    );
+////                    prefs.setInt("jobTab", 0);
+////                    Navigator.of(context).pushAndRemoveUntil(
+////                        MaterialPageRoute(
+////                            builder: (context) => Wrapper(
+////                                  currentTab: 1,
+////                                )),
+////                        (Route<dynamic> route) => false);
+//                    setState(() {});
+//                    // Navigator.push(
+//                    //   context,
+//                    //   MaterialPageRoute(builder: (context) => Updates()),
+//                    // );
+//                  }
+//                  break;
+//                case 'Alert':
+//                  {}
+//                  break;
+//                default:
+//                  {}
+//                  break;
+//              }
+//            }
+//          });
           // Toast.show("JOB", context,
           //     backgroundColor: Colors.white30,
           //     duration: 10,
@@ -157,10 +173,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     prefs = await SharedPreferences.getInstance();
     if (prefs.getBool("isNotificationsEnabled") != null) {
       if (prefs.getBool("isNotificationsEnabled") == true) {
-        _firebaseMessaging.subscribeToTopic("App");
+        _firebaseMessaging.subscribeToTopic("BMS");
       }
     } else {
-      _firebaseMessaging.subscribeToTopic("App");
+      _firebaseMessaging.subscribeToTopic("BMS");
       prefs.setBool("isNotificationsEnabled", true);
     }
   }
@@ -300,6 +316,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    mainContext = context;
     return Scaffold(
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -307,6 +324,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           padding: const EdgeInsets.only(bottom: 5),
           child: _bottomNavigationBar(),
         ),
+//        floatingActionButton: FloatingActionButton(
+//          child: Text('abcd'),
+//          onPressed: () {
+//            Flushbar( //ignored since titleText != null
+//              message: "New content is available,",
+//              messageText: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[Text('New content is available, click to refresh', style: TextStyle(color: Colors.white)), Icon(Icons.arrow_upward, color: Colors.white,)],),
+//              duration: Duration(seconds: 1),
+//            )..show(mainContext);
+//          },
+//        ),
         body: DoubleBackToCloseApp(
           child: TabBarView(
             children: _listTabs,

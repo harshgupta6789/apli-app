@@ -31,7 +31,7 @@ class _JobsTabssState extends State<JobsTabs> {
   double height, width, scale;
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
-    print(deadlineTimer);
+    print(DateTime.parse('2020-05-28 14:26:00+0000'));
     switch (status) {
       case "OFFERED":
         return StreamBuilder(
