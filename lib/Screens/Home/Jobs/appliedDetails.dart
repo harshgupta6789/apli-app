@@ -261,7 +261,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                             ? Colors.grey
                             : basicColor,
                         onPressed: () async {
-                          if (job['schedule']['cand_accepted']) {
+                          if (!job['schedule']['cand_accepted']) {
                             await showDialog(
                               context: context,
                               builder: (context) => new AlertDialog(

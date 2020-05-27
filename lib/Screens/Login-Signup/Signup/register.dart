@@ -842,8 +842,14 @@ class _MyDialogContentState extends State<MyDialogContent> {
     dummySearchList.addAll(widget.listToSearch);
     if (query.isNotEmpty) {
       List<String> dummyListData = List<String>();
+      query = query.replaceAll(new RegExp(r"\s+\b|\b\s|\s|\b"), "");
+      query = query.replaceAll(new RegExp(r'[^\w\s]+'),'');
+      print(query);
       dummySearchList.forEach((item) {
-        if (item.toLowerCase().contains(query.toLowerCase())) {
+        String temp = item;
+         temp = temp.replaceAll(new RegExp(r"\s+\b|\b\s|\s|\b"), "");
+      temp = temp.replaceAll(new RegExp(r'[^\w\s]+'),'');
+        if (temp.toLowerCase().contains(query.toLowerCase())) {
           dummyListData.add(item);
         }
       });
@@ -874,7 +880,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
               onChanged: (value) {
                 filterSearchResults(value);
               },
-              autofocus: true,
+              autofocus: false,
               controller: editingController,
               decoration: InputDecoration(
                   hintText: "Search",
@@ -888,9 +894,14 @@ class _MyDialogContentState extends State<MyDialogContent> {
             ),
             items.isEmpty
                 ? ListTile(
-                    title: Text(widget.isClg == true
-                        ? val ?? "Not found?"
-                        : "Please choose from the list"),
+                    title: Text(
+                      
+                      widget.isClg == true
+                          ? "College Not found?"
+                          : "Please choose from the list",
+                          textAlign: TextAlign.center,
+                      style: TextStyle(color: basicColor),
+                    ),
                     onTap: () {
                       if (widget.isClg != null && widget.isClg == true) {
                         Navigator.pop(context);
@@ -909,11 +920,12 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         return ListTile(
                           title: Text(
                             '${items[index]}',
-                            textAlign: TextAlign.justify,
+                            
                           ),
                           onTap: () {
                             Navigator.pop(context, '${items[index]}');
                           },
+                          subtitle: Divider(thickness:2),
                         );
                       },
                     ),

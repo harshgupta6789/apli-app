@@ -55,13 +55,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                             Icons.arrow_back,
                             color: Colors.white,
                           ),
-                          onPressed: () =>
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => Wrapper(
-                                            currentTab: 2,
-                                          )),
-                                  (Route<dynamic> route) => false)),
+                          onPressed: () => Navigator.pop(context)),
                     ),
                     title: Padding(
                       padding: EdgeInsets.only(bottom: 10.0),
