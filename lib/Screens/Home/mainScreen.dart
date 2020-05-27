@@ -8,6 +8,7 @@ import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flushbar/flushbar.dart';
+//import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -62,7 +63,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     ).show();
   }
 
-  void firebaseCloudMessagingListeners() async {
+  void firebaseCloudMessagingListeners(String topic) async {
     if (Platform.isIOS) {
       iOSPermission();
     }
@@ -173,10 +174,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     prefs = await SharedPreferences.getInstance();
     if (prefs.getBool("isNotificationsEnabled") != null) {
       if (prefs.getBool("isNotificationsEnabled") == true) {
-        _firebaseMessaging.subscribeToTopic("BMS");
+        _firebaseMessaging.subscribeToTopic(topic);
       }
     } else {
-      _firebaseMessaging.subscribeToTopic("BMS");
+      _firebaseMessaging.subscribeToTopic(topic);
       prefs.setBool("isNotificationsEnabled", true);
     }
   }
@@ -191,7 +192,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void checkIfLoggedIn() async {
     prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey("email")) {
-      firebaseCloudMessagingListeners();
+      String topic = prefs.getString("course") ?? "App";
+      firebaseCloudMessagingListeners(topic);
     }
   }
 

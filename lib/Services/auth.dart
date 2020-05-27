@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -36,30 +36,55 @@ class AuthService {
                 bool temp = decodedData["result"];
                 bool isFcm = decodedData["gen_fcm"];
                 if (temp == true) {
-                  if (isFcm == true) {
-                    _firebaseMessaging.getToken().then((token) {
-                      Firestore.instance
-                          .collection("users")
-                          .document(email)
-                          .updateData({'fcm_token': token});
-                    });
-                  } else if (isFcm == false) {
-                    _firebaseMessaging.getToken().then((token) {
-                      Firestore.instance
-                          .collection("users")
-                          .document(email)
-                          .get()
-                          .then((v) {
-                        if (v.data['fcm_token'] != token) {
-                          Firestore.instance
-                              .collection("users")
-                              .document(email)
-                              .updateData({'fcm_token': token});
+                  String batchId;
+                  String course;
+                  await Firestore.instance
+                      .collection('candidates')
+                      .document(email)
+                      .get()
+                      .then((s) {
+                    batchId = s.data['batch_id'];
+                    if (batchId != null) {
+                      var details = Firestore.instance
+                          .collection('batches')
+                          .where('batch_id', isEqualTo: batchId)
+                          .limit(1);
+                      details.getDocuments().then((data) async {
+                        course = data.documents[0].data['course'];
+
+                        await SharedPreferences.getInstance()
+                            .then((prefs) async {
+                          prefs.setString("course", course);
+                        });
+                        if (isFcm == true) {
+                          _firebaseMessaging.getToken().then((token) {
+                            Firestore.instance
+                                .collection("users")
+                                .document(email)
+                                .updateData({'fcm_token': token});
+                          });
+                        } else if (isFcm == false) {
+                          _firebaseMessaging.getToken().then((token) {
+                            Firestore.instance
+                                .collection("users")
+                                .document(email)
+                                .get()
+                                .then((v) {
+                              if (v.data['fcm_token'] != token) {
+                                Firestore.instance
+                                    .collection("users")
+                                    .document(email)
+                                    .updateData({'fcm_token': token});
+                              }
+                            });
+                          });
                         }
                       });
-                    });
-                  }
-                  result = 1;
+                      result = 1;
+                    } else {
+                      result = -2;
+                    }
+                  });
                 } else
                   result = -1;
               } else
