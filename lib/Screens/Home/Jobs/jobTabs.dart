@@ -31,113 +31,60 @@ class _JobsTabssState extends State<JobsTabs> {
   double height, width, scale;
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
-    print(DateTime.parse('2020-05-28 14:26:00+0000'));
-    switch (status) {
-      case "OFFERED":
-        return StreamBuilder(
-            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-              // var dateString;
+    if(status == 'OFFERED' || status == 'LETTER SENT') {
+      return StreamBuilder(
+          stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+          builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+            var dateString;
 
-              // int now = DateTime.now().millisecondsSinceEpoch;
+            int now = DateTime.now().millisecondsSinceEpoch;
 
-              // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-              // Duration remaining = Duration(milliseconds: estimateTs - now);
-              // if(remaining.isNegative)
-              //   dateString = 'Deadline is over';
-              // else if (remaining.inDays > 0) {
-              //   if (remaining.inDays == 1) {
-              //     dateString = remaining.inDays.toString() + ' day';
-              //   } else
-              //     dateString = remaining.inDays.toString() + ' days';
-              // } else {
-              //   if (remaining.inHours > 0) {
-              //     if (remaining.inHours == 1)
-              //       dateString = remaining.inHours.toString() + ' hour';
-              //     else
-              //       dateString = remaining.inHours.toString() + ' hours';
-              //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-              //       1)
-              //     dateString = remaining.inMinutes.toString() + ' min';
-              //   else
-              //     dateString = remaining.inMinutes.toString() + ' mins';
-              //   else if (remaining.inSeconds == 1)
-              //     dateString = remaining.inSeconds.toString() + ' sec';
-              //   else
-              //     dateString = remaining.inSeconds.toString() + ' sec';
-              // }
-              return AutoSizeText(
-                "Deadline to accept : " + deadlineTimer,
-                maxLines: 2,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12 * scale,
-                    fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-              );
-            });
-        break;
-
-      case "LETTER SENT":
-        return StreamBuilder(
-            stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-            builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-              var dateString;
-
-              // int now = DateTime.now().millisecondsSinceEpoch;
-
-              // int estimateTs = deadlineTimer.millisecondsSinceEpoch;
-              // Duration remaining = Duration(milliseconds: estimateTs - now);
-              // if(remaining.isNegative)
-              //   dateString = 'Deadline is over';
-              // else if (remaining.inDays > 0) {
-              //   if (remaining.inDays == 1) {
-              //     dateString = remaining.inDays.toString() + ' day';
-              //   } else
-              //     dateString = remaining.inDays.toString() + ' days';
-              // } else {
-              //   if (remaining.inHours > 0) {
-              //     if (remaining.inHours == 1)
-              //       dateString = remaining.inHours.toString() + ' hour';
-              //     else
-              //       dateString = remaining.inHours.toString() + ' hours';
-              //   } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
-              //       1)
-              //     dateString = remaining.inMinutes.toString() + ' min';
-              //   else
-              //     dateString = remaining.inMinutes.toString() + ' mins';
-              //   else if (remaining.inSeconds == 1)
-              //     dateString = remaining.inSeconds.toString() + ' sec';
-              //   else
-              //     dateString = remaining.inSeconds.toString() + ' sec';
-              // }
-
-              return AutoSizeText(
-                "Deadline to accept : " + deadlineTimer ??
-                    "No Deadline" + 'remaining',
-                maxLines: 2,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12 * scale,
-                    fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-              );
-            });
-        break;
-
-      default:
-        return AutoSizeText(
-          'Deadline: ' +
-              dateToReadableTimeConverter(
-                  DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
-          maxLines: 2,
-          style: TextStyle(
-              color: Colors.black,
-              fontSize: 12 * scale,
-              fontWeight: FontWeight.w500),
-          overflow: TextOverflow.ellipsis,
-        );
-    }
+            int estimateTs = DateTime.parse(deadlineTimer ?? '2020-05-28 14:26:00+0000').millisecondsSinceEpoch;
+            Duration remaining = Duration(milliseconds: estimateTs - now);
+            if(remaining.isNegative)
+              dateString = 'Deadline is over';
+            else if (remaining.inDays > 0) {
+              if (remaining.inDays == 1) {
+                dateString = remaining.inDays.toString() + ' day';
+              } else
+                dateString = remaining.inDays.toString() + ' days';
+            } else {
+              if (remaining.inHours > 0) {
+                if (remaining.inHours == 1)
+                  dateString = remaining.inHours.toString() + ' hour';
+                else
+                  dateString = remaining.inHours.toString() + ' hours';
+              } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+                  1)
+                dateString = remaining.inMinutes.toString() + ' min';
+              else
+                dateString = remaining.inMinutes.toString() + ' mins';
+              else if (remaining.inSeconds == 1)
+                dateString = remaining.inSeconds.toString() + ' sec';
+              else
+                dateString = remaining.inSeconds.toString() + ' sec';
+            }
+            return AutoSizeText(
+              "Deadline to accept : " + dateString,
+              maxLines: 2,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 12 * scale,
+                  fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
+            );
+          });
+    } else return AutoSizeText(
+      'Deadline: ' +
+          dateToReadableTimeConverter(
+              DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
+      maxLines: 2,
+      style: TextStyle(
+          color: Colors.black,
+          fontSize: 12 * scale,
+          fontWeight: FontWeight.w500),
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   Widget differentBackground(String status) {

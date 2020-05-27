@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -30,7 +31,6 @@ class AuthService {
                   '}'),
             );
             if (response.statusCode == 200) {
-              print(response.body);
               var decodedData = jsonDecode(response.body);
               if (decodedData["secret"] == checkLoginSecret) {
                 bool temp = decodedData["result"];
@@ -51,7 +51,7 @@ class AuthService {
                           .limit(1);
                       details.getDocuments().then((data) async {
                         course = data.documents[0].data['course'];
-
+                        print(course);
                         await SharedPreferences.getInstance()
                             .then((prefs) async {
                           prefs.setString("course", course);
@@ -82,7 +82,7 @@ class AuthService {
                       });
                       result = 1;
                     } else {
-                      result = -2;
+                      result = -1;
                     }
                   });
                 } else

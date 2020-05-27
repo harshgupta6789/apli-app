@@ -62,6 +62,7 @@ class _JobsState extends State<Jobs>
         floatingActionButton: RotationTransition(
           turns: Tween(begin: 0.0, end: 2.0).animate(_controller),
           child: FloatingActionButton(
+            heroTag: 'jobs',
             backgroundColor: basicColor,
             child: Icon(Icons.refresh),
             onPressed: () {

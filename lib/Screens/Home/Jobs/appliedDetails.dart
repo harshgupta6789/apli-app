@@ -132,7 +132,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     switch (status) {
       case "OFFERED":
         bool deadlineOver = job['accept_deadline_passed'] ?? true;
-        bool candAccepted = job['cand_accepted_job'] ?? true;
+        bool candAccepted = job['cand_accepted_job'] ?? false;
+        print(job['cand_accepted_job']);
         if (deadlineOver || candAccepted) {
           return Padding(
               padding:
@@ -615,8 +616,11 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             ),
                                             AutoSizeText(
                                               'Deadline: ' +
-                                                      widget.job['deadline'] ??
-                                                  "No Deadline yet",
+                                                  dateToReadableTimeConverter(
+                                                      DateTime.parse(widget
+                                                          .job[
+                                                      'deadline'] ??
+                                                          '2020-05-26 00:00:00')),
                                               maxLines: 2,
                                               style: TextStyle(
                                                   color: Colors.black,
