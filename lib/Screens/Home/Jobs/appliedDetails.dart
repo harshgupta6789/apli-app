@@ -167,7 +167,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         actions: <Widget>[
                           FlatButton(
                             onPressed: () async {
-                              Navigator.of(context).pop(true);
                               setState(() {
                                 loading = true;
                               });
@@ -274,7 +273,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                 actions: <Widget>[
                                   FlatButton(
                                     onPressed: () async {
-                                      Navigator.of(context).pop(true);
                                       setState(() {
                                         loading = true;
                                       });
@@ -427,7 +425,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                               actions: <Widget>[
                                 FlatButton(
                                   onPressed: () async {
-                                    Navigator.of(context).pop(true);
                                     setState(() {
                                       loading = true;
                                     });

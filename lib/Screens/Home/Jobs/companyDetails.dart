@@ -15,12 +15,16 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../../HomeLoginWrapper.dart';
 
 class CompanyProfile extends StatefulWidget {
-  final Map company;
+  final Map job;
   final int status;
-  final bool isApplied;
+  final bool isApplied, isTempApplied;
 
   const CompanyProfile(
-      {Key key, this.company, this.status, @required this.isApplied})
+      {Key key,
+      this.job,
+      this.status,
+      @required this.isApplied,
+      this.isTempApplied})
       : super(key: key);
 
   @override
@@ -29,19 +33,21 @@ class CompanyProfile extends StatefulWidget {
 
 class _CompanyProfileState extends State<CompanyProfile> {
   final _APIService = APIService();
-  bool loading = false, applied = false;
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return loading
         ? Loading()
         : WillPopScope(
             onWillPop: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => Wrapper(
-                            currentTab: 2,
-                          )),
-                  (Route<dynamic> route) => false);
+              if(widget.isTempApplied == true)
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => Wrapper(
+                              currentTab: 2,
+                            )),
+                    (Route<dynamic> route) => false);
+              else Navigator.pop(context);
             },
             child: Scaffold(
               appBar: PreferredSize(
@@ -89,7 +95,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                       ListTile(
                                         onTap: () {},
                                         title: AutoSizeText(
-                                          widget.company['role'] ??
+                                          widget.job['role'] ??
                                               "Role not declared",
                                           maxLines: 2,
                                           style: TextStyle(
@@ -108,7 +114,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               AutoSizeText(
-                                                widget.company['location'] ??
+                                                widget.job['location'] ??
                                                     "Location not declared",
                                                 maxLines: 2,
                                                 style: TextStyle(
@@ -121,7 +127,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 'Deadline: ' +
                                                     dateToReadableTimeConverter(
                                                         DateTime.parse(widget
-                                                                    .company[
+                                                                    .job[
                                                                 'deadline'] ??
                                                             '2020-05-26 00:00:00')),
                                                 maxLines: 2,
@@ -135,7 +141,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                           ),
                                         ),
                                       ),
-                                      widget.company['ctc'] != null
+                                      widget.job['ctc'] != null
                                           ? ListTile(
                                               dense: true,
                                               title: RichText(
@@ -148,7 +154,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                   ),
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                        text: widget.company[
+                                                        text: widget.job[
                                                                 'ctc'] ??
                                                             "Not Specified",
                                                         style: TextStyle(
@@ -160,7 +166,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['notice_period'] != null
+                                      widget.job['notice_period'] != null
                                           ? ListTile(
                                               dense: true,
                                               title: RichText(
@@ -173,7 +179,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                   ),
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                        text: widget.company[
+                                                        text: widget.job[
                                                                 'notice_period'] ??
                                                             "Not Specified",
                                                         style: TextStyle(
@@ -185,7 +191,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['description'] != null
+                                      widget.job['description'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
                                                 "Role Description : ",
@@ -206,7 +212,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      widget.company[
+                                                      widget.job[
                                                               'description'] ??
                                                           "Not Specified",
                                                       maxLines: 999999,
@@ -223,7 +229,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['key_resp'] != null
+                                      widget.job['key_resp'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
                                                 "Key Responsibilities : ",
@@ -244,7 +250,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      widget.company[
+                                                      widget.job[
                                                               'key_resp'] ??
                                                           "Not Specified",
                                                       maxLines: 999999,
@@ -261,7 +267,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['soft_skills'] != null
+                                      widget.job['soft_skills'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
                                                 "Soft Skills : ",
@@ -280,7 +286,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: widget
-                                                            .company[
+                                                            .job[
                                                                 'soft_skills']
                                                             .length ??
                                                         1,
@@ -288,7 +294,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.company[
+                                                        widget.job[
                                                                     'soft_skills']
                                                                 [index] ??
                                                             "None",
@@ -306,7 +312,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['tech_skills'] != null
+                                      widget.job['tech_skills'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
                                                 "Technical Skills  : ",
@@ -325,7 +331,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: widget
-                                                            .company[
+                                                            .job[
                                                                 'tech_skills']
                                                             .length ??
                                                         1,
@@ -333,7 +339,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.company[
+                                                        widget.job[
                                                                     'tech_skills']
                                                                 [index] ??
                                                             "None",
@@ -351,7 +357,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
-                                      widget.company['requirements'] != null
+                                      widget.job['requirements'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
                                                 "Requirements : ",
@@ -369,7 +375,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     physics:
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
-                                                    itemCount: (widget.company[
+                                                    itemCount: (widget.job[
                                                                     'requirements'] ??
                                                                 [])
                                                             .length ??
@@ -378,7 +384,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.company[
+                                                        widget.job[
                                                                     'requirements']
                                                                 [index] ??
                                                             "No specific requirements",
@@ -404,11 +410,12 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               right: 20.0,
                                               top: 10.0),
                                           child: RaisedButton(
-                                              color:
-                                                  (widget.isApplied == true ||
-                                                          applied == true)
-                                                      ? Colors.grey
-                                                      : basicColor,
+                                              color: (widget.isApplied ==
+                                                          true ||
+                                                      widget.isTempApplied ==
+                                                          true)
+                                                  ? Colors.grey
+                                                  : basicColor,
                                               elevation: 0,
                                               padding: EdgeInsets.only(
                                                   left: 30, right: 30),
@@ -418,7 +425,8 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 side: BorderSide(
                                                     color: (widget.isApplied ==
                                                                 true ||
-                                                            applied == true)
+                                                            widget.isTempApplied ==
+                                                                true)
                                                         ? Colors.grey
                                                         : basicColor,
                                                     width: 1.2),
@@ -429,9 +437,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     color: Colors.white),
                                               ),
                                               onPressed: () async {
-                                                if (applied == false) if (widget
-                                                        .isApplied ==
-                                                    false)
+                                                if (widget.isTempApplied !=
+                                                    true) if (widget
+                                                        .isApplied !=
+                                                    true)
                                                   await showDialog(
                                                     context: context,
                                                     builder: (context) =>
@@ -449,13 +458,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       actions: <Widget>[
                                                         FlatButton(
                                                           onPressed: () async {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop(true);
                                                             bool videoIntro =
                                                                     true,
                                                                 resume = true;
-                                                            if (widget.company[
+                                                            if (widget.job[
                                                                     'requirements']
                                                                 .contains(
                                                                     'Video Introduction')) {
@@ -481,7 +487,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                     false;
                                                               }
                                                             }
-                                                            if (widget.company[
+                                                            if (widget.job[
                                                                     'requirements']
                                                                 .contains('Resume')) if (widget
                                                                     .status <
@@ -503,14 +509,13 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                   await _APIService
                                                                       .applyJob(
                                                                           widget
-                                                                              .company['job_id']);
+                                                                              .job['job_id']);
                                                               setState(() {
                                                                 loading = false;
-                                                                applied = true;
                                                               });
                                                               if (result == 1) {
                                                                 if (widget
-                                                                    .company[
+                                                                    .job[
                                                                         'requirements']
                                                                     .contains(
                                                                         'Video Interview')) {
@@ -518,7 +523,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                       context,
                                                                       MaterialPageRoute(
                                                                           builder: (context) => CompanyVideo(
-                                                                                job: widget.company,
+                                                                                job: widget.job,
                                                                               )));
                                                                 } else {
                                                                   showToast(
@@ -593,9 +598,9 @@ class _CompanyProfileState extends State<CompanyProfile> {
 
 class CompanyVideo extends StatefulWidget {
   final Map job;
-  final int status;
+  final bool isIncomplete;
 
-  CompanyVideo({Key key, this.job, this.status}) : super(key: key);
+  CompanyVideo({Key key, this.job, this.isIncomplete}) : super(key: key);
 
   @override
   _CompanyVideoState createState() => _CompanyVideoState();
@@ -610,7 +615,6 @@ class _CompanyVideoState extends State<CompanyVideo> {
 
   Future<dynamic> getInfo() async {
     dynamic result = await _APIService.getCompanyIntro(widget.job['job_id']);
-    print(result);
     return result;
   }
 
@@ -661,106 +665,131 @@ class _CompanyVideoState extends State<CompanyVideo> {
     height = MediaQuery.of(context).size.height;
     return loading
         ? Loading()
-        : Scaffold(
-            appBar: PreferredSize(
-              child: AppBar(
-                  backgroundColor: basicColor,
-                  automaticallyImplyLeading: false,
-                  leading: Padding(
-                    padding: EdgeInsets.only(bottom: 5.0),
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => Navigator.pop(context)),
-                  ),
-                  title: Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Text(
-                      "Apply",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
+        : WillPopScope(
+            onWillPop: () {
+              if(widget.isIncomplete == true)
+                Navigator.pop(context);
+              else Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CompanyProfile(
+                        job: widget.job,
+                        isTempApplied: true,
+                          )));
+            },
+            child: Scaffold(
+              appBar: PreferredSize(
+                child: AppBar(
+                    backgroundColor: basicColor,
+                    automaticallyImplyLeading: false,
+                    leading: Padding(
+                      padding: EdgeInsets.only(bottom: 5.0),
+                      child: IconButton(
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            if(widget.isIncomplete == true)
+                              Navigator.pop(context);
+                            else Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CompanyProfile(
+                                      job: widget.job,
+                                      isTempApplied: true,
+                                    )));
+                          }),
                     ),
-                  )),
-              preferredSize: Size.fromHeight(50),
-            ),
-            body: FutureBuilder(
-                future: _fetch,
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.hasData &&
-                      snapshot.connectionState == ConnectionState.done) {
-                    return ScrollConfiguration(
-                      behavior: MyBehavior(),
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              left: width * 0.1, right: width * 0.1, top: 15),
-                          child: Column(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: snapshot.data['video'] != null
-                                    ? videoPlayer(snapshot.data['video'])
-                                    : SizedBox(),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                                child: Text(
-                                  snapshot.data['text'] ?? "No Info Specified",
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
+                    title: Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text(
+                        "Apply",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    )),
+                preferredSize: Size.fromHeight(50),
+              ),
+              body: FutureBuilder(
+                  future: _fetch,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasData &&
+                        snapshot.connectionState == ConnectionState.done) {
+                      return ScrollConfiguration(
+                        behavior: MyBehavior(),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                left: width * 0.1, right: width * 0.1, top: 15),
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: snapshot.data['video'] != null
+                                      ? videoPlayer(snapshot.data['video'])
+                                      : SizedBox(),
                                 ),
-                              ),
-                              SizedBox(
-                                height: height * 0.05,
-                              ),
-                              Align(
-                                child: RaisedButton(
-                                  color: basicColor,
-                                  elevation: 0,
-                                  padding: EdgeInsets.only(left: 40, right: 40),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                    side: BorderSide(
-                                        color: basicColor, width: 1.2),
-                                  ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 0, 15, 0),
                                   child: Text(
-                                    'PROCEED TO VIDEO INTERVIEW',
-                                    style: TextStyle(color: Colors.white),
+                                    snapshot.data['text'] ??
+                                        "No Info Specified",
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                  onPressed: () async {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CompanyInstructions(
-                                                  job: widget.job,
-                                                )));
-                                  },
                                 ),
-                              ),
-                            ],
+                                SizedBox(
+                                  height: height * 0.05,
+                                ),
+                                Align(
+                                  child: RaisedButton(
+                                    color: basicColor,
+                                    elevation: 0,
+                                    padding:
+                                        EdgeInsets.only(left: 40, right: 40),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                      side: BorderSide(
+                                          color: basicColor, width: 1.2),
+                                    ),
+                                    child: Text(
+                                      'PROCEED TO VIDEO INTERVIEW',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CompanyInstructions(
+                                                    job: widget.job,
+                                                  )));
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  } else if (snapshot.hasError)
-                    return Center(
-                      child: Text('Error occurred, try again later'),
-                    );
+                      );
+                    } else if (snapshot.hasError)
+                      return Center(
+                        child: Text('Error occurred, try again later'),
+                      );
 
-                  return Loading();
-                }),
+                    return Loading();
+                  }),
+            ),
           );
   }
 }

@@ -204,7 +204,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                 CompanyProfile(
                                                                   isApplied: widget
                                                                       .alreadyAccepted,
-                                                                  company: widget
+                                                                  job: widget
                                                                           .jobs[
                                                                       index],
                                                                   status: widget
@@ -227,8 +227,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                       CompanyVideo(
                                                                         job: widget
                                                                             .jobs[index],
-                                                                        status:
-                                                                            widget.profileStatus,
+                                                                        isIncomplete: true,
                                                                       )));
                                                     }
                                                   }
