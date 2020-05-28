@@ -73,7 +73,17 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         if (_currentTab == 2) {
           Flushbar(
             isDismissible: true,
-            messageText: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[Text('New content is available, click to refresh', style: TextStyle(color: Colors.white)), Icon(Icons.arrow_upward, color: Colors.white,)],),
+            messageText: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('New content is available, click to refresh',
+                    style: TextStyle(color: Colors.white)),
+                Icon(
+                  Icons.arrow_upward,
+                  color: Colors.white,
+                )
+              ],
+            ),
             duration: Duration(seconds: 5),
           )..show(context);
         } else {
@@ -132,8 +142,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   }
 
   void checkIfLoggedIn() async {
-    await SharedPreferences.getInstance()
-        .then((prefs) async {
+    await SharedPreferences.getInstance().then((prefs) async {
       String topic = prefs.getString("course") ?? "App";
       firebaseCloudMessagingListeners(topic);
     });

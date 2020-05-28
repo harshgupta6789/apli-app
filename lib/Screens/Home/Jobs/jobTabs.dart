@@ -227,7 +227,8 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                       CompanyVideo(
                                                                         job: widget
                                                                             .jobs[index],
-                                                                        isIncomplete: true,
+                                                                        isIncomplete:
+                                                                            true,
                                                                       )));
                                                     }
                                                   }

@@ -843,12 +843,12 @@ class _MyDialogContentState extends State<MyDialogContent> {
     if (query.isNotEmpty) {
       List<String> dummyListData = List<String>();
       query = query.replaceAll(new RegExp(r"\s+\b|\b\s|\s|\b"), "");
-      query = query.replaceAll(new RegExp(r'[^\w\s]+'),'');
+      query = query.replaceAll(new RegExp(r'[^\w\s]+'), '');
       print(query);
       dummySearchList.forEach((item) {
         String temp = item;
-         temp = temp.replaceAll(new RegExp(r"\s+\b|\b\s|\s|\b"), "");
-      temp = temp.replaceAll(new RegExp(r'[^\w\s]+'),'');
+        temp = temp.replaceAll(new RegExp(r"\s+\b|\b\s|\s|\b"), "");
+        temp = temp.replaceAll(new RegExp(r'[^\w\s]+'), '');
         if (temp.toLowerCase().contains(query.toLowerCase())) {
           dummyListData.add(item);
         }
@@ -895,11 +895,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
             items.isEmpty
                 ? ListTile(
                     title: Text(
-                      
                       widget.isClg == true
                           ? "College Not found?"
                           : "Please choose from the list",
-                          textAlign: TextAlign.center,
+                      textAlign: TextAlign.center,
                       style: TextStyle(color: basicColor),
                     ),
                     onTap: () {
@@ -920,12 +919,11 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         return ListTile(
                           title: Text(
                             '${items[index]}',
-                            
                           ),
                           onTap: () {
                             Navigator.pop(context, '${items[index]}');
                           },
-                          subtitle: Divider(thickness:2),
+                          subtitle: Divider(thickness: 2),
                         );
                       },
                     ),

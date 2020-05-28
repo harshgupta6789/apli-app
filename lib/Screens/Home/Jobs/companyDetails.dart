@@ -40,14 +40,15 @@ class _CompanyProfileState extends State<CompanyProfile> {
         ? Loading()
         : WillPopScope(
             onWillPop: () {
-              if(widget.isTempApplied == true)
+              if (widget.isTempApplied == true)
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => Wrapper(
                               currentTab: 2,
                             )),
                     (Route<dynamic> route) => false);
-              else Navigator.pop(context);
+              else
+                Navigator.pop(context);
             },
             child: Scaffold(
               appBar: PreferredSize(
@@ -154,9 +155,9 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                   ),
                                                   children: <TextSpan>[
                                                     TextSpan(
-                                                        text: widget.job[
-                                                                'ctc'] ??
-                                                            "Not Specified",
+                                                        text:
+                                                            widget.job['ctc'] ??
+                                                                "Not Specified",
                                                         style: TextStyle(
                                                           fontWeight:
                                                               FontWeight.w400,
@@ -250,8 +251,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      widget.job[
-                                                              'key_resp'] ??
+                                                      widget.job['key_resp'] ??
                                                           "Not Specified",
                                                       maxLines: 999999,
                                                       style: TextStyle(
@@ -286,16 +286,14 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: widget
-                                                            .job[
-                                                                'soft_skills']
+                                                            .job['soft_skills']
                                                             .length ??
                                                         1,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.job[
-                                                                    'soft_skills']
+                                                        widget.job['soft_skills']
                                                                 [index] ??
                                                             "None",
                                                         //maxLines: 4,
@@ -331,16 +329,14 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
                                                     itemCount: widget
-                                                            .job[
-                                                                'tech_skills']
+                                                            .job['tech_skills']
                                                             .length ??
                                                         1,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.job[
-                                                                    'tech_skills']
+                                                        widget.job['tech_skills']
                                                                 [index] ??
                                                             "None",
                                                         //maxLines: 4,
@@ -375,17 +371,16 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     physics:
                                                         NeverScrollableScrollPhysics(),
                                                     shrinkWrap: true,
-                                                    itemCount: (widget.job[
-                                                                    'requirements'] ??
-                                                                [])
-                                                            .length ??
-                                                        1,
+                                                    itemCount:
+                                                        (widget.job['requirements'] ??
+                                                                    [])
+                                                                .length ??
+                                                            1,
                                                     itemBuilder:
                                                         (BuildContext context,
                                                             int index) {
                                                       return Text(
-                                                        widget.job[
-                                                                    'requirements']
+                                                        widget.job['requirements']
                                                                 [index] ??
                                                             "No specific requirements",
                                                         //maxLines: 4,
@@ -514,8 +509,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                 loading = false;
                                                               });
                                                               if (result == 1) {
-                                                                if (widget
-                                                                    .job[
+                                                                if (widget.job[
                                                                         'requirements']
                                                                     .contains(
                                                                         'Video Interview')) {
@@ -667,15 +661,16 @@ class _CompanyVideoState extends State<CompanyVideo> {
         ? Loading()
         : WillPopScope(
             onWillPop: () {
-              if(widget.isIncomplete == true)
+              if (widget.isIncomplete == true)
                 Navigator.pop(context);
-              else Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CompanyProfile(
-                        job: widget.job,
-                        isTempApplied: true,
-                          )));
+              else
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CompanyProfile(
+                              job: widget.job,
+                              isTempApplied: true,
+                            )));
             },
             child: Scaffold(
               appBar: PreferredSize(
@@ -690,15 +685,16 @@ class _CompanyVideoState extends State<CompanyVideo> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            if(widget.isIncomplete == true)
+                            if (widget.isIncomplete == true)
                               Navigator.pop(context);
-                            else Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CompanyProfile(
-                                      job: widget.job,
-                                      isTempApplied: true,
-                                    )));
+                            else
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CompanyProfile(
+                                            job: widget.job,
+                                            isTempApplied: true,
+                                          )));
                           }),
                     ),
                     title: Padding(
