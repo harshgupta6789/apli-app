@@ -122,7 +122,6 @@ const List<String> proficiencies = [
   'Intermediate',
   'Expert'
 ];
-
 const List<String> experienceTypes = ['Internship', 'Job'];
 const List<String> domains = [
   'Software Development',
