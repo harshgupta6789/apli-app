@@ -16,7 +16,7 @@ class _SkillsState extends State<Skills> {
   double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
-  final _APIService = APIService(profileType: 2);
+  final apiService = APIService(profileType: 2);
   List skills;
   Map<String, TextEditingController> temp = {};
   final _formKey = GlobalKey<FormState>();
@@ -709,7 +709,7 @@ class _SkillsState extends State<Skills> {
                                         map['skill'] = List.from(skills);
                                         map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
+                                            await apiService.sendProfileData(
                                                 map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',

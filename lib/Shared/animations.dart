@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MyLinearProgressIndicator extends StatefulWidget {
-  int milliSeconds;
+  final int milliSeconds;
   MyLinearProgressIndicator({this.milliSeconds});
   @override
   _MyLinearProgressIndicatorState createState() =>

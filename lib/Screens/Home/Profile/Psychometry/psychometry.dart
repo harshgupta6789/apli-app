@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Psychometry extends StatefulWidget {
-  String email;
+  final String email;
   Psychometry({this.email});
   @override
   _PsychometryState createState() => _PsychometryState();

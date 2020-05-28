@@ -48,12 +48,11 @@ class _JobQuestionsState extends State<JobQuestions> {
   StorageUploadTask uploadTask;
   String tempURL;
   int indexOfQuestions;
-  int Status;
   currentState x = currentState.recording;
   List qs = [];
   List<CameraDescription> cameras;
   String name = Timestamp.now().toString();
-  APIService _APIService = APIService();
+  APIService apiService = APIService();
 
   camInit() async {
     qs = widget.questions;
@@ -243,7 +242,7 @@ class _JobQuestionsState extends State<JobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.submitInterViewQ(
+            dynamic result = await apiService.submitInterViewQ(
                 widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
               print(result);
@@ -283,12 +282,12 @@ class _JobQuestionsState extends State<JobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.submitInterViewQ(
+            dynamic result = await apiService.submitInterViewQ(
                 widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
             if (result != -1 || result != -2 || result != 0) {
               showToast("Submitting your answers", context);
               print(result);
-              dynamic finalResult = await _APIService.submitInterViewQ(
+              dynamic finalResult = await apiService.submitInterViewQ(
                   widget.jobID, "final", null, null);
               if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
                 showToast("Submitted Successfully", context);
@@ -351,7 +350,7 @@ class _JobQuestionsState extends State<JobQuestions> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+   
     Wakelock.disable();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -378,7 +377,6 @@ class _JobQuestionsState extends State<JobQuestions> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    final size = MediaQuery.of(context).size;
     if (controller == null) {
       return Loading();
     } else if (!controller.value.isInitialized && _isRecording == false)

@@ -17,7 +17,7 @@ import 'Jobs/jobs.dart';
 import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
-  int currentTab;
+  final int currentTab;
   MainScreen({this.currentTab});
   @override
   _MainScreenState createState() => _MainScreenState();

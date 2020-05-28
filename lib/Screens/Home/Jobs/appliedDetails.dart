@@ -34,12 +34,13 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   String tempURL;
   StorageUploadTask uploadTask;
   File fileToUpload;
-  final _APIService = APIService();
+  final apiService = APIService();
 
   Future<void> downloadFile(StorageReference ref) async {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
     final Directory systemTempDir = Directory.systemTemp;
+    print(systemTempDir);
     String tempPath = 'storage/emulated/0/Download/offer-letter' +
         DateTime.now().toString() +
         '.pdf';
@@ -102,7 +103,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
         setState(() {
           tempURL = url;
         });
-        dynamic result = await _APIService.updateJobOfferLetter(
+        dynamic result = await apiService.updateJobOfferLetter(
             widget.job['job_id'], tempURL);
         if (result['error'] != null) {
           showToast("error", context);
@@ -157,48 +158,67 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               child: RaisedButton(
                   onPressed: () async {
                     await showDialog(
-                      context: context,
-                      builder: (context) => new AlertDialog(
-                        title: new Text(
-                          'Once you accept this job you will not be able to apply for any other jobs. Are you sure you want to accept this offer?',
-                          style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
-                        ),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () async {
-                              setState(() {
-                                loading = true;
-                              });
-                              dynamic result = await _APIService.acceptJobOffer(
-                                  widget.job['job_id']);
-                              if (result['error'] != null) {
-                                showToast(result['error'].toString(), context);
-                              } else {
-                                showToast("Accepted Job Offer!", context);
-                              }
-                              Navigator.of(context).pushAndRemoveUntil(
-                                  MaterialPageRoute(
-                                      builder: (context) => Wrapper(
-                                            currentTab: 2,
-                                          )),
-                                  (Route<dynamic> route) => false);
-                            },
-                            child: new Text(
-                              'Yes',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                          FlatButton(
-                            onPressed: () => Navigator.of(context).pop(false),
-                            child: new Text(
-                              'No',
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                        context: context,
+                        builder: (context) =>
+                            StatefulBuilder(builder: (context2, setState) {
+                              return Scaffold(
+                                backgroundColor: Colors.transparent,
+                                body: loading
+                                    ? Loading()
+                                    : new AlertDialog(
+                                        title: new Text(
+                                          'Once you accept this job you will not be able to apply for any other jobs. Are you sure you want to accept this offer?',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                            onPressed: () async {
+                                              setState(() {
+                                                loading = true;
+                                              });
+                                              dynamic result = await apiService
+                                                  .acceptJobOffer(
+                                                      widget.job['job_id']);
+                                              if (result['error'] != null) {
+                                                showToast(
+                                                    result['error'].toString(),
+                                                    context);
+                                              } else {
+                                                showToast("Accepted Job Offer!",
+                                                    context);
+                                              }
+                                              Navigator.of(context)
+                                                  .pushAndRemoveUntil(
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              Wrapper(
+                                                                currentTab: 2,
+                                                              )),
+                                                      (Route<dynamic> route) =>
+                                                          false);
+                                            },
+                                            child: new Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          FlatButton(
+                                            onPressed: () =>
+                                                Navigator.of(context)
+                                                    .pop(false),
+                                            child: new Text(
+                                              'No',
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                              );
+                            }));
                   },
                   color: basicColor,
                   elevation: 0,
@@ -263,52 +283,74 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                           if (!job['schedule']['cand_accepted']) {
                             await showDialog(
                               context: context,
-                              builder: (context) => new AlertDialog(
-                                title: new Text(
-                                  'Are you sure?',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    onPressed: () async {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      showToast("Accepting", context);
-                                      dynamic result =
-                                          await _APIService.acceptInterView(
-                                              widget.job['job_id']);
-                                      if (result['error'] != null) {
-                                        showToast(result['error'].toString(),
-                                            context);
-                                      } else {
-                                        showToast(
-                                            "Accepted Interview!", context);
-                                      }
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                          MaterialPageRoute(
-                                              builder: (context) => Wrapper(
-                                                    currentTab: 2,
-                                                  )),
-                                          (Route<dynamic> route) => false);
-                                    },
-                                    child: new Text(
-                                      'Yes',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                  FlatButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(false),
-                                    child: new Text(
-                                      'No',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              builder: (context) => StatefulBuilder(
+                                  builder: (context2, setState) {
+                                return Scaffold(
+                                    backgroundColor: Colors.transparent,
+                                    body: loading
+                                        ? Loading()
+                                        : new AlertDialog(
+                                            title: new Text(
+                                              'Are you sure?',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    loading = true;
+                                                  });
+                                                  showToast(
+                                                      "Accepting", context);
+                                                  dynamic result =
+                                                      await apiService
+                                                          .acceptInterView(
+                                                              widget.job[
+                                                                  'job_id']);
+                                                  if (result['error'] != null) {
+                                                    showToast(
+                                                        result['error']
+                                                            .toString(),
+                                                        context);
+                                                  } else {
+                                                    showToast(
+                                                        "Accepted Interview!",
+                                                        context);
+                                                  }
+                                                  Navigator.of(context)
+                                                      .pushAndRemoveUntil(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Wrapper(
+                                                                        currentTab:
+                                                                            2,
+                                                                      )),
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                },
+                                                child: new Text(
+                                                  'Yes',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                              FlatButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child: new Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                      color: Colors.black),
+                                                ),
+                                              ),
+                                            ],
+                                          ));
+                              }),
                             );
                           }
                         },
@@ -415,53 +457,77 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         color: basicColor,
                         onPressed: () async {
                           await showDialog(
-                            context: context,
-                            builder: (context) => new AlertDialog(
-                              title: new Text(
-                                'Are you sure?',
-                                style: TextStyle(
-                                    fontSize: 14, fontWeight: FontWeight.bold),
-                              ),
-                              actions: <Widget>[
-                                FlatButton(
-                                  onPressed: () async {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    showToast("Accepting", context);
-                                    dynamic result =
-                                        await _APIService.acceptInterView(
-                                            widget.job['job_id']);
-                                    if (result['error'] != null) {
-                                      showToast(
-                                          result['error'].toString(), context);
-                                    } else {
-                                      showToast(
-                                          "Check Interview link!", context);
-                                    }
-                                    Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (context) => Wrapper(
-                                                  currentTab: 2,
-                                                )),
-                                        (Route<dynamic> route) => false);
-                                  },
-                                  child: new Text(
-                                    'Yes',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                                FlatButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pop(false),
-                                  child: new Text(
-                                    'No',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
+                              context: context,
+                              builder: (context) => StatefulBuilder(
+                                      builder: (context2, setState) {
+                                    return Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: loading
+                                            ? Loading()
+                                            : new AlertDialog(
+                                                title: new Text(
+                                                  'Are you sure?',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                actions: <Widget>[
+                                                  FlatButton(
+                                                    onPressed: () async {
+                                                      setState(() {
+                                                        loading = true;
+                                                      });
+                                                      showToast(
+                                                          "Accepting", context);
+                                                      dynamic result =
+                                                          await apiService
+                                                              .acceptInterView(
+                                                                  widget.job[
+                                                                      'job_id']);
+                                                      if (result['error'] !=
+                                                          null) {
+                                                        showToast(
+                                                            result['error']
+                                                                .toString(),
+                                                            context);
+                                                      } else {
+                                                        showToast(
+                                                            "Check Interview link!",
+                                                            context);
+                                                      }
+                                                      Navigator.of(context)
+                                                          .pushAndRemoveUntil(
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Wrapper(
+                                                                            currentTab:
+                                                                                2,
+                                                                          )),
+                                                              (Route<dynamic>
+                                                                      route) =>
+                                                                  false);
+                                                    },
+                                                    child: new Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
+                                                  FlatButton(
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(false),
+                                                    child: new Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ));
+                                  }));
                         },
                         elevation: 0,
                         padding: EdgeInsets.only(left: 30, right: 30),

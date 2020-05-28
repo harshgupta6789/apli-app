@@ -20,12 +20,12 @@ class _JobsState extends State<Jobs>
   TabController _tabController;
   AnimationController _controller;
   int _currentTab = 1;
-  final _APIService = APIService();
+  final apiService = APIService();
   bool loading = true;
   dynamic jobs;
 
   getInfo() async {
-    dynamic result = await _APIService.getJobs();
+    dynamic result = await apiService.getJobs();
     if (mounted)
       setState(() {
         jobs = result;

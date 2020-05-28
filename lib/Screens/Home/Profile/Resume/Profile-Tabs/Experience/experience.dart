@@ -102,7 +102,7 @@ class _ExperiencesState extends State<Experiences> {
 
   List experiences;
 
-  final _APIService = APIService(profileType: 6);
+  final apiService = APIService(profileType: 6);
 
   @override
   void initState() {
@@ -278,7 +278,7 @@ class _ExperiencesState extends State<Experiences> {
                                                 List.from(experiences);
                                             map['index'] = index;
                                             // TODO call API
-                                            dynamic result = await _APIService
+                                            dynamic result = await apiService
                                                 .sendProfileData(map);
                                             if (result == 1) {
                                               showToast(

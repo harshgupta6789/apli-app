@@ -38,7 +38,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
-  final _APIService = APIService(profileType: 4);
+  final apiService = APIService(profileType: 4);
   StorageUploadTask uploadTask;
 
   Future<void> _uploadFile(File file, String filename) async {
@@ -446,9 +446,9 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                       map['extra_curricular'] =
                                           List.from(extraCurriculars);
                                       map['index'] = index;
-                                      // TODO call API
+                                     
                                       dynamic result =
-                                          await _APIService.sendProfileData(
+                                          await apiService.sendProfileData(
                                               map);
                                       if (result == 1) {
                                         showToast('Data Updated Successfully',
@@ -487,7 +487,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                         loading = true;
                                       });
                                       if (file == null) {
-                                        // TODO call API
+                                       
                                         extraCurriculars[index]['role'] = role;
                                         extraCurriculars[index]
                                             ['organisation'] = organisation;
@@ -502,7 +502,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                             List.from(extraCurriculars);
                                         map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
+                                            await apiService.sendProfileData(
                                                 map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
@@ -523,7 +523,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                             context);
                                         _uploadFile(file, fileName)
                                             .then((f) async {
-                                          // TODO call API
+                                         
                                           extraCurriculars[index]['role'] =
                                               role;
                                           extraCurriculars[index]
@@ -540,7 +540,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                               List.from(extraCurriculars);
                                           map['index'] = -1;
                                           dynamic result =
-                                              await _APIService.sendProfileData(
+                                              await apiService.sendProfileData(
                                                   map);
                                           if (result == 1) {
                                             showToast(

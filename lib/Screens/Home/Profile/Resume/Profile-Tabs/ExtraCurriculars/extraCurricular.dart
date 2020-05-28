@@ -102,7 +102,7 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
 
   List extraCurriculars;
 
-  final _APIService = APIService(profileType: 4);
+  final apiService = APIService(profileType: 4);
 
   @override
   void initState() {
@@ -266,8 +266,8 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                             map['extra_curricular'] =
                                                 List.from(extraCurriculars);
                                             map['index'] = index;
-                                            // TODO call API
-                                            dynamic result = await _APIService
+                                            
+                                            dynamic result = await apiService
                                                 .sendProfileData(map);
                                             if (result == 1) {
                                               showToast(

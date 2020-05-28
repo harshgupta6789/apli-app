@@ -51,7 +51,7 @@ class _TenthState extends State<Tenth> {
   StorageUploadTask uploadTask;
   Map<dynamic, dynamic> education;
   List filenames;
-  final _APIService = APIService(profileType: 7);
+  final apiService = APIService(profileType: 7);
 
   Future<List> upload() async {
     List temp = [[]];
@@ -635,7 +635,7 @@ class _TenthState extends State<Tenth> {
                                             }
                                           }
                                           dynamic result =
-                                              await _APIService.sendProfileData(
+                                              await apiService.sendProfileData(
                                                   education);
                                           if (result == -1) {
                                             showToast('Failed', context);

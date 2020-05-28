@@ -229,6 +229,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                               child: Text(dateString + ' remaining ' ?? ""),
                             ),
                             RaisedButton(
+                              onPressed: null,
                               disabledColor: Colors.grey,
                               color: Colors.transparent,
                               elevation: 0,

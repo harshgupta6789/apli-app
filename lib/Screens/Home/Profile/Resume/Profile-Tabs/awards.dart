@@ -99,7 +99,7 @@ class _AwardsFormState extends State<AwardsForm> {
   Map<String, TextEditingController> temp = {}, temp2 = {};
   final _formKey = GlobalKey<FormState>();
   final format = DateFormat("MM-yyyy");
-  final _APIService = APIService(profileType: 3);
+  final apiService = APIService(profileType: 3);
 
   @override
   void initState() {
@@ -505,7 +505,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                 map['award'] = List.from(awards);
                                 map['index'] = -1;
                                 dynamic result =
-                                    await _APIService.sendProfileData(map);
+                                    await apiService.sendProfileData(map);
                                 if (result == 1) {
                                   showToast(
                                       'Data Updated Successfully', context);

@@ -11,7 +11,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class CollegeNotFound extends StatefulWidget {
-  String phoneNo;
+  final String phoneNo;
   CollegeNotFound({this.phoneNo});
   @override
   _CollegeNotFoundState createState() => _CollegeNotFoundState();

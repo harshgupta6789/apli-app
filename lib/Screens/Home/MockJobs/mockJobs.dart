@@ -19,13 +19,13 @@ class _MockJobsState extends State<MockJobs>
   @override
   bool get wantKeepAlive => true;
 
-  final _APIService = APIService();
+  final apiService = APIService();
   bool loading = true;
   dynamic mockJobs;
   double height, width, scale;
   AnimationController _controller;
   getInfo() async {
-    dynamic result = await _APIService.getMockJobs();
+    dynamic result = await apiService.getMockJobs();
     if (mounted)
       setState(() {
         mockJobs = result;

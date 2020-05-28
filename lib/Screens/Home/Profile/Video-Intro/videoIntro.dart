@@ -97,17 +97,6 @@ class _VideoIntroState extends State<VideoIntro>
     tempProfileStatus = false;
   }
 
-  double _bytesTransferred(StorageTaskSnapshot snapshot) {
-    double res = (snapshot.bytesTransferred / 1024.0) / 1000;
-    double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
-    double x = double.parse(res.toStringAsFixed(2)) /
-        double.parse(res2.toStringAsFixed(2));
-    double round = ((x * 100).roundToDouble()) / 100;
-    return round * 100;
-    // return double.parse(res.toStringAsFixed(2)) /
-    //     double.parse(res2.toStringAsFixed(2));
-  }
-
   double _bytesProgress(StorageTaskSnapshot snapshot) {
     double res = (snapshot.bytesTransferred / 1024.0) / 1000;
     double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
@@ -604,7 +593,6 @@ class _VideoIntroState extends State<VideoIntro>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     if (fileVideocontroller != null) fileVideocontroller.dispose();
   }

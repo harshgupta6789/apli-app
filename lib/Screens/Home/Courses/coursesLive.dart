@@ -1,10 +1,8 @@
 import 'package:apli/Screens/Home/Courses/courseLive.dart';
-import 'package:apli/Screens/Home/Courses/courseVideo.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
@@ -346,6 +344,7 @@ class _CoursesLiveState extends State<CoursesLive>
                                           padding:
                                               const EdgeInsets.only(top: 20.0),
                                           child: RaisedButton(
+                                            onPressed: null,
                                             disabledColor: Colors.grey,
                                             color: Colors.transparent,
                                             elevation: 0,

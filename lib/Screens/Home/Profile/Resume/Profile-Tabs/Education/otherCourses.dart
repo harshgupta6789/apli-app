@@ -123,6 +123,7 @@ class _OtherState extends State<Other> {
                       courseEdu: widget.courseEdu,
                       type: widget.type,
                     )));
+        return null;
       },
       child: Scaffold(
           appBar: PreferredSize(

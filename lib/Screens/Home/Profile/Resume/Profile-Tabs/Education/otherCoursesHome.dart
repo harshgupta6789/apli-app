@@ -156,7 +156,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
     });
   }
 
-  final _APIService = APIService(profileType: 7);
+  final apiService = APIService(profileType: 7);
 
   @override
   void initState() {
@@ -490,7 +490,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                 }
                                 print(temp.keys);
                                 dynamic result =
-                                    await _APIService.sendProfileData(temp);
+                                    await apiService.sendProfileData(temp);
                                 if (result == -1) {
                                   showToast('Failed', context);
                                 } else if (result == 0) {

@@ -102,7 +102,7 @@ class _ProjectsState extends State<Projects> {
 
   List projects;
 
-  final _APIService = APIService(profileType: 5);
+  final apiService = APIService(profileType: 5);
 
   @override
   void initState() {
@@ -264,8 +264,8 @@ class _ProjectsState extends State<Projects> {
                                             map['project'] =
                                                 List.from(projects);
                                             map['index'] = index;
-                                            // TODO call API
-                                            dynamic result = await _APIService
+                                            
+                                            dynamic result = await apiService
                                                 .sendProfileData(map);
                                             if (result == 1) {
                                               showToast(

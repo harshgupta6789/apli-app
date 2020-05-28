@@ -18,10 +18,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewProject extends StatefulWidget {
-  List projects;
-  int index;
-  bool old;
-  String email;
+  final List projects;
+  final int index;
+  final bool old;
+  final String email;
   NewProject({this.projects, this.index, this.old, this.email});
   @override
   _NewProjectState createState() => _NewProjectState();
@@ -39,7 +39,7 @@ class _NewProjectState extends State<NewProject> {
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
   StorageUploadTask uploadTask;
-  final _APIService = APIService(profileType: 5);
+  final apiService = APIService(profileType: 5);
 
   Future<void> _uploadFile(File file, String filename) async {
     await SharedPreferences.getInstance().then((value) async {
@@ -445,9 +445,9 @@ class _NewProjectState extends State<NewProject> {
                                       Map<String, dynamic> map = {};
                                       map['project'] = List.from(projects);
                                       map['index'] = index;
-                                      // TODO call API
+                                      
                                       dynamic result =
-                                          await _APIService.sendProfileData(
+                                          await apiService.sendProfileData(
                                               map);
                                       if (result == 1) {
                                         showToast('Data Updated Successfully',
@@ -485,7 +485,7 @@ class _NewProjectState extends State<NewProject> {
                                         loading = true;
                                       });
                                       if (file == null) {
-                                        // TODO call API
+                                       
                                         projects[index]['Name'] = Name;
                                         projects[index]['University_Company'] =
                                             University_Company;
@@ -499,7 +499,7 @@ class _NewProjectState extends State<NewProject> {
                                         map['project'] = List.from(projects);
                                         map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
+                                            await apiService.sendProfileData(
                                                 map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
@@ -520,7 +520,7 @@ class _NewProjectState extends State<NewProject> {
                                             context);
                                         _uploadFile(file, fileName)
                                             .then((f) async {
-                                          // TODO call API
+                                         
                                           projects[index]['Name'] = Name;
                                           projects[index]
                                                   ['University_Company'] =
@@ -535,7 +535,7 @@ class _NewProjectState extends State<NewProject> {
                                           map['project'] = List.from(projects);
                                           map['index'] = -1;
                                           dynamic result =
-                                              await _APIService.sendProfileData(
+                                              await apiService.sendProfileData(
                                                   map);
                                           if (result == 1) {
                                             showToast(

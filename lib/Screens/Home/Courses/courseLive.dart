@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CourseLive extends StatefulWidget {
-  String link;
+  final String link;
   CourseLive({this.link});
   @override
   _CourseLiveState createState() => _CourseLiveState();

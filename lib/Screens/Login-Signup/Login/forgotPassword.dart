@@ -11,7 +11,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ForgotPassword extends StatefulWidget {
-  String email;
+  final String email;
   ForgotPassword({this.email});
   @override
   _ForgotPasswordState createState() => _ForgotPasswordState();
@@ -260,7 +260,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       onPressed: () async {
                         const url =
-                            'mailto:ojask2002@gmail.com?subject=Regarding Apli App';
+                            'mailto:info@apli.ai?subject=Regarding Apli App';
                         if (await canLaunch(url)) {
                           await launch(url);
                         } else {

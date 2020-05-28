@@ -5,7 +5,7 @@ import 'Home/mainScreen.dart';
 import 'Login-Signup/Login/login.dart';
 
 class Wrapper extends StatefulWidget {
-  int currentTab;
+  final int currentTab;
   Wrapper({this.currentTab});
   @override
   _WrapperState createState() => _WrapperState();

@@ -45,7 +45,7 @@ class _NewExperienceState extends State<NewExperience> {
   bool loading = false;
   final format = DateFormat("MM-yyyy");
   final _formKey = GlobalKey<FormState>();
-  final _APIService = APIService(profileType: 6);
+  final apiService = APIService(profileType: 6);
   StorageUploadTask uploadTask;
 
   Future<void> _uploadFile(File file, String filename) async {
@@ -655,9 +655,9 @@ class _NewExperienceState extends State<NewExperience> {
                                       map['experience'] =
                                           List.from(experiences);
                                       map['index'] = index;
-                                      // TODO call API
+                                     
                                       dynamic result =
-                                          await _APIService.sendProfileData(
+                                          await apiService.sendProfileData(
                                               map);
                                       if (result == 1) {
                                         showToast('Data Updated Successfully',
@@ -698,7 +698,7 @@ class _NewExperienceState extends State<NewExperience> {
                                         loading = true;
                                       });
                                       if (file == null) {
-                                        // TODO call API
+                                     
                                         experiences[index]['Type'] = type;
                                         experiences[index]['company'] = company;
                                         experiences[index]['from'] = from;
@@ -717,7 +717,7 @@ class _NewExperienceState extends State<NewExperience> {
                                             List.from(experiences);
                                         map['index'] = -1;
                                         dynamic result =
-                                            await _APIService.sendProfileData(
+                                            await apiService.sendProfileData(
                                                 map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
@@ -738,7 +738,7 @@ class _NewExperienceState extends State<NewExperience> {
                                             context);
                                         _uploadFile(file, fileName)
                                             .then((f) async {
-                                          // TODO call API\
+                                         
                                           experiences[index]['Type'] = type;
                                           experiences[index]['company'] =
                                               company;
@@ -758,7 +758,7 @@ class _NewExperienceState extends State<NewExperience> {
                                               List.from(experiences);
                                           map['index'] = -1;
                                           dynamic result =
-                                              await _APIService.sendProfileData(
+                                              await apiService.sendProfileData(
                                                   map);
                                           if (result == 1) {
                                             showToast(

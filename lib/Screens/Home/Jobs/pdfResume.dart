@@ -1,12 +1,10 @@
 import 'dart:io';
-
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum currentState { none, uploading, success, failure }
 
@@ -51,30 +49,6 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
     return round;
     // return double.parse(res.toStringAsFixed(2)) /
     //     double.parse(res2.toStringAsFixed(2));
-  }
-
-  Future<void> _uploadFile(File file, String filename) async {
-    SharedPreferences.getInstance().then((value) async {
-      StorageReference storageReference;
-      storageReference = FirebaseStorage.instance
-          .ref()
-          .child("resumeVideos/${value.getString('email')}");
-      uploadTask = storageReference.putFile(file);
-      final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-      final String url = (await downloadUrl.ref.getDownloadURL());
-      if (uploadTask.isInProgress) {
-        if (mounted)
-          setState(() {
-            x = currentState.uploading;
-          });
-      }
-
-      if (url != null) {
-        // CALL API
-      } else if (url == null) {
-        x = currentState.failure;
-      }
-    });
   }
 
   Widget toShow() {
@@ -184,7 +158,7 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
                           microphone = true;
                         }
                       }
-                      if (storage && camera && microphone)
+                      if (storage && camera && microphone){}
                         // Navigator.push(
                         //     context,
                         //     MaterialPageRoute(
@@ -194,7 +168,7 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
 
                         // showToast('Permission denied', context,
                         //     color: Colors.red);
-                        ;
+                        
                     }),
               ),
             ]),

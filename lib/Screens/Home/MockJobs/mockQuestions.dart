@@ -50,12 +50,11 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
   StorageUploadTask uploadTask;
   String tempURL;
   int indexOfQuestions;
-  int Status;
   currentState x = currentState.recording;
   List qs = [];
   List<CameraDescription> cameras;
   String name = Timestamp.now().toString();
-  APIService _APIService = APIService();
+  APIService apiService = APIService();
 
   camInit() async {
     qs = widget.questions;
@@ -221,7 +220,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.addMockVideo(
+            dynamic result = await apiService.addMockVideo(
                 tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
             if (result != -1 || result != -2 || result != 0) {
               print(result);
@@ -253,13 +252,13 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             setState(() {
               loading = true;
             });
-            dynamic result = await _APIService.addMockVideo(
+            dynamic result = await apiService.addMockVideo(
                 tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
             if (result != -1 || result != -2 || result != 0) {
               showToast("Submitting..", context);
               print(result);
               dynamic finalResult =
-                  await _APIService.submitMockInterview(widget.docID);
+                  await apiService.submitMockInterview(widget.docID);
               if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
                 showToast("Submitted Succesfully..", context);
                 Navigator.of(context).pushAndRemoveUntil(
@@ -347,7 +346,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    final size = MediaQuery.of(context).size;
+    
     if (controller == null) {
       return Loading();
     } else if (!controller.value.isInitialized && _isRecording == false)

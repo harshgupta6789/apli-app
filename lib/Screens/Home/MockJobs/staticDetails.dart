@@ -209,10 +209,10 @@ class _MockCompanyInstructionsState extends State<MockCompanyInstructions> {
   double fontSize = 14, height, width;
   bool loading = false;
   List<CameraDescription> cameras;
-  APIService _APIService = APIService();
+  APIService apiService = APIService();
 
   Future<dynamic> getInfo() async {
-    dynamic result = await _APIService.fetchMockInterviewQ(widget.pack);
+    dynamic result = await apiService.fetchMockInterviewQ(widget.pack);
     print(result);
     return result;
   }

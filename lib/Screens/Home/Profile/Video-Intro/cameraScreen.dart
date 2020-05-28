@@ -82,18 +82,6 @@ class _CameraState extends State<Camera> {
     }
   }
 
-  double _bytesTransferred(StorageTaskSnapshot snapshot) {
-    double res = (snapshot.bytesTransferred / 1024.0) / 1000;
-    double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
-    double x = double.parse(res.toStringAsFixed(2)) /
-        double.parse(res2.toStringAsFixed(2));
-
-    double round = ((x * 100).roundToDouble()) / 100;
-    return round;
-    // return double.parse(res.toStringAsFixed(2)) /
-    //     double.parse(res2.toStringAsFixed(2));
-  }
-
   double _bytesProgress(StorageTaskSnapshot snapshot) {
     double res = (snapshot.bytesTransferred / 1024.0) / 1000;
     double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
@@ -205,6 +193,7 @@ class _CameraState extends State<Camera> {
             onWillPop: () {
               deleteDirectory();
               Navigator.pop(context);
+              return null;
             },
             child: Container(
               color: Colors.black,
@@ -493,6 +482,7 @@ class _CameraState extends State<Camera> {
           return null;
         else
           Navigator.pop(context);
+        return null;
       },
       child: Scaffold(
         key: _scaffoldKey,
