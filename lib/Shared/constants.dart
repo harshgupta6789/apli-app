@@ -17,6 +17,8 @@ const String checkLogin = "https://dev.apli.ai/accounts/api/login";
 const String checkLoginSecret = "j&R\$estgIKur657%3st4";
 const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
 const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
+const String reachUs = "https://apli.ai/accounts/api/reachus";
+const String reachUsSecret = "78J9MV7ai75KNh5zxtAVFefFEWUgOQAb";
 const String pdfUrltoBeReplaced =
     "https://storage.googleapis.com/aplidotai.appspot.com/";
 const String pdfUrltoreplacedWith = "gs://aplidotai.appspot.com/";

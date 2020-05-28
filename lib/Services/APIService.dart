@@ -180,6 +180,35 @@ class APIService {
   }
 
   Future getJobs() async {
+//    try {
+//      dynamic result;
+//      await SharedPreferences.getInstance().then((value) async {
+//        http.Response response = await http.post(
+//          jobApplyURL,
+//          body: json.decode('{'
+//              '"secret" : "$passHashSecret", '
+//              '"email": "${value.getString('email')}"'
+//              '}'),
+//        );
+//        if (response.statusCode == 200) {
+//          var decodedData = jsonDecode(response.body);
+//          var frozen = decodedData['frozen'];
+//          if(frozen == true)
+//            return 'frozen';
+//          else
+//            return decodedData;
+//        } else {
+//          result = {
+//            'error': jsonDecode(response.body)["error"] ??
+//                'Unexpected error occurred'
+//          };
+//        }
+//      });
+//
+//      return result;
+//    } catch (e) {
+//      return 0;
+//    }
     try {
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {

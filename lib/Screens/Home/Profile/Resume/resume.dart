@@ -394,20 +394,20 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                     text:
-                        "We can help you build your Resume \nBut first build your ",
-                    style: TextStyle(color: Colors.black, fontSize: 18),
+                        "Click here ",
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditResume()),
+                        );
+                      },
+                    style: TextStyle(color: basicColor, fontSize: 18),
                     children: [
                       TextSpan(
-                          text: "Profile",
-                          style: TextStyle(color: basicColor),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditResume()),
-                              );
-                            }),
+                          text: "to start building your resume",
+                          style: TextStyle(color: Colors.black),),
                     ]),
               ),
             )
