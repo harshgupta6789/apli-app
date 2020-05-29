@@ -1,3 +1,4 @@
+
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -25,6 +26,13 @@ class _CourseLiveState extends State<CourseLive> {
           disableDragSeek: true),
     );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controller.dispose();
+    super.dispose();
   }
 
   @override

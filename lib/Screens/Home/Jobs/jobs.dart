@@ -2,12 +2,14 @@ import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
+import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../HomeLoginWrapper.dart';
+import 'jobTabs.dart';
 
 class Jobs extends StatefulWidget {
   @override
@@ -146,272 +148,272 @@ class _JobsState extends State<Jobs>
                 ))),
         preferredSize: Size.fromHeight(100),
       ),
-      body: TabBarView(
-        children: [
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("Assets/Images/job.png"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text:
-                              "We know you are interested in jobs,\nbut first build your ",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(
-                              text: "Profile",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                currentTab: 3,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                },
-                            ),
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("Assets/Images/job.png"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text:
-                              "We know you are interested in jobs,\nbut first build your ",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(
-                              text: "Profile",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                currentTab: 3,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                },
-                            ),
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
-          Center(
-              child: ScrollConfiguration(
-            behavior: MyBehavior(),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Image.asset("Assets/Images/job.png"),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                          text:
-                              "We know you are interested in jobs,\nbut first build your ",
-                          style: TextStyle(color: Colors.black, fontSize: 18),
-                          children: [
-                            TextSpan(
-                              text: "Profile",
-                              style: TextStyle(color: basicColor),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) => Wrapper(
-                                                currentTab: 3,
-                                              )),
-                                      (Route<dynamic> route) => false);
-                                },
-                            ),
-                          ]),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
-        ],
-        controller: _tabController,
-      ),
-//        body: loading
-//            ? Loading()
-//            : jobs == null
-//                ? Center(
-//                    child: Text('Error occurred, try again later'),
+//      body: TabBarView(
+//        children: [
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Image.asset("Assets/Images/job.png"),
+//                  Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: RichText(
+//                      textAlign: TextAlign.center,
+//                      text: TextSpan(
+//                          text:
+//                              "We know you are interested in jobs,\nbut first build your ",
+//                          style: TextStyle(color: Colors.black, fontSize: 18),
+//                          children: [
+//                            TextSpan(
+//                              text: "Profile",
+//                              style: TextStyle(color: basicColor),
+//                              recognizer: TapGestureRecognizer()
+//                                ..onTap = () {
+//                                  Navigator.of(context).pushAndRemoveUntil(
+//                                      MaterialPageRoute(
+//                                          builder: (context) => Wrapper(
+//                                                currentTab: 3,
+//                                              )),
+//                                      (Route<dynamic> route) => false);
+//                                },
+//                            ),
+//                          ]),
+//                    ),
 //                  )
-//                : jobs == 'frozen'
-//                    ? Center(
-//                        child: Text(
-//                            "Your account is set on 'freeze' by your college"),
-//                      )
-//                    : jobs == 0
-//                        ? Center(
-//                            child: Text('Error occurred, try again later'),
-//                          )
-//                        : jobs['profile_status'] < 384 ? TabBarView(
-//          children: [
-//            Center(
-//                child: ScrollConfiguration(
-//                  behavior: MyBehavior(),
-//                  child: SingleChildScrollView(
-//                    child: Column(
-//                      mainAxisAlignment: MainAxisAlignment.center,
-//                      children: <Widget>[
-//                        Image.asset("Assets/Images/job.png"),
-//                        Padding(
-//                          padding: const EdgeInsets.all(8.0),
-//                          child: RichText(
-//                            textAlign: TextAlign.center,
-//                            text: TextSpan(
-//                                text:
-//                                "We know you are interested in jobs,\nbut first build your ",
-//                                style: TextStyle(color: Colors.black, fontSize: 18),
-//                                children: [
-//                                  TextSpan(
-//                                    text: "Profile",
-//                                    style: TextStyle(color: basicColor),
-//                                    recognizer: TapGestureRecognizer()
-//                                      ..onTap = () {
-//                                        Navigator.of(context).pushAndRemoveUntil(
-//                                            MaterialPageRoute(
-//                                                builder: (context) => Wrapper(
-//                                                  currentTab: 4,
-//                                                )),
-//                                                (Route<dynamic> route) => false);
-//                                      },),
-//                                ]),
-//                          ),
-//                        )
-//                      ],
+//                ],
+//              ),
+//            ),
+//          )),
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Image.asset("Assets/Images/job.png"),
+//                  Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: RichText(
+//                      textAlign: TextAlign.center,
+//                      text: TextSpan(
+//                          text:
+//                              "We know you are interested in jobs,\nbut first build your ",
+//                          style: TextStyle(color: Colors.black, fontSize: 18),
+//                          children: [
+//                            TextSpan(
+//                              text: "Profile",
+//                              style: TextStyle(color: basicColor),
+//                              recognizer: TapGestureRecognizer()
+//                                ..onTap = () {
+//                                  Navigator.of(context).pushAndRemoveUntil(
+//                                      MaterialPageRoute(
+//                                          builder: (context) => Wrapper(
+//                                                currentTab: 3,
+//                                              )),
+//                                      (Route<dynamic> route) => false);
+//                                },
+//                            ),
+//                          ]),
 //                    ),
-//                  ),
-//                )),
-//            Center(
-//                child: ScrollConfiguration(
-//                  behavior: MyBehavior(),
-//                  child: SingleChildScrollView(
-//                    child: Column(
-//                      mainAxisAlignment: MainAxisAlignment.center,
-//                      children: <Widget>[
-//                        Image.asset("Assets/Images/job.png"),
-//                        Padding(
-//                          padding: const EdgeInsets.all(8.0),
-//                          child: RichText(
-//                            textAlign: TextAlign.center,
-//                            text: TextSpan(
-//                                text:
-//                                "We know you are interested in jobs,\nbut first build your ",
-//                                style: TextStyle(color: Colors.black, fontSize: 18),
-//                                children: [
-//                                  TextSpan(
-//                                    text: "Profile",
-//                                    style: TextStyle(color: basicColor),
-//                                    recognizer: TapGestureRecognizer()
-//                                      ..onTap = () {
-//                                        Navigator.of(context).pushAndRemoveUntil(
-//                                            MaterialPageRoute(
-//                                                builder: (context) => Wrapper(
-//                                                  currentTab: 4,
-//                                                )),
-//                                                (Route<dynamic> route) => false);
-//                                      },),
-//                                ]),
-//                          ),
-//                        )
-//                      ],
+//                  )
+//                ],
+//              ),
+//            ),
+//          )),
+//          Center(
+//              child: ScrollConfiguration(
+//            behavior: MyBehavior(),
+//            child: SingleChildScrollView(
+//              child: Column(
+//                mainAxisAlignment: MainAxisAlignment.center,
+//                children: <Widget>[
+//                  Image.asset("Assets/Images/job.png"),
+//                  Padding(
+//                    padding: const EdgeInsets.all(8.0),
+//                    child: RichText(
+//                      textAlign: TextAlign.center,
+//                      text: TextSpan(
+//                          text:
+//                              "We know you are interested in jobs,\nbut first build your ",
+//                          style: TextStyle(color: Colors.black, fontSize: 18),
+//                          children: [
+//                            TextSpan(
+//                              text: "Profile",
+//                              style: TextStyle(color: basicColor),
+//                              recognizer: TapGestureRecognizer()
+//                                ..onTap = () {
+//                                  Navigator.of(context).pushAndRemoveUntil(
+//                                      MaterialPageRoute(
+//                                          builder: (context) => Wrapper(
+//                                                currentTab: 3,
+//                                              )),
+//                                      (Route<dynamic> route) => false);
+//                                },
+//                            ),
+//                          ]),
 //                    ),
-//                  ),
-//                )),
-//            Center(
-//                child: ScrollConfiguration(
-//                  behavior: MyBehavior(),
-//                  child: SingleChildScrollView(
-//                    child: Column(
-//                      mainAxisAlignment: MainAxisAlignment.center,
-//                      children: <Widget>[
-//                        Image.asset("Assets/Images/job.png"),
-//                        Padding(
-//                          padding: const EdgeInsets.all(8.0),
-//                          child: RichText(
-//                            textAlign: TextAlign.center,
-//                            text: TextSpan(
-//                                text:
-//                                "We know you are interested in jobs,\nbut first build your ",
-//                                style: TextStyle(color: Colors.black, fontSize: 18),
-//                                children: [
-//                                  TextSpan(
-//                                    text: "Profile",
-//                                    style: TextStyle(color: basicColor),
-//                                    recognizer: TapGestureRecognizer()
-//                                      ..onTap = () {
-//                                        Navigator.of(context).pushAndRemoveUntil(
-//                                            MaterialPageRoute(
-//                                                builder: (context) => Wrapper(
-//                                                  currentTab: 4,
-//                                                )),
-//                                                (Route<dynamic> route) => false);
-//                                      },),
-//                                ]),
-//                          ),
-//                        )
-//                      ],
-//                    ),
-//                  ),
-//                )),
-//          ],
-//          controller: _tabController,
-//        ) :  TabBarView(
-//                            children: [
-//                              JobsTabs(
-//                                alreadyAccepted: jobs['cand_accepted_job'],
-//                                jobs: jobs['submitted_jobs'],
-//                                profileStatus: jobs['profile_status'],
-//                                tabNo: 0,
-//                              ),
-//                              JobsTabs(
-//                                alreadyAccepted: jobs['cand_accepted_job'],
-//                                jobs: jobs['all_jobs'],
-//                                profileStatus: jobs['profile_status'],
-//                                tabNo: 1,
-//                              ),
-//                              JobsTabs(
-//                                alreadyAccepted: jobs['cand_accepted_job'],
-//                                jobs: jobs['pending_jobs'],
-//                                profileStatus: jobs['profile_status'],
-//                                tabNo: 2,
-//                              )
-//                            ],
-//                            controller: _tabController,
-//                          )
+//                  )
+//                ],
+//              ),
+//            ),
+//          )),
+//        ],
+//        controller: _tabController,
+//      ),
+        body: loading
+            ? Loading()
+            : jobs == null
+                ? Center(
+                    child: Text('Error occurred, try again later'),
+                  )
+                : jobs == 'frozen'
+                    ? Center(
+                        child: Text(
+                            "Your account is set on 'freeze' by your college"),
+                      )
+                    : jobs == 0
+                        ? Center(
+                            child: Text('Error occurred, try again later'),
+                          )
+                        : jobs['profile_status'] < 384 ? TabBarView(
+          children: [
+            Center(
+                child: ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset("Assets/Images/job.png"),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text:
+                                "We know you are interested in jobs,\nbut first build your ",
+                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                children: [
+                                  TextSpan(
+                                    text: "Profile",
+                                    style: TextStyle(color: basicColor),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (context) => Wrapper(
+                                                  currentTab: 4,
+                                                )),
+                                                (Route<dynamic> route) => false);
+                                      },),
+                                ]),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            Center(
+                child: ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset("Assets/Images/job.png"),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text:
+                                "We know you are interested in jobs,\nbut first build your ",
+                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                children: [
+                                  TextSpan(
+                                    text: "Profile",
+                                    style: TextStyle(color: basicColor),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (context) => Wrapper(
+                                                  currentTab: 4,
+                                                )),
+                                                (Route<dynamic> route) => false);
+                                      },),
+                                ]),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            Center(
+                child: ScrollConfiguration(
+                  behavior: MyBehavior(),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Image.asset("Assets/Images/job.png"),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                                text:
+                                "We know you are interested in jobs,\nbut first build your ",
+                                style: TextStyle(color: Colors.black, fontSize: 18),
+                                children: [
+                                  TextSpan(
+                                    text: "Profile",
+                                    style: TextStyle(color: basicColor),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        Navigator.of(context).pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (context) => Wrapper(
+                                                  currentTab: 4,
+                                                )),
+                                                (Route<dynamic> route) => false);
+                                      },),
+                                ]),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+          ],
+          controller: _tabController,
+        ) :  TabBarView(
+                            children: [
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                                jobs: jobs['submitted_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 0,
+                              ),
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                                jobs: jobs['all_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 1,
+                              ),
+                              JobsTabs(
+                                alreadyAccepted: jobs['cand_accepted_job'],
+                                jobs: jobs['pending_jobs'],
+                                profileStatus: jobs['profile_status'],
+                                tabNo: 2,
+                              )
+                            ],
+                            controller: _tabController,
+                          )
     );
   }
 }

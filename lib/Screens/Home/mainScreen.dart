@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../HomeLoginWrapper.dart';
 import 'Courses/courseHome.dart';
 import 'Jobs/jobs.dart';
+import 'MockJobs/mockJobs.dart';
 import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
@@ -165,7 +166,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   final List<Widget> _listTabs = [
     CourseMain(),
-//    MockJobs(),
+    MockJobs(),
     Jobs(),
     Updates(),
     Profile()
@@ -201,21 +202,21 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                     color: _currentTab == 0 ? basicColor : Colors.grey,
                     fontSize: fontSize),
               )),
-//          BottomNavigationBarItem(
-//              activeIcon: Icon(
-//                EvaIcons.headphonesOutline,
-//                color: basicColor,
-//              ),
-//              icon: Icon(
-//                EvaIcons.headphonesOutline,
-//                color: Colors.grey,
-//              ),
-//              title: Text(
-//                mockJob,
-//                style: TextStyle(
-//                    color: _currentTab == 1 ? basicColor : Colors.grey,
-//                    fontSize: fontSize),
-//              )),
+          BottomNavigationBarItem(
+              activeIcon: Icon(
+                EvaIcons.headphonesOutline,
+                color: basicColor,
+              ),
+              icon: Icon(
+                EvaIcons.headphonesOutline,
+                color: Colors.grey,
+              ),
+              title: Text(
+                mockJob,
+                style: TextStyle(
+                    color: _currentTab == 1 ? basicColor : Colors.grey,
+                    fontSize: fontSize),
+              )),
           BottomNavigationBarItem(
               activeIcon: Icon(
                 EvaIcons.briefcaseOutline,
@@ -228,7 +229,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 jobs,
                 style: TextStyle(
-                    color: _currentTab == 1 ? basicColor : Colors.grey,
+                    color: _currentTab == 2 ? basicColor : Colors.grey,
                     fontSize: fontSize),
               )),
           BottomNavigationBarItem(
@@ -243,7 +244,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             title: Text(
               updates,
               style: TextStyle(
-                  color: _currentTab == 2 ? basicColor : Colors.grey,
+                  color: _currentTab == 3 ? basicColor : Colors.grey,
                   fontSize: fontSize),
             ),
           ),
@@ -259,7 +260,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               title: Text(
                 profile,
                 style: TextStyle(
-                    color: _currentTab == 3 ? basicColor : Colors.grey,
+                    color: _currentTab == 4 ? basicColor : Colors.grey,
                     fontSize: fontSize),
               )),
         ]);
