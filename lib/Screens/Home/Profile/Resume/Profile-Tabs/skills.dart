@@ -708,9 +708,8 @@ class _SkillsState extends State<Skills> {
                                         Map<String, dynamic> map = {};
                                         map['skill'] = List.from(skills);
                                         map['index'] = -1;
-                                        dynamic result =
-                                            await apiService.sendProfileData(
-                                                map);
+                                        dynamic result = await apiService
+                                            .sendProfileData(map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
                                               context);

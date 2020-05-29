@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/otherCoursesHome.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
@@ -15,8 +16,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Tenth extends StatefulWidget {
@@ -402,14 +403,14 @@ class _TenthState extends State<Tenth> {
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = start != null
-                                    ? format
-                                            .format(DateTime
-                                                .fromMicrosecondsSinceEpoch(start
-                                                    .microsecondsSinceEpoch))
-                                            .toString() ??
-                                        "DOB"
-                                    : "DOB";
+//                                var temp = start != null
+//                                    ? format
+//                                            .format(DateTime
+//                                                .fromMicrosecondsSinceEpoch(start
+//                                                    .microsecondsSinceEpoch))
+//                                            .toString() ??
+//                                        "DOB"
+//                                    : "DOB";
                                 return date;
                               },
                               onChanged: (date) {
@@ -445,14 +446,14 @@ class _TenthState extends State<Tenth> {
                                     firstDate: DateTime(1900),
                                     initialDate: currentValue ?? DateTime.now(),
                                     lastDate: DateTime(2100));
-                                var temp = end != null
-                                    ? format
-                                            .format(DateTime
-                                                .fromMicrosecondsSinceEpoch(
-                                                    end.microsecondsSinceEpoch))
-                                            .toString() ??
-                                        "DOB"
-                                    : "DOB";
+//                                var temp = end != null
+//                                    ? format
+//                                            .format(DateTime
+//                                                .fromMicrosecondsSinceEpoch(
+//                                                    end.microsecondsSinceEpoch))
+//                                            .toString() ??
+//                                        "DOB"
+//                                    : "DOB";
                                 return date;
                               },
                               onChanged: (date) {
@@ -634,9 +635,8 @@ class _TenthState extends State<Tenth> {
                                               }
                                             }
                                           }
-                                          dynamic result =
-                                              await apiService.sendProfileData(
-                                                  education);
+                                          dynamic result = await apiService
+                                              .sendProfileData(education);
                                           if (result == -1) {
                                             showToast('Failed', context);
                                           } else if (result == 0) {

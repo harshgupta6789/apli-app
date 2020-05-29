@@ -350,7 +350,6 @@ class _JobQuestionsState extends State<JobQuestions> {
 
   @override
   void dispose() {
-   
     Wakelock.disable();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,

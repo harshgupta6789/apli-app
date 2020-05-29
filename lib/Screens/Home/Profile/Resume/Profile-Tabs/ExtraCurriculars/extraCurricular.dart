@@ -266,7 +266,7 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                             map['extra_curricular'] =
                                                 List.from(extraCurriculars);
                                             map['index'] = index;
-                                            
+
                                             dynamic result = await apiService
                                                 .sendProfileData(map);
                                             if (result == 1) {

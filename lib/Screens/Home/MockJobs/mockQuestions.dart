@@ -346,7 +346,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    
+
     if (controller == null) {
       return Loading();
     } else if (!controller.value.isInitialized && _isRecording == false)

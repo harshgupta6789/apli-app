@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/decorations.dart';
 import 'package:camera/camera.dart';
@@ -158,17 +159,16 @@ class _UploadResumeScreenState extends State<UploadResumeScreen> {
                           microphone = true;
                         }
                       }
-                      if (storage && camera && microphone){}
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //         builder: (context) => JobQuestions(
-                        //               cameras: cameras,
-                        //             )));
+                      if (storage && camera && microphone) {}
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => JobQuestions(
+                      //               cameras: cameras,
+                      //             )));
 
-                        // showToast('Permission denied', context,
-                        //     color: Colors.red);
-                        
+                      // showToast('Permission denied', context,
+                      //     color: Colors.red);
                     }),
               ),
             ]),

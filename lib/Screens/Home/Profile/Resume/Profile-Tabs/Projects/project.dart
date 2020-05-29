@@ -264,7 +264,7 @@ class _ProjectsState extends State<Projects> {
                                             map['project'] =
                                                 List.from(projects);
                                             map['index'] = index;
-                                            
+
                                             dynamic result = await apiService
                                                 .sendProfileData(map);
                                             if (result == 1) {

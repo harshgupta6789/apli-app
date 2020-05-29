@@ -4,8 +4,25 @@ import 'package:apli/Shared/constants.dart';
 import 'package:http/http.dart' as http;
 
 class MailerService {
-  String to_email, subject, body, name, email, workplace, work_email, contact, user_type;
-  MailerService({this.to_email, this.subject, this.body, this.name, this.email, this.workplace, this.work_email, this.contact, this.user_type});
+  String to_email,
+      subject,
+      body,
+      name,
+      email,
+      workplace,
+      work_email,
+      contact,
+      user_type;
+  MailerService(
+      {this.to_email,
+      this.subject,
+      this.body,
+      this.name,
+      this.email,
+      this.workplace,
+      this.work_email,
+      this.contact,
+      this.user_type});
 
   Future sendMail() async {
     int result;
@@ -21,13 +38,10 @@ class MailerService {
           .then((response) {
         if (response.statusCode == 200) {
           var decodedData = jsonDecode(response.body);
-          if (true) {
-            if (decodedData["success"] == true)
-              result = 1;
-            else
-              result = 0;
-          } else
-            result = -2;
+          if (decodedData["success"] == true)
+            result = 1;
+          else
+            result = 0;
         } else {
           result = -2;
         }
@@ -44,26 +58,23 @@ class MailerService {
     try {
       await http
           .post('https://apli.ai/accounts/api/reachus',
-          body: json.decode('{'
-              '"secret": "$reachUsSecret",'
-              '"name": "$name",'
-              '"email": "$email",'
-              '"workplace": "$workplace",'
-              '"work_email": "$email",'
-              '"contact": "$contact",'
-              '"user_type": "Candidate"'
-              '}'))
+              body: json.decode('{'
+                  '"secret": "$reachUsSecret",'
+                  '"name": "$name",'
+                  '"email": "$email",'
+                  '"workplace": "$workplace",'
+                  '"work_email": "$email",'
+                  '"contact": "$contact",'
+                  '"user_type": "Candidate"'
+                  '}'))
           .then((response) {
         if (response.statusCode == 200) {
           var decodedData = jsonDecode(response.body);
           print(response.body);
-          if (true) {
-            if (decodedData["success"] == true)
-              result = 1;
-            else
-              result = 0;
-          } else
-            result = -2;
+          if (decodedData["success"] == true)
+            result = 1;
+          else
+            result = 0;
         } else {
           result = -2;
         }

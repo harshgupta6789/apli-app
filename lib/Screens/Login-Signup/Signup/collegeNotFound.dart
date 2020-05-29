@@ -21,7 +21,12 @@ double height, width;
 
 class _CollegeNotFoundState extends State<CollegeNotFound> {
   final _formKey = GlobalKey<FormState>();
-  String name = '', fieldOfStudy = '', state = '', city = '', college = '', email = '';
+  String name = '',
+      fieldOfStudy = '',
+      state = '',
+      city = '',
+      college = '',
+      email = '';
   bool loading = false;
 
   @override
@@ -232,17 +237,16 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                         showToast('No Internet', context);
                                       } else {
                                         //add to excel sheet
-                                        String body =
-                                            'Email: $email, College: $college, Field of Study: $fieldOfStudy, State: $state, City: $city, Contact: ${widget.phoneNo}';
+//                                        String body =
+//                                            'Email: $email, College: $college, Field of Study: $fieldOfStudy, State: $state, City: $city, Contact: ${widget.phoneNo}';
                                         final MailerService _mail =
                                             MailerService(
-                                            name: name,
-                                              email: email,
-                                              workplace: college,
-                                              work_email: email,
-                                              contact: widget.phoneNo,
-                                              user_type: 'Candidate'
-                                            );
+                                                name: name,
+                                                email: email,
+                                                workplace: college,
+                                                work_email: email,
+                                                contact: widget.phoneNo,
+                                                user_type: 'Candidate');
                                         dynamic result = await _mail.reachUs();
                                         setState(() {
                                           loading = false;

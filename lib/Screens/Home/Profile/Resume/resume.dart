@@ -90,7 +90,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
   Future<void> downloadFile(StorageReference ref) async {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
-    final Directory systemTempDir = Directory.systemTemp;
+    //final Directory systemTempDir = Directory.systemTemp;
     String tempPath = 'storage/emulated/0/Download/resume' +
         DateTime.now().toString() +
         '.pdf';
@@ -393,21 +393,20 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    text:
-                        "Click here ",
+                    text: "Click here ",
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                              builder: (context) => EditResume()),
+                          MaterialPageRoute(builder: (context) => EditResume()),
                         );
                       },
                     style: TextStyle(color: basicColor, fontSize: 18),
                     children: [
                       TextSpan(
-                          text: "to start building your resume",
-                          style: TextStyle(color: Colors.black),),
+                        text: "to start building your resume",
+                        style: TextStyle(color: Colors.black),
+                      ),
                     ]),
               ),
             )

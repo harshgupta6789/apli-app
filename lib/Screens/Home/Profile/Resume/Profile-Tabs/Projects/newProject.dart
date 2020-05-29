@@ -1,20 +1,21 @@
 import 'dart:io';
+
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Projects/project.dart';
 import 'package:apli/Services/APIService.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart' as p;
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewProject extends StatefulWidget {
@@ -219,14 +220,14 @@ class _NewProjectState extends State<NewProject> {
                                   firstDate: DateTime(1900),
                                   initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
-                              var temp = from != null
-                                  ? format
-                                          .format(DateTime
-                                              .fromMicrosecondsSinceEpoch(
-                                                  from.microsecondsSinceEpoch))
-                                          .toString() ??
-                                      "DOB"
-                                  : "DOB";
+//                              var temp = from != null
+//                                  ? format
+//                                          .format(DateTime
+//                                              .fromMicrosecondsSinceEpoch(
+//                                                  from.microsecondsSinceEpoch))
+//                                          .toString() ??
+//                                      "DOB"
+//                                  : "DOB";
                               return date;
                             },
                             onChanged: (date) {
@@ -262,14 +263,14 @@ class _NewProjectState extends State<NewProject> {
                                   firstDate: DateTime(1900),
                                   initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
-                              var temp = to != null
-                                  ? format
-                                          .format(DateTime
-                                              .fromMicrosecondsSinceEpoch(
-                                                  to.microsecondsSinceEpoch))
-                                          .toString() ??
-                                      "DOB"
-                                  : "DOB";
+//                              var temp = to != null
+//                                  ? format
+//                                          .format(DateTime
+//                                              .fromMicrosecondsSinceEpoch(
+//                                                  to.microsecondsSinceEpoch))
+//                                          .toString() ??
+//                                      "DOB"
+//                                  : "DOB";
                               return date;
                             },
                             onChanged: (date) {
@@ -445,10 +446,9 @@ class _NewProjectState extends State<NewProject> {
                                       Map<String, dynamic> map = {};
                                       map['project'] = List.from(projects);
                                       map['index'] = index;
-                                      
+
                                       dynamic result =
-                                          await apiService.sendProfileData(
-                                              map);
+                                          await apiService.sendProfileData(map);
                                       if (result == 1) {
                                         showToast('Data Updated Successfully',
                                             context);
@@ -485,7 +485,6 @@ class _NewProjectState extends State<NewProject> {
                                         loading = true;
                                       });
                                       if (file == null) {
-                                       
                                         projects[index]['Name'] = Name;
                                         projects[index]['University_Company'] =
                                             University_Company;
@@ -498,9 +497,8 @@ class _NewProjectState extends State<NewProject> {
                                         Map<String, dynamic> map = {};
                                         map['project'] = List.from(projects);
                                         map['index'] = -1;
-                                        dynamic result =
-                                            await apiService.sendProfileData(
-                                                map);
+                                        dynamic result = await apiService
+                                            .sendProfileData(map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
                                               context);
@@ -520,7 +518,6 @@ class _NewProjectState extends State<NewProject> {
                                             context);
                                         _uploadFile(file, fileName)
                                             .then((f) async {
-                                         
                                           projects[index]['Name'] = Name;
                                           projects[index]
                                                   ['University_Company'] =
@@ -534,9 +531,8 @@ class _NewProjectState extends State<NewProject> {
                                           Map<String, dynamic> map = {};
                                           map['project'] = List.from(projects);
                                           map['index'] = -1;
-                                          dynamic result =
-                                              await apiService.sendProfileData(
-                                                  map);
+                                          dynamic result = await apiService
+                                              .sendProfileData(map);
                                           if (result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',

@@ -1,20 +1,21 @@
 import 'dart:io';
+
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/ExtraCurriculars/extraCurricular.dart';
 import 'package:apli/Services/APIService.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:path/path.dart' as p;
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NewExtraCurricular extends StatefulWidget {
@@ -219,14 +220,14 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                   firstDate: DateTime(1900),
                                   initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
-                              var temp = start != null
-                                  ? format
-                                          .format(DateTime
-                                              .fromMicrosecondsSinceEpoch(
-                                                  start.microsecondsSinceEpoch))
-                                          .toString() ??
-                                      "DOB"
-                                  : "DOB";
+//                              var temp = start != null
+//                                  ? format
+//                                          .format(DateTime
+//                                              .fromMicrosecondsSinceEpoch(
+//                                                  start.microsecondsSinceEpoch))
+//                                          .toString() ??
+//                                      "DOB"
+//                                  : "DOB";
                               return date;
                             },
                             onChanged: (date) {
@@ -262,14 +263,14 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                   firstDate: DateTime(1900),
                                   initialDate: currentValue ?? DateTime.now(),
                                   lastDate: DateTime(2100));
-                              var temp = end != null
-                                  ? format
-                                          .format(DateTime
-                                              .fromMicrosecondsSinceEpoch(
-                                                  end.microsecondsSinceEpoch))
-                                          .toString() ??
-                                      "DOB"
-                                  : "DOB";
+//                              var temp = end != null
+//                                  ? format
+//                                          .format(DateTime
+//                                              .fromMicrosecondsSinceEpoch(
+//                                                  end.microsecondsSinceEpoch))
+//                                          .toString() ??
+//                                      "DOB"
+//                                  : "DOB";
                               return date;
                             },
                             onChanged: (date) {
@@ -446,10 +447,9 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                       map['extra_curricular'] =
                                           List.from(extraCurriculars);
                                       map['index'] = index;
-                                     
+
                                       dynamic result =
-                                          await apiService.sendProfileData(
-                                              map);
+                                          await apiService.sendProfileData(map);
                                       if (result == 1) {
                                         showToast('Data Updated Successfully',
                                             context);
@@ -487,7 +487,6 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                         loading = true;
                                       });
                                       if (file == null) {
-                                       
                                         extraCurriculars[index]['role'] = role;
                                         extraCurriculars[index]
                                             ['organisation'] = organisation;
@@ -501,9 +500,8 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                         map['extra_curricular'] =
                                             List.from(extraCurriculars);
                                         map['index'] = -1;
-                                        dynamic result =
-                                            await apiService.sendProfileData(
-                                                map);
+                                        dynamic result = await apiService
+                                            .sendProfileData(map);
                                         if (result == 1) {
                                           showToast('Data Updated Successfully',
                                               context);
@@ -523,7 +521,6 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                             context);
                                         _uploadFile(file, fileName)
                                             .then((f) async {
-                                         
                                           extraCurriculars[index]['role'] =
                                               role;
                                           extraCurriculars[index]
@@ -539,9 +536,8 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
                                           map['extra_curricular'] =
                                               List.from(extraCurriculars);
                                           map['index'] = -1;
-                                          dynamic result =
-                                              await apiService.sendProfileData(
-                                                  map);
+                                          dynamic result = await apiService
+                                              .sendProfileData(map);
                                           if (result == 1) {
                                             showToast(
                                                 'Data Updated Successfully',
