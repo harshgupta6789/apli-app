@@ -1,6 +1,7 @@
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:toast/toast.dart';
 
 showToast(String msg, BuildContext context,
@@ -23,6 +24,36 @@ bool validateEmail(String value) {
   RegExp regExp = new RegExp(p);
 
   return regExp.hasMatch(value);
+}
+
+class DecimalTextInputFormatter extends TextInputFormatter {
+
+  DecimalTextInputFormatter({int decimalRange, bool activatedNegativeValues})
+  : assert(decimalRange == null || decimalRange >= 0,
+    'DecimalTextInputFormatter declaretion error') {
+    String dp = (decimalRange != null && decimalRange > 0) ? "([.][0-9]{0,$decimalRange}){0,1}" : "";
+    String num = "[0-9]*$dp";
+
+    if(activatedNegativeValues) {
+      _exp = new RegExp("^((((-){0,1})|((-){0,1}[0-9]$num))){0,1}\$");
+    }
+    else {
+      _exp = new RegExp("^($num){0,1}\$");
+    }
+  }
+
+  RegExp _exp;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if(_exp.hasMatch(newValue.text)){
+      return newValue;
+    }
+    return oldValue;
+  }
 }
 
 bool validatePassword(String value) {
