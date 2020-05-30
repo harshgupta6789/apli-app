@@ -447,7 +447,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                         return null;
                     },
                   ),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 20.0),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Row(
