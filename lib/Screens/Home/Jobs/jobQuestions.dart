@@ -33,20 +33,21 @@ class JobQuestions extends StatefulWidget {
 class _JobQuestionsState extends State<JobQuestions> {
   double height, width;
   CameraController controller;
-  bool isRecordingStopped = false;
+  bool isRecordingStopped = true;
   String path;
-  Timer _timer;
-  int seconds = 0, minute = 0;
+  Timer _timer, _timerRead;
+  int seconds = 0, minute = 0, readSeconds = 0;
   String email;
   String fileType = 'video';
   File file;
-  bool _isRecording = true;
+  bool _isRecording = false;
   String fileName = '';
   String urlFromCamera;
   bool loading = false;
   bool isUploaded = true, error = false;
   StorageUploadTask uploadTask;
   String tempURL;
+  bool isReading = true;
   int indexOfQuestions;
   currentState x = currentState.recording;
   List qs = [];
@@ -69,7 +70,8 @@ class _JobQuestionsState extends State<JobQuestions> {
           if (!mounted) {
             return;
           }
-          startVideoRecording();
+          //startVideoRecording();
+          readTimer();
           setState(() {});
         });
       } else {
@@ -249,8 +251,11 @@ class _JobQuestionsState extends State<JobQuestions> {
               setState(() {
                 loading = false;
                 indexOfQuestions = indexOfQuestions + 1;
-                x = currentState.recording;
-                startVideoRecording();
+                isReading = true;
+                _isRecording = false;
+                readTimer();
+                // x = currentState.recording;
+                // startVideoRecording();
               });
             } else {
               showToast('Error occurred, try again later', context);
@@ -343,9 +348,38 @@ class _JobQuestionsState extends State<JobQuestions> {
     );
   }
 
+  void readTimer() {
+    const oneSecRead = const Duration(seconds: 1);
+    _timerRead = new Timer.periodic(
+      oneSecRead,
+      (Timer timer) {
+        if (mounted)
+          setState(() {
+            readSeconds = readSeconds + 1;
+            if (readSeconds >= 15) {
+              setState(() {
+                isReading = false;
+
+                stopReadingTimer();
+                x = currentState.recording;
+                startVideoRecording();
+              });
+            }
+          });
+        else
+          return;
+      },
+    );
+  }
+
   void stopTimer() {
     seconds = 0;
     _timer?.cancel();
+  }
+
+  void stopReadingTimer() {
+    readSeconds = 0;
+    _timerRead.cancel();
   }
 
   @override
@@ -358,6 +392,7 @@ class _JobQuestionsState extends State<JobQuestions> {
     ]);
     controller.dispose();
     _timer?.cancel();
+    _timerRead.cancel();
     super.dispose();
   }
 
@@ -378,9 +413,13 @@ class _JobQuestionsState extends State<JobQuestions> {
     height = MediaQuery.of(context).size.height;
     if (controller == null) {
       return Loading();
-    } else if (!controller.value.isInitialized && _isRecording == false)
+    } else if (!controller.value.isInitialized &&
+        _isRecording == false &&
+        isReading == false)
       return Loading();
-    else if (_isRecording == false && x == currentState.uploading) {
+    else if (_isRecording == false &&
+        x == currentState.uploading &&
+        isReading == false) {
       return WillPopScope(
         onWillPop: () => _onWillPop(),
         child: Scaffold(
@@ -454,7 +493,77 @@ class _JobQuestionsState extends State<JobQuestions> {
           ),
         ),
       );
-    } else if (_isRecording == false && x == currentState.success) {
+    } else if (_isRecording == false && isReading == true) {
+      return WillPopScope(
+        onWillPop: () => _onWillPop(),
+        child: SafeArea(
+          child: Scaffold(
+              body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.fromLTRB(
+                    width * 0.1, height * 0.07, width * 0.1, 0),
+                child: Text(
+                  (indexOfQuestions + 1).toString() +
+                          ". " +
+                          qs[indexOfQuestions]['question'] ??
+                      "",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14,
+                      letterSpacing: 1.2),
+                  textAlign: TextAlign.justify,
+                ),
+              ),
+              Padding(
+                  padding:
+                      EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Center(
+                        child: Text(
+                            "Your Video Will Appear Here.\nYou Have 15 Seconds To Read!"),
+                      ))),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(Icons.timer),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    '00:' +
+                        ((readSeconds.toString().length == 1)
+                            ? ('0' + readSeconds.toString())
+                            : (readSeconds.toString())),
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+              // SizedBox(
+              //   height: 5,
+              // ),
+              // Container(
+              //     padding:
+              //         EdgeInsets.only(left: width * 0.1, right: width * 0.1),
+              //     child: new MyLinearProgressIndicator(
+              //       milliSeconds: 15000,
+              //     )),
+              SizedBox(
+                height: 5,
+              ),
+            ],
+          )),
+        ),
+      );
+    } else if (_isRecording == false &&
+        x == currentState.success &&
+        isReading == false) {
       return loading
           ? Loading()
           : WillPopScope(
@@ -560,7 +669,7 @@ class _JobQuestionsState extends State<JobQuestions> {
               Container(
                   padding:
                       EdgeInsets.only(left: width * 0.1, right: width * 0.1),
-                  child: MyLinearProgressIndicator(
+                  child: new MyLinearProgressIndicator(
                     milliSeconds: 60000,
                   )),
               SizedBox(
