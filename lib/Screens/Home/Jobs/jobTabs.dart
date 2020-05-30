@@ -195,6 +195,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                           index]
                                                                       [
                                                                       'status'],
+                                                                  isApplied:widget.alreadyAccepted
                                                                 )));
                                                   else if (widget.tabNo == 1)
                                                     Navigator.push(
