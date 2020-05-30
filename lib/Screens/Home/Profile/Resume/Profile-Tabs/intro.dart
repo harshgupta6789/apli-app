@@ -765,21 +765,21 @@ class _BasicIntroState extends State<BasicIntro> {
                                   height: 15,
                                 ),
                                 TextFormField(
-                                  initialValue: address['country'] ?? '',
-                                  focusNode: countryFocus,
+                                  initialValue: address['city'] ?? '',
+                                  focusNode: cityFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
-                                  decoration: x("Country"),
+                                  decoration: x("City"),
                                   onChanged: (text) {
-                                    setState(() => address['country'] = text);
+                                    setState(() => address['city'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       FocusScope.of(context)
-                                          .requestFocus(countryFocus);
-                                      return 'country cannot be empty';
+                                          .requestFocus(cityFocus);
+                                      return 'city cannot be empty';
                                     } else
                                       return null;
                                   },
@@ -839,26 +839,27 @@ class _BasicIntroState extends State<BasicIntro> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                TextFormField(
-                                  initialValue: address['city'] ?? '',
-                                  focusNode: cityFocus,
+                                 TextFormField(
+                                  initialValue: address['country'] ?? '',
+                                  focusNode: countryFocus,
                                   textInputAction: TextInputAction.next,
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
-                                  decoration: x("City"),
+                                  decoration: x("Country"),
                                   onChanged: (text) {
-                                    setState(() => address['city'] = text);
+                                    setState(() => address['country'] = text);
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       FocusScope.of(context)
-                                          .requestFocus(cityFocus);
-                                      return 'city cannot be empty';
+                                          .requestFocus(countryFocus);
+                                      return 'country cannot be empty';
                                     } else
                                       return null;
                                   },
                                 ),
+                               
                                 SizedBox(
                                   height: 20,
                                 ),
