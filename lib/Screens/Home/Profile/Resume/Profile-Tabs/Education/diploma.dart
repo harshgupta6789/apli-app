@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:apli/Screens/Home/Profile/Resume/Profile-Tabs/Education/tenth.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
@@ -12,8 +13,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart' as p;
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 
 class Diploma extends StatefulWidget {
   final Map<dynamic, dynamic> xii;
@@ -259,14 +260,8 @@ class _DiplomaState extends State<Diploma> {
                             child: TextFormField(
                               initialValue:
                                   score == null ? '' : score.toString(),
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                new WhitelistingTextInputFormatter(
-                                    RegExp("[0-9]")),
-                              ],
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).nextFocus(),
                               obscureText: false,
                               decoration: x("Score"),
                               onChanged: (text) {
@@ -274,10 +269,10 @@ class _DiplomaState extends State<Diploma> {
                               },
                               validator: (value) {
                                 if (value.isEmpty) {
-                                  return 'score cannot be empty';
-                                } else if (!(int.tryParse(value) != null)) {
-                                  return 'invalid score';
-                                } else
+                                  return 'incorrect input';
+                                } else if(double.tryParse(value) == null)
+                                  return 'incorrect input';
+                                else
                                   return null;
                               },
                             ),

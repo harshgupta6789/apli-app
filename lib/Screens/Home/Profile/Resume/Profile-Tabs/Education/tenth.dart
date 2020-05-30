@@ -303,14 +303,8 @@ class _TenthState extends State<Tenth> {
                                   initialValue: education['X']['score'] == null
                                       ? ''
                                       : education['X']['score'].toString(),
-                                  textInputAction: TextInputAction.next,
+                                  textInputAction: TextInputAction.done,
                                   keyboardType: TextInputType.number,
-                                  inputFormatters: [
-                                    new WhitelistingTextInputFormatter(
-                                        RegExp("[0-9]")),
-                                  ],
-                                  onFieldSubmitted: (_) =>
-                                      FocusScope.of(context).nextFocus(),
                                   obscureText: false,
                                   decoration: x("Score"),
                                   onChanged: (text) {
@@ -319,8 +313,10 @@ class _TenthState extends State<Tenth> {
                                   },
                                   validator: (value) {
                                     if (value.isEmpty) {
-                                      return 'score cannot be empty';
-                                    } else
+                                      return 'incorrect input';
+                                    } else if(double.tryParse(value) == null)
+                                      return 'incorrect input';
+                                    else
                                       return null;
                                   },
                                 ),

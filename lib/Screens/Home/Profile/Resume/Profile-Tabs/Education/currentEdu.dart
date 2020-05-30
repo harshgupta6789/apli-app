@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
@@ -225,12 +226,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     initialValue: edu[course]['score'] == null
                         ? ''
                         : edu[course]['score'].toString(),
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
-                    inputFormatters: [
-                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                    ],
-                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Average Score"),
                     onChanged: (text) {
@@ -238,8 +235,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     },
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'score code cannot be empty';
-                      } else
+                        return 'score cannot be empty';
+                      } else if(double.tryParse(value) == null)
+                        return 'incorrect input';
+                      else
                         return null;
                     },
                   ),
@@ -271,9 +270,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                 ['semester_score']
                                             .toString()
                                         : null,
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.done,
                                 obscureText: false,
                                 decoration: x("Score"),
                                 keyboardType: TextInputType.number,
@@ -285,14 +282,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 },
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Score cannot be empty';
-                                  } else
+                                    return 'field cannot be empty';
+                                  } else if(double.tryParse(value) == null)
+                                    return 'incorrect input';
+                                  else
                                     return null;
                                 },
-                                inputFormatters: [
-                                  new WhitelistingTextInputFormatter(
-                                      RegExp("[0-9]")),
-                                ],
                               ),
                               SizedBox(height: 15.0),
                               TextFormField(
@@ -302,9 +297,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                 ['closed_backlog']
                                             .toString()
                                         : null,
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.done,
                                 obscureText: false,
                                 decoration: x("Closed Backlogs"),
                                 keyboardType: TextInputType.number,
@@ -314,14 +307,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 },
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'backlog cannot be empty';
-                                  } else
+                                    return 'field cannot be empty';
+                                  } else if(double.tryParse(value) == null)
+                                    return 'incorrect input';
+                                  else
                                     return null;
                                 },
-                                inputFormatters: [
-                                  new WhitelistingTextInputFormatter(
-                                      RegExp("[0-9]")),
-                                ],
                               ),
                               SizedBox(height: 15.0),
                               TextFormField(
@@ -331,9 +322,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                                 ['live_backlog']
                                             .toString()
                                         : null,
-                                textInputAction: TextInputAction.next,
-                                onFieldSubmitted: (_) =>
-                                    FocusScope.of(context).nextFocus(),
+                                textInputAction: TextInputAction.done,
                                 obscureText: false,
                                 decoration: x("Live Backlogs"),
                                 keyboardType: TextInputType.number,
@@ -343,14 +332,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 },
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'backlog cannot be empty';
-                                  } else
+                                    return 'field cannot be empty';
+                                  } else if(double.tryParse(value) == null)
+                                    return 'incorrect input';
+                                  else
                                     return null;
                                 },
-                                inputFormatters: [
-                                  new WhitelistingTextInputFormatter(
-                                      RegExp("[0-9]")),
-                                ],
                               ),
                               SizedBox(height: 15.0),
                               Container(
@@ -420,9 +407,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     initialValue: edu[course]['total_closed_backlogs'] != null
                         ? edu[course]['total_closed_backlogs'].toString()
                         : null,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
-                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Closed Backlog"),
                     onChanged: (text) {
@@ -431,13 +417,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     },
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'field cannot be empty';
-                      } else
+                        return 'score cannot be empty';
+                      } else if(double.tryParse(value) == null)
+                        return 'incorrect input';
+                      else
                         return null;
                     },
-                    inputFormatters: [
-                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                    ],
                   ),
                   SizedBox(
                     height: 15,
@@ -446,9 +431,8 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     initialValue: edu[course]['total_live_backlogs'] != null
                         ? edu[course]['total_live_backlogs'].toString()
                         : null,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.number,
-                    onFieldSubmitted: (_) => FocusScope.of(context).nextFocus(),
                     obscureText: false,
                     decoration: x("Total Live Backlog"),
                     onChanged: (text) {
@@ -456,13 +440,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     },
                     validator: (value) {
                       if (value.isEmpty) {
-                        return 'field cannot be empty';
-                      } else
+                        return 'score cannot be empty';
+                      } else if(double.tryParse(value) == null)
+                        return 'incorrect input';
+                      else
                         return null;
                     },
-                    inputFormatters: [
-                      new WhitelistingTextInputFormatter(RegExp("[0-9]")),
-                    ],
                   ),
                   SizedBox(height: 30.0),
                   Padding(
