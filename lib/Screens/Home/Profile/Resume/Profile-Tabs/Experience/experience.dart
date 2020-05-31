@@ -38,6 +38,7 @@ class Experience extends StatelessWidget {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return Scaffold(
+       backgroundColor: Theme.of(context).backgroundColor,
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

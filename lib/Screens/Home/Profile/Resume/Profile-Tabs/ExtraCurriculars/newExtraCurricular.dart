@@ -125,6 +125,7 @@ class _NewExtraCurricularState extends State<NewExtraCurricular> {
     return loading || email == null
         ? Loading()
         : Scaffold(
+           backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                 backgroundColor: basicColor,

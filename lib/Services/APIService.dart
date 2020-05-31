@@ -437,7 +437,7 @@ class APIService {
             '/candidate/api/get_mock_interview_packages', queryParameters);
         http.Response response = await http.get(uri);
         var decodedData = jsonDecode(response.body);
-        print(response.body);
+
         if (response.statusCode == 200) {
           result = decodedData;
         } else

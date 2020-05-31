@@ -253,10 +253,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     "Where : " + widget.job['schedule']['where'] ??
                         "Location Not Specified",
                     maxLines: 2,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -268,10 +265,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                             widget.job['schedule']['when'] ??
                                 '2020-01-01T00:00:00Z')),
                     maxLines: 2,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -374,7 +368,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               ],
             );
           } else if (job['interview_date_passed'] &&
-              job['schedule']['cand_accepted'] && candAccepted == false) {
+              job['schedule']['cand_accepted'] &&
+              candAccepted == false) {
             return Padding(
                 padding:
                     const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
@@ -432,10 +427,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     "Where : " + widget.job['schedule']['where'] ??
                         "Location Not Specified",
                     maxLines: 2,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -447,10 +439,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                             widget.job['schedule']['when'] ??
                                 '2020-01-01T00:00:00Z')),
                     maxLines: 2,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
@@ -705,6 +694,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     return loading
         ? Loading()
         : Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                   backgroundColor: basicColor,
@@ -772,7 +762,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                   "Location not declared",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w500),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -784,7 +773,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                           '2020-05-26 00:00:00')),
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  color: Colors.black,
                                                   fontWeight: FontWeight.w500),
                                               overflow: TextOverflow.ellipsis,
                                             )
@@ -795,49 +783,47 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                     widget.job['ctc'] != null
                                         ? ListTile(
                                             dense: true,
-                                            title: RichText(
-                                              text: TextSpan(
-                                                text: 'Jobs CTC : ',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: widget.job['ctc'] ??
-                                                          "Not Specified",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      )),
-                                                ],
-                                              ),
+                                            title: Row(
+                                              children: [
+                                                Text('Jobs CTC : ',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    )),
+                                                Text(
+                                                    widget.job['ctc'] ??
+                                                        "Not Specified",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    )),
+                                              ],
                                             ),
                                           )
                                         : SizedBox(),
                                     widget.job['notice_period'] != null
                                         ? ListTile(
                                             dense: true,
-                                            title: RichText(
-                                              text: TextSpan(
-                                                text: 'Notice Period : ',
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                children: <TextSpan>[
-                                                  TextSpan(
-                                                      text: widget.job[
-                                                              'notice_period'] ??
-                                                          "Not Specified",
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                      )),
-                                                ],
-                                              ),
+                                            title: Row(
+                                              children: [
+                                                Text('Notice Period : ',
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                    )),
+                                                Text(
+                                                    widget.job[
+                                                            'notice_period'] ??
+                                                        "Not Specified",
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                    )),
+                                              ],
                                             ),
                                           )
                                         : SizedBox(),
@@ -866,7 +852,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     maxLines: 999999,
                                                     style: TextStyle(
                                                         fontSize: 15,
-                                                        color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w500),
                                                     overflow:
@@ -902,7 +887,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     maxLines: 999999,
                                                     style: TextStyle(
                                                         fontSize: 15,
-                                                        color: Colors.black,
                                                         fontWeight:
                                                             FontWeight.w500),
                                                     overflow:
@@ -944,7 +928,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                       //maxLines: 4,
                                                       style: TextStyle(
                                                           fontSize: 15,
-                                                          color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                       overflow:
@@ -985,7 +968,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                       //maxLines: 4,
                                                       style: TextStyle(
                                                           fontSize: 15,
-                                                          color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                       overflow:
@@ -1027,7 +1009,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                       //maxLines: 4,
                                                       style: TextStyle(
                                                           fontSize: 15,
-                                                          color: Colors.black,
                                                           fontWeight:
                                                               FontWeight.w500),
                                                       overflow:

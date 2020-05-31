@@ -1,4 +1,5 @@
 import 'package:apli/Screens/HomeLoginWrapper.dart';
+import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
@@ -9,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,7 +57,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(7), bottomLeft: Radius.circular(7)),
         child: Container(
-          color: Colors.white,
+          color: Theme.of(context).backgroundColor,
           child: Column(
             children: [
               Padding(
@@ -122,11 +124,13 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                 title: Text(
                   "Notification Settings",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: fontSize),
+                    fontWeight: FontWeight.bold,
+                    fontSize: fontSize,
+                  ),
                 ),
                 trailing: IconButton(
                     icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-                //trailing: NotificationSwitch(),
+                //trailing: ThemeSwitch(),
                 onTap: () {
                   AppSettings.openAppSettings();
                 },
@@ -169,6 +173,17 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                         'https://play.google.com/store/apps/details?id=com.apliai.app';
                     Share.share(url);
                   }),
+              Divider(
+                thickness: dividerThickness,
+              ),
+              ListTile(
+                  dense: true,
+                  title: Text(
+                    "Dark Theme",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: fontSize),
+                  ),
+                  trailing: ThemeSwitch()),
               Divider(
                 thickness: dividerThickness,
               ),
@@ -235,57 +250,53 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
         );
 }
 
-class NotificationSwitch extends StatefulWidget {
+class ThemeSwitch extends StatefulWidget {
   @override
-  _NotificationSwitchState createState() => _NotificationSwitchState();
+  _ThemeSwitchState createState() => _ThemeSwitchState();
 }
 
-class _NotificationSwitchState extends State<NotificationSwitch> {
-  bool isSwitched = true;
-
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+class _ThemeSwitchState extends State<ThemeSwitch> {
+  ThemeChanger themeChanger;
+  bool isSwitched = false;
   SharedPreferences prefs;
-  getPrefs() {
-    SharedPreferences.getInstance().then((prefs1) {
-      setState(() {
-        prefs = prefs1;
-      });
-      if (prefs.containsKey('isNotificationsEnabled')) {
-        setState(() {
-          isSwitched = prefs.getBool('isNotificationsEnabled');
-        });
+
+  getprefs() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.getString("theme") != null) {
+      if (prefs.getString("theme") == 'light') {
+        isSwitched = false;
+      } else {
+        isSwitched = true;
       }
-    });
+    }
+    setState(() {});
   }
 
   @override
   void initState() {
-    getPrefs();
+    getprefs();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    themeChanger = Provider.of<ThemeChanger>(context);
     return GestureDetector(
-      onTap: () {
-        setState(() {
-          isSwitched = !isSwitched;
-        });
-        if (isSwitched == false) {
-          _firebaseMessaging.unsubscribeFromTopic("App");
-          prefs.setBool("isNotificationsEnabled", false);
-        } else {
-          _firebaseMessaging.subscribeToTopic("App");
-          prefs.setBool("isNotificationsEnabled", true);
-        }
-      },
-      child: Switch(
-        activeColor: basicColor,
-        activeTrackColor: basicColor,
-        inactiveTrackColor: Colors.grey,
-        value: isSwitched,
-        onChanged: (bool value) {},
-      ),
-    );
+        onTap: () {
+          setState(() {
+            isSwitched = !isSwitched;
+          });
+          if (isSwitched == false) {
+            themeChanger.setTheme(lightTheme());
+          } else {
+            themeChanger.setTheme(darkTheme());
+          }
+        },
+        child: Switch(
+          activeColor: basicColor,
+          activeTrackColor: basicColor,
+          inactiveTrackColor: Colors.grey,
+          value: isSwitched,
+        ));
   }
 }

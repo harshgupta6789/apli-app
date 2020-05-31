@@ -124,6 +124,7 @@ class _BasicIntroState extends State<BasicIntro> {
         : loading
             ? Loading()
             : Scaffold(
+               backgroundColor: Theme.of(context).backgroundColor,
                 appBar: PreferredSize(
                   child: AppBar(
                     backgroundColor: basicColor,

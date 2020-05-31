@@ -107,6 +107,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
     else
       scale = 1;
     return Scaffold(
+       backgroundColor: Theme.of(context).backgroundColor,
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,

@@ -27,7 +27,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
     return Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
@@ -55,7 +55,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
               ),
             ),
             bottom: ColoredTabBar(
-                Colors.white,
+                Theme.of(context).backgroundColor,
                 TabBar(
                   unselectedLabelColor: Colors.grey,
                   labelColor: basicColor,

@@ -194,6 +194,7 @@ class _TenthState extends State<Tenth> {
       child: loading
           ? Loading()
           : Scaffold(
+             backgroundColor: Theme.of(context).backgroundColor,
               appBar: PreferredSize(
                 child: AppBar(
                   backgroundColor: basicColor,

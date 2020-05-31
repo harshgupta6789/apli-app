@@ -125,6 +125,7 @@ class _NewProjectState extends State<NewProject> {
     return loading || email == null
         ? Loading()
         : Scaffold(
+           backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                 backgroundColor: basicColor,

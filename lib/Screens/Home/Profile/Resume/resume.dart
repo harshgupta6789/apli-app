@@ -219,7 +219,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
                                                       child: Container(
                                                         width: width * 0.8,
                                                         height: 50,
-                                                        color: Colors.white,
+                                                        color: Theme.of(context).backgroundColor,
                                                       ))
                                                 ],
                                               )),

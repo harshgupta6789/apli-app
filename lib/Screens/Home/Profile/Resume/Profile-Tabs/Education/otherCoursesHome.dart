@@ -176,6 +176,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
               return;
             },
             child: Scaffold(
+               backgroundColor: Theme.of(context).backgroundColor,
                 appBar: PreferredSize(
                   child: AppBar(
                     backgroundColor: basicColor,

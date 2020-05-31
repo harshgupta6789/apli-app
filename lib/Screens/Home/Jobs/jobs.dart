@@ -62,6 +62,7 @@ class _JobsState extends State<Jobs>
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         floatingActionButton: jobs == null
             ? null
@@ -85,7 +86,6 @@ class _JobsState extends State<Jobs>
                     ),
                   ),
         endDrawer: customDrawer(context, _scaffoldKey),
-        backgroundColor: Colors.white,
         appBar: PreferredSize(
           child: AppBar(
               backgroundColor: basicColor,
@@ -134,7 +134,7 @@ class _JobsState extends State<Jobs>
                   : jobs['profile_status'] < 384
                       ? null
                       : ColoredTabBar(
-                          Colors.white,
+                          Theme.of(context).backgroundColor,
                           TabBar(
                             indicator: UnderlineTabIndicator(
                               borderSide:
@@ -309,7 +309,7 @@ class _JobsState extends State<Jobs>
                                               text:
                                                   "We know you are interested in jobs,\nbut first build your ",
                                               style: TextStyle(
-                                                  color: Colors.black,
+                                                 
                                                   fontSize: 18),
                                               children: [
                                                 TextSpan(

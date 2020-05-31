@@ -132,6 +132,7 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
     height = MediaQuery.of(context).size.height;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(

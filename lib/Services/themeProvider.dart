@@ -9,7 +9,7 @@ class ThemeChanger with ChangeNotifier {
 
   ThemeChanger() {
     this._themeData = lightTheme();
-    this.accentColor = Colors.blue;
+    this.accentColor = basicColor;
     init();
   }
 
@@ -29,12 +29,13 @@ class ThemeChanger with ChangeNotifier {
     return _themeData;
   }
 
-  updateTheme(ThemeData theme) {
+  updateTheme(ThemeData theme) async {
     _themeData = theme;
+    //print(_themeData.backgroundColor);
     notifyListeners();
   }
 
-  setTheme(ThemeData theme) {
+  setTheme(ThemeData theme) async {
     if (theme == lightTheme()) {
       prefs.setString("theme", "light");
     } else if (theme == darkTheme()) {
@@ -49,18 +50,23 @@ class ThemeChanger with ChangeNotifier {
 
 darkTheme() {
   return ThemeData(
-      brightness: Brightness.dark,
+     brightness: Brightness.dark,
+      primarySwatch: Colors.blue,
+       textTheme: TextTheme(headline4:TextStyle(color: Colors.white)),
+      appBarTheme: AppBarTheme(color: basicColor),
       fontFamily: 'Sans',
       accentColor: basicColor,
-      cardColor: Colors.black54,
-      cardTheme: CardTheme(color: Colors.black54),
+      cardColor: Colors.black,
+      cardTheme: CardTheme(color: Colors.black),
       iconTheme: IconThemeData(color: Colors.white),
       backgroundColor: Colors.black87,
-      textTheme: TextTheme());
+     );
 }
 
 blackTheme() {
   return ThemeData(
+      primarySwatch: Colors.blue,
+      appBarTheme: AppBarTheme(color: basicColor),
       fontFamily: 'Sans',
       cardColor: Colors.black87,
       cardTheme: CardTheme(color: Colors.black87),
@@ -71,10 +77,13 @@ blackTheme() {
 
 lightTheme() {
   return ThemeData(
+    textTheme: TextTheme(headline4:TextStyle(color: Colors.black)),
+      primarySwatch: Colors.blue,
+      appBarTheme: AppBarTheme(color: basicColor),
       fontFamily: 'Sans',
       cardColor: Colors.white,
       cardTheme: CardTheme(color: Colors.white.withOpacity(0.9)),
-      textTheme: TextTheme(),
+      brightness: Brightness.light,
       iconTheme: IconThemeData(color: Colors.grey),
       backgroundColor: Colors.white);
 }

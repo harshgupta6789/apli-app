@@ -75,7 +75,7 @@ class _SkillsState extends State<Skills> {
     return loading
         ? Loading()
         : Scaffold(
-            backgroundColor: Colors.white,
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(preferredSize),
               child: AppBar(
@@ -119,6 +119,8 @@ class _SkillsState extends State<Skills> {
                                         showDialog(
                                           context: context,
                                           builder: (_) => SimpleDialog(
+                                            backgroundColor: Theme.of(context)
+                                                .backgroundColor,
                                             title: Text(
                                               'Add Skill Group',
                                               style: TextStyle(
@@ -689,7 +691,7 @@ class _SkillsState extends State<Skills> {
                                     height: 20,
                                   ),
                                   RaisedButton(
-                                    color: Colors.white,
+                                    color: Theme.of(context).backgroundColor,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(6.0),

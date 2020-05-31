@@ -127,6 +127,7 @@ class _OtherState extends State<Other> {
         return null;
       },
       child: Scaffold(
+         backgroundColor: Theme.of(context).backgroundColor,
           appBar: PreferredSize(
             child: AppBar(
               backgroundColor: basicColor,

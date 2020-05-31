@@ -175,7 +175,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget _bottomNavigationBar() {
     double fontSize = 13;
     return BottomNavigationBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         currentIndex: _currentTab,
         onTap: (index) {
           setState(() {
@@ -271,7 +271,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
-              boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 10)]),
+              boxShadow: [BoxShadow(blurRadius: 10)]),
           padding: const EdgeInsets.only(bottom: 5),
           child: _bottomNavigationBar(),
         ),

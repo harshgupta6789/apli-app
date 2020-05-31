@@ -81,10 +81,7 @@ class _JobsTabssState extends State<JobsTabs> {
             dateToReadableTimeConverter(
                 DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
         maxLines: 2,
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 12 * scale,
-            fontWeight: FontWeight.w500),
+        style: TextStyle(fontSize: 12 * scale, fontWeight: FontWeight.w500),
         overflow: TextOverflow.ellipsis,
       );
   }
@@ -169,7 +166,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                         borderRadius:
                                             BorderRadius.circular(7.0),
                                         side:
-                                            BorderSide(color: Colors.black54)),
+                                            BorderSide(color: Colors.grey)),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -184,19 +181,17 @@ class _JobsTabssState extends State<JobsTabs> {
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                AppliedDetails(
-                                                                  job: widget
-                                                                          .jobs[
-                                                                      index],
-                                                                  status: widget
-                                                                      .profileStatus,
-                                                                  st: widget.jobs[
-                                                                          index]
-                                                                      [
-                                                                      'status'],
-                                                                  isApplied:widget.alreadyAccepted
-                                                                )));
+                                                            builder: (context) => AppliedDetails(
+                                                                job:
+                                                                    widget.jobs[
+                                                                        index],
+                                                                status: widget
+                                                                    .profileStatus,
+                                                                st: widget.jobs[
+                                                                        index]
+                                                                    ['status'],
+                                                                isApplied: widget
+                                                                    .alreadyAccepted)));
                                                   else if (widget.tabNo == 1)
                                                     Navigator.push(
                                                         context,
@@ -258,7 +253,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                           "Location not provided",
                                                       maxLines: 2,
                                                       style: TextStyle(
-                                                          color: Colors.black,
+                                                          
                                                           fontSize: 12 * scale,
                                                           fontWeight:
                                                               FontWeight.w500),
@@ -284,8 +279,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                         '2020-05-26 00:00:00')),
                                                             maxLines: 2,
                                                             style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
+                                                               
                                                                 fontSize:
                                                                     12 * scale,
                                                                 fontWeight:

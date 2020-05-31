@@ -30,7 +30,6 @@ class _CourseLiveState extends State<CourseLive> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controller.dispose();
     super.dispose();
   }
@@ -39,6 +38,7 @@ class _CourseLiveState extends State<CourseLive> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
         body: YoutubePlayer(
           controller: _controller,
           showVideoProgressIndicator: true,

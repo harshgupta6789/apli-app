@@ -138,6 +138,7 @@ class _NewExperienceState extends State<NewExperience> {
     return loading || email == null
         ? Loading()
         : Scaffold(
+           backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                 backgroundColor: basicColor,

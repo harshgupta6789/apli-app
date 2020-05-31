@@ -2,11 +2,10 @@ import 'package:apli/Screens/HomeLoginWrapper.dart';
 import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider<ThemeChanger>(
     create: (_) => ThemeChanger(),
@@ -22,15 +21,16 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    ThemeChanger theme = Provider.of<ThemeChanger>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Apli',
-      // theme: ThemeChanger().getTheme(),
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          appBarTheme: AppBarTheme(color: basicColor),
-          accentColor: basicColor,
-          fontFamily: 'Sans'),
+      theme: theme.getTheme(),
+      // theme: ThemeData(
+      //     primarySwatch: Colors.blue,
+      //     appBarTheme: AppBarTheme(color: basicColor),
+      //     accentColor: basicColor,
+      //     fontFamily: 'Sans'),
       home: MySplash(),
     );
   }
@@ -45,6 +45,7 @@ class MySplashState extends State<MySplash> {
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
+      // backgroundColor: Theme.of(context).backgroundColor,
       seconds: 1,
       navigateAfterSeconds: Wrapper(),
       image: Image.asset('Assets/Images/logo.png'),

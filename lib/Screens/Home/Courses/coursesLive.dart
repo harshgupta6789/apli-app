@@ -91,7 +91,7 @@ class _CoursesLiveState extends State<CoursesLive>
     orientation = MediaQuery.of(context).orientation;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
@@ -209,9 +209,7 @@ class _CoursesLiveState extends State<CoursesLive>
                                 bottom: 10),
                             child: Text(widget.title ?? "No Title Specified",
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 18)),
+                                    fontWeight: FontWeight.w700, fontSize: 18)),
                           ),
                           widget.didEnd
                               ? Padding(
@@ -224,7 +222,6 @@ class _CoursesLiveState extends State<CoursesLive>
                                       child: Text("Live Webinar Has Ended!",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                              color: Colors.black,
                                               fontWeight: FontWeight.w600,
                                               fontSize: 18)),
                                     ),

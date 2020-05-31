@@ -423,6 +423,7 @@ class _JobQuestionsState extends State<JobQuestions> {
       return WillPopScope(
         onWillPop: () => _onWillPop(),
         child: Scaffold(
+           backgroundColor: Theme.of(context).backgroundColor,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -448,7 +449,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.black,
+                                   
                                     fontWeight: FontWeight.bold,
                                   )),
                             );
@@ -498,6 +499,7 @@ class _JobQuestionsState extends State<JobQuestions> {
         onWillPop: () => _onWillPop(),
         child: SafeArea(
           child: Scaffold(
+             backgroundColor: Theme.of(context).backgroundColor,
               body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -569,6 +571,7 @@ class _JobQuestionsState extends State<JobQuestions> {
           : WillPopScope(
               onWillPop: () => _onWillPop(),
               child: Scaffold(
+                 backgroundColor: Theme.of(context).backgroundColor,
                 body: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -585,7 +588,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.black,
+                                    
                                     fontWeight: FontWeight.bold,
                                   ))),
                         ],
@@ -616,6 +619,7 @@ class _JobQuestionsState extends State<JobQuestions> {
       onWillPop: () => _onWillPop(),
       child: SafeArea(
         child: Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
             body: SingleChildScrollView(
           child: Column(
             children: <Widget>[

@@ -127,6 +127,7 @@ class _DiplomaState extends State<Diploma> {
         return;
       },
       child: Scaffold(
+         backgroundColor: Theme.of(context).backgroundColor,
           appBar: PreferredSize(
             child: AppBar(
               backgroundColor: basicColor,
@@ -167,7 +168,7 @@ class _DiplomaState extends State<Diploma> {
                         //hint: Text("Unit"),
                         value: type ?? 'XII',
                         style: TextStyle(
-                            color: Colors.black,
+                            
                             fontWeight: FontWeight.w400,
                             fontSize: 14),
                         icon: Padding(
