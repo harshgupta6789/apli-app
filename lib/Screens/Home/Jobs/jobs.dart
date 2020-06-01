@@ -129,7 +129,7 @@ class _JobsState extends State<Jobs>
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              bottom: jobs == null
+              bottom: (jobs == null || jobs.length == null)
                   ? null
                   : jobs['profile_status'] < 384
                       ? null
@@ -155,7 +155,7 @@ class _JobsState extends State<Jobs>
                             ],
                             controller: _tabController,
                           ))),
-          preferredSize: jobs == null
+          preferredSize: (jobs == null || jobs.length == null)
               ? Size.fromHeight(55)
               : jobs['profile_status'] < 384
                   ? Size.fromHeight(55)
@@ -308,9 +308,7 @@ class _JobsState extends State<Jobs>
                                           text: TextSpan(
                                               text:
                                                   "We know you are interested in jobs,\nbut first build your ",
-                                              style: TextStyle(
-                                                 
-                                                  fontSize: 18),
+                                              style: TextStyle(fontSize: 18),
                                               children: [
                                                 TextSpan(
                                                   text: "Profile",
@@ -339,28 +337,35 @@ class _JobsState extends State<Jobs>
                                   ),
                                 ),
                               ))
-                            : TabBarView(
-                                children: [
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['submitted_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 0,
-                                  ),
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['all_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 1,
-                                  ),
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['pending_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 2,
+                            : jobs.length == 0
+                                ? Center(
+                                    child: Text('No jobs to show right now'),
                                   )
-                                ],
-                                controller: _tabController,
-                              ));
+                                : TabBarView(
+                                    children: [
+                                      JobsTabs(
+                                        alreadyAccepted:
+                                            jobs['cand_accepted_job'],
+                                        jobs: jobs['submitted_jobs'],
+                                        profileStatus: jobs['profile_status'],
+                                        tabNo: 0,
+                                      ),
+                                      JobsTabs(
+                                        alreadyAccepted:
+                                            jobs['cand_accepted_job'],
+                                        jobs: jobs['all_jobs'],
+                                        profileStatus: jobs['profile_status'],
+                                        tabNo: 1,
+                                      ),
+                                      JobsTabs(
+                                        alreadyAccepted:
+                                            jobs['cand_accepted_job'],
+                                        jobs: jobs['pending_jobs'],
+                                        profileStatus: jobs['profile_status'],
+                                        tabNo: 2,
+                                      )
+                                    ],
+                                    controller: _tabController,
+                                  ));
   }
 }

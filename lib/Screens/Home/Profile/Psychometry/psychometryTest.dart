@@ -99,7 +99,6 @@ class _PsychometryTestState extends State<PsychometryTest> {
       child: loading
           ? Loading()
           : Scaffold(
-              
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(55),
                 child: AppBar(

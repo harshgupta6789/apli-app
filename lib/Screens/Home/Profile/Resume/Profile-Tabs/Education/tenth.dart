@@ -194,7 +194,7 @@ class _TenthState extends State<Tenth> {
       child: loading
           ? Loading()
           : Scaffold(
-             backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).backgroundColor,
               appBar: PreferredSize(
                 child: AppBar(
                   backgroundColor: basicColor,
@@ -315,7 +315,7 @@ class _TenthState extends State<Tenth> {
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return 'incorrect input';
-                                    } else if(double.tryParse(value) == null)
+                                    } else if (double.tryParse(value) == null)
                                       return 'incorrect input';
                                     else
                                       return null;

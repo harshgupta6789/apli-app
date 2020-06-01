@@ -288,7 +288,7 @@ class _VideoIntroState extends State<VideoIntro>
                       padding: EdgeInsets.fromLTRB(8, 20, 5, 8),
                       child: Align(
                         child: RaisedButton(
-                        color: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).backgroundColor,
                           elevation: 0,
                           padding: EdgeInsets.only(left: 22, right: 22),
                           shape: RoundedRectangleBorder(
@@ -320,7 +320,7 @@ class _VideoIntroState extends State<VideoIntro>
                       padding: EdgeInsets.fromLTRB(5, 20, 0, 8),
                       child: Align(
                         child: RaisedButton(
-                             color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).backgroundColor,
                             elevation: 0,
                             padding: EdgeInsets.only(left: 22, right: 22),
                             shape: RoundedRectangleBorder(
@@ -444,7 +444,6 @@ class _VideoIntroState extends State<VideoIntro>
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 15,
-                                 
                                   fontWeight: FontWeight.bold,
                                 )),
                           );
@@ -478,7 +477,6 @@ class _VideoIntroState extends State<VideoIntro>
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
-                    
                     borderRadius: BorderRadius.circular(20),
                     child: AwsomeVideoPlayer(
                       fetchUrl ?? "",

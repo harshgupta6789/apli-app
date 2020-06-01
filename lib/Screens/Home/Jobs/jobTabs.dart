@@ -165,8 +165,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(7.0),
-                                        side:
-                                            BorderSide(color: Colors.grey)),
+                                        side: BorderSide(color: Colors.grey)),
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -253,7 +252,6 @@ class _JobsTabssState extends State<JobsTabs> {
                                                           "Location not provided",
                                                       maxLines: 2,
                                                       style: TextStyle(
-                                                          
                                                           fontSize: 12 * scale,
                                                           fontWeight:
                                                               FontWeight.w500),
@@ -279,7 +277,6 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                         '2020-05-26 00:00:00')),
                                                             maxLines: 2,
                                                             style: TextStyle(
-                                                               
                                                                 fontSize:
                                                                     12 * scale,
                                                                 fontWeight:

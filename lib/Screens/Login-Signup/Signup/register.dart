@@ -101,7 +101,10 @@ class _RegisterState extends State<Register> {
         body: loading
             ? Loading()
             : StreamBuilder(
-                stream: Firestore.instance.collection('batches').snapshots(),
+                stream: Firestore.instance
+                    .collection('batches')
+                    .orderBy('college')
+                    .snapshots(),
                 builder: (context2, snapshot) {
                   if (snapshot.hasData) {
                     snapshot.data.documents.forEach((f) {

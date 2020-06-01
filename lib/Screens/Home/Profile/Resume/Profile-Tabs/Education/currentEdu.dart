@@ -107,7 +107,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
     else
       scale = 1;
     return Scaffold(
-       backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -237,7 +237,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'score cannot be empty';
-                      } else if(double.tryParse(value) == null)
+                      } else if (double.tryParse(value) == null)
                         return 'incorrect input';
                       else
                         return null;
@@ -284,7 +284,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'field cannot be empty';
-                                  } else if(double.tryParse(value) == null)
+                                  } else if (double.tryParse(value) == null)
                                     return 'incorrect input';
                                   else
                                     return null;
@@ -309,7 +309,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'field cannot be empty';
-                                  } else if(double.tryParse(value) == null)
+                                  } else if (double.tryParse(value) == null)
                                     return 'incorrect input';
                                   else
                                     return null;
@@ -334,7 +334,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                                 validator: (value) {
                                   if (value.isEmpty) {
                                     return 'field cannot be empty';
-                                  } else if(double.tryParse(value) == null)
+                                  } else if (double.tryParse(value) == null)
                                     return 'incorrect input';
                                   else
                                     return null;
@@ -419,7 +419,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'score cannot be empty';
-                      } else if(double.tryParse(value) == null)
+                      } else if (double.tryParse(value) == null)
                         return 'incorrect input';
                       else
                         return null;
@@ -442,7 +442,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     validator: (value) {
                       if (value.isEmpty) {
                         return 'score cannot be empty';
-                      } else if(double.tryParse(value) == null)
+                      } else if (double.tryParse(value) == null)
                         return 'incorrect input';
                       else
                         return null;

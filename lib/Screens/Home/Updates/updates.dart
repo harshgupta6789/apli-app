@@ -132,7 +132,7 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
     height = MediaQuery.of(context).size.height;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
@@ -292,16 +292,20 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
                           if (tempTime != null) if (int.parse(filters[0]) <=
                               tempTime.microsecondsSinceEpoch) {
                             if (receivers != null) {
-                              for (int i = 0; i < receivers.length; i++) {
-                                if (filters.contains(receivers[i])) {
-                                  isMyNotification = true;
-                                  break;
+                              if (receivers.contains('all'))
+                                isMyNotification = true;
+                              else {
+                                for (int i = 0; i < receivers.length; i++) {
+                                  if (filters.contains(receivers[i])) {
+                                    isMyNotification = true;
+                                    break;
 //                                      if(chosenTypes.length > 0)
 //                                        if(chosenTypes.contains(notiType))
 //                                          isMyNotification = true;
 //                                      else
 //                                        isMyNotification = true;
 //                                      break;
+                                  }
                                 }
                               }
                               if (isMyNotification) {

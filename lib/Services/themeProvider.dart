@@ -50,17 +50,17 @@ class ThemeChanger with ChangeNotifier {
 
 darkTheme() {
   return ThemeData(
-     brightness: Brightness.dark,
-      primarySwatch: Colors.blue,
-       textTheme: TextTheme(headline4:TextStyle(color: Colors.white)),
-      appBarTheme: AppBarTheme(color: basicColor),
-      fontFamily: 'Sans',
-      accentColor: basicColor,
-      cardColor: Colors.black,
-      cardTheme: CardTheme(color: Colors.black),
-      iconTheme: IconThemeData(color: Colors.white),
-      backgroundColor: Colors.black87,
-     );
+    brightness: Brightness.dark,
+    primarySwatch: Colors.blue,
+    textTheme: TextTheme(headline4: TextStyle(color: Colors.white)),
+    appBarTheme: AppBarTheme(color: basicColor),
+    fontFamily: 'Sans',
+    accentColor: basicColor,
+    cardColor: Colors.black,
+    cardTheme: CardTheme(color: Colors.black),
+    iconTheme: IconThemeData(color: Colors.white),
+    backgroundColor: Colors.black87,
+  );
 }
 
 blackTheme() {
@@ -77,7 +77,7 @@ blackTheme() {
 
 lightTheme() {
   return ThemeData(
-    textTheme: TextTheme(headline4:TextStyle(color: Colors.black)),
+      textTheme: TextTheme(headline4: TextStyle(color: Colors.black)),
       primarySwatch: Colors.blue,
       appBarTheme: AppBarTheme(color: basicColor),
       fontFamily: 'Sans',

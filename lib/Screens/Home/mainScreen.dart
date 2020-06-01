@@ -270,8 +270,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-              boxShadow: [BoxShadow(blurRadius: 10)]),
+          decoration: BoxDecoration(boxShadow: [BoxShadow(blurRadius: 10)]),
           padding: const EdgeInsets.only(bottom: 5),
           child: _bottomNavigationBar(),
         ),

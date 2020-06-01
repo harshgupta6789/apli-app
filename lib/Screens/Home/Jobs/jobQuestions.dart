@@ -423,7 +423,7 @@ class _JobQuestionsState extends State<JobQuestions> {
       return WillPopScope(
         onWillPop: () => _onWillPop(),
         child: Scaffold(
-           backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(context).backgroundColor,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -449,7 +449,6 @@ class _JobQuestionsState extends State<JobQuestions> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 15,
-                                   
                                     fontWeight: FontWeight.bold,
                                   )),
                             );
@@ -499,68 +498,68 @@ class _JobQuestionsState extends State<JobQuestions> {
         onWillPop: () => _onWillPop(),
         child: SafeArea(
           child: Scaffold(
-             backgroundColor: Theme.of(context).backgroundColor,
+              backgroundColor: Theme.of(context).backgroundColor,
               body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.07, width * 0.1, 0),
-                child: Text(
-                  (indexOfQuestions + 1).toString() +
-                          ". " +
-                          qs[indexOfQuestions]['question'] ??
-                      "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14,
-                      letterSpacing: 1.2),
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              Padding(
-                  padding:
-                      EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Center(
-                        child: Text(
-                            "Your Video Will Appear Here.\nYou Have 15 Seconds To Read!"),
-                      ))),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Icon(Icons.timer),
-                  SizedBox(
-                    width: 5,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        width * 0.1, height * 0.07, width * 0.1, 0),
+                    child: Text(
+                      (indexOfQuestions + 1).toString() +
+                              ". " +
+                              qs[indexOfQuestions]['question'] ??
+                          "",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          letterSpacing: 1.2),
+                      textAlign: TextAlign.justify,
+                    ),
                   ),
-                  Text(
-                    '00:' +
-                        ((readSeconds.toString().length == 1)
-                            ? ('0' + readSeconds.toString())
-                            : (readSeconds.toString())),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          width * 0.07, 10, width * 0.07, 8),
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Center(
+                            child: Text(
+                                "Your Video Will Appear Here.\nYou Have 15 Seconds To Read!"),
+                          ))),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.timer),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '00:' +
+                            ((readSeconds.toString().length == 1)
+                                ? ('0' + readSeconds.toString())
+                                : (readSeconds.toString())),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Container(
+                  //     padding:
+                  //         EdgeInsets.only(left: width * 0.1, right: width * 0.1),
+                  //     child: new MyLinearProgressIndicator(
+                  //       milliSeconds: 15000,
+                  //     )),
+                  SizedBox(
+                    height: 5,
+                  ),
                 ],
-              ),
-              // SizedBox(
-              //   height: 5,
-              // ),
-              // Container(
-              //     padding:
-              //         EdgeInsets.only(left: width * 0.1, right: width * 0.1),
-              //     child: new MyLinearProgressIndicator(
-              //       milliSeconds: 15000,
-              //     )),
-              SizedBox(
-                height: 5,
-              ),
-            ],
-          )),
+              )),
         ),
       );
     } else if (_isRecording == false &&
@@ -571,7 +570,7 @@ class _JobQuestionsState extends State<JobQuestions> {
           : WillPopScope(
               onWillPop: () => _onWillPop(),
               child: Scaffold(
-                 backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).backgroundColor,
                 body: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -588,7 +587,6 @@ class _JobQuestionsState extends State<JobQuestions> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 15,
-                                    
                                     fontWeight: FontWeight.bold,
                                   ))),
                         ],
@@ -619,84 +617,84 @@ class _JobQuestionsState extends State<JobQuestions> {
       onWillPop: () => _onWillPop(),
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).backgroundColor,
             body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                    width * 0.1, height * 0.07, width * 0.1, 0),
-                child: Text(
-                  (indexOfQuestions + 1).toString() +
-                          ". " +
-                          qs[indexOfQuestions]['question'] ??
-                      "",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w900,
-                      fontSize: 14,
-                      letterSpacing: 1.2),
-                  textAlign: TextAlign.justify,
-                ),
-              ),
-              Padding(
-                  padding:
-                      EdgeInsets.fromLTRB(width * 0.07, 10, width * 0.07, 8),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: AspectRatio(
-                      aspectRatio: controller.value.aspectRatio,
-                      child: CameraPreview(controller),
-                    ),
-                  )),
-              SizedBox(
-                height: 5,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: <Widget>[
-                  Icon(Icons.timer),
-                  SizedBox(
-                    width: 5,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        width * 0.1, height * 0.07, width * 0.1, 0),
+                    child: Text(
+                      (indexOfQuestions + 1).toString() +
+                              ". " +
+                              qs[indexOfQuestions]['question'] ??
+                          "",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w900,
+                          fontSize: 14,
+                          letterSpacing: 1.2),
+                      textAlign: TextAlign.justify,
+                    ),
                   ),
-                  Text(
-                    '00:' +
-                        ((seconds.toString().length == 1)
-                            ? ('0' + seconds.toString())
-                            : (seconds.toString())),
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(
+                          width * 0.07, 10, width * 0.07, 8),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: AspectRatio(
+                          aspectRatio: controller.value.aspectRatio,
+                          child: CameraPreview(controller),
+                        ),
+                      )),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(Icons.timer),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        '00:' +
+                            ((seconds.toString().length == 1)
+                                ? ('0' + seconds.toString())
+                                : (seconds.toString())),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                      padding: EdgeInsets.only(
+                          left: width * 0.1, right: width * 0.1),
+                      child: new MyLinearProgressIndicator(
+                        milliSeconds: 60000,
+                      )),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  RaisedButton(
+                      color: Colors.red,
+                      elevation: 0,
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(width: 0),
+                      ),
+                      child: Text(
+                        'DONE',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        stopVideoRecording(false);
+                      }),
                 ],
               ),
-              SizedBox(
-                height: 5,
-              ),
-              Container(
-                  padding:
-                      EdgeInsets.only(left: width * 0.1, right: width * 0.1),
-                  child: new MyLinearProgressIndicator(
-                    milliSeconds: 60000,
-                  )),
-              SizedBox(
-                height: 5,
-              ),
-              RaisedButton(
-                  color: Colors.red,
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(width: 0),
-                  ),
-                  child: Text(
-                    'DONE',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () {
-                    stopVideoRecording(false);
-                  }),
-            ],
-          ),
-        )),
+            )),
       ),
     );
   }

@@ -32,7 +32,7 @@ class _MockJobsState extends State<MockJobs>
         loading = false;
         _controller.reset();
       });
-      print(mockJobs);
+    print(mockJobs);
   }
 
   Widget button(String package, List incomplete) {
@@ -181,7 +181,8 @@ class _MockJobsState extends State<MockJobs>
             ? Loading()
             : mockJobs['error'] != null
                 ? Center(
-                    child: Text('Error occurred, try again later'),
+                    child: Text(
+                        mockJobs['error'] ?? 'Error occurred, try again later'),
                   )
                 : mockJobs == null
                     ? Center(
@@ -191,139 +192,156 @@ class _MockJobsState extends State<MockJobs>
                         ? Center(
                             child: Text('Error occurred, try again later'),
                           )
-                        : ScrollConfiguration(
-                            behavior: MyBehavior(),
-                            child: SingleChildScrollView(
-                                physics: AlwaysScrollableScrollPhysics(),
-                                child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        15, 15, 15, 10),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8.0),
-                                              child: Image.asset(
-                                                "Assets/Images/mock.png",
-                                                fit: BoxFit.cover,
-                                              )),
-                                        ),
-                                        Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                5, 10, 15, 18),
-                                            child: AutoSizeText(
-                                              "Mock Interviews",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w900),
-                                              overflow: TextOverflow.ellipsis,
-                                            )),
-                                        ListView.builder(
-                                            physics:
-                                                NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: (mockJobs[
-                                                        "interviewPackages"] ??
-                                                    [])
-                                                .length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return Container(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 4,
-                                                    left: 10,
-                                                    right: 10),
-                                                child: Card(
-                                                  elevation: 0.2,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              7.0),
-                                                      side: BorderSide(
-                                                          color: Colors.grey)),
-                                                  child: Padding(
-                                                      padding:
-                                                          EdgeInsets.fromLTRB(
-                                                              0, 5, 0, 6),
-                                                      child: ListTile(
-                                                        onTap: () {
-                                                          List mockTaken = mockJobs[
-                                                                  'mockTaken'] ??
-                                                              [];
-                                                          List mockSubmitted =
-                                                              mockJobs[
-                                                                      'mockSubmitted'] ??
-                                                                  [];
-                                                          if (mockTaken.contains(
-                                                              mockJobs[
-                                                                      'interviewPackages']
-                                                                  [index])) {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        MockCompanyInstructions(
-                                                                            pack:
-                                                                                mockJobs['interviewPackages'][index])));
-                                                          } else if (mockSubmitted
-                                                              .contains(mockJobs[
-                                                                      'interviewPackages']
-                                                                  [index])) {
-                                                            showToast(
-                                                                "Already Completed",
-                                                                context,
-                                                                duration: 1);
-                                                          } else {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        RandomDetails(
-                                                                            package:
-                                                                                mockJobs['interviewPackages'][index])));
-                                                          }
-                                                        },
-                                                        dense: true,
-                                                        title: AutoSizeText(
-                                                          mockJobs['interviewPackages']
-                                                                  [index] ??
-                                                              "Interview 0",
-                                                          maxLines: 2,
-                                                          style: TextStyle(
-                                                              color: basicColor,
-                                                              fontSize: 15,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700),
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                        ),
-                                                        subtitle: button(
-                                                            mockJobs[
-                                                                    'interviewPackages']
-                                                                [index],
-                                                            mockJobs[
-                                                                'mockTaken']),
-                                                        trailing: tickmark(
-                                                            mockJobs[
-                                                                    'interviewPackages']
-                                                                [index],
-                                                            mockJobs[
-                                                                'mockSubmitted']),
-                                                      )),
-                                                ),
-                                              );
-                                            }),
-                                        SizedBox(
-                                          height: height * 0.1,
-                                        ),
-                                      ],
-                                    ))),
-                          ));
+                        : mockJobs.length == 0
+                            ? Center(
+                                child: Text('No mock jobs to show right now'),
+                              )
+                            : ScrollConfiguration(
+                                behavior: MyBehavior(),
+                                child: SingleChildScrollView(
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            15, 15, 15, 10),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child: Image.asset(
+                                                    "Assets/Images/mock.png",
+                                                    fit: BoxFit.cover,
+                                                  )),
+                                            ),
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        5, 10, 15, 18),
+                                                child: AutoSizeText(
+                                                  "Mock Interviews",
+                                                  maxLines: 2,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w900),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                )),
+                                            ListView.builder(
+                                                physics:
+                                                    NeverScrollableScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemCount: (mockJobs[
+                                                            "interviewPackages"] ??
+                                                        [])
+                                                    .length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Container(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 4,
+                                                        left: 10,
+                                                        right: 10),
+                                                    child: Card(
+                                                      elevation: 0.2,
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          7.0),
+                                                              side: BorderSide(
+                                                                  color: Colors
+                                                                      .grey)),
+                                                      child: Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  0, 5, 0, 6),
+                                                          child: ListTile(
+                                                            onTap: () {
+                                                              List mockTaken =
+                                                                  mockJobs[
+                                                                          'mockTaken'] ??
+                                                                      [];
+                                                              List
+                                                                  mockSubmitted =
+                                                                  mockJobs[
+                                                                          'mockSubmitted'] ??
+                                                                      [];
+                                                              if (mockTaken.contains(
+                                                                  mockJobs[
+                                                                          'interviewPackages']
+                                                                      [
+                                                                      index])) {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                MockCompanyInstructions(pack: mockJobs['interviewPackages'][index])));
+                                                              } else if (mockSubmitted
+                                                                  .contains(mockJobs[
+                                                                          'interviewPackages']
+                                                                      [
+                                                                      index])) {
+                                                                showToast(
+                                                                    "Already Completed",
+                                                                    context,
+                                                                    duration:
+                                                                        1);
+                                                              } else {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                RandomDetails(package: mockJobs['interviewPackages'][index])));
+                                                              }
+                                                            },
+                                                            dense: true,
+                                                            title: AutoSizeText(
+                                                              mockJobs['interviewPackages']
+                                                                      [index] ??
+                                                                  "Interview 0",
+                                                              maxLines: 2,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      basicColor,
+                                                                  fontSize: 15,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700),
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                            ),
+                                                            subtitle: button(
+                                                                mockJobs[
+                                                                        'interviewPackages']
+                                                                    [index],
+                                                                mockJobs[
+                                                                    'mockTaken']),
+                                                            trailing: tickmark(
+                                                                mockJobs[
+                                                                        'interviewPackages']
+                                                                    [index],
+                                                                mockJobs[
+                                                                    'mockSubmitted']),
+                                                          )),
+                                                    ),
+                                                  );
+                                                }),
+                                            SizedBox(
+                                              height: height * 0.1,
+                                            ),
+                                          ],
+                                        ))),
+                              ));
   }
 }

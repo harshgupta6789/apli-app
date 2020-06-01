@@ -151,7 +151,7 @@ class _EducationOverviewState extends State<EducationOverview> {
                 ? Loading()
                 : WillPopScope(
                     child: Scaffold(
-                       backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Theme.of(context).backgroundColor,
                       body: PageView(
                         physics: new NeverScrollableScrollPhysics(),
                         controller: pageController,

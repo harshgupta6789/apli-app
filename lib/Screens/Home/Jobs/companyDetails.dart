@@ -121,7 +121,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     "Location not declared",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    
                                                     fontWeight:
                                                         FontWeight.w500),
                                                 overflow: TextOverflow.ellipsis,
@@ -135,7 +134,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                             '2020-05-26 00:00:00')),
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                   
                                                     fontWeight:
                                                         FontWeight.w500),
                                                 overflow: TextOverflow.ellipsis,
@@ -144,53 +142,53 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                           ),
                                         ),
                                       ),
-                                       widget.job['ctc'] != null
-                                        ? ListTile(
-                                            dense: true,
-                                            title: Row(
-                                              children: [
-                                                Text('Jobs CTC : ',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                                Text(
-                                                    widget.job['ctc'] ??
-                                                        "Not Specified",
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    )),
-                                              ],
-                                            ),
-                                          )
-                                        : SizedBox(),
-                                    widget.job['notice_period'] != null
-                                        ? ListTile(
-                                            dense: true,
-                                            title: Row(
-                                              children: [
-                                                Text('Notice Period : ',
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                                Text(
-                                                    widget.job[
-                                                            'notice_period'] ??
-                                                        "Not Specified",
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    )),
-                                              ],
-                                            ),
-                                          )
-                                        : SizedBox(),
+                                      widget.job['ctc'] != null
+                                          ? ListTile(
+                                              dense: true,
+                                              title: Row(
+                                                children: [
+                                                  Text('Jobs CTC : ',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  Text(
+                                                      widget.job['ctc'] ??
+                                                          "Not Specified",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      )),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(),
+                                      widget.job['notice_period'] != null
+                                          ? ListTile(
+                                              dense: true,
+                                              title: Row(
+                                                children: [
+                                                  Text('Notice Period : ',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  Text(
+                                                      widget.job[
+                                                              'notice_period'] ??
+                                                          "Not Specified",
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      )),
+                                                ],
+                                              ),
+                                            )
+                                          : SizedBox(),
                                       widget.job['description'] != null
                                           ? ListTile(
                                               title: AutoSizeText(
@@ -218,7 +216,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       maxLines: 999999,
                                                       style: TextStyle(
                                                           fontSize: 15,
-                                                         
                                                           fontWeight:
                                                               FontWeight.w500),
                                                       overflow:
@@ -255,7 +252,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                       maxLines: 999999,
                                                       style: TextStyle(
                                                           fontSize: 15,
-                                                          
                                                           fontWeight:
                                                               FontWeight.w500),
                                                       overflow:
@@ -298,7 +294,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         //maxLines: 4,
                                                         style: TextStyle(
                                                             fontSize: 15,
-                                                            
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w500),
@@ -341,7 +336,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         //maxLines: 4,
                                                         style: TextStyle(
                                                             fontSize: 15,
-                                                           
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w500),
@@ -385,7 +379,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                         //maxLines: 4,
                                                         style: TextStyle(
                                                             fontSize: 15,
-                                                           
                                                             fontWeight:
                                                                 FontWeight
                                                                     .w500),
@@ -826,7 +819,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
     return loading
         ? Loading()
         : Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                   backgroundColor: basicColor,
@@ -883,7 +876,10 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                               text: TextSpan(
                                                 text: 'Click ',
                                                 style: TextStyle(
-                                                 color: Theme.of(context).textTheme.headline4.color,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      .color,
                                                   fontSize: 19,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -896,7 +892,13 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                           color: basicColor)),
                                                   TextSpan(
                                                       text:
-                                                          ' when you are ready! ',style: TextStyle( color: Theme.of(context).textTheme.headline4.color,)),
+                                                          ' when you are ready! ',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
+                                                      )),
                                                 ],
                                               ),
                                             ),

@@ -124,7 +124,7 @@ class _BasicIntroState extends State<BasicIntro> {
         : loading
             ? Loading()
             : Scaffold(
-               backgroundColor: Theme.of(context).backgroundColor,
+                backgroundColor: Theme.of(context).backgroundColor,
                 appBar: PreferredSize(
                   child: AppBar(
                     backgroundColor: basicColor,
@@ -258,14 +258,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                           initialDate:
                                               currentValue ?? DateTime.now(),
                                           lastDate: DateTime(2100));
-                                      var temp = dob != null
-                                          ? format
-                                                  .format(DateTime
-                                                      .fromMicrosecondsSinceEpoch(
-                                                          dob.microsecondsSinceEpoch))
-                                                  .toString() ??
-                                              "DOB"
-                                          : "DOB";
                                       return date;
                                     },
                                     onChanged: (date) {
@@ -840,7 +832,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                 SizedBox(
                                   height: 15,
                                 ),
-                                 TextFormField(
+                                TextFormField(
                                   initialValue: address['country'] ?? '',
                                   focusNode: countryFocus,
                                   textInputAction: TextInputAction.next,
@@ -860,7 +852,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                       return null;
                                   },
                                 ),
-                               
                                 SizedBox(
                                   height: 20,
                                 ),

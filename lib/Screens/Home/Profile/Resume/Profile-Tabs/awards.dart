@@ -38,7 +38,7 @@ class _AwardsState extends State<Awards> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -155,10 +155,10 @@ class _AwardsFormState extends State<AwardsForm> {
                                 newAwardDescription = null;
                                 newAwardDate = null;
                                 showDialog(
-                                  
                                   context: context,
                                   builder: (_) => SimpleDialog(
-                                    backgroundColor:Theme.of(context).backgroundColor,
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
                                     title: Text(
                                       'Add New Award',
                                       style: TextStyle(

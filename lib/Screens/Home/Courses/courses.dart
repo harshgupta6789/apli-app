@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Courses extends StatefulWidget {
   final String documentId;
@@ -54,6 +55,9 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                   Html(
                     data: snapshot.data['overview'] ??
                         "Error While Fetching The Data",
+                    onLinkTap: (url) {
+                      launch(url);
+                    },
                   ),
                   // Padding(
                   //     padding: EdgeInsets.only(top: 20.0),
@@ -345,7 +349,6 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     orientation = MediaQuery.of(context).orientation;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        
         key: _scaffoldKey,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
