@@ -138,8 +138,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         .listen((IosNotificationSettings settings) {});
   }
 
+  void checkIfLoggedIn() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey("email")) {
+      firebaseCloudMessagingListeners();
+    }
+  }
+
   @override
   void initState() {
+    checkIfLoggedIn();
     _currentTab = widget.currentTab ?? 0;
     _tabController = TabController(vsync: this, length: _listTabs.length);
     _tabController.animateTo(_currentTab);
