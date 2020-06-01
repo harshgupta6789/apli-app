@@ -127,7 +127,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                               AutoSizeText(
                                                 'Deadline: ' +
-                                                    dateToReadableTimeConverter(
+                                                    dateTimeToReadableDateTimeConverter(
                                                         DateTime.parse(widget
                                                                     .job[
                                                                 'deadline'] ??

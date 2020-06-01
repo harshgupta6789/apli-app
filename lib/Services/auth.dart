@@ -11,6 +11,7 @@ class AuthService {
 
   Future signInWithoutAuth(String email, String password) async {
     try {
+      //email = email.toLowerCase();
       String url = checkLogin;
       DocumentReference userIsThere =
           Firestore.instance.collection('users').document(email);
@@ -117,7 +118,9 @@ class AuthService {
       String branch,
       String batch,
       String batchID) async {
+    Timestamp t = Timestamp.now();
     try {
+      email = email.toLowerCase();
       int result;
       DocumentReference emailCheck =
           Firestore.instance.collection('users').document(email);
@@ -144,7 +147,7 @@ class AuthService {
                         .setData({
                       'name': fname + '' + lname,
                       'password': hash,
-                      'timestamp': Timestamp.now(),
+                      'timestamp': t,
                       'user_type': 'Candidate'
                     }),
                     Firestore.instance
@@ -157,6 +160,8 @@ class AuthService {
                       'name': fname + ' ' + lname,
                       'ph_no': phoneNo,
                       'batch_id': batchID,
+                      'timestamp' : t,
+                      'profile_status' : 0
                     }),
                     Firestore.instance
                         .collection('rel_batch_candidates')
@@ -188,6 +193,7 @@ class AuthService {
 
   Future updatePassword(String email, String password) async {
     int result;
+    //email = email.toLowerCase();
     try {
       dynamic response = await passHashResponse(password);
       if (response == null) {

@@ -78,7 +78,7 @@ class _JobsTabssState extends State<JobsTabs> {
     } else
       return AutoSizeText(
         'Deadline: ' +
-            dateToReadableTimeConverter(
+            dateTimeToReadableDateTimeConverter(
                 DateTime.parse(deadline ?? '2020-05-26 00:00:00')),
         maxLines: 2,
         style: TextStyle(fontSize: 12 * scale, fontWeight: FontWeight.w500),
@@ -271,7 +271,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                                 "")
                                                         : AutoSizeText(
                                                             'Deadline: ' +
-                                                                dateToReadableTimeConverter(DateTime.parse(
+                                                                dateTimeToReadableDateTimeConverter(DateTime.parse(
                                                                     widget.jobs[index]
                                                                             [
                                                                             'deadline'] ??

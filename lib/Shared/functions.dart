@@ -1,4 +1,5 @@
 import 'package:apli/Shared/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -92,7 +93,23 @@ String getFileNameFromURL(String url) {
   return regExp.stringMatch(url);
 }
 
-String dateToReadableTimeConverter(DateTime dt) {
+String timestampToReadableTimeConverter(Timestamp t) {
+  String time;
+  DateTime dt = DateTime.fromMillisecondsSinceEpoch(t.millisecondsSinceEpoch);
+  TimeOfDay timeOfDay = TimeOfDay.fromDateTime(dt);
+  time = (timeOfDay.hour.toString().length == 1
+          ? '0' + timeOfDay.hour.toString()
+          : timeOfDay.hour.toString()) +
+      ':' +
+      (timeOfDay.minute.toString().length == 1
+          ? '0' + timeOfDay.minute.toString()
+          : timeOfDay.minute.toString()) +
+      ' ' +
+      ((timeOfDay.period == DayPeriod.am) ? 'AM' : 'PM');
+  return time;
+}
+
+String dateTimeToReadableDateTimeConverter(DateTime dt) {
   String time, monthString;
   switch (dt.month) {
     case 1:

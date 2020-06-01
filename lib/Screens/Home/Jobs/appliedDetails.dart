@@ -261,7 +261,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   dense: true,
                   title: AutoSizeText(
                     "When : " +
-                        dateToReadableTimeConverter(DateTime.parse(
+                        dateTimeToReadableDateTimeConverter(DateTime.parse(
                             widget.job['schedule']['when'] ??
                                 '2020-01-01T00:00:00Z')),
                     maxLines: 2,
@@ -435,7 +435,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   dense: true,
                   title: AutoSizeText(
                     "When : " +
-                        dateToReadableTimeConverter(DateTime.parse(
+                        dateTimeToReadableDateTimeConverter(DateTime.parse(
                             widget.job['schedule']['when'] ??
                                 '2020-01-01T00:00:00Z')),
                     maxLines: 2,
@@ -767,7 +767,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             ),
                                             AutoSizeText(
                                               'Deadline: ' +
-                                                  dateToReadableTimeConverter(
+                                                  dateTimeToReadableDateTimeConverter(
                                                       DateTime.parse(widget.job[
                                                               'deadline'] ??
                                                           '2020-05-26 00:00:00')),

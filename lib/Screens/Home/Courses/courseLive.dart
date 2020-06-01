@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +17,8 @@ class CourseLive extends StatefulWidget {
 class _CourseLiveState extends State<CourseLive> {
   YoutubePlayerController _controller;
   bool visible = true, tapped = false, go = false, loading = false;
-  TextEditingController _textEditingController;
-  FocusNode _focusNode;
+  TextEditingController _textEditingController = new TextEditingController(text: '');
+  FocusNode _focusNode = new FocusNode();
   String name, email;
 
   BoxDecoration myBoxDecoration() {
@@ -34,7 +33,7 @@ class _CourseLiveState extends State<CourseLive> {
       await Firestore.instance.collection('candidates').document(prefs.getString('email')).get().then((value) {
         setState(() {
           email = prefs.getString('email');
-          name = (value.data['First_name'] ?? '') + (value.data['Last_name'] ?? '');
+          name = (value.data['First_name'] ?? '') + ' ' + (value.data['Last_name'] ?? '');
         });
       });
     });
@@ -61,6 +60,8 @@ class _CourseLiveState extends State<CourseLive> {
 
   @override
   void dispose() {
+    _focusNode.dispose();
+    _textEditingController.dispose();
     Wakelock.disable();
     _controller.dispose();
     SystemChrome.setPreferredOrientations([
@@ -136,96 +137,119 @@ class _CourseLiveState extends State<CourseLive> {
                       ],
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      height: 1,
-                      child: StreamBuilder<Object>(
-                          stream: Firestore.instance
-                              .collection('edu_courses')
-                              .document(widget.documentID)
-                              .collection("comments")
-                              .orderBy("timestamp", descending: true)
-                              .snapshots(),
-                          builder: (context, snapshot) {
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 100,
-                              itemBuilder: (BuildContext context, int index) {
-                                var rng = new Random();
-                                return Container(
-                                  margin: EdgeInsets.all(8),
-                                  decoration: myBoxDecoration(),
-                                  child: ListTile(
-                                    isThreeLine: true,
-                                    dense: true,
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      child:
-                                          Text('randomAlpha(1).toUpperCase()'),
-                                    ),
-                                    title: Text(
-                                        'randomAlpha(10 * (1 + rng.nextInt(2)))',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold)),
-                                    subtitle: Text(
-                                      'randomAlpha(10 * (1 + rng.nextInt(10)))',
-                                      maxLines: 3,
-                                      style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                    trailing: Text(
-                                      '12:38 pm',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ),
+                  Visibility(
+                    visible: MediaQuery.of(context).orientation == Orientation.portrait,
+                    child: Expanded(
+                      child: Container(
+                        height: 1,
+                        child: StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('edu_courses')
+                                .document(widget.documentID)
+                                .collection("comments")
+                                .orderBy("timestamp", descending: true)
+                                .snapshots(),
+                            builder: (context, snapshot) {
+                              if(snapshot.hasData) {
+                                if((snapshot.data.documents ?? []).length == 0) {
+                                  return Center(child: Text('Be the first one to write a comment'),);
+                                }
+                                else return ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: (snapshot.data.documents ?? []).length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    var comments = snapshot.data.documents[index] ?? {};
+                                    String commentName = comments['name'] ?? 'Anonymous';
+                                    String commentNameLetter = (commentName.substring(0, 1)).toUpperCase();
+                                    String commentContent = comments['comment'] ?? '';
+                                    String commentTime = timestampToReadableTimeConverter(comments['timestamp'] ?? Timestamp.now());
+                                    Color commentColor = ['A', 'B', 'C', 'D', 'E', 'F'].contains(commentNameLetter) ? Colors.redAccent :
+                                    ['G', 'H', 'I', 'J', 'K', 'L'].contains(commentNameLetter) ? Colors.green :
+                                    ['M', 'N', 'O', 'P', 'Q', 'R'].contains(commentNameLetter) ? Colors.orange :
+                                    ['S', 'T', 'U', 'V', 'W', 'X'].contains(commentNameLetter) ? Colors.blue : Colors.white;
+                                    return Container(
+                                      margin: EdgeInsets.all(8),
+                                      decoration: myBoxDecoration(),
+                                      child: ListTile(
+                                        isThreeLine: true,
+                                        dense: true,
+                                        leading: CircleAvatar(
+                                          backgroundColor: commentColor,
+                                          child:
+                                          Text(commentNameLetter),
+                                        ),
+                                        title: Text(
+                                            commentName,
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.bold)),
+                                        subtitle: Text(
+                                          commentContent,
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        trailing: Text(
+                                          commentTime,
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 );
-                              },
-                            );
-                          }),
+                              } else if(snapshot.hasError) {
+                                return Center(child: Text('Error occurred, tray again later'),);
+                              } else
+                                return Loading();
+                            }),
+                      ),
                     ),
                   ),
-                  Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: ListTile(
-                        leading: FlutterLogo(),
-                        title: TextFormField(
-                          controller: _textEditingController,
-                          focusNode: _focusNode,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Type Here'
-                          )
-                        ),
-                        trailing: loading ? CircularProgressIndicator() : IconButton(
-                          icon: Icon(Icons.send),
-                          onPressed: () async {
-                            _focusNode.unfocus();
-                            if(_textEditingController.text.isNotEmpty) {
-                              setState(() {
-                                loading = true;
-                              });
-                              await Firestore.instance
-                                  .collection('edu_courses')
-                                  .document(widget.documentID)
-                                  .collection("comments")
-                                  .document()
-                                  .setData({
-                                'timestamp': Timestamp.now(),
-                                'name': name,
-                                'email': email,
-                                'chat_text': _textEditingController.text
-                              }).then((value) {
+                  Visibility(
+                    visible: MediaQuery.of(context).orientation == Orientation.portrait,
+                    child: Align(
+                        alignment: FractionalOffset.bottomCenter,
+                        child: ListTile(
+                          leading: FlutterLogo(),
+                          title: TextFormField(
+                            controller: _textEditingController,
+                            focusNode: _focusNode,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Type Here'
+                            )
+                          ),
+                          trailing: loading ? CircularProgressIndicator() : IconButton(
+                            icon: Icon(Icons.send),
+                            onPressed: () async {
+                              if(_textEditingController.text.isNotEmpty) {
                                 setState(() {
-                                  loading = false;
+                                  loading = true;
                                 });
-                              });
-                            }
-                          },
-                        ),
-                      )),
+                                await Firestore.instance
+                                    .collection('edu_courses')
+                                    .document(widget.documentID)
+                                    .collection("comments")
+                                    .document()
+                                    .setData({
+                                  'timestamp': Timestamp.now(),
+                                  'name': name,
+                                  'email': email,
+                                  'comment': _textEditingController.text
+                                }).then((value) {
+                                  _focusNode.unfocus();
+                                  setState(() {
+                                    loading = false;
+                                    _textEditingController.text = '';
+                                  });
+                                });
+                              }
+                            },
+                          ),
+                        )),
+                  ),
                 ],
               ),
             ),
