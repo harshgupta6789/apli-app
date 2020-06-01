@@ -198,7 +198,7 @@ class _MockJobsState extends State<MockJobs>
                         ? Center(
                             child: Text('Error occurred, try again later'),
                           )
-                        : mockJobs.length == 0
+                        : mockJobs['interviewPackages'].length == 0
                             ? Center(
                                 child: Text('No mock jobs to show right now'),
                               )

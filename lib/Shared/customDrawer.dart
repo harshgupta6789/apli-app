@@ -8,7 +8,6 @@ import 'package:app_settings/app_settings.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -69,7 +68,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                       if (snapshot.hasData &&
                           snapshot.connectionState == ConnectionState.done) {
                         if (snapshot.data[0] == 'error')
-                          return Text('Error occured, try again later');
+                          return Text('Error occurred, try again later');
                         return Row(
                           children: <Widget>[
                             Padding(

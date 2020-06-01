@@ -129,7 +129,7 @@ class _JobsState extends State<Jobs>
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              bottom: (jobs == null || jobs.length == null)
+              bottom: (jobs == null)
                   ? null
                   : jobs['profile_status'] < 384
                       ? null
@@ -155,7 +155,7 @@ class _JobsState extends State<Jobs>
                             ],
                             controller: _tabController,
                           ))),
-          preferredSize: (jobs == null || jobs.length == null)
+          preferredSize: (jobs == null)
               ? Size.fromHeight(55)
               : jobs['profile_status'] < 384
                   ? Size.fromHeight(55)
@@ -337,11 +337,7 @@ class _JobsState extends State<Jobs>
                                   ),
                                 ),
                               ))
-                            : jobs.length == 0
-                                ? Center(
-                                    child: Text('No jobs to show right now'),
-                                  )
-                                : TabBarView(
+                            : TabBarView(
                                     children: [
                                       JobsTabs(
                                         alreadyAccepted:

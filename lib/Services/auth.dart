@@ -54,7 +54,6 @@ class AuthService {
                           course = data.documents[0].data['course'];
 
                           course = course.replaceAll(" ", "_");
-                          print(course);
                           prefs.setString("course", course);
                           _firebaseMessaging
                               .subscribeToTopic(course)

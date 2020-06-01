@@ -400,9 +400,10 @@ class _AllNotificationsState extends State<AllNotifications> {
                                 padding: EdgeInsets.only(
                                     left: width * 0.01, top: 5.0),
                                 child: ListTile(
+                                  isThreeLine: true,
                                   title: AutoSizeText(
                                     myNotifications[index][0] ??
-                                        "No Messsage Specified",
+                                        "No Message Specified",
                                     maxLines: 2,
                                     style: TextStyle(
                                         fontSize: 18,
@@ -411,7 +412,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                                   ),
                                   subtitle: AutoSizeText(
                                     myNotifications[index][1] ??
-                                        "No Messsage Specified",
+                                        "No Message Specified",
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),

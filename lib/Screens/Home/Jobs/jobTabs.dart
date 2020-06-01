@@ -230,8 +230,8 @@ class _JobsTabssState extends State<JobsTabs> {
                                                   }
                                                 },
                                                 title: AutoSizeText(
-                                                  widget.jobs[index]['role'] ??
-                                                      "Role not provided",
+                                                 ( widget.jobs[index]['role'] ??
+                                                      "Floater") + ', ' + (widget.jobs[index]['organisation'] ?? 'No Company'),
                                                   maxLines: 2,
                                                   style: TextStyle(
                                                       color: basicColor,
