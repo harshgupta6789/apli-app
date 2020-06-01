@@ -15,84 +15,90 @@ class AuthService {
       DocumentReference userIsThere =
           Firestore.instance.collection('users').document(email);
       int result;
-      await userIsThere.get().then((snapshot) async {
-        if (!snapshot.exists) {
-          result = -10;
-        } else {
-          if (snapshot.data['user_type'] != 'Candidate') {
+      await SharedPreferences.getInstance().then((prefs) async {
+        await userIsThere.get().then((snapshot) async {
+          if (!snapshot.exists) {
             result = -10;
           } else {
-            http.Response response = await http.post(
-              url,
-              body: json.decode('{'
-                  '"secret" : "$checkLoginSecret", '
-                  '"useremail" : "$email", '
-                  '"password": "$password"'
-                  '}'),
-            );
-            if (response.statusCode == 200) {
-              var decodedData = jsonDecode(response.body);
-              if (decodedData["secret"] == checkLoginSecret) {
-                bool temp = decodedData["result"];
-                bool isFcm = decodedData["gen_fcm"];
-                if (temp == true) {
-                  String batchId;
-                  String course;
-                  await Firestore.instance
-                      .collection('candidates')
-                      .document(email)
-                      .get()
-                      .then((s) {
-                    batchId = s.data['batch_id'];
-                    if (batchId != null) {
-                      var details = Firestore.instance
-                          .collection('batches')
-                          .where('batch_id', isEqualTo: batchId)
-                          .limit(1);
-                      details.getDocuments().then((data) async {
-                        course = data.documents[0].data['course'];
-                        print(course);
-                        await SharedPreferences.getInstance()
-                            .then((prefs) async {
+            if (snapshot.data['user_type'] != 'Candidate') {
+              result = -10;
+            } else {
+              http.Response response = await http.post(
+                url,
+                body: json.decode('{'
+                    '"secret" : "$checkLoginSecret", '
+                    '"useremail" : "$email", '
+                    '"password": "$password"'
+                    '}'),
+              );
+              if (response.statusCode == 200) {
+                var decodedData = jsonDecode(response.body);
+                if (decodedData["secret"] == checkLoginSecret) {
+                  bool temp = decodedData["result"];
+                  bool isFcm = decodedData["gen_fcm"];
+                  if (temp == true) {
+                    String batchId;
+                    String course;
+                    await Firestore.instance
+                        .collection('candidates')
+                        .document(email)
+                        .get()
+                        .then((s) {
+                      batchId = s.data['batch_id'];
+                      if (batchId != null) {
+                        var details = Firestore.instance
+                            .collection('batches')
+                            .where('batch_id', isEqualTo: batchId)
+                            .limit(1);
+                        details.getDocuments().then((data) {
+                          course = data.documents[0].data['course'];
+
+                          course = course.replaceAll(" ", "_");
+                          print(course);
                           prefs.setString("course", course);
-                        });
-                        if (isFcm == true) {
-                          _firebaseMessaging.getToken().then((token) {
-                            Firestore.instance
-                                .collection("users")
-                                .document(email)
-                                .updateData({'fcm_token': token});
+                          _firebaseMessaging
+                              .subscribeToTopic(course)
+                              .then((value) {
+                            print("f0");
                           });
-                        } else if (isFcm == false) {
-                          _firebaseMessaging.getToken().then((token) {
-                            Firestore.instance
-                                .collection("users")
-                                .document(email)
-                                .get()
-                                .then((v) {
-                              if (v.data['fcm_token'] != token) {
-                                Firestore.instance
-                                    .collection("users")
-                                    .document(email)
-                                    .updateData({'fcm_token': token});
-                              }
+                          if (isFcm == true) {
+                            _firebaseMessaging.getToken().then((token) {
+                              Firestore.instance
+                                  .collection("users")
+                                  .document(email)
+                                  .updateData({'fcm_token': token});
                             });
-                          });
-                        }
-                      });
-                      result = 1;
-                    } else {
-                      result = -1;
-                    }
-                  });
+                          } else if (isFcm == false) {
+                            _firebaseMessaging.getToken().then((token) {
+                              Firestore.instance
+                                  .collection("users")
+                                  .document(email)
+                                  .get()
+                                  .then((v) {
+                                if (v.data['fcm_token'] != token) {
+                                  Firestore.instance
+                                      .collection("users")
+                                      .document(email)
+                                      .updateData({'fcm_token': token});
+                                }
+                              });
+                            });
+                          }
+                        });
+                        result = 1;
+                      } else {
+                        result = -1;
+                      }
+                    });
+                  } else
+                    result = -1;
                 } else
-                  result = -1;
+                  result = -2;
               } else
                 result = -2;
-            } else
-              result = -2;
+            }
           }
-        }
+        });
       });
       return result ?? -2;
     } catch (e) {

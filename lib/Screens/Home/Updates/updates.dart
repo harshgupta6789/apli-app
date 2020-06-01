@@ -386,6 +386,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                   padding: const EdgeInsets.all(4.0),
                   child: Container(
                     child: Card(
+                      color:Theme.of(context).backgroundColor,
                       elevation: 0.2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),

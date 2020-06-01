@@ -40,7 +40,13 @@ class _MockJobsState extends State<MockJobs>
       return Container();
     } else if (incomplete.contains(package)) {
       return InkWell(
-        onTap: () {},
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MockCompanyInstructions(
+                      pack: package)));
+        },
         child: Align(
           alignment: Alignment.centerLeft,
           child: Text('Tap to resume'),
@@ -249,6 +255,7 @@ class _MockJobsState extends State<MockJobs>
                                                         left: 10,
                                                         right: 10),
                                                     child: Card(
+                                                      color: Theme.of(context).backgroundColor,
                                                       elevation: 0.2,
                                                       shape:
                                                           RoundedRectangleBorder(

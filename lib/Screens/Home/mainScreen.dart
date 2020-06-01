@@ -59,14 +59,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     ).show();
   }
 
-  void firebaseCloudMessagingListeners(String topic) async {
+  void firebaseCloudMessagingListeners() async {
     if (Platform.isIOS) {
       iOSPermission();
     }
     _firebaseMessaging.getToken().then((token) {
       //print(token);
     });
-
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         if (_currentTab == 2) {
@@ -130,7 +129,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         });
       },
     );
-    _firebaseMessaging.subscribeToTopic(topic);
   }
 
   void iOSPermission() {
@@ -140,17 +138,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         .listen((IosNotificationSettings settings) {});
   }
 
-  void checkIfLoggedIn() async {
-    await SharedPreferences.getInstance().then((prefs) async {
-      String topic = prefs.getString("course") ?? "App";
-      firebaseCloudMessagingListeners(topic);
-    });
-  }
-
   @override
   void initState() {
     _currentTab = widget.currentTab ?? 0;
-    checkIfLoggedIn();
     _tabController = TabController(vsync: this, length: _listTabs.length);
     _tabController.animateTo(_currentTab);
     _animationController = AnimationController(

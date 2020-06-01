@@ -161,6 +161,7 @@ class _JobsTabssState extends State<JobsTabs> {
                               Container(
                                 padding: EdgeInsets.only(bottom: 1),
                                 child: Card(
+                                  color: Theme.of(context).backgroundColor,
                                     elevation: 0.2,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:

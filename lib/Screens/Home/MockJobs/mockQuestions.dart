@@ -42,7 +42,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
   String email;
   String fileType = 'video';
   File file;
-  bool _isRecording = true;
+  bool _isRecording = false;
   String fileName = '';
   String urlFromCamera;
   bool loading = false;
@@ -75,7 +75,6 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
       ///startVideoRecording();
       setState(() {});
     });
-    //startTimer();
   }
 
   Future videoPicker(String path) async {
@@ -174,35 +173,6 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
     });
   }
 
-  void readTimer() {
-    const oneSecRead = const Duration(seconds: 1);
-    _timerRead = new Timer.periodic(
-      oneSecRead,
-      (Timer timer) {
-        if (mounted)
-          setState(() {
-            readSeconds = readSeconds + 1;
-            if (readSeconds >= 15) {
-              setState(() {
-                isReading = false;
-
-                stopReadingTimer();
-                x = currentState.recording;
-                startVideoRecording();
-              });
-            }
-          });
-        else
-          return;
-      },
-    );
-  }
-
-  void stopReadingTimer() {
-    readSeconds = 0;
-    _timerRead.cancel();
-  }
-
   Future<String> startVideoRecording() async {
     if (!controller.value.isInitialized) {
       return null;
@@ -259,8 +229,11 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
               setState(() {
                 loading = false;
                 indexOfQuestions = indexOfQuestions + 1;
-                x = currentState.recording;
-                startVideoRecording();
+                isReading = true;
+                _isRecording = false;
+                readTimer();
+                //x = currentState.recording;
+                //startVideoRecording();
               });
             }
           });
@@ -345,9 +318,38 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
     );
   }
 
+  void readTimer() {
+    const oneSecRead = const Duration(seconds: 1);
+    _timerRead = new Timer.periodic(
+      oneSecRead,
+      (Timer timer) {
+        if (mounted)
+          setState(() {
+            readSeconds = readSeconds + 1;
+            if (readSeconds >= 15) {
+              setState(() {
+                isReading = false;
+
+                stopReadingTimer();
+                x = currentState.recording;
+                startVideoRecording();
+              });
+            }
+          });
+        else
+          return;
+      },
+    );
+  }
+
   void stopTimer() {
     seconds = 0;
     _timer?.cancel();
+  }
+
+  void stopReadingTimer() {
+    readSeconds = 0;
+    _timerRead.cancel();
   }
 
   @override
@@ -478,13 +480,13 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                     child: Text(
                       (indexOfQuestions + 1).toString() +
                               ". " +
-                              qs[indexOfQuestions]['question'] ??
+                              qs[indexOfQuestions][1] ??
                           "",
                       style: TextStyle(
                           fontWeight: FontWeight.w900,
                           fontSize: 14,
                           letterSpacing: 1.2),
-                      textAlign: TextAlign.justify,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(

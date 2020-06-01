@@ -81,8 +81,8 @@ lightTheme() {
       primarySwatch: Colors.blue,
       appBarTheme: AppBarTheme(color: basicColor),
       fontFamily: 'Sans',
-      cardColor: Colors.white,
-      cardTheme: CardTheme(color: Colors.white.withOpacity(0.9)),
+      //cardColor: Colors.white,
+      //cardTheme: CardTheme(color: Colors.white.withOpacity(0.9)),
       brightness: Brightness.light,
       iconTheme: IconThemeData(color: Colors.grey),
       backgroundColor: Colors.white);
