@@ -207,7 +207,7 @@ class _SkillsState extends State<Skills> {
                                         );
                                       },
                                       child: ListTile(
-                                        focusColor: Theme.of(context).backgroundColor,
+                                        //focusColor: Theme.of(context).backgroundColor,
                                         leading: Text(
                                           'Add Skill Group',
                                           style: TextStyle(

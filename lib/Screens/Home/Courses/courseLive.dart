@@ -3,7 +3,6 @@ import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emoji_picker/emoji_picker.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
@@ -22,7 +21,7 @@ class CourseLive extends StatefulWidget {
 class _CourseLiveState extends State<CourseLive>
     with SingleTickerProviderStateMixin {
   YoutubePlayerController _controller;
-  bool isEmoji = false;
+  bool isEmoji = false, isFocus = false;
   AnimationController _animationController;
   ScrollController _scrollController =
       new ScrollController(initialScrollOffset: 0);
@@ -34,7 +33,7 @@ class _CourseLiveState extends State<CourseLive>
   TextEditingController _textEditingController =
       new TextEditingController(text: '');
   FocusNode _focusNode = new FocusNode();
-  String name, email;
+  String name, email, profilePicture;
 
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
@@ -65,6 +64,7 @@ class _CourseLiveState extends State<CourseLive>
           name = (value.data['First_name'] ?? '') +
               ' ' +
               (value.data['Last_name'] ?? '');
+          profilePicture = (value.data['profile_picture'] == null || value.data['profile_picture'] == defaultPic) ? null : value.data['profile_picture'];
         });
       });
     });
@@ -72,6 +72,13 @@ class _CourseLiveState extends State<CourseLive>
 
   @override
   void initState() {
+    _focusNode.addListener(() {
+      if(_focusNode.hasFocus)
+        if(mounted)
+          setState(() {
+            isEmoji = false;
+          });
+    });
     getInfo();
     Wakelock.enable();
     _animationController =
@@ -118,12 +125,19 @@ class _CourseLiveState extends State<CourseLive>
                     DeviceOrientation.portraitUp,
                   ]);
                 else {
-                  SystemChrome.setPreferredOrientations([
-                    DeviceOrientation.landscapeRight,
-                    DeviceOrientation.landscapeLeft,
-                    DeviceOrientation.portraitUp,
-                  ]);
-                  Navigator.pop(context);
+                  if(isEmoji)
+                    setState(() {
+                      isEmoji = false;
+                      isFocus = false;
+                    });
+                  else {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.landscapeRight,
+                      DeviceOrientation.landscapeLeft,
+                      DeviceOrientation.portraitUp,
+                    ]);
+                    Navigator.pop(context);
+                  }
                 }
               },
               child: Scaffold(
@@ -139,7 +153,7 @@ class _CourseLiveState extends State<CourseLive>
                           children: <Widget>[
                             YoutubePlayer(
                               controller: _controller,
-                              showVideoProgressIndicator: true,
+                              showVideoProgressIndicator: false,
                             ),
                             Visibility(
                               visible: MediaQuery.of(context).orientation ==
@@ -192,6 +206,7 @@ class _CourseLiveState extends State<CourseLive>
                                                     (commentName.substring(
                                                             0, 1))
                                                         .toUpperCase();
+                                                String commentProfilePicture = comments['profile_picture'];
                                                 String commentContent =
                                                     comments['comment'] ?? '';
                                                 List<String>
@@ -241,7 +256,7 @@ class _CourseLiveState extends State<CourseLive>
                                                               ].contains(
                                                                     commentNameLetter)
                                                                 ? Colors.blue
-                                                                : Colors.white;
+                                                                : Colors.deepPurpleAccent;
                                                 return Container(
                                                   padding: EdgeInsets.all(0),
                                                   margin: EdgeInsets.all(8),
@@ -252,11 +267,12 @@ class _CourseLiveState extends State<CourseLive>
                                                     leading: CircleAvatar(
                                                       backgroundColor:
                                                           commentColor,
+                                                      backgroundImage: commentProfilePicture == null ? null : NetworkImage(commentProfilePicture),
                                                       child: Text(
                                                         commentNameLetter,
                                                         style: TextStyle(
                                                             color:
-                                                                Colors.white),
+                                                                Colors.white, fontWeight: FontWeight.bold, ),
                                                       ),
                                                     ),
                                                     title: Text(commentName,
@@ -309,24 +325,47 @@ class _CourseLiveState extends State<CourseLive>
                                     alignment: FractionalOffset.bottomCenter,
                                     child: ListTile(
                                         leading: IconButton(
-                                            icon: Icon(Icons.face,
-                                                color: basicColor),
+                                            icon: Icon(Icons.face),
                                             onPressed: () {
-                                              if (isEmoji != true) {
-                                                SystemChannels.textInput
-                                                    .invokeMethod(
-                                                        'TextInput.hide');
+                                              if(_focusNode.hasFocus) {
+                                                _focusNode.unfocus();
                                                 setState(() {
                                                   isEmoji = true;
+                                                  isFocus = false;
                                                 });
                                               } else {
-                                                SystemChannels.textInput
-                                                    .invokeMethod(
-                                                        'TextInput.show');
-                                                setState(() {
-                                                  isEmoji = false;
-                                                });
+                                                if(isEmoji == true) {
+                                                  FocusScope.of(context).requestFocus(_focusNode);
+                                                  setState(() {
+                                                    isEmoji = false;
+                                                    isFocus = true;
+                                                  });
+                                                } else {
+                                                  setState(() {
+                                                    isEmoji = true;
+                                                    isFocus = false;
+                                                  });
+                                                }
                                               }
+//                                              if (isEmoji != true) {
+//                                                _focusNode.unfocus();
+////                                                SystemChannels.textInput
+////                                                    .invokeMethod(
+////                                                        'TextInput.hide');
+//                                                setState(() {
+//                                                  isEmoji = true;
+//                                                  isFocus = false;
+//                                                });
+//                                              } else {
+////                                                SystemChannels.textInput
+////                                                    .invokeMethod(
+////                                                        'TextInput.show');
+//                                              FocusScope.of(context).requestFocus(_focusNode);
+//                                              setState(() {
+//                                                isEmoji = false;
+//                                                isFocus = true;
+//                                              });
+//                                              }
 
                                               // return EmojiPicker(
                                               //   rows: 3,
@@ -342,21 +381,18 @@ class _CourseLiveState extends State<CourseLive>
                                               //   },
                                               // );
                                             }),
-                                        title: IgnorePointer(
-                                          ignoring: isEmoji,
-                                          child: TextFormField(
-                                              controller:
-                                                  _textEditingController,
-                                              focusNode: _focusNode,
+                                        title: TextFormField(
+                                            controller:
+                                            _textEditingController,
+                                            focusNode: _focusNode,
 
-                                              // showCursor: !isEmoji,
-                                              // readOnly: !isEmoji,
-                                              textInputAction:
-                                                  TextInputAction.done,
-                                              decoration: InputDecoration(
-                                                  border: InputBorder.none,
-                                                  hintText: 'Type Here')),
-                                        ),
+                                            // showCursor: !isEmoji,
+                                            // readOnly: !isEmoji,
+                                            textInputAction:
+                                            TextInputAction.done,
+                                            decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: 'Type Here')),
                                         trailing: loading
                                             ? CircularProgressIndicator()
                                             : IconButton(
@@ -381,7 +417,8 @@ class _CourseLiveState extends State<CourseLive>
                                                       'email': email,
                                                       'comment':
                                                           _textEditingController
-                                                              .text
+                                                              .text,
+                                                      'profile_picture' : profilePicture
                                                     }).then((value) {
                                                       _focusNode.unfocus();
                                                       setState(() {
@@ -400,7 +437,7 @@ class _CourseLiveState extends State<CourseLive>
                                                     });
                                                   }
                                                 })))),
-                            isEmoji ? emojiKeyboard() : SizedBox()
+                            (isEmoji && !isFocus) ? emojiKeyboard() : SizedBox()
                           ],
                         ),
                       ),

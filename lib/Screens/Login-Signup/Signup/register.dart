@@ -750,6 +750,19 @@ class _RegisterState extends State<Register> {
                                                       setState(() {
                                                         loading = false;
                                                       });
+                                                      if(result != 1) {
+                                                        collegeText = null;
+                                                        collegeSet = false;
+                                                        yearText = null;
+                                                        yearSet = false;
+                                                        courseText = null;
+                                                        courseSet = false;
+                                                        branchText = null;
+                                                        branchSet = false;
+                                                        batchText = null;
+                                                        batchSet = false;
+                                                        allSet = false;
+                                                      }
                                                       if (result == -1) {
                                                         //already exists
                                                         showToast(
@@ -765,7 +778,7 @@ class _RegisterState extends State<Register> {
                                                         showToast(
                                                             'Failed, try again later',
                                                             context);
-                                                        Navigator.pop(context);
+                                                        //Navigator.pop(context);
                                                       } else if (result == 1) {
                                                         //success
                                                         showToast(
@@ -784,7 +797,7 @@ class _RegisterState extends State<Register> {
                                                         showToast(
                                                             'Failed, try again later',
                                                             context);
-                                                        Navigator.pop(context);
+                                                        //Navigator.pop(context);
                                                       }
                                                     }
                                                   }
