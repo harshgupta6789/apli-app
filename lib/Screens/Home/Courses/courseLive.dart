@@ -6,7 +6,9 @@ import 'package:emoji_picker/emoji_picker.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -139,87 +141,6 @@ class _CourseLiveState extends State<CourseLive>
                               controller: _controller,
                               showVideoProgressIndicator: true,
                             ),
-//                      GestureDetector(
-//                        onTap: () {
-//                          setState(() {
-//                            visible = !visible;
-//                            if (tapped != true) go = true;
-//                          });
-//                          if (go == true)
-//                            Future.delayed(Duration(seconds: 4), () {
-//                              if (mounted)
-//                                setState(() {
-//                                  visible = false;
-//                                  tapped = false;
-//                                });
-//                            });
-//                        },
-//                        onDoubleTap: () {
-//                          if (MediaQuery.of(context).orientation ==
-//                              Orientation.portrait)
-//                            SystemChrome.setPreferredOrientations([
-//                              DeviceOrientation.landscapeLeft,
-//                            ]);
-//                          else
-//                            SystemChrome.setPreferredOrientations([
-//                              DeviceOrientation.portraitUp,
-//                            ]);
-//                        },
-//                        child: Stack(
-//                          children: <Widget>[
-//                            YoutubePlayer(
-//                              controller: _controller,
-//                              showVideoProgressIndicator: true,
-//                              onReady: () {
-//                                setState(() {
-//                                  visible = false;
-//                                });
-//                              },
-//                            ),
-//                            Align(
-//                              alignment: Alignment.topCenter,
-//                              child: AnimatedOpacity(
-//                                opacity: visible ? 1 : 0,
-//                                duration: Duration(milliseconds: 200),
-//                                child: Text(
-//                                  'Double tap to toggle fullscreen',
-//                                  style: TextStyle(
-//                                      color: Colors.white,
-//                                      fontWeight: FontWeight.bold, backgroundColor: Colors.black45),
-//                                ),
-//                              ),
-//                            ),
-////                            Align(
-//////                              top: (MediaQuery.of(context).orientation == Orientation.portrait) ?30 :  MediaQuery.of(context).size.height / 2,
-//////                              left: MediaQuery.of(context).size.width / 2,
-//////                              right: MediaQuery.of(context).size.width / 2,
-////                            alignment: Alignment.center,
-////                              child: AnimatedOpacity(
-////                                opacity: visible ? 1 : 0,
-////                                duration: Duration(milliseconds: 200),
-////                                child: InkWell(
-////                                  onTap: () {
-////                                    setState(() {
-////                                      if (playing) {
-////                                        _controller.pause();
-////                                        _animationController.reverse();
-////                                      } else {
-////                                        _controller.play();
-////                                        _animationController.forward();
-////                                      }
-////                                    });
-////                                  },
-////                                  child: AnimatedIcon(
-////                                    icon: AnimatedIcons.play_pause,
-////                                    size: 40,
-////                                    progress: _animationController,
-////                                  ),
-////                                ),
-////                              ),
-////                            )
-//                          ],
-//                        ),
-//                      ),
                             Visibility(
                               visible: MediaQuery.of(context).orientation ==
                                   Orientation.portrait,
@@ -273,6 +194,10 @@ class _CourseLiveState extends State<CourseLive>
                                                         .toUpperCase();
                                                 String commentContent =
                                                     comments['comment'] ?? '';
+                                                List<String>
+                                                    commentContentDivided =
+                                                    commentContent
+                                                        .split("#AskAQuestion");
                                                 String commentTime =
                                                     timestampToReadableTimeConverter(
                                                         comments['timestamp'] ??
@@ -340,8 +265,17 @@ class _CourseLiveState extends State<CourseLive>
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold)),
-                                                    subtitle: Text(
-                                                      commentContent,
+                                                    subtitle: Linkify(
+                                                      text: commentContent,
+                                                      onOpen: (link) async {
+                                                        if (await canLaunch(
+                                                            link.url)) {
+                                                          await launch(
+                                                              link.url);
+                                                        } else {
+                                                          throw 'Could not launch $link';
+                                                        }
+                                                      },
                                                       maxLines: 5,
                                                       style: TextStyle(
                                                           fontSize: 12,
@@ -369,98 +303,103 @@ class _CourseLiveState extends State<CourseLive>
                               ),
                             ),
                             Visibility(
-                              visible: MediaQuery.of(context).orientation ==
-                                  Orientation.portrait,
-                              child: Align(
-                                  alignment: FractionalOffset.bottomCenter,
-                                  child: ListTile(
-                                    leading: IconButton(
-                                        icon:
-                                            Icon(Icons.face, color: basicColor),
-                                        onPressed: () {
-                                          if (isEmoji != true) {
-                                            SystemChannels.textInput
-                                                .invokeMethod('TextInput.hide');
-                                            setState(() {
-                                              isEmoji = true;
-                                            });
-                                          } else {
-                                            SystemChannels.textInput
-                                                .invokeMethod('TextInput.show');
-                                            setState(() {
-                                              isEmoji = false;
-                                            });
-                                          }
-
-                                          // return EmojiPicker(
-                                          //   rows: 3,
-                                          //   columns: 7,
-                                          //   buttonMode: ButtonMode.MATERIAL,
-                                          //   recommendKeywords: [
-                                          //     "racing",
-                                          //     "horse"
-                                          //   ],
-                                          //   numRecommended: 10,
-                                          //   onEmojiSelected: (emoji, category) {
-                                          //     print(emoji);
-                                          //   },
-                                          // );
-                                        }),
-                                    title: IgnorePointer(
-                                      ignoring: isEmoji,
-                                      child: TextFormField(
-                                          controller: _textEditingController,
-                                          focusNode: _focusNode,
-
-                                          // showCursor: !isEmoji,
-                                          // readOnly: !isEmoji,
-                                          textInputAction: TextInputAction.done,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText: 'Type Here')),
-                                    ),
-                                    trailing: loading
-                                        ? CircularProgressIndicator()
-                                        : IconButton(
-                                            icon: Icon(Icons.send),
-                                            onPressed: () async {
-                                              if (_textEditingController
-                                                  .text.isNotEmpty) {
+                                visible: MediaQuery.of(context).orientation ==
+                                    Orientation.portrait,
+                                child: Align(
+                                    alignment: FractionalOffset.bottomCenter,
+                                    child: ListTile(
+                                        leading: IconButton(
+                                            icon: Icon(Icons.face,
+                                                color: basicColor),
+                                            onPressed: () {
+                                              if (isEmoji != true) {
+                                                SystemChannels.textInput
+                                                    .invokeMethod(
+                                                        'TextInput.hide');
                                                 setState(() {
-                                                  loading = true;
+                                                  isEmoji = true;
                                                 });
-                                                await Firestore.instance
-                                                    .collection('edu_courses')
-                                                    .document(widget.documentID)
-                                                    .collection("comments")
-                                                    .document()
-                                                    .setData({
-                                                  'timestamp': Timestamp.now(),
-                                                  'name': name,
-                                                  'email': email,
-                                                  'comment':
-                                                      _textEditingController
-                                                          .text
-                                                }).then((value) {
-                                                  _focusNode.unfocus();
-                                                  setState(() {
-                                                    loading = false;
-                                                    _textEditingController
-                                                        .text = '';
-                                                    _scrollController.animateTo(
-                                                        _scrollController
-                                                            .position
-                                                            .minScrollExtent,
-                                                        duration: Duration(
-                                                            seconds: 1),
-                                                        curve: Curves.easeOut);
-                                                  });
+                                              } else {
+                                                SystemChannels.textInput
+                                                    .invokeMethod(
+                                                        'TextInput.show');
+                                                setState(() {
+                                                  isEmoji = false;
                                                 });
                                               }
-                                            },
-                                          ),
-                                  )),
-                            ),
+
+                                              // return EmojiPicker(
+                                              //   rows: 3,
+                                              //   columns: 7,
+                                              //   buttonMode: ButtonMode.MATERIAL,
+                                              //   recommendKeywords: [
+                                              //     "racing",
+                                              //     "horse"
+                                              //   ],
+                                              //   numRecommended: 10,
+                                              //   onEmojiSelected: (emoji, category) {
+                                              //     print(emoji);
+                                              //   },
+                                              // );
+                                            }),
+                                        title: IgnorePointer(
+                                          ignoring: isEmoji,
+                                          child: TextFormField(
+                                              controller:
+                                                  _textEditingController,
+                                              focusNode: _focusNode,
+
+                                              // showCursor: !isEmoji,
+                                              // readOnly: !isEmoji,
+                                              textInputAction:
+                                                  TextInputAction.done,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: 'Type Here')),
+                                        ),
+                                        trailing: loading
+                                            ? CircularProgressIndicator()
+                                            : IconButton(
+                                                icon: Icon(Icons.send),
+                                                onPressed: () async {
+                                                  if (_textEditingController
+                                                      .text.isNotEmpty) {
+                                                    setState(() {
+                                                      loading = true;
+                                                    });
+                                                    await Firestore.instance
+                                                        .collection(
+                                                            'edu_courses')
+                                                        .document(
+                                                            widget.documentID)
+                                                        .collection("comments")
+                                                        .document()
+                                                        .setData({
+                                                      'timestamp':
+                                                          Timestamp.now(),
+                                                      'name': name,
+                                                      'email': email,
+                                                      'comment':
+                                                          _textEditingController
+                                                              .text
+                                                    }).then((value) {
+                                                      _focusNode.unfocus();
+                                                      setState(() {
+                                                        loading = false;
+                                                        _textEditingController
+                                                            .text = '';
+                                                        _scrollController.animateTo(
+                                                            _scrollController
+                                                                .position
+                                                                .minScrollExtent,
+                                                            duration: Duration(
+                                                                seconds: 1),
+                                                            curve:
+                                                                Curves.easeOut);
+                                                      });
+                                                    });
+                                                  }
+                                                })))),
                             isEmoji ? emojiKeyboard() : SizedBox()
                           ],
                         ),
