@@ -161,7 +161,7 @@ class _JobsTabssState extends State<JobsTabs> {
                               Container(
                                 padding: EdgeInsets.only(bottom: 1),
                                 child: Card(
-                                  color: Theme.of(context).backgroundColor,
+                                    color: Theme.of(context).backgroundColor,
                                     elevation: 0.2,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -230,8 +230,12 @@ class _JobsTabssState extends State<JobsTabs> {
                                                   }
                                                 },
                                                 title: AutoSizeText(
-                                                 ( widget.jobs[index]['role'] ??
-                                                      "Floater") + ', ' + (widget.jobs[index]['organisation'] ?? 'No Company'),
+                                                  (widget.jobs[index]['role'] ??
+                                                          "Floater") +
+                                                      ', ' +
+                                                      (widget.jobs[index][
+                                                              'organisation'] ??
+                                                          'No Company'),
                                                   maxLines: 2,
                                                   style: TextStyle(
                                                       color: basicColor,

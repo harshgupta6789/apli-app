@@ -750,7 +750,7 @@ class _RegisterState extends State<Register> {
                                                       setState(() {
                                                         loading = false;
                                                       });
-                                                      if(result != 1) {
+                                                      if (result != 1) {
                                                         collegeText = null;
                                                         collegeSet = false;
                                                         yearText = null;

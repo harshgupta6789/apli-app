@@ -18,12 +18,10 @@ class _TempState extends State<Temp> {
   ScrollController _scrollController = new ScrollController();
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
-      border: Border.all(
-          width: 1.0
-      ),
+      border: Border.all(width: 1.0),
       borderRadius: BorderRadius.all(
           Radius.circular(5.0) //                 <--- border radius here
-      ),
+          ),
     );
   }
 
@@ -111,9 +109,22 @@ class _TempState extends State<Temp> {
                                   backgroundColor: Colors.red,
                                   child: Text('randomAlpha(1).toUpperCase()'),
                                 ),
-                                title: Text('randomAlpha(10 * (1 + rng.nextInt(2)))', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                subtitle: Text('randomAlpha(10 * (1 + rng.nextInt(10)))', maxLines: 3, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
-                                trailing: Text('12:38 pm', style: TextStyle(fontSize: 12),),
+                                title: Text(
+                                    'randomAlpha(10 * (1 + rng.nextInt(2)))',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
+                                subtitle: Text(
+                                  'randomAlpha(10 * (1 + rng.nextInt(10)))',
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                trailing: Text(
+                                  '12:38 pm',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                               ),
                             );
                           },

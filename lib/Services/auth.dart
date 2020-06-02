@@ -160,8 +160,8 @@ class AuthService {
                       'name': fname + ' ' + lname,
                       'ph_no': phoneNo,
                       'batch_id': batchID,
-                      'timestamp' : t,
-                      'profile_status' : 0
+                      'timestamp': t,
+                      'profile_status': 0
                     }),
                     Firestore.instance
                         .collection('rel_batch_candidates')

@@ -307,10 +307,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                             hint: Text("Gender"),
                                             value: gender ?? 'Male',
                                             style: TextStyle(
-                                                 color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline4
+                                                    .color,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 14),
                                             icon: Padding(
@@ -686,10 +686,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                           child: DropdownButton<String>(
                                             value: 'Proficiency',
                                             style: TextStyle(
-                                               color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline4
+                                                    .color,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 13),
                                             icon: Padding(

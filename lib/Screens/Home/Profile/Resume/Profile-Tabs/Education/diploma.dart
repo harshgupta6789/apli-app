@@ -300,9 +300,9 @@ class _DiplomaState extends State<Diploma> {
                                         value: unit ?? '%',
                                         style: TextStyle(
                                             color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                                .textTheme
+                                                .headline4
+                                                .color,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14),
                                         icon: Padding(

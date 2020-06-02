@@ -338,30 +338,27 @@ class _JobsState extends State<Jobs>
                                 ),
                               ))
                             : TabBarView(
-                                    children: [
-                                      JobsTabs(
-                                        alreadyAccepted:
-                                            jobs['cand_accepted_job'],
-                                        jobs: jobs['submitted_jobs'],
-                                        profileStatus: jobs['profile_status'],
-                                        tabNo: 0,
-                                      ),
-                                      JobsTabs(
-                                        alreadyAccepted:
-                                            jobs['cand_accepted_job'],
-                                        jobs: jobs['all_jobs'],
-                                        profileStatus: jobs['profile_status'],
-                                        tabNo: 1,
-                                      ),
-                                      JobsTabs(
-                                        alreadyAccepted:
-                                            jobs['cand_accepted_job'],
-                                        jobs: jobs['pending_jobs'],
-                                        profileStatus: jobs['profile_status'],
-                                        tabNo: 2,
-                                      )
-                                    ],
-                                    controller: _tabController,
-                                  ));
+                                children: [
+                                  JobsTabs(
+                                    alreadyAccepted: jobs['cand_accepted_job'],
+                                    jobs: jobs['submitted_jobs'],
+                                    profileStatus: jobs['profile_status'],
+                                    tabNo: 0,
+                                  ),
+                                  JobsTabs(
+                                    alreadyAccepted: jobs['cand_accepted_job'],
+                                    jobs: jobs['all_jobs'],
+                                    profileStatus: jobs['profile_status'],
+                                    tabNo: 1,
+                                  ),
+                                  JobsTabs(
+                                    alreadyAccepted: jobs['cand_accepted_job'],
+                                    jobs: jobs['pending_jobs'],
+                                    profileStatus: jobs['profile_status'],
+                                    tabNo: 2,
+                                  )
+                                ],
+                                controller: _tabController,
+                              ));
   }
 }

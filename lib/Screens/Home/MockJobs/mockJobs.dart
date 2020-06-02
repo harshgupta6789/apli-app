@@ -44,8 +44,8 @@ class _MockJobsState extends State<MockJobs>
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MockCompanyInstructions(
-                      pack: package)));
+                  builder: (context) =>
+                      MockCompanyInstructions(pack: package)));
         },
         child: Align(
           alignment: Alignment.centerLeft,
@@ -255,7 +255,8 @@ class _MockJobsState extends State<MockJobs>
                                                         left: 10,
                                                         right: 10),
                                                     child: Card(
-                                                      color: Theme.of(context).backgroundColor,
+                                                      color: Theme.of(context)
+                                                          .backgroundColor,
                                                       elevation: 0.2,
                                                       shape:
                                                           RoundedRectangleBorder(

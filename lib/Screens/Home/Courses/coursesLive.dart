@@ -324,7 +324,9 @@ class _CoursesLiveState extends State<CoursesLive>
                                                                       link: snapshot
                                                                           .data
                                                                           .documents[0]['link'],
-                                                                      documentID: widget.documentId,
+                                                                      documentID:
+                                                                          widget
+                                                                              .documentId,
                                                                     )));
                                                   }),
                                             ),

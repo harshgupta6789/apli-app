@@ -202,9 +202,9 @@ class _NewExperienceState extends State<NewExperience> {
                                             type.substring(1),
                                     style: TextStyle(
                                         color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                            .textTheme
+                                            .headline4
+                                            .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
                                     icon: Padding(
@@ -377,10 +377,10 @@ class _NewExperienceState extends State<NewExperience> {
                                         industry.substring(0, 1).toUpperCase() +
                                             industry.substring(1),
                                     style: TextStyle(
-                                         color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline4
+                                            .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
                                     icon: Padding(
@@ -439,10 +439,10 @@ class _NewExperienceState extends State<NewExperience> {
                                         domain.substring(0, 1).toUpperCase() +
                                             domain.substring(1),
                                     style: TextStyle(
-                                         color: Theme.of(context)
-                                                            .textTheme
-                                                            .headline4
-                                                            .color,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline4
+                                            .color,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 14),
                                     icon: Padding(

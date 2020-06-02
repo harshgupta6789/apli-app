@@ -64,7 +64,10 @@ class _CourseLiveState extends State<CourseLive>
           name = (value.data['First_name'] ?? '') +
               ' ' +
               (value.data['Last_name'] ?? '');
-          profilePicture = (value.data['profile_picture'] == null || value.data['profile_picture'] == defaultPic) ? null : value.data['profile_picture'];
+          profilePicture = (value.data['profile_picture'] == null ||
+                  value.data['profile_picture'] == defaultPic)
+              ? null
+              : value.data['profile_picture'];
         });
       });
     });
@@ -73,11 +76,10 @@ class _CourseLiveState extends State<CourseLive>
   @override
   void initState() {
     _focusNode.addListener(() {
-      if(_focusNode.hasFocus)
-        if(mounted)
-          setState(() {
-            isEmoji = false;
-          });
+      if (_focusNode.hasFocus) if (mounted)
+        setState(() {
+          isEmoji = false;
+        });
     });
     getInfo();
     Wakelock.enable();
@@ -125,7 +127,7 @@ class _CourseLiveState extends State<CourseLive>
                     DeviceOrientation.portraitUp,
                   ]);
                 else {
-                  if(isEmoji)
+                  if (isEmoji)
                     setState(() {
                       isEmoji = false;
                       isFocus = false;
@@ -206,7 +208,8 @@ class _CourseLiveState extends State<CourseLive>
                                                     (commentName.substring(
                                                             0, 1))
                                                         .toUpperCase();
-                                                String commentProfilePicture = comments['profile_picture'];
+                                                String commentProfilePicture =
+                                                    comments['profile_picture'];
                                                 String commentContent =
                                                     comments['comment'] ?? '';
                                                 List<String>
@@ -256,7 +259,8 @@ class _CourseLiveState extends State<CourseLive>
                                                               ].contains(
                                                                     commentNameLetter)
                                                                 ? Colors.blue
-                                                                : Colors.deepPurpleAccent;
+                                                                : Colors
+                                                                    .deepPurpleAccent;
                                                 return Container(
                                                   padding: EdgeInsets.all(0),
                                                   margin: EdgeInsets.all(8),
@@ -267,12 +271,19 @@ class _CourseLiveState extends State<CourseLive>
                                                     leading: CircleAvatar(
                                                       backgroundColor:
                                                           commentColor,
-                                                      backgroundImage: commentProfilePicture == null ? null : NetworkImage(commentProfilePicture),
+                                                      backgroundImage:
+                                                          commentProfilePicture ==
+                                                                  null
+                                                              ? null
+                                                              : NetworkImage(
+                                                                  commentProfilePicture),
                                                       child: Text(
                                                         commentNameLetter,
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.white, fontWeight: FontWeight.bold, ),
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
                                                     ),
                                                     title: Text(commentName,
@@ -325,17 +336,23 @@ class _CourseLiveState extends State<CourseLive>
                                     alignment: FractionalOffset.bottomCenter,
                                     child: ListTile(
                                         leading: IconButton(
-                                            icon: Icon(Icons.face),
+                                            icon: Icon(
+                                              Icons.face,
+                                              color: isEmoji
+                                                  ? basicColor
+                                                  : Colors.grey,
+                                            ),
                                             onPressed: () {
-                                              if(_focusNode.hasFocus) {
+                                              if (_focusNode.hasFocus) {
                                                 _focusNode.unfocus();
                                                 setState(() {
                                                   isEmoji = true;
                                                   isFocus = false;
                                                 });
                                               } else {
-                                                if(isEmoji == true) {
-                                                  FocusScope.of(context).requestFocus(_focusNode);
+                                                if (isEmoji == true) {
+                                                  FocusScope.of(context)
+                                                      .requestFocus(_focusNode);
                                                   setState(() {
                                                     isEmoji = false;
                                                     isFocus = true;
@@ -347,49 +364,15 @@ class _CourseLiveState extends State<CourseLive>
                                                   });
                                                 }
                                               }
-//                                              if (isEmoji != true) {
-//                                                _focusNode.unfocus();
-////                                                SystemChannels.textInput
-////                                                    .invokeMethod(
-////                                                        'TextInput.hide');
-//                                                setState(() {
-//                                                  isEmoji = true;
-//                                                  isFocus = false;
-//                                                });
-//                                              } else {
-////                                                SystemChannels.textInput
-////                                                    .invokeMethod(
-////                                                        'TextInput.show');
-//                                              FocusScope.of(context).requestFocus(_focusNode);
-//                                              setState(() {
-//                                                isEmoji = false;
-//                                                isFocus = true;
-//                                              });
-//                                              }
-
-                                              // return EmojiPicker(
-                                              //   rows: 3,
-                                              //   columns: 7,
-                                              //   buttonMode: ButtonMode.MATERIAL,
-                                              //   recommendKeywords: [
-                                              //     "racing",
-                                              //     "horse"
-                                              //   ],
-                                              //   numRecommended: 10,
-                                              //   onEmojiSelected: (emoji, category) {
-                                              //     print(emoji);
-                                              //   },
-                                              // );
                                             }),
                                         title: TextFormField(
-                                            controller:
-                                            _textEditingController,
+                                            controller: _textEditingController,
                                             focusNode: _focusNode,
 
                                             // showCursor: !isEmoji,
                                             // readOnly: !isEmoji,
                                             textInputAction:
-                                            TextInputAction.done,
+                                                TextInputAction.done,
                                             decoration: InputDecoration(
                                                 border: InputBorder.none,
                                                 hintText: 'Type Here')),
@@ -418,7 +401,8 @@ class _CourseLiveState extends State<CourseLive>
                                                       'comment':
                                                           _textEditingController
                                                               .text,
-                                                      'profile_picture' : profilePicture
+                                                      'profile_picture':
+                                                          profilePicture
                                                     }).then((value) {
                                                       _focusNode.unfocus();
                                                       setState(() {

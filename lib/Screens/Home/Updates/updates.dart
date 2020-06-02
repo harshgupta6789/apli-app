@@ -84,7 +84,9 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
     if (dt.inDays > 30)
       return (dt.inDays ~/ 30).toStringAsFixed(0) + ' mo';
     else if (dt.inDays > 0)
-      return (dt.inDays.toString() == '1') ? '1 day' : dt.inDays.toString() + ' days';
+      return (dt.inDays.toString() == '1')
+          ? '1 day'
+          : dt.inDays.toString() + ' days';
     else if (dt.inHours > 0)
       return dt.inHours.toString() + ' hrs';
     else if (dt.inMinutes > 0)
@@ -385,7 +387,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                   padding: const EdgeInsets.all(4.0),
                   child: Container(
                     child: Card(
-                      color:Theme.of(context).backgroundColor,
+                      color: Theme.of(context).backgroundColor,
                       elevation: 0.2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),

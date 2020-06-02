@@ -349,7 +349,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     orientation = MediaQuery.of(context).orientation;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
         endDrawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
