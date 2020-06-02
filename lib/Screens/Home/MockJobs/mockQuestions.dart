@@ -158,11 +158,70 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
           });
       }
 
-      if (url != null) {
+            if (url != null) {
         setState(() {
-          x = currentState.success;
-          tempURL = url;
+          loading = true;
         });
+        if (indexOfQuestions + 1 < qs.length) {
+         dynamic result = await apiService.addMockVideo(
+                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+          if (result != -1 || result != -2 || result != 0) {
+            print('abcd');
+            print(result);
+            print('abcd');
+            setState(() {
+              loading = false;
+//              indexOfQuestions = indexOfQuestions + 1;
+//              isReading = true;
+//              _isRecording = false;
+//              readTimer();
+              // x = currentState.recording;
+              // startVideoRecording();
+            });
+          } else {
+            showToast('Error occurred, try again later', context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          currentTab: 2,
+                        )),
+                (Route<dynamic> route) => false);
+          }
+          setState(() {
+            x = currentState.success;
+            tempURL = url;
+          });
+        } else {
+          setState(() {
+            loading = true;
+          });
+          dynamic result = await apiService.addMockVideo(
+                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+          if (result != -1 || result != -2 || result != 0) {
+            showToast("Submitting your answers", context);
+            print(result);
+           dynamic finalResult =
+                  await apiService.submitMockInterview(widget.docID);
+            if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
+              showToast("Submitted Successfully", context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => Wrapper(
+                            currentTab: 2,
+                          )),
+                  (Route<dynamic> route) => false);
+              print(finalResult);
+            }
+          } else {
+            showToast('Error occurred, try again later', context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          currentTab: 2,
+                        )),
+                (Route<dynamic> route) => false);
+          }
+        }
 
         // MOVE TO NEXT QUESTION
       } else if (url == null) {
@@ -219,15 +278,8 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
-            setState(() {
-              loading = true;
-            });
-            dynamic result = await apiService.addMockVideo(
-                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
-            if (result != -1 || result != -2 || result != 0) {
-              print(result);
-              setState(() {
-                loading = false;
+             setState(() {
+                //loading = false;
                 indexOfQuestions = indexOfQuestions + 1;
                 isReading = true;
                 _isRecording = false;
@@ -235,7 +287,23 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                 //x = currentState.recording;
                 //startVideoRecording();
               });
-            }
+            // setState(() {
+            //   loading = true;
+            // });
+            // dynamic result = await apiService.addMockVideo(
+            //     tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+            // if (result != -1 || result != -2 || result != 0) {
+            //   print(result);
+            //   setState(() {
+            //     loading = false;
+            //     indexOfQuestions = indexOfQuestions + 1;
+            //     isReading = true;
+            //     _isRecording = false;
+            //     readTimer();
+            //     //x = currentState.recording;
+            //     //startVideoRecording();
+            //   });
+            // }
           });
     } else {
       return RaisedButton(
@@ -254,27 +322,27 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
-            setState(() {
-              loading = true;
-            });
-            dynamic result = await apiService.addMockVideo(
-                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
-            if (result != -1 || result != -2 || result != 0) {
-              showToast("Submitting..", context);
-              print(result);
-              dynamic finalResult =
-                  await apiService.submitMockInterview(widget.docID);
-              if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
-                showToast("Submitted Succesfully..", context);
+            // setState(() {
+            //   loading = true;
+            // });
+            // dynamic result = await apiService.addMockVideo(
+            //     tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+            // if (result != -1 || result != -2 || result != 0) {
+            //   showToast("Submitting..", context);
+            //   print(result);
+            //   dynamic finalResult =
+            //       await apiService.submitMockInterview(widget.docID);
+            //   if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
+            //     showToast("Submitted Succesfully..", context);
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (context) => Wrapper(
                               currentTab: 1,
                             )),
                     (Route<dynamic> route) => false);
-                print(finalResult);
-              }
-            }
+                //print(finalResult);
+              //}
+           // }
           });
     }
   }

@@ -49,6 +49,16 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
     return userData;
   }
 
+  Widget profilePic(data) {
+    if (data == null || data == 'null') {
+     return CircleAvatar(
+          minRadius: 30, maxRadius: 35, backgroundImage: AssetImage("Assets/Images/pic.png"));
+    } else {
+      return CircleAvatar(
+          minRadius: 30, maxRadius: 35, backgroundImage: NetworkImage(data));
+    }
+  }
+
   Widget sideNav() {
     return Padding(
       padding:
@@ -73,19 +83,9 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                         return Row(
                           children: <Widget>[
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 10.0, left: 10),
-                              child: CircleAvatar(
-                                minRadius: 30,
-                                maxRadius: 35,
-                                backgroundImage: snapshot.data[1] != null
-                                    ? snapshot.data[1] == defaultPic
-                                        ? AssetImage(
-                                            "Assets/Images/defaultProfilePicture.jpeg")
-                                        : NetworkImage(snapshot.data[1])
-                                    : null,
-                              ),
-                            ),
+                                padding:
+                                    const EdgeInsets.only(top: 10.0, left: 10),
+                                child: profilePic(snapshot.data[1])),
                             Padding(
                               padding:
                                   const EdgeInsets.only(left: 20.0, top: 10.0),
@@ -282,22 +282,21 @@ class _ThemeSwitchState extends State<ThemeSwitch> {
   @override
   Widget build(BuildContext context) {
     themeChanger = Provider.of<ThemeChanger>(context);
-    return GestureDetector(
-        onTap: () {
-          setState(() {
-            isSwitched = !isSwitched;
-          });
-          if (isSwitched == false) {
-            themeChanger.setTheme(lightTheme());
-          } else {
-            themeChanger.setTheme(darkTheme());
-          }
-        },
-        child: Switch(
-          activeColor: basicColor,
-          activeTrackColor: basicColor,
-          inactiveTrackColor: Colors.grey,
-          value: isSwitched,
-        ));
+    return Switch(
+      onChanged: (value) {
+        setState(() {
+          isSwitched = value;
+        });
+        if (isSwitched == false) {
+          themeChanger.setTheme(lightTheme());
+        } else {
+          themeChanger.setTheme(darkTheme());
+        }
+      },
+      activeColor: basicColor,
+      activeTrackColor: basicColor,
+      inactiveTrackColor: Colors.grey,
+      value: isSwitched,
+    );
   }
 }

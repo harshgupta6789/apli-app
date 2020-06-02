@@ -407,6 +407,8 @@ class _CourseLiveState extends State<CourseLive>
                                                       _focusNode.unfocus();
                                                       setState(() {
                                                         loading = false;
+                                                        isEmoji = false;
+                                                        isFocus = false;
                                                         _textEditingController
                                                             .text = '';
                                                         _scrollController.animateTo(

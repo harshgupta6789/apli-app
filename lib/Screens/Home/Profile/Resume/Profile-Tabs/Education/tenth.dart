@@ -332,7 +332,31 @@ class _TenthState extends State<Tenth> {
                                         enabled: false,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500),
-                                        decoration: x("Unit"),
+                                        decoration:InputDecoration(
+                                            prefixIcon: Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Column(
+                                                children: <Widget>[
+                                                  SizedBox(
+                                                    height: 13,
+                                                  ),
+                                                  Text("Unit" + " : "),
+                                                ],
+                                              ),
+                                            ),
+                                            //hintText: t,
+                                            disabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey[600])),
+                                            contentPadding:
+                                                new EdgeInsets.symmetric(
+                                                    vertical: 2.0,
+                                                    horizontal: 10.0),
+                                            hintStyle: TextStyle(
+                                                fontWeight: FontWeight.w400),
+                                            labelStyle:
+                                                TextStyle(color: Colors.black)),
                                       ),
                                     ),
                                     Align(

@@ -161,6 +161,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
   @override
   void initState() {
     init();
+    //print(otherCourses);
     super.initState();
   }
 
@@ -258,38 +259,38 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                               physics: ScrollPhysics(),
                               itemCount: otherCourses.length,
                               itemBuilder: (BuildContext context1, int index) {
-                                String from =
-                                    otherCourses[index]['start'] == null
-                                        ? null
-                                        : DateTime.fromMicrosecondsSinceEpoch(
-                                                    otherCourses[index]['start']
-                                                        .microsecondsSinceEpoch)
-                                                .month
-                                                .toString() +
-                                            '-' +
-                                            DateTime.fromMicrosecondsSinceEpoch(
-                                                    otherCourses[index]['start']
-                                                        .microsecondsSinceEpoch)
-                                                .year
-                                                .toString();
-                                String to = otherCourses[index]['end'] == null
-                                    ? null
-                                    : DateTime.fromMicrosecondsSinceEpoch(
-                                                otherCourses[index]['end']
-                                                    .microsecondsSinceEpoch)
-                                            .month
-                                            .toString() +
-                                        '-' +
-                                        DateTime.fromMicrosecondsSinceEpoch(
-                                                otherCourses[index]['end']
-                                                    .microsecondsSinceEpoch)
-                                            .year
-                                            .toString();
-                                String duration = (from ?? '') +
-                                    ' to ' +
-                                    ((from != null && to == null)
-                                        ? 'ongoing'
-                                        : to ?? '');
+                                // String from =
+                                //     otherCourses[index]['start'] == null
+                                //         ? null
+                                //         : DateTime.fromMicrosecondsSinceEpoch(
+                                //                     otherCourses[index]['start']
+                                //                         .microsecondsSinceEpoch)
+                                //                 .month
+                                //                 .toString() +
+                                //             '-' +
+                                //             DateTime.fromMicrosecondsSinceEpoch(
+                                //                     otherCourses[index]['start']
+                                //                         .microsecondsSinceEpoch)
+                                //                 .year
+                                //                 .toString();
+                                // String to = otherCourses[index]['end'] == null
+                                //     ? null
+                                //     : DateTime.fromMicrosecondsSinceEpoch(
+                                //                 otherCourses[index]['end']
+                                //                     .microsecondsSinceEpoch)
+                                //             .month
+                                //             .toString() +
+                                //         '-' +
+                                //         DateTime.fromMicrosecondsSinceEpoch(
+                                //                 otherCourses[index]['end']
+                                //                     .microsecondsSinceEpoch)
+                                //             .year
+                                //             .toString();
+                                // String duration = (from ?? '') +
+                                //     ' to ' +
+                                //     ((from != null && to == null)
+                                //         ? 'ongoing'
+                                //         : to ?? '');
 
                                 return Column(
                                   children: <Widget>[
@@ -314,18 +315,18 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                                 SizedBox(
                                                   height: 5,
                                                 ),
-                                                Text('Score: ' +
-                                                    ((otherCourses[index]
-                                                                ['score'] ??
-                                                            '') +
-                                                        (otherCourses[index][
-                                                                'score_unit'] ??
-                                                            '%'))),
+                                                // Text('Score: ' +
+                                                //     ((otherCourses[index]
+                                                //                 ['score'] ??
+                                                //             '') +
+                                                //         (otherCourses[index][
+                                                //                 'score_unit'] ??
+                                                //             '%'))),
                                                 Text('Board: ' +
                                                     (otherCourses[index]
                                                             ['board'] ??
                                                         '')),
-                                                Text('Duration: ' + duration),
+                                                //Text('Duration: ' + duration),
                                                 // Text('Industry Type: ' +
                                                 //     (otherCourses[index]['industry'] ??
                                                 //         '')),

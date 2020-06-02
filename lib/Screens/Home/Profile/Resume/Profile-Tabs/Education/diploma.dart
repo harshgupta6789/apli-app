@@ -168,7 +168,10 @@ class _DiplomaState extends State<Diploma> {
                         //hint: Text("Unit"),
                         value: type ?? 'XII',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 14),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          color: Theme.of(context).textTheme.headline4.color,
+                        ),
                         icon: Padding(
                           padding: const EdgeInsets.only(left: 10.0),
                           child: Icon(Icons.keyboard_arrow_down),
@@ -286,7 +289,30 @@ class _DiplomaState extends State<Diploma> {
                                     enabled: false,
                                     style:
                                         TextStyle(fontWeight: FontWeight.w500),
-                                    decoration: x("Unit"),
+                                    decoration: InputDecoration(
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.only(left: 10),
+                                          child: Column(
+                                            children: <Widget>[
+                                              SizedBox(
+                                                height: 13,
+                                              ),
+                                              Text("Unit" + " : "),
+                                            ],
+                                          ),
+                                        ),
+                                        //hintText: t,
+                                        disabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.grey[600])),
+                                        contentPadding:
+                                            new EdgeInsets.symmetric(
+                                                vertical: 2.0,
+                                                horizontal: 10.0),
+                                        hintStyle: TextStyle(
+                                            fontWeight: FontWeight.w400),
+                                        labelStyle:
+                                            TextStyle(color: Colors.black)),
                                   ),
                                 ),
                                 Align(
