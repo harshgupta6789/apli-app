@@ -3,7 +3,9 @@ import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wakelock/wakelock.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -221,6 +223,7 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
                                         String commentName = comments['name'] ?? 'Anonymous';
                                         String commentNameLetter = (commentName.substring(0, 1)).toUpperCase();
                                         String commentContent = comments['comment'] ?? '';
+                                        List<String> commentContentDivided = commentContent.split("#AskAQuestion");
                                         String commentTime = timestampToReadableTimeConverter(comments['timestamp'] ?? Timestamp.now());
                                         Color commentColor = ['A', 'B', 'C', 'D', 'E', 'F'].contains(commentNameLetter) ? Colors.redAccent :
                                         ['G', 'H', 'I', 'J', 'K', 'L'].contains(commentNameLetter) ? Colors.green :
@@ -243,8 +246,15 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.bold)),
-                                            subtitle: Text(
-                                              commentContent,
+                                            subtitle: Linkify(
+                                              text: commentContent,
+                                              onOpen: (link) async {
+                                                if (await canLaunch(link.url)) {
+                                                  await launch(link.url);
+                                                } else {
+                                                  throw 'Could not launch $link';
+                                                }
+                                              },
                                               maxLines: 5,
                                               style: TextStyle(
                                                   fontSize: 12,
