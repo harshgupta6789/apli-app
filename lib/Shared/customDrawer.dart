@@ -21,7 +21,8 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
   height = MediaQuery.of(context).size.height;
   double dividerThickness = 2;
   double fontSize = 15;
-
+  ThemeChanger themeChanger;
+  themeChanger = Provider.of<ThemeChanger>(context);
   Future<List<String>> userInit() async {
     List<String> userData = [];
 
@@ -220,6 +221,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
                     SharedPreferences preferences =
                         await SharedPreferences.getInstance();
                     preferences.clear();
+                    themeChanger.setTheme(lightTheme());
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(builder: (context) => Wrapper()),
                         (Route<dynamic> route) => false);

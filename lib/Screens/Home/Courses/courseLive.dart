@@ -1,6 +1,9 @@
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emoji_picker/emoji_picker.dart';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,28 +17,52 @@ class CourseLive extends StatefulWidget {
   _CourseLiveState createState() => _CourseLiveState();
 }
 
-class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateMixin {
+class _CourseLiveState extends State<CourseLive>
+    with SingleTickerProviderStateMixin {
   YoutubePlayerController _controller;
+  bool isEmoji = false;
   AnimationController _animationController;
-  ScrollController _scrollController = new ScrollController(initialScrollOffset: 0);
-  bool visible = true, tapped = false, go = false, loading = false, playing = true;
-  TextEditingController _textEditingController = new TextEditingController(text: '');
+  ScrollController _scrollController =
+      new ScrollController(initialScrollOffset: 0);
+  bool visible = true,
+      tapped = false,
+      go = false,
+      loading = false,
+      playing = true;
+  TextEditingController _textEditingController =
+      new TextEditingController(text: '');
   FocusNode _focusNode = new FocusNode();
   String name, email;
 
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
-      border: Border.all(width: 1.0),
+      border: Border.all(width: 1.0, color: Colors.grey),
       borderRadius: BorderRadius.all(Radius.circular(5.0)),
+    );
+  }
+
+  Widget emojiKeyboard() {
+    return EmojiPicker(
+      rows: 4,
+      columns: 7,
+      onEmojiSelected: (emoji, category) {
+        _textEditingController.text = _textEditingController.text + emoji.emoji;
+      },
     );
   }
 
   getInfo() async {
     await SharedPreferences.getInstance().then((prefs) async {
-      await Firestore.instance.collection('candidates').document(prefs.getString('email')).get().then((value) {
+      await Firestore.instance
+          .collection('candidates')
+          .document(prefs.getString('email'))
+          .get()
+          .then((value) {
         setState(() {
           email = prefs.getString('email');
-          name = (value.data['First_name'] ?? '') + ' ' + (value.data['Last_name'] ?? '');
+          name = (value.data['First_name'] ?? '') +
+              ' ' +
+              (value.data['Last_name'] ?? '');
         });
       });
     });
@@ -79,37 +106,39 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    return name == null ? Loading() : SafeArea(
-      child: WillPopScope(
-        onWillPop: () {
-          if(MediaQuery.of(context).orientation == Orientation.landscape)
-            SystemChrome.setPreferredOrientations([
-              DeviceOrientation.portraitUp,
-            ]);
-          else {
-            SystemChrome.setPreferredOrientations([
-              DeviceOrientation.landscapeRight,
-              DeviceOrientation.landscapeLeft,
-              DeviceOrientation.portraitUp,
-            ]);
-            Navigator.pop(context);
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Theme.of(context).backgroundColor,
-          body: LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    minWidth: constraints.maxWidth,
-                    minHeight: constraints.maxHeight),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: <Widget>[
-                      YoutubePlayer(
-                        controller: _controller,
-                        showVideoProgressIndicator: true,
-                      ),
+    return name == null
+        ? Loading()
+        : SafeArea(
+            child: WillPopScope(
+              onWillPop: () {
+                if (MediaQuery.of(context).orientation == Orientation.landscape)
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.portraitUp,
+                  ]);
+                else {
+                  SystemChrome.setPreferredOrientations([
+                    DeviceOrientation.landscapeRight,
+                    DeviceOrientation.landscapeLeft,
+                    DeviceOrientation.portraitUp,
+                  ]);
+                  Navigator.pop(context);
+                }
+              },
+              child: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
+                body: LayoutBuilder(builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: constraints.maxWidth,
+                          minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: <Widget>[
+                            YoutubePlayer(
+                              controller: _controller,
+                              showVideoProgressIndicator: true,
+                            ),
 //                      GestureDetector(
 //                        onTap: () {
 //                          setState(() {
@@ -191,134 +220,256 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
 //                          ],
 //                        ),
 //                      ),
-                      Visibility(
-                        visible: MediaQuery.of(context).orientation == Orientation.portrait,
-                        child: Expanded(
-                          child: Container(
-                            height: 1,
-                            decoration: BoxDecoration(
-                              boxShadow: [BoxShadow(blurRadius: 10, color: Colors.white)]
+                            Visibility(
+                              visible: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait,
+                              child: Expanded(
+                                child: Container(
+                                  height: 1,
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context).backgroundColor,
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 10, color: Colors.white)
+                                      ]),
+                                  child: StreamBuilder(
+                                      stream: Firestore.instance
+                                          .collection('edu_courses')
+                                          .document(widget.documentID)
+                                          .collection("comments")
+                                          .orderBy("timestamp",
+                                              descending: true)
+                                          .snapshots(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasData) {
+                                          if ((snapshot.data.documents ?? [])
+                                                  .length ==
+                                              0) {
+                                            return Center(
+                                              child: Text(
+                                                  'Be the first one to write a comment'),
+                                            );
+                                          } else
+                                            return ListView.builder(
+                                              shrinkWrap: true,
+                                              reverse: true,
+                                              controller: _scrollController,
+                                              itemCount:
+                                                  (snapshot.data.documents ??
+                                                          [])
+                                                      .length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                var comments = snapshot.data
+                                                        .documents[index] ??
+                                                    {};
+                                                String commentName =
+                                                    comments['name'] ??
+                                                        'Anonymous';
+                                                String commentNameLetter =
+                                                    (commentName.substring(
+                                                            0, 1))
+                                                        .toUpperCase();
+                                                String commentContent =
+                                                    comments['comment'] ?? '';
+                                                String commentTime =
+                                                    timestampToReadableTimeConverter(
+                                                        comments['timestamp'] ??
+                                                            Timestamp.now());
+                                                Color commentColor = [
+                                                  'A',
+                                                  'B',
+                                                  'C',
+                                                  'D',
+                                                  'E',
+                                                  'F'
+                                                ].contains(commentNameLetter)
+                                                    ? Colors.redAccent
+                                                    : [
+                                                        'G',
+                                                        'H',
+                                                        'I',
+                                                        'J',
+                                                        'K',
+                                                        'L'
+                                                      ].contains(
+                                                            commentNameLetter)
+                                                        ? Colors.green
+                                                        : [
+                                                            'M',
+                                                            'N',
+                                                            'O',
+                                                            'P',
+                                                            'Q',
+                                                            'R'
+                                                          ].contains(
+                                                                commentNameLetter)
+                                                            ? Colors.orange
+                                                            : [
+                                                                'S',
+                                                                'T',
+                                                                'U',
+                                                                'V',
+                                                                'W',
+                                                                'X'
+                                                              ].contains(
+                                                                    commentNameLetter)
+                                                                ? Colors.blue
+                                                                : Colors.white;
+                                                return Container(
+                                                  padding: EdgeInsets.all(0),
+                                                  margin: EdgeInsets.all(8),
+                                                  decoration: myBoxDecoration(),
+                                                  child: ListTile(
+                                                    isThreeLine: true,
+                                                    dense: true,
+                                                    leading: CircleAvatar(
+                                                      backgroundColor:
+                                                          commentColor,
+                                                      child: Text(
+                                                        commentNameLetter,
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ),
+                                                    title: Text(commentName,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                    subtitle: Text(
+                                                      commentContent,
+                                                      maxLines: 5,
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    ),
+                                                    trailing: Text(
+                                                      commentTime,
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                        } else if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                                'Error occurred, tray again later'),
+                                          );
+                                        } else
+                                          return Loading();
+                                      }),
+                                ),
+                              ),
                             ),
-                            child: StreamBuilder(
-                                stream: Firestore.instance
-                                    .collection('edu_courses')
-                                    .document(widget.documentID)
-                                    .collection("comments")
-                                    .orderBy("timestamp", descending: true)
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if(snapshot.hasData) {
-                                    if((snapshot.data.documents ?? []).length == 0) {
-                                      return Center(child: Text('Be the first one to write a comment'),);
-                                    }
-                                    else return ListView.builder(
-                                      shrinkWrap: true,
-                                      reverse: true,
-                                      controller: _scrollController,
-                                      itemCount: (snapshot.data.documents ?? []).length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        var comments = snapshot.data.documents[index] ?? {};
-                                        String commentName = comments['name'] ?? 'Anonymous';
-                                        String commentNameLetter = (commentName.substring(0, 1)).toUpperCase();
-                                        String commentContent = comments['comment'] ?? '';
-                                        String commentTime = timestampToReadableTimeConverter(comments['timestamp'] ?? Timestamp.now());
-                                        Color commentColor = ['A', 'B', 'C', 'D', 'E', 'F'].contains(commentNameLetter) ? Colors.redAccent :
-                                        ['G', 'H', 'I', 'J', 'K', 'L'].contains(commentNameLetter) ? Colors.green :
-                                        ['M', 'N', 'O', 'P', 'Q', 'R'].contains(commentNameLetter) ? Colors.orange :
-                                        ['S', 'T', 'U', 'V', 'W', 'X'].contains(commentNameLetter) ? Colors.blue : Colors.white;
-                                        return Container(
-                                          padding: EdgeInsets.all(0),
-                                          margin: EdgeInsets.all(8),
-                                          decoration: myBoxDecoration(),
-                                          child: ListTile(
-                                            isThreeLine: true,
-                                            dense: true,
-                                            leading: CircleAvatar(
-                                              backgroundColor: commentColor,
-                                              child:
-                                              Text(commentNameLetter, style: TextStyle(color: Colors.white),),
-                                            ),
-                                            title: Text(
-                                                commentName,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold)),
-                                            subtitle: Text(
-                                              commentContent,
-                                              maxLines: 5,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                            trailing: Text(
-                                              commentTime,
-                                              style: TextStyle(fontSize: 12),
-                                            ),
+                            Visibility(
+                              visible: MediaQuery.of(context).orientation ==
+                                  Orientation.portrait,
+                              child: Align(
+                                  alignment: FractionalOffset.bottomCenter,
+                                  child: ListTile(
+                                    leading: IconButton(
+                                        icon:
+                                            Icon(Icons.face, color: basicColor),
+                                        onPressed: () {
+                                          if (isEmoji != true) {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.hide');
+                                            setState(() {
+                                              isEmoji = true;
+                                            });
+                                          } else {
+                                            SystemChannels.textInput
+                                                .invokeMethod('TextInput.show');
+                                            setState(() {
+                                              isEmoji = false;
+                                            });
+                                          }
+
+                                          // return EmojiPicker(
+                                          //   rows: 3,
+                                          //   columns: 7,
+                                          //   buttonMode: ButtonMode.MATERIAL,
+                                          //   recommendKeywords: [
+                                          //     "racing",
+                                          //     "horse"
+                                          //   ],
+                                          //   numRecommended: 10,
+                                          //   onEmojiSelected: (emoji, category) {
+                                          //     print(emoji);
+                                          //   },
+                                          // );
+                                        }),
+                                    title: IgnorePointer(
+                                      ignoring: isEmoji,
+                                      child: TextFormField(
+                                          controller: _textEditingController,
+                                          focusNode: _focusNode,
+
+                                          // showCursor: !isEmoji,
+                                          // readOnly: !isEmoji,
+                                          textInputAction: TextInputAction.done,
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Type Here')),
+                                    ),
+                                    trailing: loading
+                                        ? CircularProgressIndicator()
+                                        : IconButton(
+                                            icon: Icon(Icons.send),
+                                            onPressed: () async {
+                                              if (_textEditingController
+                                                  .text.isNotEmpty) {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                await Firestore.instance
+                                                    .collection('edu_courses')
+                                                    .document(widget.documentID)
+                                                    .collection("comments")
+                                                    .document()
+                                                    .setData({
+                                                  'timestamp': Timestamp.now(),
+                                                  'name': name,
+                                                  'email': email,
+                                                  'comment':
+                                                      _textEditingController
+                                                          .text
+                                                }).then((value) {
+                                                  _focusNode.unfocus();
+                                                  setState(() {
+                                                    loading = false;
+                                                    _textEditingController
+                                                        .text = '';
+                                                    _scrollController.animateTo(
+                                                        _scrollController
+                                                            .position
+                                                            .minScrollExtent,
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        curve: Curves.easeOut);
+                                                  });
+                                                });
+                                              }
+                                            },
                                           ),
-                                        );
-                                      },
-                                    );
-                                  } else if(snapshot.hasError) {
-                                    return Center(child: Text('Error occurred, tray again later'),);
-                                  } else
-                                    return Loading();
-                                }),
-                          ),
+                                  )),
+                            ),
+                            isEmoji ? emojiKeyboard() : SizedBox()
+                          ],
                         ),
                       ),
-                      Visibility(
-                        visible: MediaQuery.of(context).orientation == Orientation.portrait,
-                        child: Align(
-                            alignment: FractionalOffset.bottomCenter,
-                            child: ListTile(
-                              leading: FlutterLogo(),
-                              title: TextFormField(
-                                controller: _textEditingController,
-                                focusNode: _focusNode,
-                                textInputAction: TextInputAction.done,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Type Here'
-                                )
-                              ),
-                              trailing: loading ? CircularProgressIndicator() : IconButton(
-                                icon: Icon(Icons.send),
-                                onPressed: () async {
-                                  if(_textEditingController.text.isNotEmpty) {
-                                    setState(() {
-                                      loading = true;
-                                    });
-                                    await Firestore.instance
-                                        .collection('edu_courses')
-                                        .document(widget.documentID)
-                                        .collection("comments")
-                                        .document()
-                                        .setData({
-                                      'timestamp': Timestamp.now(),
-                                      'name': name,
-                                      'email': email,
-                                      'comment': _textEditingController.text
-                                    }).then((value) {
-                                      _focusNode.unfocus();
-                                      setState(() {
-                                        loading = false;
-                                        _textEditingController.text = '';
-                                        _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: Duration(seconds: 1), curve: Curves.easeOut);
-                                      });
-                                    });
-                                  }
-                                },
-                              ),
-                            )),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                }),
               ),
-            );
-          }),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

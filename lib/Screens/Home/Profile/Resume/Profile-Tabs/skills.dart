@@ -106,7 +106,7 @@ class _SkillsState extends State<Skills> {
                                         25 * scale, 5, 25 * scale, 5),
                                     child: RaisedButton(
                                       padding: EdgeInsets.all(0),
-                                      color: Colors.white,
+                                   color: Theme.of(context).backgroundColor,
                                       elevation: 0,
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -136,7 +136,7 @@ class _SkillsState extends State<Skills> {
                                                     20 * scale,
                                                     20),
                                                 child: TextField(
-                                                  autofocus: true,
+                                                  autofocus: false,
                                                   style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.w500,
@@ -174,7 +174,7 @@ class _SkillsState extends State<Skills> {
                                                     child: Text(
                                                       'CLOSE',
                                                       style: TextStyle(
-                                                          color: Colors.black),
+                                                          ),
                                                     ),
                                                     onPressed: () {
                                                       Navigator.of(context)
@@ -185,7 +185,7 @@ class _SkillsState extends State<Skills> {
                                                     child: Text(
                                                       'ADD',
                                                       style: TextStyle(
-                                                          color: basicColor),
+                                                          ),
                                                     ),
                                                     onPressed: () {
                                                       Navigator.of(context)
@@ -207,6 +207,7 @@ class _SkillsState extends State<Skills> {
                                         );
                                       },
                                       child: ListTile(
+                                        focusColor: Theme.of(context).backgroundColor,
                                         leading: Text(
                                           'Add Skill Group',
                                           style: TextStyle(
@@ -357,8 +358,7 @@ class _SkillsState extends State<Skills> {
                                                                       .circular(
                                                                           5),
                                                               child: Container(
-                                                                color: Colors
-                                                                    .grey[300],
+                                                               color: Theme.of(context).backgroundColor,
                                                                 padding: EdgeInsets
                                                                     .fromLTRB(
                                                                         10 *
@@ -379,8 +379,10 @@ class _SkillsState extends State<Skills> {
                                                                           proficiency
                                                                               .substring(1),
                                                                   style: TextStyle(
-                                                                      color: Colors
-                                                                          .black,
+                                                                       color: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      .color,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w500,
@@ -512,7 +514,7 @@ class _SkillsState extends State<Skills> {
                                                                 child:
                                                                     TextField(
                                                                   autofocus:
-                                                                      true,
+                                                                      false,
                                                                   style: TextStyle(
                                                                       fontWeight:
                                                                           FontWeight
@@ -626,7 +628,7 @@ class _SkillsState extends State<Skills> {
                                                         BorderRadius.circular(
                                                             5),
                                                     child: Container(
-                                                      color: Colors.grey[300],
+                                                    color:Theme.of(context).backgroundColor,
                                                       padding:
                                                           EdgeInsets.fromLTRB(
                                                               10 * scale,
@@ -639,8 +641,10 @@ class _SkillsState extends State<Skills> {
                                                             String>(
                                                           value: 'Proficiency',
                                                           style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
+                                                            color: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      .color,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,

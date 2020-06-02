@@ -55,6 +55,7 @@ class _LoginState extends State<Login> {
               return null;
             },
             child: Scaffold(
+              backgroundColor:Theme.of(context).backgroundColor,
               resizeToAvoidBottomInset: true,
               body: ScrollConfiguration(
                 behavior: MyBehavior(),

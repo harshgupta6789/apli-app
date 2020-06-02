@@ -557,7 +557,7 @@ class _VideoIntroState extends State<VideoIntro>
                                 },
                                 child: new Text(
                                   'Yes',
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(),
                                 ),
                               ),
                               FlatButton(
@@ -565,7 +565,7 @@ class _VideoIntroState extends State<VideoIntro>
                                     Navigator.of(context).pop(false),
                                 child: new Text(
                                   'No',
-                                  style: TextStyle(color: Colors.black),
+                                  style: TextStyle(),
                                 ),
                               ),
                             ],

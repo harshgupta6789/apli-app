@@ -99,6 +99,7 @@ class _PsychometryTestState extends State<PsychometryTest> {
       child: loading
           ? Loading()
           : Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(55),
                 child: AppBar(
@@ -220,7 +221,10 @@ class _PsychometryTestState extends State<PsychometryTest> {
                                                               position][2] ==
                                                           (i + 1).toString()
                                                       ? basicColor
-                                                      : Colors.black,
+                                                      : Theme.of(context)
+                                                          .textTheme
+                                                          .headline4
+                                                          .color,
                                                   fontSize: 13),
                                             ),
                                             onTap: () {
@@ -344,14 +348,14 @@ class _PsychometryTestState extends State<PsychometryTest> {
                 },
                 child: new Text(
                   'Yes',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'No',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
             ],

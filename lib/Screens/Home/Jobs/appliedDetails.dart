@@ -205,7 +205,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             child: new Text(
                                               'Yes',
                                               style: TextStyle(
-                                                  color: Colors.black),
+                                                  ),
                                             ),
                                           ),
                                           FlatButton(
@@ -215,7 +215,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                             child: new Text(
                                               'No',
                                               style: TextStyle(
-                                                  color: Colors.black),
+                                                 ),
                                             ),
                                           ),
                                         ],
@@ -332,7 +332,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                 child: new Text(
                                                   'Yes',
                                                   style: TextStyle(
-                                                      color: Colors.black),
+                                                      ),
                                                 ),
                                               ),
                                               FlatButton(
@@ -342,7 +342,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                 child: new Text(
                                                   'No',
                                                   style: TextStyle(
-                                                      color: Colors.black),
+                                                      ),
                                                 ),
                                               ),
                                             ],
@@ -505,8 +505,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                       child: new Text(
                                                         'Yes',
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.black),
+                                                          ),
                                                       ),
                                                     ),
                                                     FlatButton(
@@ -516,8 +515,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                       child: new Text(
                                                         'No',
                                                         style: TextStyle(
-                                                            color:
-                                                                Colors.black),
+                                                          ),
                                                       ),
                                                     ),
                                                   ],

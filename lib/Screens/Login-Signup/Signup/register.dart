@@ -64,7 +64,7 @@ class _RegisterState extends State<Register> {
                 },
                 child: new Text(
                   'YES',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
             ],

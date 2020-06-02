@@ -229,6 +229,7 @@ class _MockCompanyInstructionsState extends State<MockCompanyInstructions> {
     return loading
         ? Loading()
         : Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
             appBar: PreferredSize(
               child: AppBar(
                   backgroundColor: basicColor,
@@ -285,7 +286,10 @@ class _MockCompanyInstructionsState extends State<MockCompanyInstructions> {
                                               text: TextSpan(
                                                 text: 'Click ',
                                                 style: TextStyle(
-                                                  color: Colors.black,
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .headline4
+                                                      .color,
                                                   fontSize: 19,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -298,7 +302,13 @@ class _MockCompanyInstructionsState extends State<MockCompanyInstructions> {
                                                           color: basicColor)),
                                                   TextSpan(
                                                       text:
-                                                          ' when you are ready! '),
+                                                          ' when you are ready! ',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
+                                                      )),
                                                 ],
                                               ),
                                             ),

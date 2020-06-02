@@ -59,7 +59,7 @@ darkTheme() {
     cardColor: Colors.black,
     cardTheme: CardTheme(color: Colors.black),
     iconTheme: IconThemeData(color: Colors.white),
-    backgroundColor: Colors.black87,
+    backgroundColor: Color(0xff121212),
   );
 }
 

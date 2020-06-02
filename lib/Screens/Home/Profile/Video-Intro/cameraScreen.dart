@@ -212,6 +212,7 @@ class _CameraState extends State<Camera> {
                                 child: Text(
                                   "Upload",
                                   style: TextStyle(
+                                      color: Colors.black,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w600),
                                 ),
@@ -228,6 +229,7 @@ class _CameraState extends State<Camera> {
                                 child: Text(
                                   "Re-Take",
                                   style: TextStyle(
+                                      color: Colors.black,
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.w600),
                                 ),
@@ -258,6 +260,7 @@ class _CameraState extends State<Camera> {
                 return null;
               },
               child: Scaffold(
+                backgroundColor: Theme.of(context).backgroundColor,
                 body: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -286,7 +289,6 @@ class _CameraState extends State<Camera> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: 15,
-                                          color: Colors.black,
                                           fontWeight: FontWeight.bold,
                                         )),
                                   );

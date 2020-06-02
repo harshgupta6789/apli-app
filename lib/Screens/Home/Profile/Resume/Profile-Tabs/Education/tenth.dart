@@ -348,7 +348,10 @@ class _TenthState extends State<Tenth> {
                                                     ['score_unit'] ??
                                                 '%',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 14),
                                             icon: Padding(
@@ -686,14 +689,14 @@ class _TenthState extends State<Tenth> {
                 },
                 child: new Text(
                   'Yes',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'No',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
             ],

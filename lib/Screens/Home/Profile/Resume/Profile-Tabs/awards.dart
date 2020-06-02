@@ -175,7 +175,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             TextFormField(
-                                              autofocus: true,
+                                              autofocus: false,
                                               maxLines: 3,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w500,

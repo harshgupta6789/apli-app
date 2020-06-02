@@ -547,9 +547,8 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                       child:
                                                                           new Text(
                                                                         'Yes',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black),
+                                                                        style:
+                                                                            TextStyle(),
                                                                       ),
                                                                     ),
                                                                     FlatButton(
@@ -559,9 +558,8 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                       child:
                                                                           new Text(
                                                                         'No',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.black),
+                                                                        style:
+                                                                            TextStyle(),
                                                                       ),
                                                                     ),
                                                                   ],

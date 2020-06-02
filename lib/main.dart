@@ -45,7 +45,7 @@ class MySplashState extends State<MySplash> {
   @override
   Widget build(BuildContext context) {
     return SplashScreen(
-      // backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       seconds: 1,
       navigateAfterSeconds: Wrapper(),
       image: Image.asset('Assets/Images/logo.png'),

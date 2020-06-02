@@ -127,14 +127,14 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                 },
                 child: new Text(
                   'Yes',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'No',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
             ],

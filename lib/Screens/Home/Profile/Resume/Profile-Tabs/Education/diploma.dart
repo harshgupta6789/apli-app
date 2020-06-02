@@ -299,7 +299,10 @@ class _DiplomaState extends State<Diploma> {
                                         //hint: Text("Unit"),
                                         value: unit ?? '%',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
                                             fontWeight: FontWeight.w400,
                                             fontSize: 14),
                                         icon: Padding(
@@ -580,14 +583,14 @@ class _DiplomaState extends State<Diploma> {
                 },
                 child: new Text(
                   'Yes',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
               FlatButton(
                 onPressed: () => Navigator.of(context).pop(false),
                 child: new Text(
                   'No',
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(),
                 ),
               ),
             ],

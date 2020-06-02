@@ -307,7 +307,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                             hint: Text("Gender"),
                                             value: gender ?? 'Male',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                 color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 14),
                                             icon: Padding(
@@ -462,7 +465,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                                 borderRadius:
                                                     BorderRadius.circular(5),
                                                 child: Container(
-                                                  color: Colors.grey[300],
+                                                  color: Theme.of(context)
+                                                      .backgroundColor,
                                                   padding: EdgeInsets.fromLTRB(
                                                       10 * scale,
                                                       0,
@@ -481,7 +485,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                                                     [1]
                                                                 .substring(1),
                                                     style: TextStyle(
-                                                        color: Colors.black,
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
                                                         fontWeight:
                                                             FontWeight.w500,
                                                         fontSize: 12),
@@ -563,6 +570,8 @@ class _BasicIntroState extends State<BasicIntro> {
                                           showDialog(
                                             context: context,
                                             builder: (_) => SimpleDialog(
+                                              backgroundColor: Theme.of(context)
+                                                  .backgroundColor,
                                               title: Text(
                                                 'Add Language',
                                                 style: TextStyle(
@@ -578,7 +587,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                                       20 * scale,
                                                       20),
                                                   child: TextField(
-                                                    autofocus: true,
+                                                    autofocus: false,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w500,
@@ -615,9 +624,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                                     FlatButton(
                                                       child: Text(
                                                         'CLOSE',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.black),
+                                                        style: TextStyle(),
                                                       ),
                                                       onPressed: () {
                                                         Navigator.of(context)
@@ -627,8 +634,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                                     FlatButton(
                                                       child: Text(
                                                         'ADD',
-                                                        style: TextStyle(
-                                                            color: basicColor),
+                                                        style: TextStyle(),
                                                       ),
                                                       onPressed: () {
                                                         Navigator.of(context)
@@ -673,7 +679,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(5),
                                       child: Container(
-                                        color: Colors.grey[300],
                                         padding: EdgeInsets.fromLTRB(
                                             10 * scale, 0, 5 * scale, 0),
                                         child: IgnorePointer(
@@ -681,7 +686,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                           child: DropdownButton<String>(
                                             value: 'Proficiency',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                               color: Theme.of(context)
+                                                            .textTheme
+                                                            .headline4
+                                                            .color,
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 13),
                                             icon: Padding(
@@ -697,7 +705,9 @@ class _BasicIntroState extends State<BasicIntro> {
                                                 (String value) {
                                               return DropdownMenuItem<String>(
                                                 value: value,
-                                                child: Text(value),
+                                                child: Text(
+                                                  value,
+                                                ),
                                               );
                                             }).toList(),
                                             onChanged: (value) {},
