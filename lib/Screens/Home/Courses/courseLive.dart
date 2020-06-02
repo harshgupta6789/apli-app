@@ -94,7 +94,7 @@ class _CourseLiveState extends State<CourseLive>
           isLive: true,
           forceHD: true,
           loop: false,
-          disableDragSeek: true,
+         
           hideControls: false),
     );
     super.initState();
@@ -153,10 +153,10 @@ class _CourseLiveState extends State<CourseLive>
                       child: IntrinsicHeight(
                         child: Column(
                           children: <Widget>[
-                            YoutubePlayer(
-                              controller: _controller,
-                              showVideoProgressIndicator: false,
-                            ),
+                            YoutubePlayer(controller: _controller , aspectRatio:16/9, bottomActions: [
+     Text("OJAS")
+      
+    ],),
                             Visibility(
                               visible: MediaQuery.of(context).orientation ==
                                   Orientation.portrait,
