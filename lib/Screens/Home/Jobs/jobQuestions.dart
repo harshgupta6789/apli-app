@@ -175,12 +175,70 @@ class _JobQuestionsState extends State<JobQuestions> {
             x = currentState.uploading;
           });
       }
-
       if (url != null) {
         setState(() {
-          x = currentState.success;
-          tempURL = url;
+          loading = true;
         });
+        if (indexOfQuestions + 1 < qs.length) {
+          dynamic result = await apiService.submitInterViewQ(
+              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+          if (result != -1 || result != -2 || result != 0) {
+            print('abcd');
+            print(result);
+            print('abcd');
+            setState(() {
+              loading = false;
+//              indexOfQuestions = indexOfQuestions + 1;
+//              isReading = true;
+//              _isRecording = false;
+//              readTimer();
+              // x = currentState.recording;
+              // startVideoRecording();
+            });
+          } else {
+            showToast('Error occurred, try again later', context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                      currentTab: 2,
+                    )),
+                    (Route<dynamic> route) => false);
+          }
+          setState(() {
+            x = currentState.success;
+            tempURL = url;
+          });
+        } else {
+          setState(() {
+            loading = true;
+          });
+          dynamic result = await apiService.submitInterViewQ(
+              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+          if (result != -1 || result != -2 || result != 0) {
+            showToast("Submitting your answers", context);
+            print(result);
+            dynamic finalResult = await apiService.submitInterViewQ(
+                widget.jobID, "final", null, null);
+            if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
+              showToast("Submitted Successfully", context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => Wrapper(
+                        currentTab: 2,
+                      )),
+                      (Route<dynamic> route) => false);
+              print(finalResult);
+            }
+          } else {
+            showToast('Error occurred, try again later', context);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                      currentTab: 2,
+                    )),
+                    (Route<dynamic> route) => false);
+          }
+        }
 
         // MOVE TO NEXT QUESTION
       } else if (url == null) {
@@ -242,30 +300,36 @@ class _JobQuestionsState extends State<JobQuestions> {
           ),
           onPressed: () async {
             setState(() {
-              loading = true;
+              indexOfQuestions = indexOfQuestions + 1;
+              isReading = true;
+              _isRecording = false;
+              readTimer();
             });
-            dynamic result = await apiService.submitInterViewQ(
-                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
-            if (result != -1 || result != -2 || result != 0) {
-              print(result);
-              setState(() {
-                loading = false;
-                indexOfQuestions = indexOfQuestions + 1;
-                isReading = true;
-                _isRecording = false;
-                readTimer();
-                // x = currentState.recording;
-                // startVideoRecording();
-              });
-            } else {
-              showToast('Error occurred, try again later', context);
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => Wrapper(
-                            currentTab: 2,
-                          )),
-                  (Route<dynamic> route) => false);
-            }
+//            setState(() {
+//              loading = true;
+//            });
+//            dynamic result = await apiService.submitInterViewQ(
+//                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+//            if (result != -1 || result != -2 || result != 0) {
+//              print(result);
+//              setState(() {
+//                loading = false;
+//                indexOfQuestions = indexOfQuestions + 1;
+//                isReading = true;
+//                _isRecording = false;
+//                readTimer();
+//                // x = currentState.recording;
+//                // startVideoRecording();
+//              });
+//            } else {
+//              showToast('Error occurred, try again later', context);
+//              Navigator.of(context).pushAndRemoveUntil(
+//                  MaterialPageRoute(
+//                      builder: (context) => Wrapper(
+//                            currentTab: 2,
+//                          )),
+//                  (Route<dynamic> route) => false);
+//            }
           });
     } else {
       return RaisedButton(
@@ -284,27 +348,33 @@ class _JobQuestionsState extends State<JobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
-            setState(() {
-              loading = true;
-            });
-            dynamic result = await apiService.submitInterViewQ(
-                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
-            if (result != -1 || result != -2 || result != 0) {
-              showToast("Submitting your answers", context);
-              print(result);
-              dynamic finalResult = await apiService.submitInterViewQ(
-                  widget.jobID, "final", null, null);
-              if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
-                showToast("Submitted Successfully", context);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => Wrapper(
-                              currentTab: 2,
-                            )),
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                      currentTab: 2,
+                    )),
                     (Route<dynamic> route) => false);
-                print(finalResult);
-              }
-            }
+//            setState(() {
+//              loading = true;
+//            });
+//            dynamic result = await apiService.submitInterViewQ(
+//                widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+//            if (result != -1 || result != -2 || result != 0) {
+//              showToast("Submitting your answers", context);
+//              print(result);
+//              dynamic finalResult = await apiService.submitInterViewQ(
+//                  widget.jobID, "final", null, null);
+//              if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
+//                showToast("Submitted Successfully", context);
+//                Navigator.of(context).pushAndRemoveUntil(
+//                    MaterialPageRoute(
+//                        builder: (context) => Wrapper(
+//                              currentTab: 2,
+//                            )),
+//                    (Route<dynamic> route) => false);
+//                print(finalResult);
+//              }
+//            }
           });
     }
   }

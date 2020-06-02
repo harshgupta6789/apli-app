@@ -17,7 +17,7 @@ class CourseLive extends StatefulWidget {
 class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateMixin {
   YoutubePlayerController _controller;
   AnimationController _animationController;
-  ScrollController _scrollController = new ScrollController();
+  ScrollController _scrollController = new ScrollController(initialScrollOffset: 0);
   bool visible = true, tapped = false, go = false, loading = false, playing = true;
   TextEditingController _textEditingController = new TextEditingController(text: '');
   FocusNode _focusNode = new FocusNode();
@@ -57,7 +57,7 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
           forceHD: true,
           loop: false,
           disableDragSeek: true,
-          hideControls: true),
+          hideControls: false),
     );
     super.initState();
   }
@@ -106,97 +106,105 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
                 child: IntrinsicHeight(
                   child: Column(
                     children: <Widget>[
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            visible = !visible;
-                            if (tapped != true) go = true;
-                          });
-                          if (go == true)
-                            Future.delayed(Duration(seconds: 4), () {
-                              if (mounted)
-                                setState(() {
-                                  visible = false;
-                                  tapped = false;
-                                });
-                            });
-                        },
-                        onDoubleTap: () {
-                          if (MediaQuery.of(context).orientation ==
-                              Orientation.portrait)
-                            SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.landscapeLeft,
-                            ]);
-                          else
-                            SystemChrome.setPreferredOrientations([
-                              DeviceOrientation.portraitUp,
-                            ]);
-                        },
-                        child: Stack(
-                          children: <Widget>[
-                            YoutubePlayer(
-                              controller: _controller,
-                              onReady: () {
-                                setState(() {
-                                  visible = false;
-                                });
-                              },
-                            ),
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: AnimatedOpacity(
-                                opacity: visible ? 1 : 0,
-                                duration: Duration(milliseconds: 200),
-                                child: Text(
-                                  'Double tap to toggle fullscreen',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold, backgroundColor: Colors.black45),
-                                ),
-                              ),
-                            ),
+                      YoutubePlayer(
+                        controller: _controller,
+                        showVideoProgressIndicator: true,
+                      ),
+//                      GestureDetector(
+//                        onTap: () {
+//                          setState(() {
+//                            visible = !visible;
+//                            if (tapped != true) go = true;
+//                          });
+//                          if (go == true)
+//                            Future.delayed(Duration(seconds: 4), () {
+//                              if (mounted)
+//                                setState(() {
+//                                  visible = false;
+//                                  tapped = false;
+//                                });
+//                            });
+//                        },
+//                        onDoubleTap: () {
+//                          if (MediaQuery.of(context).orientation ==
+//                              Orientation.portrait)
+//                            SystemChrome.setPreferredOrientations([
+//                              DeviceOrientation.landscapeLeft,
+//                            ]);
+//                          else
+//                            SystemChrome.setPreferredOrientations([
+//                              DeviceOrientation.portraitUp,
+//                            ]);
+//                        },
+//                        child: Stack(
+//                          children: <Widget>[
+//                            YoutubePlayer(
+//                              controller: _controller,
+//                              showVideoProgressIndicator: true,
+//                              onReady: () {
+//                                setState(() {
+//                                  visible = false;
+//                                });
+//                              },
+//                            ),
 //                            Align(
-////                              top: (MediaQuery.of(context).orientation == Orientation.portrait) ?30 :  MediaQuery.of(context).size.height / 2,
-////                              left: MediaQuery.of(context).size.width / 2,
-////                              right: MediaQuery.of(context).size.width / 2,
-//                            alignment: Alignment.center,
+//                              alignment: Alignment.topCenter,
 //                              child: AnimatedOpacity(
 //                                opacity: visible ? 1 : 0,
 //                                duration: Duration(milliseconds: 200),
-//                                child: InkWell(
-//                                  onTap: () {
-//                                    setState(() {
-//                                      if (playing) {
-//                                        _controller.pause();
-//                                        _animationController.reverse();
-//                                      } else {
-//                                        _controller.play();
-//                                        _animationController.forward();
-//                                      }
-//                                    });
-//                                  },
-//                                  child: AnimatedIcon(
-//                                    icon: AnimatedIcons.play_pause,
-//                                    size: 40,
-//                                    progress: _animationController,
-//                                  ),
+//                                child: Text(
+//                                  'Double tap to toggle fullscreen',
+//                                  style: TextStyle(
+//                                      color: Colors.white,
+//                                      fontWeight: FontWeight.bold, backgroundColor: Colors.black45),
 //                                ),
 //                              ),
-//                            )
-                          ],
-                        ),
-                      ),
+//                            ),
+////                            Align(
+//////                              top: (MediaQuery.of(context).orientation == Orientation.portrait) ?30 :  MediaQuery.of(context).size.height / 2,
+//////                              left: MediaQuery.of(context).size.width / 2,
+//////                              right: MediaQuery.of(context).size.width / 2,
+////                            alignment: Alignment.center,
+////                              child: AnimatedOpacity(
+////                                opacity: visible ? 1 : 0,
+////                                duration: Duration(milliseconds: 200),
+////                                child: InkWell(
+////                                  onTap: () {
+////                                    setState(() {
+////                                      if (playing) {
+////                                        _controller.pause();
+////                                        _animationController.reverse();
+////                                      } else {
+////                                        _controller.play();
+////                                        _animationController.forward();
+////                                      }
+////                                    });
+////                                  },
+////                                  child: AnimatedIcon(
+////                                    icon: AnimatedIcons.play_pause,
+////                                    size: 40,
+////                                    progress: _animationController,
+////                                  ),
+////                                ),
+////                              ),
+////                            )
+//                          ],
+//                        ),
+//                      ),
                       Visibility(
                         visible: MediaQuery.of(context).orientation == Orientation.portrait,
                         child: Expanded(
                           child: Container(
                             height: 1,
+                            decoration: BoxDecoration(
+                              boxShadow: [BoxShadow(blurRadius: 10, color: Colors.white)]
+                            ),
                             child: StreamBuilder(
                                 stream: Firestore.instance
                                     .collection('edu_courses')
                                     .document(widget.documentID)
                                     .collection("comments")
-                                    .orderBy("timestamp", descending: false)
+                                    .orderBy("timestamp", descending: true)
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if(snapshot.hasData) {
@@ -205,6 +213,8 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
                                     }
                                     else return ListView.builder(
                                       shrinkWrap: true,
+                                      reverse: true,
+                                      controller: _scrollController,
                                       itemCount: (snapshot.data.documents ?? []).length,
                                       itemBuilder: (BuildContext context, int index) {
                                         var comments = snapshot.data.documents[index] ?? {};
@@ -293,6 +303,7 @@ class _CourseLiveState extends State<CourseLive> with SingleTickerProviderStateM
                                       setState(() {
                                         loading = false;
                                         _textEditingController.text = '';
+                                        _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: Duration(seconds: 1), curve: Curves.easeOut);
                                       });
                                     });
                                   }

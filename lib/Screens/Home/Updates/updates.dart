@@ -1,7 +1,6 @@
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -85,7 +84,7 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
     if (dt.inDays > 30)
       return (dt.inDays ~/ 30).toStringAsFixed(0) + ' mo';
     else if (dt.inDays > 0)
-      return dt.inDays.toString() + ' days';
+      return (dt.inDays.toString() == '1') ? '1 day' : dt.inDays.toString() + ' days';
     else if (dt.inHours > 0)
       return dt.inHours.toString() + ' hrs';
     else if (dt.inMinutes > 0)
@@ -400,21 +399,22 @@ class _AllNotificationsState extends State<AllNotifications> {
                                 padding: EdgeInsets.only(
                                     left: width * 0.01, top: 5.0),
                                 child: ListTile(
-                                  isThreeLine: true,
-                                  title: AutoSizeText(
+                                  dense: true,
+                                  //isThreeLine: true,
+                                  title: Text(
                                     myNotifications[index][0] ??
                                         "No Message Specified",
-                                    maxLines: 2,
+                                    //maxLines: 2,
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500),
-                                    overflow: TextOverflow.ellipsis,
+                                    //overflow: TextOverflow.ellipsis,
                                   ),
-                                  subtitle: AutoSizeText(
+                                  subtitle: Text(
                                     myNotifications[index][1] ??
                                         "No Message Specified",
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    //maxLines: 2,
+                                    //overflow: TextOverflow.ellipsis,
                                   ),
                                   trailing: Text(myNotifications[index][2] ??
                                       'No Time Exception'),
