@@ -38,7 +38,7 @@ class _RegisterState extends State<Register> {
           builder: (context) => AlertDialog(
             title: new Text(
               'Your details will not be saved and you will have to start over again !!!\n\nAre you sure you want to leave?',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 15),
               textAlign: TextAlign.justify,
             ),
 //            content: new Text(
@@ -64,7 +64,7 @@ class _RegisterState extends State<Register> {
                 },
                 child: new Text(
                   'YES',
-                  style: TextStyle(),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ],
@@ -327,6 +327,7 @@ class _RegisterState extends State<Register> {
                                           )
                                         : InkWell(
                                             onTap: () async {
+                                              FocusScope.of(context).unfocus();
                                               String x = await showDialog(
                                                   context: context,
                                                   builder: (_) {

@@ -214,7 +214,7 @@ class _ExperiencesState extends State<Experiences> {
                                 children: <Widget>[
                                   Container(
                                     decoration:
-                                        BoxDecoration(border: Border.all()),
+                                        BoxDecoration(border: Border.all(color: Colors.grey)),
                                     padding: EdgeInsets.all(8),
                                     child: ListTile(
                                       title: Text(

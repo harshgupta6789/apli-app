@@ -44,8 +44,10 @@ class _CourseLiveState extends State<CourseLive>
 
   Widget emojiKeyboard() {
     return EmojiPicker(
+      bgColor: Theme.of(context).backgroundColor,
+      indicatorColor: Theme.of(context).backgroundColor,
       rows: 4,
-      columns: 7,
+      columns: 9,
       onEmojiSelected: (emoji, category) {
         _textEditingController.text = _textEditingController.text + emoji.emoji;
       },
@@ -94,7 +96,6 @@ class _CourseLiveState extends State<CourseLive>
           isLive: true,
           forceHD: true,
           loop: false,
-         
           hideControls: false),
     );
     super.initState();
@@ -153,10 +154,12 @@ class _CourseLiveState extends State<CourseLive>
                       child: IntrinsicHeight(
                         child: Column(
                           children: <Widget>[
-                            YoutubePlayer(controller: _controller , aspectRatio:16/9, bottomActions: [
-     Text("OJAS")
-      
-    ],),
+                            Container(
+                              height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 27 : 250,
+                              child: YoutubePlayer(
+                                controller: _controller,
+                              ),
+                            ),
                             Visibility(
                               visible: MediaQuery.of(context).orientation ==
                                   Orientation.portrait,
@@ -167,7 +170,7 @@ class _CourseLiveState extends State<CourseLive>
                                       color: Theme.of(context).backgroundColor,
                                       boxShadow: [
                                         BoxShadow(
-                                            blurRadius: 10, color: Colors.white)
+                                            blurRadius: 10, color: Colors.white),
                                       ]),
                                   child: StreamBuilder(
                                       stream: Firestore.instance
@@ -337,10 +340,10 @@ class _CourseLiveState extends State<CourseLive>
                                     child: ListTile(
                                         leading: IconButton(
                                             icon: Icon(
-                                              Icons.face,
-                                              color: isEmoji
-                                                  ? basicColor
-                                                  : Colors.grey,
+                                              isEmoji ? Icons.keyboard : Icons.face,
+//                                              color: isEmoji
+//                                                  ? basicColor
+//                                                  : Colors.grey,
                                             ),
                                             onPressed: () {
                                               if (_focusNode.hasFocus) {
@@ -368,11 +371,10 @@ class _CourseLiveState extends State<CourseLive>
                                         title: TextFormField(
                                             controller: _textEditingController,
                                             focusNode: _focusNode,
-
                                             // showCursor: !isEmoji,
                                             // readOnly: !isEmoji,
                                             textInputAction:
-                                                TextInputAction.done,
+                                                TextInputAction.newline,
                                             decoration: InputDecoration(
                                                 border: InputBorder.none,
                                                 hintText: 'Type Here')),

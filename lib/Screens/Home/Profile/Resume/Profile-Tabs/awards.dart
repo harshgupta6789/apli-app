@@ -8,8 +8,8 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Awards extends StatefulWidget {
   @override
@@ -243,8 +243,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                           FlatButton(
                                             child: Text(
                                               'CLOSE',
-                                              style: TextStyle(
-                                                  color: Colors.black),
+                                              style: TextStyle(),
                                             ),
                                             onPressed: () {
                                               Navigator.of(context).pop();
@@ -254,7 +253,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                             child: Text(
                                               'ADD',
                                               style:
-                                                  TextStyle(color: basicColor),
+                                                  TextStyle(),
                                             ),
                                             onPressed: () {
                                               Navigator.of(context).pop();

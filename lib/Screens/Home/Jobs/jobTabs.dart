@@ -2,7 +2,6 @@ import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -296,13 +295,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                 trailing: widget.tabNo == 0
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
-                                                    : IconButton(
-                                                        icon: Icon(
-                                                          EvaIcons
-                                                              .bookmarkOutline,
-                                                        ),
-                                                        onPressed: () async {},
-                                                      )),
+                                                    : SizedBox()),
                                           ),
                                         ])),
                               ),
