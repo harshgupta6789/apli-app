@@ -93,7 +93,6 @@ class _RandomDetailsState extends State<RandomDetails> {
                                                   "Office Of Apli",
                                                   maxLines: 2,
                                                   style: TextStyle(
-                                                      color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                   overflow:
@@ -103,7 +102,6 @@ class _RandomDetailsState extends State<RandomDetails> {
                                                   "No Deadline yet",
                                                   maxLines: 2,
                                                   style: TextStyle(
-                                                      color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                   overflow:
@@ -134,7 +132,6 @@ class _RandomDetailsState extends State<RandomDetails> {
                                                   //maxLines: 4,
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                   overflow:
@@ -145,7 +142,6 @@ class _RandomDetailsState extends State<RandomDetails> {
                                                   //maxLines: 4,
                                                   style: TextStyle(
                                                       fontSize: 15,
-                                                      color: Colors.black,
                                                       fontWeight:
                                                           FontWeight.w500),
                                                   overflow:
