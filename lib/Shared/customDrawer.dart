@@ -52,9 +52,11 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
   Widget profilePic(data) {
     if (data == null || data == 'null') {
      return CircleAvatar(
+       backgroundColor: Colors.blue,
           minRadius: 30, maxRadius: 35, backgroundImage: AssetImage("Assets/Images/pic.png"));
     } else {
       return CircleAvatar(
+          backgroundColor: Colors.blue,
           minRadius: 30, maxRadius: 35, backgroundImage: NetworkImage(data));
     }
   }

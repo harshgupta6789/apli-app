@@ -12,8 +12,8 @@ import 'package:wakelock/wakelock.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class CourseLive extends StatefulWidget {
-  final String link, documentID;
-  CourseLive({this.link, this.documentID});
+  final String link, documentID, hashtag;
+  CourseLive({this.link, this.documentID, this.hashtag});
   @override
   _CourseLiveState createState() => _CourseLiveState();
 }
@@ -155,7 +155,10 @@ class _CourseLiveState extends State<CourseLive>
                         child: Column(
                           children: <Widget>[
                             Container(
-                              height: MediaQuery.of(context).orientation == Orientation.landscape ? MediaQuery.of(context).size.height - 27 : 250,
+                              height: MediaQuery.of(context).orientation ==
+                                      Orientation.landscape
+                                  ? MediaQuery.of(context).size.height - 27
+                                  : 250,
                               child: YoutubePlayer(
                                 controller: _controller,
                               ),
@@ -170,7 +173,8 @@ class _CourseLiveState extends State<CourseLive>
                                       color: Theme.of(context).backgroundColor,
                                       boxShadow: [
                                         BoxShadow(
-                                            blurRadius: 10, color: Colors.white),
+                                            blurRadius: 10,
+                                            color: Colors.white),
                                       ]),
                                   child: StreamBuilder(
                                       stream: Firestore.instance
@@ -217,16 +221,57 @@ class _CourseLiveState extends State<CourseLive>
                                                     comments['comment'] ?? '';
                                                 List<String>
                                                     commentContentDivided =
-                                                    commentContent
-                                                        .split("#AskAQuestion");
+                                                    commentContent.split(" ");
+                                                List<Widget> temp =
+                                                    commentContentDivided
+                                                        .map((e) {
+                                                  if (e.toLowerCase() ==
+                                                      ((widget.hashtag == null) ? '#askaquestion' : widget.hashtag.toLowerCase()))
+                                                    return Linkify(
+                                                      text: e + ' ',
+                                                      onOpen: (link) async {
+                                                        if (await canLaunch(
+                                                            link.url)) {
+                                                          await launch(
+                                                              link.url);
+                                                        } else {
+                                                          throw 'Could not launch $link';
+                                                        }
+                                                      },
+                                                      style: TextStyle(
+                                                          wordSpacing: 0,
+                                                          color: basicColor,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    );
+                                                  else
+                                                    return Linkify(
+                                                      text: e + ' ',
+                                                      onOpen: (link) async {
+                                                        if (await canLaunch(
+                                                            link.url)) {
+                                                          await launch(
+                                                              link.url);
+                                                        } else {
+                                                          throw 'Could not launch $link';
+                                                        }
+                                                      },
+                                                      style: TextStyle(
+                                                          wordSpacing: 0,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400),
+                                                    );
+                                                }).toList();
                                                 String commentTime =
                                                     timestampToReadableTimeConverter(
                                                         comments['timestamp'] ??
                                                             Timestamp.now());
                                                 Color commentColor = [
                                                   'A',
-                                                  'B',
-                                                  'C',
+                                                  'J',
+                                                  'P',
                                                   'D',
                                                   'E',
                                                   'F'
@@ -236,7 +281,7 @@ class _CourseLiveState extends State<CourseLive>
                                                         'G',
                                                         'H',
                                                         'I',
-                                                        'J',
+                                                        'B',
                                                         'K',
                                                         'L'
                                                       ].contains(
@@ -246,7 +291,7 @@ class _CourseLiveState extends State<CourseLive>
                                                             'M',
                                                             'N',
                                                             'O',
-                                                            'P',
+                                                            'C',
                                                             'Q',
                                                             'R'
                                                           ].contains(
@@ -266,7 +311,7 @@ class _CourseLiveState extends State<CourseLive>
                                                                     .deepPurpleAccent;
                                                 return Container(
                                                   padding: EdgeInsets.all(0),
-                                                  margin: EdgeInsets.all(8),
+                                                  margin: EdgeInsets.fromLTRB(8, 3, 8, 3),
                                                   decoration: myBoxDecoration(),
                                                   child: ListTile(
                                                     isThreeLine: true,
@@ -295,22 +340,8 @@ class _CourseLiveState extends State<CourseLive>
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold)),
-                                                    subtitle: Linkify(
-                                                      text: commentContent,
-                                                      onOpen: (link) async {
-                                                        if (await canLaunch(
-                                                            link.url)) {
-                                                          await launch(
-                                                              link.url);
-                                                        } else {
-                                                          throw 'Could not launch $link';
-                                                        }
-                                                      },
-                                                      maxLines: 5,
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w400),
+                                                    subtitle: Wrap(
+                                                      children: temp,
                                                     ),
                                                     trailing: Text(
                                                       commentTime,
@@ -340,7 +371,9 @@ class _CourseLiveState extends State<CourseLive>
                                     child: ListTile(
                                         leading: IconButton(
                                             icon: Icon(
-                                              isEmoji ? Icons.keyboard : Icons.face,
+                                              isEmoji
+                                                  ? Icons.keyboard
+                                                  : Icons.tag_faces,
 //                                              color: isEmoji
 //                                                  ? basicColor
 //                                                  : Colors.grey,
@@ -369,15 +402,56 @@ class _CourseLiveState extends State<CourseLive>
                                               }
                                             }),
                                         title: TextFormField(
+                                            onFieldSubmitted: (value) async {
+                                              if (_textEditingController
+                                                  .text.isNotEmpty) {
+                                                setState(() {
+                                                  loading = true;
+                                                });
+                                                await Firestore.instance
+                                                    .collection(
+                                                    'edu_courses')
+                                                    .document(
+                                                    widget.documentID)
+                                                    .collection("comments")
+                                                    .document()
+                                                    .setData({
+                                                  'timestamp':
+                                                  Timestamp.now(),
+                                                  'name': name,
+                                                  'email': email,
+                                                  'comment':
+                                                  _textEditingController
+                                                      .text,
+                                                  'profile_picture':
+                                                  profilePicture
+                                                }).then((value) {
+                                                  _focusNode.unfocus();
+                                                  setState(() {
+                                                    loading = false;
+                                                    isEmoji = false;
+                                                    isFocus = false;
+                                                    _textEditingController
+                                                        .text = '';
+                                                    _scrollController.animateTo(
+                                                        _scrollController
+                                                            .position
+                                                            .minScrollExtent,
+                                                        duration: Duration(
+                                                            seconds: 1),
+                                                        curve:
+                                                        Curves.easeOut);
+                                                  });
+                                                });
+                                              }
+                                            },
                                             controller: _textEditingController,
                                             focusNode: _focusNode,
-                                            // showCursor: !isEmoji,
-                                            // readOnly: !isEmoji,
                                             textInputAction:
-                                                TextInputAction.newline,
+                                                TextInputAction.send,
                                             decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: 'Type Here')),
+                                                hintText: 'Use ' + widget.hashtag ?? '#AskAQuestion')),
                                         trailing: loading
                                             ? CircularProgressIndicator()
                                             : IconButton(

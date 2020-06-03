@@ -327,6 +327,9 @@ class _CoursesLiveState extends State<CoursesLive>
                                                                       documentID:
                                                                           widget
                                                                               .documentId,
+                                                                      hashtag: snapshot
+                                                                          .data
+                                                                          .documents[0]['hashtag'],
                                                                     )));
                                                   }),
                                             ),
