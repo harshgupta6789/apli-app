@@ -135,30 +135,19 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, _scaffoldKey),
+        drawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
-            actions: <Widget>[
-              // IconButton(
-              //     icon: Icon(
-              //       EvaIcons.funnelOutline,
-              //       color: Colors.white,
-              //     ),
-              //     onPressed: null),
-              Padding(
+            leading: Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: IconButton(
                     icon: Icon(
-                      EvaIcons.moreVerticalOutline,
+                      EvaIcons.menuOutline,
                       color: Colors.white,
                     ),
-                    onPressed: () {
-                      _scaffoldKey.currentState.openEndDrawer();
-                    }),
-              ),
-            ],
+                    onPressed: () => _scaffoldKey.currentState.openDrawer())),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(

@@ -351,7 +351,7 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
     return Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         key: _scaffoldKey,
-        endDrawer: customDrawer(context, _scaffoldKey),
+        drawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
@@ -377,10 +377,10 @@ class _CoursesState extends State<Courses> with SingleTickerProviderStateMixin {
                 padding: EdgeInsets.only(bottom: 10.0),
                 child: IconButton(
                     icon: Icon(
-                      EvaIcons.moreVerticalOutline,
+                      EvaIcons.menuOutline,
                       color: Colors.white,
                     ),
-                    onPressed: () => _scaffoldKey.currentState.openEndDrawer()),
+                    onPressed: () => _scaffoldKey.currentState.openDrawer()),
               )
             ],
             leading: Padding(

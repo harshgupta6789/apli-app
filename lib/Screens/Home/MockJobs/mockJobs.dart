@@ -136,9 +136,17 @@ class _MockJobsState extends State<MockJobs>
                 }
               },
             )),
-        endDrawer: customDrawer(context, _scaffoldKey),
+        drawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
+            leading: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.menuOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => _scaffoldKey.currentState.openDrawer())),
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             actions: <Widget>[
@@ -160,15 +168,6 @@ class _MockJobsState extends State<MockJobs>
 //                    ),
 //                    onPressed: null),
 //              ),
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: IconButton(
-                      icon: Icon(
-                        EvaIcons.moreVerticalOutline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () =>
-                          _scaffoldKey.currentState.openEndDrawer())),
             ],
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),

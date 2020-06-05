@@ -30,22 +30,20 @@ class _CourseMainState extends State<CourseMain> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       key: _scaffoldKey,
-      endDrawer: customDrawer(context, _scaffoldKey),
+      drawer: customDrawer(context, _scaffoldKey),
       appBar: PreferredSize(
         child: AppBar(
           backgroundColor: basicColor,
           automaticallyImplyLeading: false,
-          actions: <Widget>[
-            Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: IconButton(
-                    icon: Icon(
-                      EvaIcons.moreVerticalOutline,
-                      color: Colors.white,
-                    ),
-                    onPressed: () =>
-                        _scaffoldKey.currentState.openEndDrawer())),
-          ],
+          leading: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: IconButton(
+                  icon: Icon(
+                    EvaIcons.menuOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
+        
           title: Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: Text(courses,

@@ -16,7 +16,7 @@ class Jobs extends StatefulWidget {
   _JobsState createState() => _JobsState();
 }
 
-List<List<bool>> savedJobs= [[], [], []];
+List<List<bool>> savedJobs = [[], [], []];
 var tempGlobalJobs;
 
 class _JobsState extends State<Jobs>
@@ -141,13 +141,13 @@ class _JobsState extends State<Jobs>
         jobs = result;
         if (jobs != null && jobs != 'frozen') {
           savedJobs = [[], [], []];
-          for(int i = 0; i < (jobs['submitted_jobs']?? []).length; i++) {
+          for (int i = 0; i < (jobs['submitted_jobs'] ?? []).length; i++) {
             savedJobs[0].add(jobs['submitted_jobs'][i]['is_saved'] ?? false);
           }
-          for(int i = 0; i < (jobs['all_jobs']?? []).length; i++) {
+          for (int i = 0; i < (jobs['all_jobs'] ?? []).length; i++) {
             savedJobs[1].add(jobs['all_jobs'][i]['is_saved'] ?? false);
           }
-          for(int i = 0; i < (jobs['pending_jobs']?? []).length; i++) {
+          for (int i = 0; i < (jobs['pending_jobs'] ?? []).length; i++) {
             savedJobs[2].add(jobs['pending_jobs'][i]['is_saved'] ?? false);
           }
           submittedJob = jobs['submitted_jobs'] ?? [];
@@ -208,7 +208,7 @@ class _JobsState extends State<Jobs>
                       },
                     ),
                   ),
-        endDrawer: customDrawer(context, _scaffoldKey),
+        drawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
               backgroundColor: basicColor,
@@ -223,7 +223,7 @@ class _JobsState extends State<Jobs>
                       ),
                       onPressed: () async {
                         await showDialog(
-                          barrierDismissible: true,
+                            barrierDismissible: true,
                             context: context,
                             builder: (context) =>
                                 StatefulBuilder(builder: (context2, setState) {
@@ -269,16 +269,15 @@ class _JobsState extends State<Jobs>
 //                    ),
 //                    onPressed: null),
 //              ),
-                Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: IconButton(
-                        icon: Icon(
-                          EvaIcons.moreVerticalOutline,
-                          color: Colors.white,
-                        ),
-                        onPressed: () =>
-                            _scaffoldKey.currentState.openEndDrawer())),
               ],
+              leading: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: IconButton(
+                      icon: Icon(
+                        EvaIcons.menuOutline,
+                        color: Colors.white,
+                      ),
+                      onPressed: () => _scaffoldKey.currentState.openDrawer())),
               title: Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: Text(

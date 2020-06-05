@@ -28,22 +28,19 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Theme.of(context).backgroundColor,
-        endDrawer: customDrawer(context, _scaffoldKey),
+        drawer: customDrawer(context, _scaffoldKey),
         appBar: PreferredSize(
           child: AppBar(
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
-            actions: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: IconButton(
-                      icon: Icon(
-                        EvaIcons.moreVerticalOutline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () =>
-                          _scaffoldKey.currentState.openEndDrawer())),
-            ],
+            leading: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: IconButton(
+                  icon: Icon(
+                    EvaIcons.menuOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(

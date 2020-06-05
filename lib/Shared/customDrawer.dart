@@ -51,20 +51,24 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
 
   Widget profilePic(data) {
     if (data == null || data == 'null') {
-     return CircleAvatar(
-       backgroundColor: Colors.blue,
-          minRadius: 30, maxRadius: 35, backgroundImage: AssetImage("Assets/Images/pic.png"));
+      return CircleAvatar(
+          backgroundColor: Colors.blue,
+          minRadius: 30,
+          maxRadius: 35,
+          backgroundImage: AssetImage("Assets/Images/pic.png"));
     } else {
       return CircleAvatar(
           backgroundColor: Colors.blue,
-          minRadius: 30, maxRadius: 35, backgroundImage: NetworkImage(data));
+          minRadius: 30,
+          maxRadius: 35,
+          backgroundImage: NetworkImage(data));
     }
   }
 
   Widget sideNav() {
     return Padding(
       padding:
-          EdgeInsets.fromLTRB(width * 0.3, height * 0.05, 0, height * 0.03),
+          EdgeInsets.fromLTRB(0, height * 0.03, width * 0.3, 0),
       child: ClipRRect(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(7), bottomLeft: Radius.circular(7)),
