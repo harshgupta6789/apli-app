@@ -168,7 +168,7 @@ class _JobsState extends State<Jobs>
       duration: const Duration(milliseconds: 1000),
       vsync: this,
     );
-    getInfo();
+//    getInfo();
     _tabController =
         TabController(length: 3, vsync: this, initialIndex: _currentTab);
     super.initState();
@@ -185,81 +185,81 @@ class _JobsState extends State<Jobs>
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        key: _scaffoldKey,
-        floatingActionButton: jobs == null
-            ? null
-            : jobs['profile_status'] < 384
-                ? null
-                : RotationTransition(
-                    turns: Tween(begin: 0.0, end: 3.0).animate(_controller),
-                    child: FloatingActionButton(
-                      heroTag: 'jobs',
-                      backgroundColor: basicColor,
-                      child: Icon(Icons.refresh),
-                      onPressed: () {
-                        if (!loading) {
-                          _controller.forward();
-                          getInfo();
-                          setState(() {
-                            loading = true;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-        drawer: customDrawer(context, _scaffoldKey),
-        appBar: PreferredSize(
-          child: AppBar(
-              backgroundColor: basicColor,
-              automaticallyImplyLeading: false,
-              actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: IconButton(
-                      icon: Icon(
-                        EvaIcons.funnelOutline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        await showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (context) =>
-                                StatefulBuilder(builder: (context2, setState) {
-                                  return Scaffold(
-                                    backgroundColor: Colors.transparent,
-                                    body: AlertDialog(
-                                      title: new Text(
-                                        'Filter',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      content: Container(
-                                        height: 300,
-                                        width: 300,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            return ListTile(
-                                              title: Text(
-                                                '${filterMenu[index]}',
-                                              ),
-                                              onTap: () {
-                                                //Navigator.pop(context, '${items[index]}');
-                                              },
-                                              subtitle: Divider(thickness: 2),
-                                            );
-                                          },
-                                          itemCount: filterMenu.length,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }));
-                      }),
-                ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      key: _scaffoldKey,
+//        floatingActionButton: jobs == null
+//            ? null
+//            : jobs['profile_status'] < 384
+//                ? null
+//                : RotationTransition(
+//                    turns: Tween(begin: 0.0, end: 3.0).animate(_controller),
+//                    child: FloatingActionButton(
+//                      heroTag: 'jobs',
+//                      backgroundColor: basicColor,
+//                      child: Icon(Icons.refresh),
+//                      onPressed: () {
+//                        if (!loading) {
+//                          _controller.forward();
+//                          getInfo();
+//                          setState(() {
+//                            loading = true;
+//                          });
+//                        }
+//                      },
+//                    ),
+//                  ),
+      endDrawer: customDrawer(context, _scaffoldKey),
+      appBar: PreferredSize(
+        child: AppBar(
+            backgroundColor: basicColor,
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+//                Padding(
+//                  padding: const EdgeInsets.only(bottom: 10.0),
+//                  child: IconButton(
+//                      icon: Icon(
+//                        EvaIcons.funnelOutline,
+//                        color: Colors.white,
+//                      ),
+//                      onPressed: () async {
+//                        await showDialog(
+//                          barrierDismissible: true,
+//                            context: context,
+//                            builder: (context) =>
+//                                StatefulBuilder(builder: (context2, setState) {
+//                                  return Scaffold(
+//                                    backgroundColor: Colors.transparent,
+//                                    body: AlertDialog(
+//                                      title: new Text(
+//                                        'Filter',
+//                                        style: TextStyle(
+//                                            fontSize: 14,
+//                                            fontWeight: FontWeight.bold),
+//                                      ),
+//                                      content: Container(
+//                                        height: 300,
+//                                        width: 300,
+//                                        child: ListView.builder(
+//                                          shrinkWrap: true,
+//                                          itemBuilder: (context, index) {
+//                                            return ListTile(
+//                                              title: Text(
+//                                                '${filterMenu[index]}',
+//                                              ),
+//                                              onTap: () {
+//                                                //Navigator.pop(context, '${items[index]}');
+//                                              },
+//                                              subtitle: Divider(thickness: 2),
+//                                            );
+//                                          },
+//                                          itemCount: filterMenu.length,
+//                                        ),
+//                                      ),
+//                                    ),
+//                                  );
+//                                }));
+//                      }),
+//                ),
 //              Padding(
 //                padding: const EdgeInsets.only(bottom: 10.0),
 //                child: IconButton(
@@ -269,255 +269,279 @@ class _JobsState extends State<Jobs>
 //                    ),
 //                    onPressed: null),
 //              ),
-              ],
-              leading: Padding(
+              Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: IconButton(
                       icon: Icon(
-                        EvaIcons.menuOutline,
+                        EvaIcons.moreVerticalOutline,
                         color: Colors.white,
                       ),
-                      onPressed: () => _scaffoldKey.currentState.openDrawer())),
-              title: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: Text(
-                  jobsAvailable,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                ),
+                      onPressed: () =>
+                          _scaffoldKey.currentState.openEndDrawer())),
+            ],
+            title: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Text(
+                jobsAvailable,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
               ),
-              bottom: (jobs == null)
-                  ? null
-                  : jobs['profile_status'] < 384
-                      ? null
-                      : ColoredTabBar(
-                          Theme.of(context).backgroundColor,
-                          TabBar(
-                            indicator: UnderlineTabIndicator(
-                              borderSide:
-                                  BorderSide(width: 3.0, color: basicColor),
+            ),
+            bottom: ColoredTabBar(
+                Theme.of(context).backgroundColor,
+                TabBar(
+                  indicator: UnderlineTabIndicator(
+                    borderSide: BorderSide(width: 3.0, color: basicColor),
+                  ),
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: basicColor,
+                  tabs: [
+                    Tab(
+                      text: applied,
+                    ),
+                    Tab(
+                      text: allJobs,
+                    ),
+                    Tab(
+                      text: incomplete,
+                    )
+                  ],
+                  controller: _tabController,
+                ))),
+//              bottom: (jobs == null)
+//                  ? null
+//                  : jobs['profile_status'] < 384
+//                      ? null
+//                      : ColoredTabBar(
+//                          Theme.of(context).backgroundColor,
+//                          TabBar(
+//                            indicator: UnderlineTabIndicator(
+//                              borderSide:
+//                                  BorderSide(width: 3.0, color: basicColor),
+//                            ),
+//                            unselectedLabelColor: Colors.grey,
+//                            labelColor: basicColor,
+//                            tabs: [
+//                              Tab(
+//                                text: applied,
+//                              ),
+//                              Tab(
+//                                text: allJobs,
+//                              ),
+//                              Tab(
+//                                text: incomplete,
+//                              )
+//                            ],
+//                            controller: _tabController,
+//                          ))),
+        preferredSize: Size.fromHeight(100),
+//          preferredSize: (jobs == null)
+//              ? Size.fromHeight(55)
+//              : jobs['profile_status'] < 384
+//                  ? Size.fromHeight(55)
+//                  : Size.fromHeight(100),
+      ),
+      body: TabBarView(
+        children: [
+          Center(
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "We know you are interested in jobs,\nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                              text: "Profile",
+                              style: TextStyle(color: basicColor),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => Wrapper(
+                                                currentTab: 3,
+                                              )),
+                                      (Route<dynamic> route) => false);
+                                },
                             ),
-                            unselectedLabelColor: Colors.grey,
-                            labelColor: basicColor,
-                            tabs: [
-                              Tab(
-                                text: applied,
-                              ),
-                              Tab(
-                                text: allJobs,
-                              ),
-                              Tab(
-                                text: incomplete,
-                              )
-                            ],
-                            controller: _tabController,
-                          ))),
-          preferredSize: (jobs == null)
-              ? Size.fromHeight(55)
-              : jobs['profile_status'] < 384
-                  ? Size.fromHeight(55)
-                  : Size.fromHeight(100),
-        ),
-//      body: TabBarView(
-//        children: [
-//          Center(
-//              child: ScrollConfiguration(
-//            behavior: MyBehavior(),
-//            child: SingleChildScrollView(
-//              child: Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  Image.asset("Assets/Images/job.png"),
-//                  Padding(
-//                    padding: const EdgeInsets.all(8.0),
-//                    child: RichText(
-//                      textAlign: TextAlign.center,
-//                      text: TextSpan(
-//                          text:
-//                              "We know you are interested in jobs,\nbut first build your ",
-//                          style: TextStyle(color: Colors.black, fontSize: 18),
-//                          children: [
-//                            TextSpan(
-//                              text: "Profile",
-//                              style: TextStyle(color: basicColor),
-//                              recognizer: TapGestureRecognizer()
-//                                ..onTap = () {
-//                                  Navigator.of(context).pushAndRemoveUntil(
-//                                      MaterialPageRoute(
-//                                          builder: (context) => Wrapper(
-//                                                currentTab: 3,
-//                                              )),
-//                                      (Route<dynamic> route) => false);
-//                                },
-//                            ),
-//                          ]),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//          )),
-//          Center(
-//              child: ScrollConfiguration(
-//            behavior: MyBehavior(),
-//            child: SingleChildScrollView(
-//              child: Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  Image.asset("Assets/Images/job.png"),
-//                  Padding(
-//                    padding: const EdgeInsets.all(8.0),
-//                    child: RichText(
-//                      textAlign: TextAlign.center,
-//                      text: TextSpan(
-//                          text:
-//                              "We know you are interested in jobs,\nbut first build your ",
-//                          style: TextStyle(color: Colors.black, fontSize: 18),
-//                          children: [
-//                            TextSpan(
-//                              text: "Profile",
-//                              style: TextStyle(color: basicColor),
-//                              recognizer: TapGestureRecognizer()
-//                                ..onTap = () {
-//                                  Navigator.of(context).pushAndRemoveUntil(
-//                                      MaterialPageRoute(
-//                                          builder: (context) => Wrapper(
-//                                                currentTab: 3,
-//                                              )),
-//                                      (Route<dynamic> route) => false);
-//                                },
-//                            ),
-//                          ]),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//          )),
-//          Center(
-//              child: ScrollConfiguration(
-//            behavior: MyBehavior(),
-//            child: SingleChildScrollView(
-//              child: Column(
-//                mainAxisAlignment: MainAxisAlignment.center,
-//                children: <Widget>[
-//                  Image.asset("Assets/Images/job.png"),
-//                  Padding(
-//                    padding: const EdgeInsets.all(8.0),
-//                    child: RichText(
-//                      textAlign: TextAlign.center,
-//                      text: TextSpan(
-//                          text:
-//                              "We know you are interested in jobs,\nbut first build your ",
-//                          style: TextStyle(color: Colors.black, fontSize: 18),
-//                          children: [
-//                            TextSpan(
-//                              text: "Profile",
-//                              style: TextStyle(color: basicColor),
-//                              recognizer: TapGestureRecognizer()
-//                                ..onTap = () {
-//                                  Navigator.of(context).pushAndRemoveUntil(
-//                                      MaterialPageRoute(
-//                                          builder: (context) => Wrapper(
-//                                                currentTab: 3,
-//                                              )),
-//                                      (Route<dynamic> route) => false);
-//                                },
-//                            ),
-//                          ]),
-//                    ),
-//                  )
-//                ],
-//              ),
-//            ),
-//          )),
-//        ],
-//        controller: _tabController,
-//      ),
-        body: loading
-            ? Loading()
-            : jobs == null
-                ? Center(
-                    child: Text('Error occurred, try again later'),
+                          ]),
+                    ),
                   )
-                : jobs == 'frozen'
-                    ? Center(
-                        child: Text(
-                            "Your account is set on 'freeze' by your college"),
-                      )
-                    : jobs == 0
-                        ? Center(
-                            child: Text('Error occurred, try again later'),
-                          )
-                        : jobs['profile_status'] < 384
-                            ? Center(
-                                child: ScrollConfiguration(
-                                behavior: MyBehavior(),
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset("Assets/Images/job.png"),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: RichText(
-                                          textAlign: TextAlign.center,
-                                          text: TextSpan(
-                                              text:
-                                                  "We know you are interested in jobs,\nbut first build your ",
-                                              style: TextStyle(fontSize: 18),
-                                              children: [
-                                                TextSpan(
-                                                  text: "Profile",
-                                                  style: TextStyle(
-                                                      color: basicColor),
-                                                  recognizer:
-                                                      TapGestureRecognizer()
-                                                        ..onTap = () {
-                                                          Navigator.of(context)
-                                                              .pushAndRemoveUntil(
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Wrapper(
-                                                                                currentTab: 4,
-                                                                              )),
-                                                                  (Route<dynamic>
-                                                                          route) =>
-                                                                      false);
-                                                        },
-                                                ),
-                                              ]),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ))
-                            : TabBarView(
-                                children: [
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['submitted_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 0,
-                                  ),
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['all_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 1,
-                                  ),
-                                  JobsTabs(
-                                    alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['pending_jobs'],
-                                    profileStatus: jobs['profile_status'],
-                                    tabNo: 2,
-                                  )
-                                ],
-                                controller: _tabController,
-                              ));
+                ],
+              ),
+            ),
+          )),
+          Center(
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "We know you are interested in jobs,\nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                              text: "Profile",
+                              style: TextStyle(color: basicColor),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => Wrapper(
+                                                currentTab: 3,
+                                              )),
+                                      (Route<dynamic> route) => false);
+                                },
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )),
+          Center(
+              child: ScrollConfiguration(
+            behavior: MyBehavior(),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Image.asset("Assets/Images/job.png"),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                          text:
+                              "We know you are interested in jobs,\nbut first build your ",
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                          children: [
+                            TextSpan(
+                              text: "Profile",
+                              style: TextStyle(color: basicColor),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                          builder: (context) => Wrapper(
+                                                currentTab: 3,
+                                              )),
+                                      (Route<dynamic> route) => false);
+                                },
+                            ),
+                          ]),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )),
+        ],
+        controller: _tabController,
+      ),
+//        body: loading
+//            ? Loading()
+//            : jobs == null
+//                ? Center(
+//                    child: Text('Error occurred, try again later'),
+//                  )
+//                : jobs == 'frozen'
+//                    ? Center(
+//                        child: Text(
+//                            "Your account is set on 'freeze' by your college"),
+//                      )
+//                    : jobs == 0
+//                        ? Center(
+//                            child: Text('Error occurred, try again later'),
+//                          )
+//                        : jobs['profile_status'] < 384
+//                            ? Center(
+//                                child: ScrollConfiguration(
+//                                behavior: MyBehavior(),
+//                                child: SingleChildScrollView(
+//                                  child: Column(
+//                                    mainAxisAlignment: MainAxisAlignment.center,
+//                                    children: <Widget>[
+//                                      Image.asset("Assets/Images/job.png"),
+//                                      Padding(
+//                                        padding: const EdgeInsets.all(8.0),
+//                                        child: RichText(
+//                                          textAlign: TextAlign.center,
+//                                          text: TextSpan(
+//                                              text:
+//                                                  "We know you are interested in jobs,\nbut first build your ",
+//                                              style: TextStyle(fontSize: 18),
+//                                              children: [
+//                                                TextSpan(
+//                                                  text: "Profile",
+//                                                  style: TextStyle(
+//                                                      color: basicColor),
+//                                                  recognizer:
+//                                                      TapGestureRecognizer()
+//                                                        ..onTap = () {
+//                                                          Navigator.of(context)
+//                                                              .pushAndRemoveUntil(
+//                                                                  MaterialPageRoute(
+//                                                                      builder:
+//                                                                          (context) =>
+//                                                                              Wrapper(
+//                                                                                currentTab: 4,
+//                                                                              )),
+//                                                                  (Route<dynamic>
+//                                                                          route) =>
+//                                                                      false);
+//                                                        },
+//                                                ),
+//                                              ]),
+//                                        ),
+//                                      )
+//                                    ],
+//                                  ),
+//                                ),
+//                              ))
+//                            : TabBarView(
+//                                children: [
+//                                  JobsTabs(
+//                                    alreadyAccepted: jobs['cand_accepted_job'],
+//                                    jobs: jobs['submitted_jobs'],
+//                                    profileStatus: jobs['profile_status'],
+//                                    tabNo: 0,
+//                                  ),
+//                                  JobsTabs(
+//                                    alreadyAccepted: jobs['cand_accepted_job'],
+//                                    jobs: jobs['all_jobs'],
+//                                    profileStatus: jobs['profile_status'],
+//                                    tabNo: 1,
+//                                  ),
+//                                  JobsTabs(
+//                                    alreadyAccepted: jobs['cand_accepted_job'],
+//                                    jobs: jobs['pending_jobs'],
+//                                    profileStatus: jobs['profile_status'],
+//                                    tabNo: 2,
+//                                  )
+//                                ],
+//                                controller: _tabController,
+//                              ));
+    );
   }
 }
