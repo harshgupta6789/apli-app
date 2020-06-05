@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:apli/Screens/Home/Courses/courses.dart';
 import 'package:apli/Screens/Home/Courses/coursesLive.dart';
-import 'package:apli/Screens/Home/Courses/multiLive.dart';
-import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
@@ -9,18 +9,19 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class CourseMain extends StatefulWidget {
+class MultiLive extends StatefulWidget {
+  final String documentID;
+
+  const MultiLive({Key key, this.documentID}) : super(key: key);
   @override
-  _CourseMainState createState() => _CourseMainState();
+  _MultiLiveState createState() => _MultiLiveState();
 }
 
 double height, width;
 Orientation orientation;
 
-class _CourseMainState extends State<CourseMain> {
+class _MultiLiveState extends State<MultiLive> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -36,14 +37,6 @@ class _CourseMainState extends State<CourseMain> {
         child: AppBar(
           backgroundColor: basicColor,
           automaticallyImplyLeading: false,
-          leading: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(
-                    EvaIcons.menuOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
           title: Padding(
             padding: EdgeInsets.only(bottom: 10.0),
             child: Text(courses,
@@ -56,9 +49,14 @@ class _CourseMainState extends State<CourseMain> {
         preferredSize: Size.fromHeight(50),
       ),
       body: StreamBuilder(
-          stream: Firestore.instance.collection('edu_courses').snapshots(),
+          stream: Firestore.instance
+              .collection('edu_courses')
+              .document(widget.documentID)
+              .collection("speakers")
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              print(snapshot.data);
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
                 child: ScrollConfiguration(
@@ -83,74 +81,60 @@ class _CourseMainState extends State<CourseMain> {
                                           bottom: 20, top: 20),
                                       child: InkWell(
                                         onTap: () {
-                                          if (snapshot.data.documents[index]
-                                                      ['live'] !=
-                                                  null &&
-                                              snapshot.data.documents[index]
-                                                      ['live'] !=
-                                                  true &&
-                                              snapshot.data.documents[index]
-                                                      ['multiSpeakers'] !=
-                                                  true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => Courses(
+                                          // if (snapshot.data.documents[index]
+                                          //             ['live'] !=
+                                          //         null &&
+                                          //     snapshot.data.documents[index]
+                                          //             ['live'] !=
+                                          //         true) {
+                                          //   Navigator.push(
+                                          //       context,
+                                          //       MaterialPageRoute(
+                                          //           builder: (context) => Courses(
+                                          //               documentId: snapshot
+                                          //                   .data
+                                          //                   .documents[index]
+                                          //                   .documentID,
+                                          //               email: 'user',
+                                          //               imageUrl: snapshot.data
+                                          //                           .documents[
+                                          //                       index]['image'] ??
+                                          //                   null)));
+                                          // } else if (snapshot.data.documents[index]
+                                          //             ['live'] !=
+                                          //         null &&
+                                          //     snapshot.data.documents[index]
+                                          //             ['live'] ==
+                                          //         true && snapshot.data.documents[index]
+                                          //             ['multiSpeakers'] !=
+                                          //         null && snapshot.data.documents[index]
+                                          //             ['multiSpeakers'] ==
+                                          //         true ) {
+
+                                          //         }else {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CoursesLive(
                                                         documentId: snapshot
                                                             .data
                                                             .documents[index]
                                                             .documentID,
                                                         email: 'user',
+                                                        didEnd: snapshot.data
+                                                                    .documents[
+                                                                index]['ended'] ??
+                                                            false,
                                                         imageUrl: snapshot.data
                                                                     .documents[
                                                                 index]['image'] ??
-                                                            null)));
-                                          } else if (snapshot
-                                                      .data.documents[index]
-                                                  ['multiSpeakers'] ==
-                                              true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MultiLive(
-                                                          documentID: snapshot
-                                                              .data
-                                                              .documents[index]
-                                                              .documentID,
-                                                        )));
-                                          } else if (snapshot
-                                                          .data.documents[index]
-                                                      ['live'] ==
-                                                  true &&
-                                              snapshot.data.documents[index]
-                                                      ['multiSpeakers'] !=
-                                                  true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CoursesLive(
-                                                          documentId: snapshot
-                                                              .data
-                                                              .documents[index]
-                                                              .documentID,
-                                                          email: 'user',
-                                                          didEnd: snapshot.data
-                                                                      .documents[
-                                                                  index]['ended'] ??
-                                                              false,
-                                                          imageUrl: snapshot
-                                                                      .data
-                                                                      .documents[
-                                                                  index]['image'] ??
-                                                              null,
-                                                          title: snapshot.data
-                                                                      .documents[
-                                                                  index]['title'] ??
-                                                              'No Title',
-                                                        )));
-                                          }
+                                                            null,
+                                                        title: snapshot.data
+                                                                    .documents[
+                                                                index]['title'] ??
+                                                            'No Title',
+                                                      )));
                                         },
                                         child: Center(
                                           child: Stack(
