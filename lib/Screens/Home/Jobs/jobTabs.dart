@@ -1,3 +1,4 @@
+import 'package:apli/Screens/Home/Jobs/jobs.dart';
 import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
@@ -28,7 +29,11 @@ class JobsTabs extends StatefulWidget {
   _JobsTabssState createState() => _JobsTabssState();
 }
 
-class _JobsTabssState extends State<JobsTabs> {
+class _JobsTabssState extends State<JobsTabs> with AutomaticKeepAliveClientMixin {
+
+  @override
+  bool get wantKeepAlive => true;
+
   double height, width, scale;
   final apiService = APIService();
   List<bool> saved = [];
@@ -36,8 +41,19 @@ class _JobsTabssState extends State<JobsTabs> {
 
   @override
   void initState() {
+    if((savedJobs ?? []).length != 3) {
+      savedJobs = [[], [], []];
+      for(int i = 0; i < (tempGlobalJobs['submitted_jobs']?? []).length; i++) {
+        savedJobs[0].add(tempGlobalJobs['submitted_jobs'][i]['is_saved'] ?? false);
+      }
+      for(int i = 0; i < (tempGlobalJobs['all_jobs']?? []).length; i++) {
+        savedJobs[1].add(tempGlobalJobs['all_jobs'][i]['is_saved'] ?? false);
+      }
+      for(int i = 0; i < (tempGlobalJobs['pending_jobs']?? []).length; i++) {
+        savedJobs[2].add(tempGlobalJobs['pending_jobs'][i]['is_saved'] ?? false);
+      }
+    }
     for(int i = 0; i < (widget.jobs ?? []).length; i++) {
-      saved.add(widget.jobs[i]['is_saved'] ?? false);
       loadingIcon.add(false);
     }
     if(mounted)
@@ -314,7 +330,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
                                                     : (loadingIcon[index] ? CircularProgressIndicator() : IconButton(
-                                                  icon: saved[index] ? Icon(Icons.bookmark, color: Colors.yellowAccent,) : Icon(Icons.bookmark_border,),
+                                                  icon: (savedJobs[widget.tabNo][index] == true) ? Icon(Icons.bookmark, color: Colors.yellow[700],) : Icon(Icons.bookmark_border,),
                                                   onPressed: () async {
                                                     setState(() {
                                                       loadingIcon[index] = true;
@@ -333,7 +349,7 @@ class _JobsTabssState extends State<JobsTabs> {
                                                       )..show(context);
                                                     } else {
                                                       setState(() {
-                                                        saved[index] = !saved[index];
+                                                        savedJobs[widget.tabNo][index] = !savedJobs[widget.tabNo][index];
                                                       });
                                                     }
                                                   },

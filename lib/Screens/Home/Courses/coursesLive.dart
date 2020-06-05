@@ -157,12 +157,13 @@ class _CoursesLiveState extends State<CoursesLive>
               stream: Firestore.instance
                   .collection('edu_courses')
                   .document(widget.documentId)
-                  .collection("videos")
+                  .collection("comments")
                   .orderBy("timestamp")
                   .snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.hasData)
-                  return SingleChildScrollView(
+                if (snapshot.hasData) {
+                  if(snapshot.data.documents.length != 0)
+                    return SingleChildScrollView(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,6 +384,8 @@ class _CoursesLiveState extends State<CoursesLive>
                               child: _overView())
                         ]),
                   );
+                  else return Center(child: Text('Error occurred, try again later'),);
+                }
                 return Loading();
               }),
         ));

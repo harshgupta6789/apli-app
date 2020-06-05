@@ -16,6 +16,9 @@ class Jobs extends StatefulWidget {
   _JobsState createState() => _JobsState();
 }
 
+List<List<bool>> savedJobs= [[], [], []];
+var tempGlobalJobs;
+
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   @override
@@ -132,10 +135,21 @@ class _JobsState extends State<Jobs>
   getInfo() async {
     dynamic result = await apiService.getJobs();
     print(result['pending_jobs']);
+    tempGlobalJobs = result;
     if (mounted)
       setState(() {
         jobs = result;
-        if (jobs != null) {
+        if (jobs != null && jobs != 'frozen') {
+          savedJobs = [[], [], []];
+          for(int i = 0; i < (jobs['submitted_jobs']?? []).length; i++) {
+            savedJobs[0].add(jobs['submitted_jobs'][i]['is_saved'] ?? false);
+          }
+          for(int i = 0; i < (jobs['all_jobs']?? []).length; i++) {
+            savedJobs[1].add(jobs['all_jobs'][i]['is_saved'] ?? false);
+          }
+          for(int i = 0; i < (jobs['pending_jobs']?? []).length; i++) {
+            savedJobs[2].add(jobs['pending_jobs'][i]['is_saved'] ?? false);
+          }
           submittedJob = jobs['submitted_jobs'] ?? [];
           allJob = jobs['all_jobs'] ?? [];
           incompleteJob = jobs['pending_jobs'] ?? [];
