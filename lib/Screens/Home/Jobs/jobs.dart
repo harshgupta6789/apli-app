@@ -32,36 +32,53 @@ class _JobsState extends State<Jobs>
   final apiService = APIService();
   bool loading = true;
   List companies = [], locations = [];
-  List type = ['Intern', 'Job'];
+  List type = ['Internship', 'Job'];
   dynamic jobs;
+  bool didFilter = false;
   List filterMenu = ['Company', 'Type', 'Location', 'Bookmarked'];
 
   void addFilters(List jobList) {
     if (jobList != null) {
+      //print("gg00");
       for (int i = 0; i < jobList.length; i++) {
+        //print(jobList[i]['location']);
         if (!companies.contains(jobList[i]['organisation'])) {
           companies.add(jobList[i]['organisation']);
         } else if (!locations.contains(jobList[i]['location'])) {
+          print(jobList[i]['location']);
           locations.add(jobList[i]['location']);
         } else {}
       }
     }
   }
 
-  void filterStuff(List comp, String type, List loc) {
-    submittedFilter = [];
-    allFilter = [];
-    incompleteFilter = [];
+  void filterStuff(List comp, List type, List loc) {
+    setState(() {
+      didFilter = true;
+      submittedFilter = [];
+      allFilter = [];
+      incompleteFilter = [];
+    });
+
     if (comp == null && loc == null) {
-      // for (var map in submittedJob) {
-      //    submittedFilter = submittedJob;
-      // }
-      //  for (var map in incompleteJob) {
-      //    submittedFilter = submittedJob;
-      // }
-      //  for (var map in allJob) {
-      //    submittedFilter = submittedJob;
-      // }
+      for (int i = 0; i < type.length; i++) {
+        for (var map in submittedJob) {
+          if (map['job_type'] == type[i]) {
+            submittedFilter.add(map);
+          }
+        }
+        for (var map in incompleteJob) {
+          if (map['job_type'] == type[i]) {
+            incompleteFilter.add(map);
+          }
+        }
+        for (var map in allJob) {
+          if (map['job_type'] == type[i]) {
+            allFilter.add(map);
+          }
+        }
+        setState(() {});
+      }
     } else if (type == null && loc == null) {
       for (int i = 0; i < comp.length; i++) {
         for (var map in submittedJob) {
@@ -79,9 +96,16 @@ class _JobsState extends State<Jobs>
             allFilter.add(map);
           }
         }
+        setState(() {});
+        // print(allFilter);
+        // // print(incompleteFilter);
       }
+      setState(() {});
     } else if (type == null && comp == null) {
       for (int i = 0; i < loc.length; i++) {
+        print(allFilter.toString() + "all");
+        print(submittedFilter.toString() + "submitted");
+        print(incompleteFilter.toString() + "inc");
         for (var map in submittedJob) {
           if (map['location'] == loc[i]) {
             submittedFilter.add(map);
@@ -90,18 +114,28 @@ class _JobsState extends State<Jobs>
         for (var map in incompleteJob) {
           if (map['location'] == loc[i]) {
             incompleteFilter.add(map);
+            print("hi");
           }
         }
         for (var map in allJob) {
           if (map['location'] == loc[i]) {
             allFilter.add(map);
+            print("hi");
           }
         }
+        print(allFilter.isEmpty);
+        print(submittedFilter.isEmpty);
+        print(incompleteFilter.isEmpty);
+        setState(() {});
       }
-    } else {
-      submittedFilter = submittedJob;
-      allFilter = allJob;
-      incompleteFilter = incompleteJob;
+    } else if (comp == null && loc == null && type == null) {
+      print("f");
+      setState(() {
+        didFilter = false;
+        submittedFilter = submittedJob;
+        allFilter = allJob;
+        incompleteFilter = incompleteJob;
+      });
     }
     // if (jobList != null) {
     //   for (int i = 0; i < jobList.length; i++) {
@@ -114,107 +148,17 @@ class _JobsState extends State<Jobs>
     // }
   }
 
-  Widget filterDialog(String filter) {
-    switch (filter) {
-      case 'Company':
-      Map compChecked = {};
-      for(var temp in companies){
-        compChecked[temp] = false;
-      }
-      print(compChecked);
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context3, index) {
-             return  Checkbox(
-              // title: Text(
-              //   '${companies[index]}',
-              // ),
-            value: compChecked['${companies[index]}'],
-            onChanged: (bool value) {
-              setState(() {
-                compChecked['${companies[index]}'] = value;
-              });
-              print(compChecked);
-            },
-          );
-          },
-          itemCount: companies.length,
-        );
-        break;
-
-      case 'Type':
-        return Column(
-          children: [],
-        );
-        break;
-      case 'Location':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
-              title: Text(
-                '${companies[index]}',
-              ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              subtitle: Divider(thickness: 2),
-            );
-          },
-          itemCount: companies.length,
-        );
-        break;
-      case 'Bookmarked':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
-              title: Text(
-                '${companies[index]}',
-              ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              subtitle: Divider(thickness: 2),
-            );
-          },
-          itemCount: companies.length,
-        );
-        break;
-      default:
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
-              title: Text(
-                '${companies[index]}',
-              ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              subtitle: Divider(thickness: 2),
-            );
-          },
-          itemCount: companies.length,
-        );
-    }
-  }
-
   getInfo() async {
     dynamic result = await apiService.getJobs();
-    print(result['pending_jobs']);
+    //print(result['pending_jobs']);
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
+        submittedFilter = [];
+        companies = [];
+        locations = [];
+        allFilter = [];
+        incompleteFilter = [];
         jobs = result;
         if (jobs != null && jobs != 'frozen') {
           savedJobs = [[], [], []];
@@ -299,60 +243,117 @@ class _JobsState extends State<Jobs>
                         color: Colors.white,
                       ),
                       onPressed: () async {
-                        await showDialog(
+                        dynamic list = await showDialog(
                             barrierDismissible: true,
                             context: context,
-                            builder:
-                                (context) => StatefulBuilder(
-                                        builder: (context2, setState) {
-                                      return Scaffold(
-                                        backgroundColor: Colors.transparent,
-                                        body: AlertDialog(
-                                          title: new Text(
-                                            'Filter By',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          content: Container(
-                                            height: 300,
-                                            width: 300,
-                                            child: ListView.builder(
-                                              shrinkWrap: true,
-                                              itemBuilder: (context, index) {
-                                                return ListTile(
-                                                  dense: true,
-                                                  title: Text(
-                                                    '${filterMenu[index]}',
-                                                  ),
-                                                  trailing: IconButton(
-                                                      icon: Icon(EvaIcons
-                                                          .arrowIosForward),
-                                                      onPressed: null),
-                                                  onTap: () async {
-                                                    Navigator.pop(context);
-                                                    await showDialog(
-                                                        barrierDismissible:
-                                                            true,
-                                                        context: context,
-                                                        builder: (context){
-                                                          return MyDialogContent(
-                                                          typeFilter: '${filterMenu[index]}',
-                                                          companies: companies,
-                                                        );
-                                                        }
-                                                             );
-                                                  },
-                                                  subtitle:
-                                                      Divider(thickness: 2),
-                                                );
+                            builder: (context) =>
+                                StatefulBuilder(builder: (context2, setState) {
+                                  return Scaffold(
+                                    backgroundColor: Colors.transparent,
+                                    body: AlertDialog(
+                                      title: new Text(
+                                        'Filter By',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      content: Container(
+                                        height: 300,
+                                        width: 300,
+                                        child: ListView.builder(
+                                          shrinkWrap: true,
+                                          itemBuilder: (context, index) {
+                                            return ListTile(
+                                              dense: true,
+                                              title: Text(
+                                                '${filterMenu[index]}',
+                                              ),
+                                              trailing: IconButton(
+                                                  icon: Icon(
+                                                      EvaIcons.arrowIosForward),
+                                                  onPressed: null),
+                                              onTap: () async {
+                                                //Navigator.pop(context);
+                                                dynamic x = await showDialog(
+                                                    barrierDismissible: true,
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return MyDialogContent(
+                                                        typeFilter:
+                                                            '${filterMenu[index]}',
+                                                        companies: companies,
+                                                        locations: locations,
+                                                        type: type,
+                                                      );
+                                                    });
+
+                                                if (x != null) {
+                                                  Navigator.of(context).pop([
+                                                    x,
+                                                    '${filterMenu[index]}'
+                                                  ]);
+                                                }
                                               },
-                                              itemCount: filterMenu.length,
-                                            ),
-                                          ),
+                                              subtitle: Divider(thickness: 2),
+                                            );
+                                          },
+                                          itemCount: filterMenu.length,
                                         ),
-                                      );
-                                    }));
+                                      ),
+                                      actions: [
+                                        Align(
+                                            alignment: Alignment.center,
+                                            child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0,
+                                                    right: 20.0,
+                                                    top: 30.0,
+                                                    bottom: 20.0),
+                                                child: RaisedButton(
+                                                    color: basicColor,
+                                                    elevation: 0,
+                                                    padding: EdgeInsets.only(
+                                                        left: 30, right: 30),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      side: BorderSide(
+                                                          color: basicColor,
+                                                          width: 1.2),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        didFilter = false;
+                                                        allFilter = [];
+                                                        submittedFilter = [];
+                                                        incompleteFilter = [];
+                                                      });
+                                                      Navigator.of(context)
+                                                          .pop(null);
+                                                    },
+                                                    child: Text(
+                                                      'Clear Filters',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    )))),
+                                      ],
+                                    ),
+                                  );
+                                }));
+                        if (list != null) {
+                          print(list);
+                          if (list[1] == 'Company') {
+                            filterStuff(list[0], null, null);
+                          } else if (list[1] == 'Location') {
+                            filterStuff(null, null, list[0]);
+                          } else if (list[1] == 'Type') {
+                            filterStuff(null, list[0], null);
+                          }
+                        } else {
+                          setState(() {});
+                        }
                       }),
                 ),
 //              Padding(
@@ -595,19 +596,31 @@ class _JobsState extends State<Jobs>
                                 children: [
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['submitted_jobs'],
+                                    jobs: didFilter
+                                        ? submittedFilter
+                                        : submittedFilter.isEmpty
+                                            ? submittedJob
+                                            : submittedFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 0,
                                   ),
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['all_jobs'],
+                                    jobs: didFilter
+                                        ? allFilter
+                                        : allFilter.isEmpty
+                                            ? allJob
+                                            : allFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 1,
                                   ),
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: jobs['pending_jobs'],
+                                    jobs: didFilter
+                                        ? incompleteFilter
+                                        : incompleteFilter.isEmpty
+                                            ? incompleteJob
+                                            : incompleteFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 2,
                                   )
@@ -620,11 +633,12 @@ class _JobsState extends State<Jobs>
 class MyDialogContent extends StatefulWidget {
   final String typeFilter;
   final List companies;
+  final List locations;
+  final List type;
 
-  MyDialogContent({
-    Key key,
-    this.typeFilter, this.companies
-  }) : super(key: key);
+  MyDialogContent(
+      {Key key, this.typeFilter, this.companies, this.locations, this.type})
+      : super(key: key);
   @override
   _MyDialogContentState createState() => new _MyDialogContentState();
 }
@@ -634,74 +648,104 @@ class _MyDialogContentState extends State<MyDialogContent> {
   String val;
   var items = List<dynamic>();
 
-    Widget filterDialog(String filter) {
+  Map compChecked = {};
+  Map typeChecked = {};
+  Map locationChecked = {};
+  void init() {
+    for (var temp in widget.companies) {
+      compChecked[temp] = false;
+    }
+    for (var temp in widget.type) {
+      typeChecked[temp] = false;
+    }
+    for (var temp in widget.locations) {
+      locationChecked[temp] = false;
+    }
+  }
+
+  Widget filterDialog(String filter, BuildContext buildContext) {
     switch (filter) {
       case 'Company':
-      Map compChecked = {};
-      for(var temp in widget.companies){
-        compChecked[temp] = false;
-      }
-      print(compChecked);
+        print(compChecked);
         return ListView.builder(
           shrinkWrap: true,
-          itemBuilder: (context, index) {
-             return  CheckboxListTile(
+          itemBuilder: (buildContext, index) {
+            return CheckboxListTile(
+              checkColor: basicColor,
               title: Text(
                 '${widget.companies[index]}',
               ),
-            value: compChecked['${widget.companies[index]}'],
-            onChanged: (bool value) {
-              setState(() {
-                compChecked['${widget.companies[index]}'] = value;
-              });
-              print(compChecked);
-            },
-          );
+              value: compChecked['${widget.companies[index]}'],
+              onChanged: (bool value) {
+                setState(() {
+                  compChecked['${widget.companies[index]}'] = value;
+                });
+                //print(compChecked);
+              },
+            );
           },
           itemCount: widget.companies.length,
         );
         break;
 
       case 'Type':
-        return Column(
-          children: [],
+        return ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (buildContext, index) {
+            return CheckboxListTile(
+              checkColor: basicColor,
+              title: Text(
+                '${widget.type[index]}',
+              ),
+              value: typeChecked['${widget.type[index]}'],
+              onChanged: (bool value) {
+                setState(() {
+                  typeChecked['${widget.type[index]}'] = value;
+                });
+                //print(compChecked);
+              },
+            );
+          },
+          itemCount: widget.type.length,
         );
         break;
       case 'Location':
         return ListView.builder(
           shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
+          itemBuilder: (buildContext, index) {
+            return CheckboxListTile(
+              checkColor: basicColor,
               title: Text(
-                '${widget.companies[index]}',
+                '${widget.locations[index]}',
               ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
+              value: locationChecked['${widget.locations[index]}'],
+              onChanged: (bool value) {
+                setState(() {
+                  locationChecked['${widget.locations[index]}'] = value;
+                });
+                //print(compChecked);
               },
-              subtitle: Divider(thickness: 2),
             );
           },
-          itemCount: widget.companies.length,
+          itemCount: widget.locations.length,
         );
         break;
       case 'Bookmarked':
         return ListView.builder(
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
+            return CheckboxListTile(
+              checkColor: basicColor,
               title: Text(
                 '${widget.companies[index]}',
               ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
+              value: compChecked['${widget.companies[index]}'],
+              onChanged: (bool value) {
+                setState(() {
+                  compChecked['${widget.companies[index]}'] = value;
+                });
+                //print(compChecked);
               },
-              subtitle: Divider(thickness: 2),
             );
           },
           itemCount: widget.companies.length,
@@ -731,19 +775,64 @@ class _MyDialogContentState extends State<MyDialogContent> {
 
   @override
   void initState() {
-   
+    init();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      actions: [
+        Align(
+            alignment: Alignment.center,
+            child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 20.0, right: 20.0, top: 30.0, bottom: 20.0),
+                child: RaisedButton(
+                    color: basicColor,
+                    elevation: 0,
+                    padding: EdgeInsets.only(left: 30, right: 30),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                      side: BorderSide(color: basicColor, width: 1.2),
+                    ),
+                    onPressed: () {
+                      if (widget.typeFilter == 'Company') {
+                        List filtered = [];
+                        compChecked.forEach((key, value) {
+                          if (value == true) {
+                            filtered.add(key);
+                          }
+                        });
+                        Navigator.pop(context, filtered);
+                      } else if (widget.typeFilter == 'Location') {
+                        List filtered = [];
+                        locationChecked.forEach((key, value) {
+                          if (value == true) {
+                            filtered.add(key);
+                          }
+                        });
+                        Navigator.pop(context, filtered);
+                      } else if (widget.typeFilter == 'Type') {
+                        List filtered = [];
+                        typeChecked.forEach((key, value) {
+                          if (value == true) {
+                            filtered.add(key.toString().toLowerCase());
+                          }
+                          print(filtered);
+                        });
+                        Navigator.pop(context, filtered);
+                      }
+                    },
+                    child: Text(
+                      'FILTER',
+                      style: TextStyle(color: Colors.white),
+                    )))),
+      ],
       content: Container(
-        height: 300,
-        width: 300,
-        child: filterDialog(widget.typeFilter)
-      ),
+          height: 300,
+          width: 300,
+          child: filterDialog(widget.typeFilter, context)),
     );
   }
 }
-

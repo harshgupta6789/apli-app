@@ -7,6 +7,7 @@ import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awsome_video_player/awsome_video_player.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -36,7 +37,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
     if (link == null) {
       return SizedBox();
     } else {
-      return Image.network(link);
+      return CachedNetworkImage(
+        imageUrl: link,
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
     }
   }
 
@@ -115,8 +119,8 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               fontWeight: FontWeight.w500),
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        trailing:
-                                            companyLogo(widget.job['logo']),
+                                        trailing: companyLogo(
+                                            widget.job['company_logo']),
                                         subtitle: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 10.0),
@@ -1184,7 +1188,7 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                                   JobQuestions(
                                                                     logo: widget
                                                                             .job[
-                                                                        'logo'],
+                                                                        'company_logo'],
                                                                     questions: snapshot
                                                                             .data[
                                                                         'questions'],
