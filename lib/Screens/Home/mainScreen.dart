@@ -87,31 +87,38 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         } else {
           showAlertDialog(message['notification']['title'],
               message['notification']['body'], DialogType.INFO, context, () {
-            if (message['data']['type'] != null) {
-              switch (message['data']['type']) {
-                case 'Job':
-                  {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (context) => Wrapper(
-                                  currentTab: 2,
-                                )),
-                        (Route<dynamic> route) => false);
-                    setState(() {});
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Updates()),
-                    // );
-                  }
-                  break;
-                case 'Alert':
-                  {}
-                  break;
-                default:
-                  {}
-                  break;
-              }
-            }
+            // if (message['data']['type'] != null) {
+            //   switch (message['data']['type']) {
+            //     case 'Job':
+            //       {
+            //         Navigator.of(context).pushAndRemoveUntil(
+            //             MaterialPageRoute(
+            //                 builder: (context) => Wrapper(
+            //                       currentTab: 2,
+            //                     )),
+            //             (Route<dynamic> route) => false);
+            //         setState(() {});
+            //         // Navigator.push(
+            //         //   context,
+            //         //   MaterialPageRoute(builder: (context) => Updates()),
+            //         // );
+            //       }
+            //       break;
+            //     case 'Alert':
+            //       {}
+            //       break;
+            //     default:
+            //       {}
+            //       break;
+            //   }
+            // }
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          currentTab: 2,
+                        )),
+                (Route<dynamic> route) => false);
+            setState(() {});
           });
         }
       },
