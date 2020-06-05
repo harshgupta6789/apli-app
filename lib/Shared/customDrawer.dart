@@ -71,7 +71,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
           EdgeInsets.fromLTRB(0, height * 0.03, width * 0.3, 0),
       child: ClipRRect(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(7), bottomLeft: Radius.circular(7)),
+            topRight: Radius.circular(7), bottomRight: Radius.circular(7)),
         child: Container(
           color: Theme.of(context).backgroundColor,
           child: Column(

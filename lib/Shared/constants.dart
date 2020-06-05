@@ -11,26 +11,26 @@ const FontWeight appBarFontWeight = FontWeight.bold;
 const double preferredSize = 50;
 
 // ---------------Important------------------
-const String passHash = "https://apli.ai/accounts/api/passHash";
-const String passHashSecret = "kQ2HzKUnHeanYkejRQjog8UZfkpScERz";
-const String checkLogin = "https://apli.ai/accounts/api/login";
-const String checkLoginSecret = "AnTokvMivXC4utZRV8smIRDJdj2jveaz";
-const String send_mail = "https://apli.ai/accounts/api/send_mail";
-const String send_mailSecret = "IIZyENHyHjRcHRYdUxPxsigJfopeu8Az";
+const String passHash = "https://dev.apli.ai/accounts/api/passHash";
+const String passHashSecret = "YjVd13QEMZe0JsWlkqDyEjE9jpNTZyvQ";
+const String checkLogin = "https://dev.apli.ai/accounts/api/login";
+const String checkLoginSecret = "j&R\$estgIKur657%3st4";
+const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
+const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
 
-const String reachUs = "https://apli.ai/accounts/api/reachus";
+const String reachUs = "https://dev.apli.ai/accounts/api/reachus";
 const String reachUsSecret = "78J9MV7ai75KNh5zxtAVFefFEWUgOQAb";
 const String pdfUrltoBeReplaced =
-    "https://storage.googleapis.com/aplidotai-be4e6.appspot.com/";
-const String pdfUrltoreplacedWith = "gs://aplidotai-be4e6.appspot.com/";
+    "https://storage.googleapis.com/aplidotai.appspot.com/";
+const String pdfUrltoreplacedWith = "gs://aplidotai.appspot.com/";
 
-const String basic_infoURL = "https://apli.ai/candidate/api/basic_info";
-const String projectsURL = "https://apli.ai/candidate/api/projects";
-const String expURL = "https://apli.ai/candidate/api/experience";
-const String awardsURL = "https://apli.ai/candidate/api/awards";
-const String skillsURL = "https://apli.ai/candidate/api/skills";
-const String educationURL = "https://apli.ai/candidate/api/education";
-const String extraCURL = "https://apli.ai/candidate/api/extra_curricular";
+const String basic_infoURL = "https://dev.apli.ai/candidate/api/basic_info";
+const String projectsURL = "https://dev.apli.ai/candidate/api/projects";
+const String expURL = "https://dev.apli.ai/candidate/api/experience";
+const String awardsURL = "https://dev.apli.ai/candidate/api/awards";
+const String skillsURL = "https://dev.apli.ai/candidate/api/skills";
+const String educationURL = "https://dev.apli.ai/candidate/api/education";
+const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
 
 const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';
