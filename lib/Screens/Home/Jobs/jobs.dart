@@ -131,7 +131,7 @@ class _JobsState extends State<Jobs>
 
   getInfo() async {
     dynamic result = await apiService.getJobs();
-    print(result);
+    print(result['pending_jobs']);
     if (mounted)
       setState(() {
         jobs = result;
@@ -143,8 +143,6 @@ class _JobsState extends State<Jobs>
           addFilters(allJob);
           addFilters(incompleteJob);
         }
-        print(companies);
-        print(locations);
         loading = false;
         _controller.reset();
       });
@@ -211,6 +209,7 @@ class _JobsState extends State<Jobs>
                       ),
                       onPressed: () async {
                         await showDialog(
+                          barrierDismissible: true,
                             context: context,
                             builder: (context) =>
                                 StatefulBuilder(builder: (context2, setState) {

@@ -1,7 +1,9 @@
+import 'package:apli/Services/APIService.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -28,6 +30,22 @@ class JobsTabs extends StatefulWidget {
 
 class _JobsTabssState extends State<JobsTabs> {
   double height, width, scale;
+  final apiService = APIService();
+  List<bool> saved = [];
+  List<bool> loadingIcon = [];
+
+  @override
+  void initState() {
+    for(int i = 0; i < (widget.jobs ?? []).length; i++) {
+      saved.add(widget.jobs[i]['is_saved'] ?? false);
+      loadingIcon.add(false);
+    }
+    if(mounted)
+      setState(() {
+
+      });
+    super.initState();
+  }
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
     if (status == 'OFFERED' || status == 'LETTER SENT') {
@@ -295,7 +313,31 @@ class _JobsTabssState extends State<JobsTabs> {
                                                 trailing: widget.tabNo == 0
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
-                                                    : SizedBox()),
+                                                    : (loadingIcon[index] ? CircularProgressIndicator() : IconButton(
+                                                  icon: saved[index] ? Icon(Icons.bookmark, color: Colors.yellowAccent,) : Icon(Icons.bookmark_border,),
+                                                  onPressed: () async {
+                                                    setState(() {
+                                                      loadingIcon[index] = true;
+                                                    });
+                                                    dynamic result = await apiService.saveJob(
+                                                        widget.jobs[index]['job_id']);
+                                                    setState(() {
+                                                      loadingIcon[index] = false;
+                                                    });
+                                                    if (result['error'] != null) {
+                                                      Flushbar(
+                                                        isDismissible: true,
+                                                        messageText: Text('Error occurred, try again later',
+                                                            style: TextStyle(color: Colors.white)),
+                                                        duration: Duration(seconds: 2),
+                                                      )..show(context);
+                                                    } else {
+                                                      setState(() {
+                                                        saved[index] = !saved[index];
+                                                      });
+                                                    }
+                                                  },
+                                                ))),
                                           ),
                                         ])),
                               ),

@@ -539,6 +539,35 @@ class APIService {
       return;
     }
   }
+
+  Future saveJob(
+      String id) async {
+    try {
+      dynamic result;
+      await SharedPreferences.getInstance().then((value) async {
+        http.Response response = await http.post(
+          saveJobURL,
+          body: json.decode('{'
+              '"secret" : "$passHashSecret", '
+              '"job_id" : "$id", '
+              '"email": "${value.getString('email')}"'
+              '}'),
+        );
+        var decodedData = jsonDecode(response.body);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          result = decodedData;
+        } else
+          result = {
+            'error': decodedData["reason"] ?? 'Unexpected error occurred'
+          };
+      });
+      return result;
+    } catch (e) {
+      print(e);
+      return;
+    }
+  }
 }
 
 // NOTE: result =     1 = success
