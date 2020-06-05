@@ -32,6 +32,14 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfileState extends State<CompanyProfile> {
+  Widget companyLogo(String link) {
+    if (link == null) {
+      return SizedBox();
+    } else {
+      return Image.network(link);
+    }
+  }
+
   final apiService = APIService();
   bool loading = false;
   @override
@@ -90,7 +98,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                             child: Container(
                               child: Padding(
                                 padding: EdgeInsets.only(
-                                    bottom: 18.0, left: 10.0, right: 10.0),
+                                    bottom: 16.0, left: 10.0, right: 10.0),
                                 child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -103,10 +111,12 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                           maxLines: 2,
                                           style: TextStyle(
                                               color: basicColor,
-                                              fontSize: 18,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.w500),
                                           overflow: TextOverflow.ellipsis,
                                         ),
+                                        trailing:
+                                            companyLogo(widget.job['logo']),
                                         subtitle: Padding(
                                           padding:
                                               const EdgeInsets.only(top: 10.0),
@@ -181,7 +191,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                               'notice_period'] ??
                                                           "Not Specified",
                                                       style: TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 16,
                                                         fontWeight:
                                                             FontWeight.w400,
                                                       )),
@@ -195,7 +205,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 "Role Description : ",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w600),
                                                 overflow: TextOverflow.ellipsis,
@@ -232,7 +242,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 "Key Responsibilities : ",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w600),
                                                 overflow: TextOverflow.ellipsis,
@@ -268,7 +278,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 "Soft Skills : ",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w600),
                                                 overflow: TextOverflow.ellipsis,
@@ -310,7 +320,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 "Technical Skills  : ",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w600),
                                                 overflow: TextOverflow.ellipsis,
@@ -352,7 +362,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                 "Requirements : ",
                                                 maxLines: 2,
                                                 style: TextStyle(
-                                                    fontSize: 18,
+                                                    fontSize: 16,
                                                     fontWeight:
                                                         FontWeight.w600),
                                                 overflow: TextOverflow.ellipsis,
@@ -521,6 +531,7 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                                                   context,
                                                                                   MaterialPageRoute(
                                                                                       builder: (context) => CompanyVideo(
+                                                                                            isOnlyInfo: false,
                                                                                             job: widget.job,
                                                                                           )));
                                                                             } else {
@@ -570,7 +581,67 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                   );
                                               }),
                                         ),
-                                      )
+                                      ),
+                                      widget.job['requirements']
+                                              .contains('Video Interview')
+                                          ? Container()
+                                          : Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0,
+                                                    right: 20.0,
+                                                    top: 10.0),
+                                                child: RaisedButton(
+                                                    color: (widget.isApplied ==
+                                                                true ||
+                                                            widget.isTempApplied ==
+                                                                true)
+                                                        ? Colors.grey
+                                                        : basicColor,
+                                                    elevation: 0,
+                                                    padding: EdgeInsets.only(
+                                                        left: 30, right: 30),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.0),
+                                                      side: BorderSide(
+                                                          color: (widget.isApplied ==
+                                                                      true ||
+                                                                  widget.isTempApplied ==
+                                                                      true)
+                                                              ? Colors.grey
+                                                              : basicColor,
+                                                          width: 1.2),
+                                                    ),
+                                                    child: Text(
+                                                      'Company Info',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (widget
+                                                              .isTempApplied !=
+                                                          true) if (widget
+                                                              .isApplied !=
+                                                          true) {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        CompanyVideo(
+                                                                          isOnlyInfo:
+                                                                              true,
+                                                                          job: widget
+                                                                              .job,
+                                                                        )));
+                                                      }
+                                                    }),
+                                              ),
+                                            )
                                     ]),
                               ),
                             ),
@@ -587,8 +658,10 @@ class _CompanyProfileState extends State<CompanyProfile> {
 class CompanyVideo extends StatefulWidget {
   final Map job;
   final bool isIncomplete;
+  final bool isOnlyInfo;
 
-  CompanyVideo({Key key, this.job, this.isIncomplete}) : super(key: key);
+  CompanyVideo({Key key, this.job, this.isIncomplete, this.isOnlyInfo})
+      : super(key: key);
 
   @override
   _CompanyVideoState createState() => _CompanyVideoState();
@@ -603,6 +676,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
 
   Future<dynamic> getInfo() async {
     dynamic result = await apiService.getCompanyIntro(widget.job['job_id']);
+    print(result);
     return result;
   }
 
@@ -743,32 +817,36 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                 SizedBox(
                                   height: height * 0.05,
                                 ),
-                                Align(
-                                  child: RaisedButton(
-                                    color: basicColor,
-                                    elevation: 0,
-                                    padding:
-                                        EdgeInsets.only(left: 40, right: 40),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                      side: BorderSide(
-                                          color: basicColor, width: 1.2),
-                                    ),
-                                    child: Text(
-                                      'PROCEED TO VIDEO INTERVIEW',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    onPressed: () async {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CompanyInstructions(
-                                                    job: widget.job,
-                                                  )));
-                                    },
-                                  ),
-                                ),
+                                widget.isOnlyInfo
+                                    ? Container()
+                                    : Align(
+                                        child: RaisedButton(
+                                          color: basicColor,
+                                          elevation: 0,
+                                          padding: EdgeInsets.only(
+                                              left: 40, right: 40),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5.0),
+                                            side: BorderSide(
+                                                color: basicColor, width: 1.2),
+                                          ),
+                                          child: Text(
+                                            'PROCEED TO VIDEO INTERVIEW',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: () async {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        CompanyInstructions(
+                                                          job: widget.job,
+                                                        )));
+                                          },
+                                        ),
+                                      ),
                               ],
                             ),
                           ),
@@ -1104,6 +1182,9 @@ class _CompanyInstructionsState extends State<CompanyInstructions> {
                                                           builder:
                                                               (context) =>
                                                                   JobQuestions(
+                                                                    logo: widget
+                                                                            .job[
+                                                                        'logo'],
                                                                     questions: snapshot
                                                                             .data[
                                                                         'questions'],

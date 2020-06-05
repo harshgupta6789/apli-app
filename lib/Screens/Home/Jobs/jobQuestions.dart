@@ -21,10 +21,15 @@ enum currentState { recording, uploading, success, failure }
 
 class JobQuestions extends StatefulWidget {
   final List questions;
+  final String logo;
   final String jobID;
   final int whereToStart;
   const JobQuestions(
-      {Key key, @required this.questions, this.whereToStart, this.jobID})
+      {Key key,
+      @required this.questions,
+      this.whereToStart,
+      this.jobID,
+      this.logo})
       : super(key: key);
   @override
   _JobQuestionsState createState() => _JobQuestionsState();
@@ -94,6 +99,14 @@ class _JobQuestionsState extends State<JobQuestions> {
     }
 
     //startTimer();
+  }
+
+  Widget companyLogo(String link) {
+    if (link == null) {
+      return Image.asset("Assets/Images/logo.png");
+    } else {
+      return Image.network(link);
+    }
   }
 
   Future videoPicker(String path) async {
@@ -527,21 +540,21 @@ class _JobQuestionsState extends State<JobQuestions> {
                         }),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      width * 0.1, height * 0.04, width * 0.1, height * 0.04),
-                  child: Text(
-                    (indexOfQuestions + 1).toString() +
-                            ". " +
-                            qs[indexOfQuestions]['question'] ??
-                        "",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        letterSpacing: 1.2),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       width * 0.1, height * 0.04, width * 0.1, height * 0.04),
+                //   child: Text(
+                //     (indexOfQuestions + 1).toString() +
+                //             ". " +
+                //             qs[indexOfQuestions]['question'] ??
+                //         "",
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.w900,
+                //         fontSize: 14,
+                //         letterSpacing: 1.2),
+                //     textAlign: TextAlign.justify,
+                //   ),
+                // ),
                 RaisedButton(
                     color: Colors.grey,
                     elevation: 0,
@@ -573,6 +586,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  companyLogo(widget.logo),
                   Padding(
                     padding: EdgeInsets.fromLTRB(
                         width * 0.1, height * 0.07, width * 0.1, 0),
@@ -588,6 +602,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                       textAlign: TextAlign.justify,
                     ),
                   ),
+
                   Padding(
                       padding: EdgeInsets.fromLTRB(
                           width * 0.07, 10, width * 0.07, 8),
@@ -661,21 +676,21 @@ class _JobQuestionsState extends State<JobQuestions> {
                                   ))),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
-                            width * 0.1, height * 0.04),
-                        child: Text(
-                          (indexOfQuestions + 1).toString() +
-                                  ". " +
-                                  qs[indexOfQuestions]['question'] ??
-                              "",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 14,
-                              letterSpacing: 1.2),
-                          textAlign: TextAlign.justify,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
+                      //       width * 0.1, height * 0.04),
+                      //   child: Text(
+                      //     (indexOfQuestions + 1).toString() +
+                      //             ". " +
+                      //             qs[indexOfQuestions]['question'] ??
+                      //         "",
+                      //     style: TextStyle(
+                      //         fontWeight: FontWeight.w900,
+                      //         fontSize: 14,
+                      //         letterSpacing: 1.2),
+                      //     textAlign: TextAlign.justify,
+                      //   ),
+                      // ),
                       buttonToShow()
                     ],
                   ),

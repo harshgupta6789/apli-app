@@ -29,8 +29,8 @@ class JobsTabs extends StatefulWidget {
   _JobsTabssState createState() => _JobsTabssState();
 }
 
-class _JobsTabssState extends State<JobsTabs> with AutomaticKeepAliveClientMixin {
-
+class _JobsTabssState extends State<JobsTabs>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -41,25 +41,26 @@ class _JobsTabssState extends State<JobsTabs> with AutomaticKeepAliveClientMixin
 
   @override
   void initState() {
-    if((savedJobs ?? []).length != 3) {
+    if ((savedJobs ?? []).length != 3) {
       savedJobs = [[], [], []];
-      for(int i = 0; i < (tempGlobalJobs['submitted_jobs']?? []).length; i++) {
-        savedJobs[0].add(tempGlobalJobs['submitted_jobs'][i]['is_saved'] ?? false);
+      for (int i = 0;
+          i < (tempGlobalJobs['submitted_jobs'] ?? []).length;
+          i++) {
+        savedJobs[0]
+            .add(tempGlobalJobs['submitted_jobs'][i]['is_saved'] ?? false);
       }
-      for(int i = 0; i < (tempGlobalJobs['all_jobs']?? []).length; i++) {
+      for (int i = 0; i < (tempGlobalJobs['all_jobs'] ?? []).length; i++) {
         savedJobs[1].add(tempGlobalJobs['all_jobs'][i]['is_saved'] ?? false);
       }
-      for(int i = 0; i < (tempGlobalJobs['pending_jobs']?? []).length; i++) {
-        savedJobs[2].add(tempGlobalJobs['pending_jobs'][i]['is_saved'] ?? false);
+      for (int i = 0; i < (tempGlobalJobs['pending_jobs'] ?? []).length; i++) {
+        savedJobs[2]
+            .add(tempGlobalJobs['pending_jobs'][i]['is_saved'] ?? false);
       }
     }
-    for(int i = 0; i < (widget.jobs ?? []).length; i++) {
+    for (int i = 0; i < (widget.jobs ?? []).length; i++) {
       loadingIcon.add(false);
     }
-    if(mounted)
-      setState(() {
-
-      });
+    if (mounted) setState(() {});
     super.initState();
   }
 
@@ -254,6 +255,7 @@ class _JobsTabssState extends State<JobsTabs> with AutomaticKeepAliveClientMixin
                                                               builder:
                                                                   (context) =>
                                                                       CompanyVideo(
+                                                                        isOnlyInfo: false,
                                                                         job: widget
                                                                             .jobs[index],
                                                                         isIncomplete:
@@ -329,31 +331,73 @@ class _JobsTabssState extends State<JobsTabs> with AutomaticKeepAliveClientMixin
                                                 trailing: widget.tabNo == 0
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
-                                                    : (loadingIcon[index] ? CircularProgressIndicator() : IconButton(
-                                                  icon: (savedJobs[widget.tabNo][index] == true) ? Icon(Icons.bookmark, color: Colors.yellow[700],) : Icon(Icons.bookmark_border,),
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      loadingIcon[index] = true;
-                                                    });
-                                                    dynamic result = await apiService.saveJob(
-                                                        widget.jobs[index]['job_id']);
-                                                    setState(() {
-                                                      loadingIcon[index] = false;
-                                                    });
-                                                    if (result['error'] != null) {
-                                                      Flushbar(
-                                                        isDismissible: true,
-                                                        messageText: Text('Error occurred, try again later',
-                                                            style: TextStyle(color: Colors.white)),
-                                                        duration: Duration(seconds: 2),
-                                                      )..show(context);
-                                                    } else {
-                                                      setState(() {
-                                                        savedJobs[widget.tabNo][index] = !savedJobs[widget.tabNo][index];
-                                                      });
-                                                    }
-                                                  },
-                                                ))),
+                                                    : (loadingIcon[index]
+                                                        ? CircularProgressIndicator()
+                                                        : IconButton(
+                                                            icon: (savedJobs[widget
+                                                                            .tabNo]
+                                                                        [
+                                                                        index] ==
+                                                                    true)
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .bookmark,
+                                                                    color: Colors
+                                                                            .yellow[
+                                                                        700],
+                                                                  )
+                                                                : Icon(
+                                                                    Icons
+                                                                        .bookmark_border,
+                                                                  ),
+                                                            onPressed:
+                                                                () async {
+                                                              setState(() {
+                                                                loadingIcon[
+                                                                        index] =
+                                                                    true;
+                                                              });
+                                                              dynamic result = await apiService
+                                                                  .saveJob(widget
+                                                                              .jobs[
+                                                                          index]
+                                                                      [
+                                                                      'job_id']);
+                                                              setState(() {
+                                                                loadingIcon[
+                                                                        index] =
+                                                                    false;
+                                                              });
+                                                              if (result[
+                                                                      'error'] !=
+                                                                  null) {
+                                                                Flushbar(
+                                                                  isDismissible:
+                                                                      true,
+                                                                  messageText: Text(
+                                                                      'Error occurred, try again later',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white)),
+                                                                  duration:
+                                                                      Duration(
+                                                                          seconds:
+                                                                              2),
+                                                                )..show(
+                                                                    context);
+                                                              } else {
+                                                                setState(() {
+                                                                  savedJobs[widget
+                                                                          .tabNo]
+                                                                      [
+                                                                      index] = !savedJobs[
+                                                                          widget
+                                                                              .tabNo]
+                                                                      [index];
+                                                                });
+                                                              }
+                                                            },
+                                                          ))),
                                           ),
                                         ])),
                               ),

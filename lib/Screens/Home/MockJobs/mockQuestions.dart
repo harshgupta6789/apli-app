@@ -158,13 +158,13 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
           });
       }
 
-            if (url != null) {
+      if (url != null) {
         setState(() {
           loading = true;
         });
         if (indexOfQuestions + 1 < qs.length) {
-         dynamic result = await apiService.addMockVideo(
-                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+          dynamic result = await apiService.addMockVideo(
+              tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
           if (result != -1 || result != -2 || result != 0) {
             print('abcd');
             print(result);
@@ -196,12 +196,12 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             loading = true;
           });
           dynamic result = await apiService.addMockVideo(
-                tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+              tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
           if (result != -1 || result != -2 || result != 0) {
             showToast("Submitting your answers", context);
             print(result);
-           dynamic finalResult =
-                  await apiService.submitMockInterview(widget.docID);
+            dynamic finalResult =
+                await apiService.submitMockInterview(widget.docID);
             if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
               showToast("Submitted Successfully", context);
               Navigator.of(context).pushAndRemoveUntil(
@@ -278,15 +278,15 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             style: TextStyle(color: Colors.white),
           ),
           onPressed: () async {
-             setState(() {
-                //loading = false;
-                indexOfQuestions = indexOfQuestions + 1;
-                isReading = true;
-                _isRecording = false;
-                readTimer();
-                //x = currentState.recording;
-                //startVideoRecording();
-              });
+            setState(() {
+              //loading = false;
+              indexOfQuestions = indexOfQuestions + 1;
+              isReading = true;
+              _isRecording = false;
+              readTimer();
+              //x = currentState.recording;
+              //startVideoRecording();
+            });
             // setState(() {
             //   loading = true;
             // });
@@ -334,15 +334,15 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             //       await apiService.submitMockInterview(widget.docID);
             //   if (finalResult != -1 || finalResult != -2 || finalResult != 0) {
             //     showToast("Submitted Succesfully..", context);
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => Wrapper(
-                              currentTab: 1,
-                            )),
-                    (Route<dynamic> route) => false);
-                //print(finalResult);
-              //}
-           // }
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                    builder: (context) => Wrapper(
+                          currentTab: 1,
+                        )),
+                (Route<dynamic> route) => false);
+            //print(finalResult);
+            //}
+            // }
           });
     }
   }
@@ -496,21 +496,21 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                         }),
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(
-                      width * 0.1, height * 0.04, width * 0.1, height * 0.04),
-                  child: Text(
-                    (indexOfQuestions + 1).toString() +
-                            ". " +
-                            qs[indexOfQuestions][1] ??
-                        "",
-                    style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        letterSpacing: 1.2),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.fromLTRB(
+                //       width * 0.1, height * 0.04, width * 0.1, height * 0.04),
+                //   child: Text(
+                //     (indexOfQuestions + 1).toString() +
+                //             ". " +
+                //             qs[indexOfQuestions][1] ??
+                //         "",
+                //     style: TextStyle(
+                //         fontWeight: FontWeight.w900,
+                //         fontSize: 14,
+                //         letterSpacing: 1.2),
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
                 RaisedButton(
                     color: Colors.grey,
                     elevation: 0,
@@ -542,6 +542,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Image.asset("Assets/Images/logo.png"),
                   Padding(
                     padding: EdgeInsets.fromLTRB(
                         width * 0.1, height * 0.07, width * 0.1, 0),
@@ -557,6 +558,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                       textAlign: TextAlign.center,
                     ),
                   ),
+
                   Padding(
                       padding: EdgeInsets.fromLTRB(
                           width * 0.07, 10, width * 0.07, 8),
@@ -630,21 +632,21 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
                                   ))),
                         ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
-                            width * 0.1, height * 0.04),
-                        child: Text(
-                          (indexOfQuestions + 1).toString() +
-                                  ". " +
-                                  qs[indexOfQuestions][1] ??
-                              "",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 14,
-                              letterSpacing: 1.2),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.fromLTRB(width * 0.1, height * 0.04,
+                      //       width * 0.1, height * 0.04),
+                      //   child: Text(
+                      //     (indexOfQuestions + 1).toString() +
+                      //             ". " +
+                      //             qs[indexOfQuestions][1] ??
+                      //         "",
+                      //     style: TextStyle(
+                      //         fontWeight: FontWeight.w900,
+                      //         fontSize: 14,
+                      //         letterSpacing: 1.2),
+                      //     textAlign: TextAlign.center,
+                      //   ),
+                      // ),
                       buttonToShow()
                     ],
                   ),

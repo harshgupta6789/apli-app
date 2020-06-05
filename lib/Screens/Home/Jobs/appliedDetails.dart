@@ -38,6 +38,14 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   File fileToUpload;
   final apiService = APIService();
 
+    Widget companyLogo(String link){
+     if (link==null) {
+      return SizedBox();
+    } else {
+      return Image.network(link);
+    }
+  }
+
   Future<void> downloadFile(StorageReference ref) async {
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
@@ -133,6 +141,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
 
   Widget button(String status, Map job) {
     bool candAccepted = widget.isApplied ?? false;
+    print(job);
     switch (status) {
       case "OFFERED":
         bool deadlineOver = job['accept_deadline_passed'] ?? true;
@@ -724,19 +733,20 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                           child: Container(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                  bottom: 18.0, left: 10.0, right: 10.0),
+                                  bottom: 16.0, left: 10.0, right: 10.0),
                               child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     ListTile(
                                       onTap: () {},
+                                      trailing: companyLogo(widget.job['logo']),
                                       title: AutoSizeText(
                                         widget.job['role'] ??
                                             "Role not declared",
                                         maxLines: 2,
                                         style: TextStyle(
                                             color: basicColor,
-                                            fontSize: 18,
+                                            fontSize: 16,
                                             fontWeight: FontWeight.w500),
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -779,7 +789,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               children: [
                                                 Text('Jobs CTC : ',
                                                     style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     )),
@@ -787,7 +797,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                     widget.job['ctc'] ??
                                                         "Not Specified",
                                                     style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                     )),
@@ -802,7 +812,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               children: [
                                                 Text('Notice Period : ',
                                                     style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     )),
@@ -811,7 +821,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                                             'notice_period'] ??
                                                         "Not Specified",
                                                     style: TextStyle(
-                                                      fontSize: 18,
+                                                      fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                     )),
@@ -825,7 +835,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               "Role Description : ",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -860,7 +870,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               "Key Responsibilities : ",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -895,7 +905,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               "Soft Skills : ",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -935,7 +945,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               "Technical Skills  : ",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -975,7 +985,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                               "Requirements : ",
                                               maxLines: 2,
                                               style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 16,
                                                   fontWeight: FontWeight.w600),
                                               overflow: TextOverflow.ellipsis,
                                             ),
