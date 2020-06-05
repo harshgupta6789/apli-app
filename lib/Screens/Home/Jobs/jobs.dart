@@ -32,39 +32,54 @@ class _JobsState extends State<Jobs>
   final apiService = APIService();
   bool loading = true;
   List companies = [], locations = [];
-  List type = ['Intern', 'Job'];
+  List type = ['Internship', 'Job'];
   dynamic jobs;
+  bool didFilter = false;
   List filterMenu = ['Company', 'Type', 'Location', 'Bookmarked'];
 
   void addFilters(List jobList) {
     if (jobList != null) {
+      //print("gg00");
       for (int i = 0; i < jobList.length; i++) {
+        //print(jobList[i]['location']);
         if (!companies.contains(jobList[i]['organisation'])) {
           companies.add(jobList[i]['organisation']);
         } else if (!locations.contains(jobList[i]['location'])) {
+          print(jobList[i]['location']);
           locations.add(jobList[i]['location']);
         } else {}
       }
     }
   }
 
-  void filterStuff(List comp, String type, List loc) {
-    submittedFilter = [];
-    allFilter = [];
-    incompleteFilter = [];
+  void filterStuff(List comp, List type, List loc) {
+    setState(() {
+      didFilter = true;
+      submittedFilter = [];
+      allFilter = [];
+      incompleteFilter = [];
+    });
 
     if (comp == null && loc == null) {
-      // for (var map in submittedJob) {
-      //    submittedFilter = submittedJob;
-      // }
-      //  for (var map in incompleteJob) {
-      //    submittedFilter = submittedJob;
-      // }
-      //  for (var map in allJob) {
-      //    submittedFilter = submittedJob;
-      // }
+      for (int i = 0; i < type.length; i++) {
+        for (var map in submittedJob) {
+          if (map['job_type'] == type[i]) {
+            submittedFilter.add(map);
+          }
+        }
+        for (var map in incompleteJob) {
+          if (map['job_type'] == type[i]) {
+            incompleteFilter.add(map);
+          }
+        }
+        for (var map in allJob) {
+          if (map['job_type'] == type[i]) {
+            allFilter.add(map);
+          }
+        }
+        setState(() {});
+      }
     } else if (type == null && loc == null) {
-      print(allJob);
       for (int i = 0; i < comp.length; i++) {
         for (var map in submittedJob) {
           if (map['organisation'] == comp[i]) {
@@ -82,12 +97,15 @@ class _JobsState extends State<Jobs>
           }
         }
         setState(() {});
-        // print(submittedFilter);
         // print(allFilter);
         // // print(incompleteFilter);
       }
+      setState(() {});
     } else if (type == null && comp == null) {
       for (int i = 0; i < loc.length; i++) {
+        print(allFilter.toString() + "all");
+        print(submittedFilter.toString() + "submitted");
+        print(incompleteFilter.toString() + "inc");
         for (var map in submittedJob) {
           if (map['location'] == loc[i]) {
             submittedFilter.add(map);
@@ -96,17 +114,24 @@ class _JobsState extends State<Jobs>
         for (var map in incompleteJob) {
           if (map['location'] == loc[i]) {
             incompleteFilter.add(map);
+            print("hi");
           }
         }
         for (var map in allJob) {
           if (map['location'] == loc[i]) {
             allFilter.add(map);
+            print("hi");
           }
         }
+        print(allFilter.isEmpty);
+        print(submittedFilter.isEmpty);
+        print(incompleteFilter.isEmpty);
         setState(() {});
       }
-    } else {
+    } else if (comp == null && loc == null && type == null) {
+      print("f");
       setState(() {
+        didFilter = false;
         submittedFilter = submittedJob;
         allFilter = allJob;
         incompleteFilter = incompleteJob;
@@ -125,11 +150,13 @@ class _JobsState extends State<Jobs>
 
   getInfo() async {
     dynamic result = await apiService.getJobs();
-    print(result['pending_jobs']);
+    //print(result['pending_jobs']);
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
         submittedFilter = [];
+        companies = [];
+        locations = [];
         allFilter = [];
         incompleteFilter = [];
         jobs = result;
@@ -256,6 +283,7 @@ class _JobsState extends State<Jobs>
                                                             '${filterMenu[index]}',
                                                         companies: companies,
                                                         locations: locations,
+                                                        type: type,
                                                       );
                                                     });
 
@@ -296,10 +324,14 @@ class _JobsState extends State<Jobs>
                                                           width: 1.2),
                                                     ),
                                                     onPressed: () {
-                                                      filterStuff(
-                                                          null, null, null);
+                                                      setState(() {
+                                                        didFilter = false;
+                                                        allFilter = [];
+                                                        submittedFilter = [];
+                                                        incompleteFilter = [];
+                                                      });
                                                       Navigator.of(context)
-                                                          .pop();
+                                                          .pop(null);
                                                     },
                                                     child: Text(
                                                       'Clear Filters',
@@ -316,7 +348,11 @@ class _JobsState extends State<Jobs>
                             filterStuff(list[0], null, null);
                           } else if (list[1] == 'Location') {
                             filterStuff(null, null, list[0]);
+                          } else if (list[1] == 'Type') {
+                            filterStuff(null, list[0], null);
                           }
+                        } else {
+                          setState(() {});
                         }
                       }),
                 ),
@@ -560,25 +596,31 @@ class _JobsState extends State<Jobs>
                                 children: [
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: submittedFilter.isEmpty
-                                        ? jobs['submitted_jobs']
-                                        : submittedFilter,
+                                    jobs: didFilter
+                                        ? submittedFilter
+                                        : submittedFilter.isEmpty
+                                            ? submittedJob
+                                            : submittedFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 0,
                                   ),
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: allFilter.isEmpty
-                                        ? jobs['all_jobs']
-                                        : allFilter,
+                                    jobs: didFilter
+                                        ? allFilter
+                                        : allFilter.isEmpty
+                                            ? allJob
+                                            : allFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 1,
                                   ),
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: incompleteFilter.isEmpty
-                                        ? jobs['pending_jobs']
-                                        : incompleteFilter,
+                                    jobs: didFilter
+                                        ? incompleteFilter
+                                        : incompleteFilter.isEmpty
+                                            ? incompleteJob
+                                            : incompleteFilter,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 2,
                                   )
@@ -592,8 +634,10 @@ class MyDialogContent extends StatefulWidget {
   final String typeFilter;
   final List companies;
   final List locations;
+  final List type;
 
-  MyDialogContent({Key key, this.typeFilter, this.companies, this.locations})
+  MyDialogContent(
+      {Key key, this.typeFilter, this.companies, this.locations, this.type})
       : super(key: key);
   @override
   _MyDialogContentState createState() => new _MyDialogContentState();
@@ -605,10 +649,14 @@ class _MyDialogContentState extends State<MyDialogContent> {
   var items = List<dynamic>();
 
   Map compChecked = {};
+  Map typeChecked = {};
   Map locationChecked = {};
   void init() {
     for (var temp in widget.companies) {
       compChecked[temp] = false;
+    }
+    for (var temp in widget.type) {
+      typeChecked[temp] = false;
     }
     for (var temp in widget.locations) {
       locationChecked[temp] = false;
@@ -641,8 +689,24 @@ class _MyDialogContentState extends State<MyDialogContent> {
         break;
 
       case 'Type':
-        return Column(
-          children: [],
+        return ListView.builder(
+          shrinkWrap: true,
+          itemBuilder: (buildContext, index) {
+            return CheckboxListTile(
+              checkColor: basicColor,
+              title: Text(
+                '${widget.type[index]}',
+              ),
+              value: typeChecked['${widget.type[index]}'],
+              onChanged: (bool value) {
+                setState(() {
+                  typeChecked['${widget.type[index]}'] = value;
+                });
+                //print(compChecked);
+              },
+            );
+          },
+          itemCount: widget.type.length,
         );
         break;
       case 'Location':
@@ -663,7 +727,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
               },
             );
           },
-          itemCount: widget.companies.length,
+          itemCount: widget.locations.length,
         );
         break;
       case 'Bookmarked':
@@ -747,6 +811,15 @@ class _MyDialogContentState extends State<MyDialogContent> {
                           if (value == true) {
                             filtered.add(key);
                           }
+                        });
+                        Navigator.pop(context, filtered);
+                      } else if (widget.typeFilter == 'Type') {
+                        List filtered = [];
+                        typeChecked.forEach((key, value) {
+                          if (value == true) {
+                            filtered.add(key.toString().toLowerCase());
+                          }
+                          print(filtered);
                         });
                         Navigator.pop(context, filtered);
                       }

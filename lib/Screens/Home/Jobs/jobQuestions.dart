@@ -6,6 +6,7 @@ import 'package:apli/Shared/animations.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:apli/Shared/loading.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -105,7 +106,10 @@ class _JobQuestionsState extends State<JobQuestions> {
     if (link == null) {
       return Image.asset("Assets/Images/logo.png");
     } else {
-      return Image.network(link);
+      return CachedNetworkImage(
+        imageUrl: link,
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -38,11 +39,14 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   File fileToUpload;
   final apiService = APIService();
 
-    Widget companyLogo(String link){
-     if (link==null) {
+  Widget companyLogo(String link) {
+    if (link == null) {
       return SizedBox();
     } else {
-      return Image.network(link);
+      return CachedNetworkImage(
+        imageUrl: link,
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
     }
   }
 
@@ -739,7 +743,8 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                   children: <Widget>[
                                     ListTile(
                                       onTap: () {},
-                                      trailing: companyLogo(widget.job['logo']),
+                                      trailing: companyLogo(
+                                          widget.job['company_logo']),
                                       title: AutoSizeText(
                                         widget.job['role'] ??
                                             "Role not declared",
