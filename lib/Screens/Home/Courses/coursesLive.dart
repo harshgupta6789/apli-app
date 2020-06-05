@@ -157,7 +157,7 @@ class _CoursesLiveState extends State<CoursesLive>
               stream: Firestore.instance
                   .collection('edu_courses')
                   .document(widget.documentId)
-                  .collection("comments")
+                  .collection("videos")
                   .orderBy("timestamp")
                   .snapshots(),
               builder: (context, snapshot) {

@@ -451,7 +451,7 @@ class _CourseLiveState extends State<CourseLive>
                                                 TextInputAction.send,
                                             decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: 'Use ' + widget.hashtag ?? '#AskAQuestion')),
+                                                hintText: 'Use ' + (widget.hashtag ?? '#AskAQuestion'))),
                                         trailing: loading
                                             ? CircularProgressIndicator()
                                             : IconButton(

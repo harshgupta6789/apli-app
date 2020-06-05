@@ -68,6 +68,41 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     });
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
+        showAlertDialog(message['notification']['title'],
+            message['notification']['body'], DialogType.INFO, context, () {
+//              // if (message['data']['type'] != null) {
+//              //   switch (message['data']['type']) {
+//              //     case 'Job':
+//              //       {
+//              //         Navigator.of(context).pushAndRemoveUntil(
+//              //             MaterialPageRoute(
+//              //                 builder: (context) => Wrapper(
+//              //                       currentTab: 2,
+//              //                     )),
+//              //             (Route<dynamic> route) => false);
+//              //         setState(() {});
+//              //         // Navigator.push(
+//              //         //   context,
+//              //         //   MaterialPageRoute(builder: (context) => Updates()),
+//              //         // );
+//              //       }
+//              //       break;
+//              //     case 'Alert':
+//              //       {}
+//              //       break;
+//              //     default:
+//              //       {}
+//              //       break;
+//              //   }
+//              // }
+//              Navigator.of(context).pushAndRemoveUntil(
+//                  MaterialPageRoute(
+//                      builder: (context) => Wrapper(
+//                        currentTab: 2,
+//                      )),
+//                      (Route<dynamic> route) => false);
+//              setState(() {});
+            });
         if (_currentTab == 2) {
           Flushbar(
             isDismissible: true,
@@ -125,14 +160,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       // onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {
         setState(() {
-          _currentTab = 3;
-          _tabController.animateTo(3);
+          _currentTab = 2;
+          _tabController.animateTo(2);
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
         setState(() {
-          _currentTab = 3;
-          _tabController.animateTo(3);
+          _currentTab = 2;
+          _tabController.animateTo(2);
         });
       },
     );

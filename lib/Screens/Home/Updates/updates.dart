@@ -18,21 +18,13 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   List filters = [], chosenTypes = [];
-  List typesList = [
-    'New Jobs',
-    'Messages',
-    'Applications',
-    'Interviews',
-    'Applications',
-    'Abcd'
-  ];
-  Map<String, String> typesMap = {
-    'New Jobs': 'message_from_tpo',
-    'Messages': 'added_to_placement',
-    'Applications': 'cand_status_change',
-    'Interviews': 'cand_status_change_from_campus',
-    'Applications': 'message_from_company',
-    'Abcdefg': 'apli_job',
+  Map<String, bool> userFilters = {
+    'message_from_tpo': false,
+    'added_to_placement': false,
+    'cand_status_change': false,
+    'cand_status_change_from_campus': false,
+    'message_from_company': false,
+    'apli_job': false
   };
 
   List<List<String>> myNotifications = [];
@@ -124,224 +116,322 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-//    getPrefs();
   }
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    final _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        key: _scaffoldKey,
-        drawer: customDrawer(context, _scaffoldKey),
-        appBar: PreferredSize(
-          child: AppBar(
-            backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: IconButton(
-                    icon: Icon(
-                      EvaIcons.menuOutline,
-                      color: Colors.white,
-                    ),
-                    onPressed: () => _scaffoldKey.currentState.openDrawer())),
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                updates,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          preferredSize: Size.fromHeight(50),
-        ),
-        body:
-//          Container(
-//            padding: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-//            height: height * 0.07,
-//            child: ListView.builder(
-//              scrollDirection: Axis.horizontal,
-//              itemCount: typesList.length,
-//              itemBuilder: (BuildContext context, int index) {
-//                String temp = typesMap[typesList[index]];
-//                bool contains = chosenTypes.contains(temp);
-//                return Padding(
-//                  padding: const EdgeInsets.only(right: 8.0),
-//                  child: Stack(
-//                    children: <Widget>[
-//                      RaisedButton(
-//                        padding: EdgeInsets.only(left: 30, right: 30),
-//                        shape: RoundedRectangleBorder(
-//                          borderRadius: BorderRadius.circular(15),
-//                        ),
-//                        color: contains ? basicColor : Colors.lightBlue[300],
-//                        child: Text(typesList[index], style: TextStyle(color: contains ? Colors.white : Colors.black),),
-//                        onPressed: () {
-//                          if(contains)
-//                            setState(() {
-//                              chosenTypes.remove(temp);
-//                            });
-//                          else
-//                            setState(() {
-//                              chosenTypes.add(temp);
-//                            });
-//                        },
-//                      ),
-//                      Align(
-//                        alignment: Alignment.center,
-//                        child: Visibility(
-//                          visible: contains,
-//                          child: Icon(Icons.done, color: Colors.white,),
-//                        ),
-//                      )
-//                    ],
-//                  ),
-//                );
-//              }),
+//        backgroundColor: Theme.of(context).backgroundColor,
+//        key: _scaffoldKey,
+//        drawer: customDrawer(context, _scaffoldKey),
+//        appBar: PreferredSize(
+//          child: AppBar(
+//            backgroundColor: basicColor,
+//            automaticallyImplyLeading: false,
+//            leading: Padding(
+//                padding: const EdgeInsets.only(bottom: 10.0),
+//                child: IconButton(
+//                    icon: Icon(
+//                      EvaIcons.menuOutline,
+//                      color: Colors.white,
+//                    ),
+//                    onPressed: () => _scaffoldKey.currentState.openDrawer())),
+//            title: Padding(
+//              padding: const EdgeInsets.only(bottom: 10.0),
+//              child: Text(
+//                updates,
+//                style: TextStyle(
+//                    color: Colors.white,
+//                    fontSize: 24,
+//                    fontWeight: FontWeight.bold),
+//              ),
+//            ),
 //          ),
-            FutureBuilder(
-          future: userInit(email),
-          builder:
-              (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data.length == 0)
-                return Center(
-                  child: Text('No New Updates'),
-                );
-              else {
-                filters = snapshot.data;
-                return StreamBuilder(
-                    stream: Firestore.instance
-                        .collection("notifications")
-                        .orderBy('time', descending: true)
-                        .snapshots(),
-                    builder: (context, snapshot1) {
-                      if (snapshot1.hasData) {
-                        myNotifications = [];
-                        snapshot1.data.documents.forEach((f) {
-                          bool isMyNotification = false;
-                          String title;
-                          String message, status;
-                          String notiType = f.data['type'];
+//          preferredSize: Size.fromHeight(50),
+//        ),
+        body: FutureBuilder(
+      future: userInit(email),
+      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.data.length == 0)
+            return Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              key: _scaffoldKey,
+              drawer: customDrawer(context, _scaffoldKey),
+              appBar: PreferredSize(
+                child: AppBar(
+                  backgroundColor: basicColor,
+                  automaticallyImplyLeading: false,
+                  leading: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: IconButton(
+                          icon: Icon(
+                            EvaIcons.menuOutline,
+                            color: Colors.white,
+                          ),
+                          onPressed: () =>
+                              _scaffoldKey.currentState.openDrawer())),
+                  title: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Text(
+                      updates,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                preferredSize: Size.fromHeight(50),
+              ),
+              body: Center(
+                child: Text('No New Updates'),
+              ),
+            );
+          else {
+            filters = snapshot.data;
+            return StreamBuilder(
+                stream: Firestore.instance
+                    .collection("notifications")
+                    .orderBy('time', descending: true)
+                    .snapshots(),
+                builder: (context, snapshot1) {
+                  if (snapshot1.hasData) {
+                    myNotifications = [];
+                    snapshot1.data.documents.forEach((f) {
+                      bool isMyNotification = false;
+                      String title;
+                      String message, status;
+                      String notiType = f.data['type'];
 
-                          String messageToShow(
-                              String status, String name, String role) {
-                            if (status == 'HIRED' || status == 'OFFERED') {
-                              return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
-                            } else if (status == 'INTERVIEW') {
-                              return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
-                            } else if (status == 'REJECTED') {
-                              return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
-                            } else {
-                              return '';
-                            }
-                          }
+                      String messageToShow(
+                          String status, String name, String role) {
+                        if (status == 'HIRED' || status == 'OFFERED') {
+                          return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
+                        } else if (status == 'INTERVIEW') {
+                          return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
+                        } else if (status == 'REJECTED') {
+                          return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
+                        } else {
+                          return '';
+                        }
+                      }
 
-                          switch (notiType) {
-                            case 'message_from_tpo':
-                              title = f.data['tpo_name'];
-                              message = f.data['message'];
-                              break;
-                            case 'added_to_placement':
-                              title = f.data['campus'];
-                              message = f.data['placement'];
-                              break;
-                            case 'cand_status_change':
-                              title = f.data['name'];
-                              status = f.data['status'];
-                              message = messageToShow(status,
-                                  f.data['name'] ?? '', f.data['job'] ?? '');
-                              break;
-                            case 'cand_status_change_from_campus':
-                              title = f.data['campus_id'];
-                              status = f.data['status'];
-                              message = messageToShow(status,
-                                  f.data['name'] ?? '', f.data['job'] ?? '');
-                              break;
-                            case 'message_from_company':
-                              title = f.data['name'];
-                              message = f.data['message'];
-                              break;
-                            case 'apli_job':
-                              title = f.data['name'];
-                              message = f.data['message'];
-                              break;
-                            default:
-                              message = null;
-                          }
+                      switch (notiType) {
+                        case 'message_from_tpo':
+                          title = f.data['tpo_name'];
+                          message = f.data['message'];
+                          break;
+                        case 'added_to_placement':
+                          title = f.data['campus'];
+                          message = f.data['placement'];
+                          break;
+                        case 'cand_status_change':
+                          title = f.data['name'];
+                          status = f.data['status'];
+                          message = messageToShow(status, f.data['name'] ?? '',
+                              f.data['job'] ?? '');
+                          break;
+                        case 'cand_status_change_from_campus':
+                          title = f.data['campus_id'];
+                          status = f.data['status'];
+                          message = messageToShow(status, f.data['name'] ?? '',
+                              f.data['job'] ?? '');
+                          break;
+                        case 'message_from_company':
+                          title = f.data['name'];
+                          message = f.data['message'];
+                          break;
+                        case 'apli_job':
+                          title = f.data['name'];
+                          message = f.data['message'];
+                          break;
+                        default:
+                          message = null;
+                      }
 
-                          Timestamp tempTime = f.data['time'];
-                          List receivers = f.data['receivers'];
-                          if (tempTime != null) if (int.parse(filters[0]) <=
-                              tempTime.microsecondsSinceEpoch) {
-                            if (receivers != null) {
-                              if (receivers.contains('all'))
+                      Timestamp tempTime = f.data['time'];
+                      List receivers = f.data['receivers'];
+                      if (tempTime != null) if (int.parse(filters[0]) <=
+                          tempTime.microsecondsSinceEpoch) {
+                        if (receivers != null) {
+                          if (receivers.contains('all'))
+                            isMyNotification = true;
+                          else {
+                            for (int i = 0; i < receivers.length; i++) {
+                              if (filters.contains(receivers[i])) {
                                 isMyNotification = true;
-                              else {
-                                for (int i = 0; i < receivers.length; i++) {
-                                  if (filters.contains(receivers[i])) {
-                                    isMyNotification = true;
-                                    break;
-//                                      if(chosenTypes.length > 0)
-//                                        if(chosenTypes.contains(notiType))
-//                                          isMyNotification = true;
-//                                      else
-//                                        isMyNotification = true;
-//                                      break;
-                                  }
-                                }
-                              }
-                              if (isMyNotification) {
-                                if (difference(tempTime) != 'negative') {
-                                  myNotifications.add([
-                                    title,
-                                    message,
-                                    tempTime == null
-                                        ? null
-                                        : difference(tempTime),
-                                    notiType,
-                                    f.documentID,
-                                  ]);
-                                }
+                                break;
                               }
                             }
                           }
-                        });
-                        if (myNotifications.length == 0)
-                          return Center(
-                            child: Text(
-                              'No New Updates',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          );
-                        else
-                          return Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: AllNotifications(
-                              myNotifications: myNotifications,
-                            ),
-                          );
-                      } else
-                        return Loading();
+                          if (isMyNotification) {
+                            if (difference(tempTime) != 'negative') {
+                              myNotifications.add([
+                                title,
+                                message,
+                                tempTime == null ? null : difference(tempTime),
+                                notiType,
+                                f.documentID,
+                              ]);
+                            }
+                          }
+                        }
+                      }
                     });
-              }
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error, please try again later'),
-              );
-            } else {
-              return Loading();
-            }
-          },
-        ));
+                    if (myNotifications.length == 0)
+                      return Scaffold(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        key: _scaffoldKey,
+                        drawer: customDrawer(context, _scaffoldKey),
+                        appBar: PreferredSize(
+                          child: AppBar(
+                            backgroundColor: basicColor,
+                            automaticallyImplyLeading: false,
+                            leading: Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: IconButton(
+                                    icon: Icon(
+                                      EvaIcons.menuOutline,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () => _scaffoldKey.currentState
+                                        .openDrawer())),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: Text(
+                                updates,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          preferredSize: Size.fromHeight(50),
+                        ),
+                        body: Center(
+                          child: Text(
+                            'No New Updates',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      );
+                    else {
+                      return AllNotifications(
+                        myNotifications: myNotifications,
+                      );
+                    }
+                  } else
+                    return Scaffold(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        key: _scaffoldKey,
+                        drawer: customDrawer(context, _scaffoldKey),
+                        appBar: PreferredSize(
+                          child: AppBar(
+                            backgroundColor: basicColor,
+                            automaticallyImplyLeading: false,
+                            leading: Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: IconButton(
+                                    icon: Icon(
+                                      EvaIcons.menuOutline,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () => _scaffoldKey.currentState
+                                        .openDrawer())),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: Text(
+                                updates,
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          preferredSize: Size.fromHeight(50),
+                        ),
+                        body: Loading());
+                });
+          }
+        } else if (snapshot.hasError) {
+          return Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            key: _scaffoldKey,
+            drawer: customDrawer(context, _scaffoldKey),
+            appBar: PreferredSize(
+              child: AppBar(
+                backgroundColor: basicColor,
+                automaticallyImplyLeading: false,
+                leading: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: IconButton(
+                        icon: Icon(
+                          EvaIcons.menuOutline,
+                          color: Colors.white,
+                        ),
+                        onPressed: () =>
+                            _scaffoldKey.currentState.openDrawer())),
+                title: Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Text(
+                    updates,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              preferredSize: Size.fromHeight(50),
+            ),
+            body: Center(
+              child: Text('Error, please try again later'),
+            ),
+          );
+        } else {
+          return Scaffold(
+              backgroundColor: Theme.of(context).backgroundColor,
+              key: _scaffoldKey,
+              drawer: customDrawer(context, _scaffoldKey),
+              appBar: PreferredSize(
+                child: AppBar(
+                  backgroundColor: basicColor,
+                  automaticallyImplyLeading: false,
+                  leading: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: IconButton(
+                          icon: Icon(
+                            EvaIcons.menuOutline,
+                            color: Colors.white,
+                          ),
+                          onPressed: () =>
+                              _scaffoldKey.currentState.openDrawer())),
+                  title: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: Text(
+                      updates,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                preferredSize: Size.fromHeight(50),
+              ),
+              body: Loading());
+        }
+      },
+    ));
   }
 }
 
@@ -355,90 +445,330 @@ class AllNotifications extends StatefulWidget {
 }
 
 class _AllNotificationsState extends State<AllNotifications> {
-  double width, height;
+  double width, height, scale;
   List<List<String>> myNotifications;
   List<List<String>> items;
   int count = 15;
+  int result;
+
+  Map<String, bool> userFilters = {
+    'message_from_tpo': false,
+    'added_to_placement': false,
+    'cand_status_change': false,
+    'cand_status_change_from_campus': false,
+    'message_from_company': false,
+    'apli_job': false
+  };
 
   @override
   Widget build(BuildContext context) {
+    result = 0;
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    if (width < 360)
+      scale = 0.7;
+    else
+      scale = 1;
     myNotifications = widget.myNotifications;
     int length =
         (myNotifications.length < count) ? myNotifications.length : count;
-    return Container(
-      child: ListView.builder(
-        itemCount: length + 1,
-        itemBuilder: (BuildContext context, int index) {
-          return index != length
-              ? Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    child: Card(
-                      color: Theme.of(context).backgroundColor,
-                      elevation: 0.2,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Colors.grey)),
-                      child: Padding(
-                        padding: EdgeInsets.only(bottom: 15.0),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
+    for(int i = 0; i < myNotifications.length; i++) {
+      if((!(userFilters.values.toList().contains(true)) ||
+          (userFilters[myNotifications[i][3]] ?? false)))
+        result = result + 1;
+    }
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      key: _scaffoldKey,
+      drawer: customDrawer(context, _scaffoldKey),
+      appBar: PreferredSize(
+        child: AppBar(
+          backgroundColor: basicColor,
+          automaticallyImplyLeading: false,
+          leading: Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: IconButton(
+                  icon: Icon(
+                    EvaIcons.menuOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
+          title: Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              updates,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+          actions: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0, right: 10),
+              child: IconButton(
+                  icon: Icon(
+                    EvaIcons.funnelOutline,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    showDialog(
+                      context: context,
+                      builder: (_) {
+                        List<bool> temp = userFilters.values.toList();
+                        return StatefulBuilder(builder: (context, setstate) {
+                          return SimpleDialog(
+//                            shape: RoundedRectangleBorder(
+//                                borderRadius: BorderRadius.all(Radius.circular(6.0))),
+                            backgroundColor: Theme.of(context).backgroundColor,
+                            contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                            title: Text(
+                              'Filter Updates',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 15),
+                            ),
                             children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: width * 0.01, top: 5.0),
-                                child: ListTile(
-                                  dense: true,
-                                  //isThreeLine: true,
-                                  title: Text(
-                                    myNotifications[index][0] ??
-                                        "No Message Specified",
-                                    //maxLines: 2,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                    //overflow: TextOverflow.ellipsis,
-                                  ),
-                                  subtitle: Text(
-                                    myNotifications[index][1] ??
-                                        "No Message Specified",
-                                    //maxLines: 2,
-                                    //overflow: TextOverflow.ellipsis,
-                                  ),
-                                  trailing: Text(myNotifications[index][2] ??
-                                      'No Time Exception'),
+                              Container(
+                                width: width,
+                                padding: EdgeInsets.fromLTRB(
+                                    20 * scale, 20, 20 * scale, 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[0],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[0] = value;
+                                        });
+                                      },
+                                      title: Text('Message from TPO'),
+                                    ),
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[1],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[1] = value;
+                                        });
+                                      },
+                                      title: Text('Added to Placements'),
+                                    ),
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[2],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[2] = value;
+                                        });
+                                      },
+                                      title: Text('Status Changed'),
+                                    ),
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[3],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[3] = value;
+                                        });
+                                      },
+                                      title: Text('Status Changed From Campus'),
+                                    ),
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[4],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[4] = value;
+                                        });
+                                      },
+                                      title: Text('Message from Campus'),
+                                    ),
+                                    CheckboxListTile(
+                                      activeColor: basicColor,
+                                      dense: true,
+                                      value: temp[5],
+                                      onChanged: (value) {
+                                        setstate(() {
+                                          temp[5] = value;
+                                        });
+                                      },
+                                      title: Text('Apli Job'),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ]),
-                      ),
-                    ),
-                  ),
-                )
-              : length == myNotifications.length
-                  ? Container()
-                  : FlatButton(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Load More',
-                            style: TextStyle(fontSize: 12),
-                          ),
-                          Icon(
-                            Icons.refresh,
-                            size: 15,
-                          )
-                        ],
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          count = count + 10;
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  FlatButton(
+                                    child: Text(
+                                      'CLEAR',
+                                      style: TextStyle(),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      userFilters.forEach((key, value) {
+                                        userFilters[key] = false;
+                                      });
+                                      setState(() {});
+                                    },
+                                  ),
+                                  FlatButton(
+                                    child: Text(
+                                      'APPLY',
+                                      style: TextStyle(color: basicColor),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                      setState(() {
+                                        userFilters['message_from_tpo'] = temp[0];
+                                        userFilters['added_to_placement'] = temp[1];
+                                        userFilters['cand_status_change'] = temp[2];
+                                        userFilters['cand_status_change_from_campus'] = temp[3];
+                                        userFilters['message_from_company'] = temp[4];
+                                        userFilters['apli_job'] = temp[5];
+                                      });
+                                    },
+                                  ),
+                                ],
+                              )
+                            ],
+                          );
                         });
                       },
                     );
-        },
+                  }),
+            ),
+          ],
+        ),
+        preferredSize: Size.fromHeight(50),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: const EdgeInsets.all(4.0),
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: ScrollPhysics(),
+                itemCount: length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  return index != length
+                      ? (!(userFilters.values.toList().contains(true)) ||
+                              (userFilters[myNotifications[index][3]] ?? false))
+                          ? Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                child: Card(
+                                  color: Theme.of(context).backgroundColor,
+                                  elevation: 0.2,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      side: BorderSide(color: Colors.grey)),
+                                  child: Padding(
+                                    padding: EdgeInsets.only(bottom: 15.0),
+                                    child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: width * 0.01, top: 5.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                ListTile(
+                                                  dense: true,
+                                                  //isThreeLine: true,
+                                                  title: Text(
+                                                    myNotifications[index][0] ??
+                                                        "No Message Specified",
+                                                    //maxLines: 2,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight: FontWeight.w500),
+                                                    //overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  subtitle: Text(
+                                                    myNotifications[index][1] ??
+                                                        "No Message Specified",
+                                                    //maxLines: 2,
+                                                    //overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  trailing: Text(myNotifications[index]
+                                                          [2] ??
+                                                      'No Time Exception'),
+                                                ),
+//                                                (myNotifications[index][3] == 'cand_status_change_from_campus' || myNotifications[index][3] == 'cand_status_change' || myNotifications[index][3] == 'message_from_company') ?
+                                                false ?
+                                                Padding(
+                                                    padding: EdgeInsets.only(
+                                                        top: 15.0, left: 12.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        border:
+                                                        Border.all(color: basicColor),
+                                                        borderRadius:
+                                                        BorderRadius.circular(8),
+                                                      ),
+                                                      child: MaterialButton(
+                                                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                                          child: Text(
+                                                            "View Application",
+                                                            style: TextStyle(
+                                                                fontSize: 13.0,
+                                                                color: basicColor,
+                                                                fontWeight:
+                                                                FontWeight.w600),
+                                                          ),
+                                                          onPressed: () => null),
+                                                    )) : SizedBox()
+
+                                              ],
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : length == myNotifications.length
+                          ? Container()
+                          : FlatButton(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    'Load More',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Icon(
+                                    Icons.refresh,
+                                    size: 15,
+                                  )
+                                ],
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  count = count + 10;
+                                });
+                              },
+                            );
+                },
+              ),
+            ),
+            result == 0 ? Container(width: width, height: height * 0.75, child: Center(child: Text('No Results')),) : SizedBox()
+          ],
+        ),
       ),
     );
   }
