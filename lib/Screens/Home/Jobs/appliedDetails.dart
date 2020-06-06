@@ -37,6 +37,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   String tempURL;
   StorageUploadTask uploadTask;
   File fileToUpload;
+  bool interOffer = false;
   final apiService = APIService();
 
   Widget companyLogo(String link) {
@@ -149,7 +150,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     switch (status) {
       case "OFFERED":
         bool deadlineOver = job['accept_deadline_passed'] ?? true;
-
         print(job['cand_accepted_job']);
         if (deadlineOver || candAccepted) {
           return Padding(
@@ -168,101 +168,144 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     style: TextStyle(color: Colors.white),
                   )));
         } else {
-          return Padding(
-              padding:
-                  const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
-              child: RaisedButton(
-                  onPressed: () async {
-                    await showDialog(
-                        context: context,
-                        builder: (context) =>
-                            StatefulBuilder(builder: (context2, setState) {
-                              return Scaffold(
-                                backgroundColor: Colors.transparent,
-                                body: loading
-                                    ? Loading()
-                                    : new AlertDialog(
-                                        title: new Text(
-                                          'Once you accept this job you will not be able to apply for any other jobs. Are you sure you want to accept this offer?',
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        actions: <Widget>[
-                                          FlatButton(
-                                            onPressed: () async {
-                                              setState(() {
-                                                loading = true;
-                                              });
-                                              dynamic result = await apiService
-                                                  .acceptJobOffer(
-                                                      widget.job['job_id']);
-                                              if (result['error'] != null) {
-                                                showToast(
-                                                    result['error'].toString(),
-                                                    context);
-                                              } else {
-                                                showToast("Accepted Job Offer!",
-                                                    context);
-                                              }
-                                              Navigator.of(context)
-                                                  .pushAndRemoveUntil(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              Wrapper(
-                                                                currentTab: 2,
-                                                              )),
-                                                      (Route<dynamic> route) =>
-                                                          false);
-                                            },
-                                            child: new Text(
-                                              'Yes',
-                                              style: TextStyle(),
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                dense: true,
+                title: AutoSizeText(
+                  "Congralutations Atmiya!!",
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.green),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: AutoSizeText(
+                  "You are offered this job from " + job['organisation']??"",
+                  maxLines: 2,
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              ListTile(
+                  title: AutoSizeText(
+                "Download your offer letter!",
+                maxLines: 2,
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                overflow: TextOverflow.ellipsis,
+              )),
+              Padding(
+                  padding:
+                      const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                  child: RaisedButton(
+                      onPressed: () async {
+                        await showDialog(
+                            context: context,
+                            builder: (context) =>
+                                StatefulBuilder(builder: (context2, setState) {
+                                  return Scaffold(
+                                    backgroundColor: Colors.transparent,
+                                    body: loading
+                                        ? Loading()
+                                        : new AlertDialog(
+                                            title: new Text(
+                                              'Once you accept this job you will not be able to apply for any other jobs. Are you sure you want to accept this offer?',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
                                             ),
+                                            actions: <Widget>[
+                                              FlatButton(
+                                                onPressed: () async {
+                                                  setState(() {
+                                                    loading = true;
+                                                  });
+                                                  dynamic result =
+                                                      await apiService
+                                                          .acceptJobOffer(widget
+                                                              .job['job_id']);
+                                                  if (result['error'] != null) {
+                                                    showToast(
+                                                        result['error']
+                                                            .toString(),
+                                                        context);
+                                                  } else {
+                                                    showToast(
+                                                        "Accepted Job Offer!",
+                                                        context);
+                                                  }
+                                                  Navigator.of(context)
+                                                      .pushAndRemoveUntil(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      Wrapper(
+                                                                        currentTab:
+                                                                            2,
+                                                                      )),
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                },
+                                                child: new Text(
+                                                  'Yes',
+                                                  style: TextStyle(),
+                                                ),
+                                              ),
+                                              FlatButton(
+                                                onPressed: () =>
+                                                    Navigator.of(context)
+                                                        .pop(false),
+                                                child: new Text(
+                                                  'No',
+                                                  style: TextStyle(),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          FlatButton(
-                                            onPressed: () =>
-                                                Navigator.of(context)
-                                                    .pop(false),
-                                            child: new Text(
-                                              'No',
-                                              style: TextStyle(),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                              );
-                            }));
-                  },
-                  color: basicColor,
-                  elevation: 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0),
-                    side: BorderSide(color: basicColor, width: 1.2),
-                  ),
-                  child: Text(
-                    'ACCEPT',
-                    style: TextStyle(color: Colors.white),
-                  )));
+                                  );
+                                }));
+                      },
+                      color: Colors.green,
+                      elevation: 0,
+                      padding: EdgeInsets.only(left: 30, right: 30),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0),
+                        side: BorderSide(color: Colors.green, width: 1.2),
+                      ),
+                      child: Text(
+                        'ACCEPT OFFER',
+                        style: TextStyle(color: Colors.white),
+                      ))),
+            ],
+          );
         }
 
         break;
       case "INTERVIEW":
+        setState(() {
+          interOffer = true;
+        });
         if (job['schedule'] != null) {
           if (job['schedule']['is_online'] != true && candAccepted == false) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(
-                  thickness: 2,
-                ),
                 ListTile(
                   dense: true,
                   title: AutoSizeText(
-                    "Where : " + widget.job['schedule']['where'] ??
-                        "Location Not Specified",
+                    "Interviewer",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    widget.job['schedule']['interviewer'] ??
+                        "Name Not Specified",
                     maxLines: 2,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
@@ -271,10 +314,49 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                 ListTile(
                   dense: true,
                   title: AutoSizeText(
-                    "When : " +
-                        dateTimeToReadableDateTimeConverter(DateTime.parse(
-                            widget.job['schedule']['when'] ??
-                                '2020-01-01T00:00:00Z')),
+                    "Your interview has been scheduled",
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.yellow[700]),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    "Scheduled By " + widget.job['schedule']['interviewer'] ??
+                        "Name Not Specified",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Date & Time",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    dateTimeToReadableDateTimeConverter(DateTime.parse(
+                        widget.job['schedule']['when'] ??
+                            '2020-01-01T00:00:00Z')),
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Location",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    widget.job['schedule']['where'] ?? "Location Not Specified",
                     maxLines: 2,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
@@ -286,7 +368,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     child: RaisedButton(
                         color: job['schedule']['cand_accepted']
                             ? Colors.grey
-                            : basicColor,
+                            : Colors.yellow[700],
                         onPressed: () async {
                           if (!job['schedule']['cand_accepted']) {
                             await showDialog(
@@ -364,11 +446,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         padding: EdgeInsets.only(left: 30, right: 30),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(
-                              color: job['schedule']['cand_accepted']
-                                  ? Colors.grey
-                                  : basicColor,
-                              width: 1.2),
                         ),
                         child: Text(
                           'ACCEPT INTERVIEW',
@@ -427,14 +504,17 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Divider(
-                  thickness: 2,
-                ),
                 ListTile(
                   dense: true,
                   title: AutoSizeText(
-                    "Where : " + widget.job['schedule']['where'] ??
-                        "Location Not Specified",
+                    "Your interview has been scheduled",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    "Scheduled By " + widget.job['schedule']['interviewer'] ??
+                        "Name Not Specified",
                     maxLines: 2,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
@@ -443,10 +523,46 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                 ListTile(
                   dense: true,
                   title: AutoSizeText(
-                    "When : " +
-                        dateTimeToReadableDateTimeConverter(DateTime.parse(
-                            widget.job['schedule']['when'] ??
-                                '2020-01-01T00:00:00Z')),
+                    "Date & Time",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    dateTimeToReadableDateTimeConverter(DateTime.parse(
+                        widget.job['schedule']['when'] ??
+                            '2020-01-01T00:00:00Z')),
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Interviewer",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    widget.job['schedule']['interviewer'] ??
+                        "Name Not Specified",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                ListTile(
+                  dense: true,
+                  title: AutoSizeText(
+                    "Location",
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: AutoSizeText(
+                    widget.job['schedule']['where'] ?? "Location Not Specified",
                     maxLines: 2,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                     overflow: TextOverflow.ellipsis,
@@ -456,7 +572,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                     padding: const EdgeInsets.only(
                         left: 20.0, right: 20.0, top: 10.0),
                     child: RaisedButton(
-                        color: candAccepted ? Colors.grey : basicColor,
+                        color: candAccepted ? Colors.grey : Colors.yellow[700],
                         onPressed: () async {
                           if (!candAccepted)
                             await showDialog(
@@ -533,7 +649,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                         padding: EdgeInsets.only(left: 30, right: 30),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
-                          side: BorderSide(color: basicColor, width: 1.2),
                         ),
                         child: Text(
                           'ACCEPT INTERVIEW',
@@ -691,6 +806,12 @@ class _AppliedDetailsState extends State<AppliedDetails> {
 
   @override
   void initState() {
+    if (widget.job['status'] == 'INTERVIEW' ||
+        widget.job['status'] == 'OFFERED') {
+      setState(() {
+        interOffer = true;
+      });
+    }
     super.initState();
   }
 
@@ -788,242 +909,266 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                                       ),
                                     ),
                                     widget.job['ctc'] != null
-                                        ? ListTile(
-                                            dense: true,
-                                            title: Row(
-                                              children: [
-                                                Text('Jobs CTC : ',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                                Text(
-                                                    widget.job['ctc'] ??
-                                                        "Not Specified",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    )),
-                                              ],
-                                            ),
-                                          )
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              dense: true,
+                                              title: Row(
+                                                children: [
+                                                  Text('Jobs CTC : ',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  Text(
+                                                      widget.job['ctc'] ??
+                                                          "Not Specified",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      )),
+                                                ],
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     widget.job['notice_period'] != null
-                                        ? ListTile(
-                                            dense: true,
-                                            title: Row(
-                                              children: [
-                                                Text('Notice Period : ',
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                    )),
-                                                Text(
-                                                    widget.job[
-                                                            'notice_period'] ??
-                                                        "Not Specified",
-                                                    style: TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    )),
-                                              ],
-                                            ),
-                                          )
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              dense: true,
+                                              title: Row(
+                                                children: [
+                                                  Text('Notice Period : ',
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )),
+                                                  Text(
+                                                      widget.job[
+                                                              'notice_period'] ??
+                                                          "Not Specified",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      )),
+                                                ],
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     widget.job['description'] != null
-                                        ? ListTile(
-                                            title: AutoSizeText(
-                                              "Role Description : ",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    widget.job['description'] ??
-                                                        "Not Specified",
-                                                    maxLines: 999999,
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              title: AutoSizeText(
+                                                "Role Description : ",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                          )
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      widget.job[
+                                                              'description'] ??
+                                                          "Not Specified",
+                                                      maxLines: 999999,
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     widget.job['key_resp'] != null
-                                        ? ListTile(
-                                            title: AutoSizeText(
-                                              "Key Responsibilities : ",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    widget.job['key_resp'] ??
-                                                        "Not Specified",
-                                                    maxLines: 999999,
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              title: AutoSizeText(
+                                                "Key Responsibilities : ",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                            ),
-                                          )
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      widget.job['key_resp'] ??
+                                                          "Not Specified",
+                                                      maxLines: 999999,
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     widget.job['soft_skills'] != null
-                                        ? ListTile(
-                                            title: AutoSizeText(
-                                              "Soft Skills : ",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: ListView.builder(
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: widget
-                                                          .job['soft_skills']
-                                                          .length ??
-                                                      1,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Text(
-                                                      widget.job['soft_skills']
-                                                              [index] ??
-                                                          "None",
-                                                      //maxLines: 4,
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    );
-                                                  }),
-                                            ),
-                                          )
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              title: AutoSizeText(
+                                                "Soft Skills : ",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: ListView.builder(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: widget
+                                                            .job['soft_skills']
+                                                            .length ??
+                                                        1,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Text(
+                                                        widget.job['soft_skills']
+                                                                [index] ??
+                                                            "None",
+                                                        //maxLines: 4,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      );
+                                                    }),
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     widget.job['tech_skills'] != null
-                                        ? ListTile(
-                                            title: AutoSizeText(
-                                              "Technical Skills  : ",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: ListView.builder(
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount: widget
-                                                          .job['tech_skills']
-                                                          .length ??
-                                                      1,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Text(
-                                                      widget.job['tech_skills']
-                                                              [index] ??
-                                                          "None",
-                                                      //maxLines: 4,
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    );
-                                                  }),
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              title: AutoSizeText(
+                                                "Technical Skills  : ",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: ListView.builder(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: widget
+                                                            .job['tech_skills']
+                                                            .length ??
+                                                        1,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Text(
+                                                        widget.job['tech_skills']
+                                                                [index] ??
+                                                            "None",
+                                                        //maxLines: 4,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      );
+                                                    }),
+                                              ),
                                             ),
                                           )
                                         : SizedBox(),
                                     widget.job['requirements'] != null
-                                        ? ListTile(
-                                            title: AutoSizeText(
-                                              "Requirements : ",
-                                              maxLines: 2,
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600),
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            subtitle: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 10.0),
-                                              child: ListView.builder(
-                                                  physics:
-                                                      NeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemCount:
-                                                      (widget.job['requirements'] ??
-                                                                  [])
-                                                              .length ??
-                                                          1,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return Text(
-                                                      widget.job['requirements']
-                                                              [index] ??
-                                                          "No specific requirements",
-                                                      //maxLines: 4,
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    );
-                                                  }),
-                                            ),
-                                          )
+                                        ? Visibility(
+                                            visible: !interOffer,
+                                            child: ListTile(
+                                              title: AutoSizeText(
+                                                "Requirements : ",
+                                                maxLines: 2,
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              subtitle: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10.0),
+                                                child: ListView.builder(
+                                                    physics:
+                                                        NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount:
+                                                        (widget.job['requirements'] ??
+                                                                    [])
+                                                                .length ??
+                                                            1,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Text(
+                                                        widget.job['requirements']
+                                                                [index] ??
+                                                            "No specific requirements",
+                                                        //maxLines: 4,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      );
+                                                    }),
+                                              ),
+                                            ))
                                         : SizedBox(),
                                     button(widget.job['status'], widget.job)
                                   ]),

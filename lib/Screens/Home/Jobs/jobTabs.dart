@@ -255,7 +255,8 @@ class _JobsTabssState extends State<JobsTabs>
                                                               builder:
                                                                   (context) =>
                                                                       CompanyVideo(
-                                                                        isOnlyInfo: false,
+                                                                        isOnlyInfo:
+                                                                            false,
                                                                         job: widget
                                                                             .jobs[index],
                                                                         isIncomplete:
@@ -303,8 +304,7 @@ class _JobsTabssState extends State<JobsTabs>
                                                             widget.jobs[index]
                                                                 ['status'],
                                                             widget.jobs[index][
-                                                                    'accept_deadline'] ??
-                                                                '',
+                                                                'accept_deadline'],
                                                             widget.jobs[index][
                                                                     'deadline'] ??
                                                                 "")
