@@ -161,6 +161,7 @@ class _JobsTabssState extends State<JobsTabs>
 
   @override
   Widget build(BuildContext context) {
+    print(savedJobsShown[widget.tabNo]);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     if (width >= 360) {
@@ -190,6 +191,19 @@ class _JobsTabssState extends State<JobsTabs>
                         itemCount: widget.jobs.length,
                         physics: ScrollPhysics(),
                         itemBuilder: (BuildContext context, int index) {
+                          int i = 0, trues = 0;
+                          for (int j = 0;
+                              j < savedJobsShown[widget.tabNo].length;
+                              j++) {
+                            i = i + 1;
+                            if (savedJobsShown[widget.tabNo][j]) {
+                              trues = trues + 1;
+                              if (trues == index + 1) break;
+                            }
+                          }
+//                          print(i);
+//                          print(savedJobs[widget.tabNo]);
+//                          print(savedJobsShown[widget.tabNo]);
                           return Column(
                             children: <Widget>[
                               Container(
@@ -336,8 +350,7 @@ class _JobsTabssState extends State<JobsTabs>
                                                         : IconButton(
                                                             icon: (savedJobs[widget
                                                                             .tabNo]
-                                                                        [
-                                                                        index] ==
+                                                                        [i - 1] ==
                                                                     true)
                                                                 ? Icon(
                                                                     Icons
@@ -357,12 +370,13 @@ class _JobsTabssState extends State<JobsTabs>
                                                                         index] =
                                                                     true;
                                                               });
-                                                              dynamic result = await apiService
-                                                                  .saveJob(widget
-                                                                              .jobs[
-                                                                          index]
-                                                                      [
-                                                                      'job_id']);
+                                                              print(widget.jobs[index]['role']);
+                                                              dynamic result =
+                                                                  await apiService
+                                                                      .saveJob(widget
+                                                                              .jobs[index]
+                                                                          [
+                                                                          'job_id']);
                                                               setState(() {
                                                                 loadingIcon[
                                                                         index] =
@@ -390,10 +404,10 @@ class _JobsTabssState extends State<JobsTabs>
                                                                   savedJobs[widget
                                                                           .tabNo]
                                                                       [
-                                                                      index] = !savedJobs[
+                                                                      i - 1] = !savedJobs[
                                                                           widget
                                                                               .tabNo]
-                                                                      [index];
+                                                                      [i - 1];
                                                                 });
                                                               }
                                                             },

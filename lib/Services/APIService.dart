@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:apli/Shared/constants.dart';
-import 'package:apli/Shared/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -228,7 +227,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -244,7 +242,6 @@ class APIService {
         } else
           result = -2;
       });
-      print(result);
       return result;
     } catch (e) {
       return;
@@ -332,7 +329,6 @@ class APIService {
 
       return result;
     } catch (e) {
-      print(e);
       return 0;
     }
   }
@@ -350,7 +346,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -361,7 +356,6 @@ class APIService {
 
       return result;
     } catch (e) {
-      print(e);
       return 0;
     }
   }
@@ -379,7 +373,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -390,7 +383,6 @@ class APIService {
 
       return result;
     } catch (e) {
-      print(e);
       return 0;
     }
   }
@@ -409,7 +401,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -420,7 +411,6 @@ class APIService {
 
       return result;
     } catch (e) {
-      print(e);
       return 0;
     }
   }
@@ -448,7 +438,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -466,7 +455,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -476,7 +464,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -494,7 +481,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -504,7 +490,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -526,7 +511,6 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
           result = decodedData;
         } else
@@ -536,7 +520,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }
@@ -544,6 +527,7 @@ class APIService {
   Future saveJob(
       String id) async {
     try {
+      print(id);
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
         http.Response response = await http.post(
@@ -555,8 +539,8 @@ class APIService {
               '}'),
         );
         var decodedData = jsonDecode(response.body);
-        print(response.statusCode);
         if (response.statusCode == 200) {
+          print(decodedData);
           result = decodedData;
         } else
           result = {
@@ -565,7 +549,6 @@ class APIService {
       });
       return result;
     } catch (e) {
-      print(e);
       return;
     }
   }

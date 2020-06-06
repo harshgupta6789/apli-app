@@ -17,7 +17,11 @@ class Jobs extends StatefulWidget {
 }
 
 List<List<bool>> savedJobs = [[], [], []];
+List<List<bool>> savedJobsShown = [[], [], []];
 var tempGlobalJobs;
+Map companies = {}, locations = {};
+Map type = {};
+Map bookmarked = {'Saved': false};
 
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
@@ -31,28 +35,29 @@ class _JobsState extends State<Jobs>
   List submittedFilter = [], allFilter = [], incompleteFilter = [];
   final apiService = APIService();
   bool loading = true;
-  List companies = [], locations = [];
-  List type = ['Internship', 'Job'];
   dynamic jobs;
   bool didFilter = false;
   List filterMenu = ['Company', 'Type', 'Location', 'Bookmarked'];
 
   void addFilters(List jobList) {
     if (jobList != null) {
-      //print("gg00");
       for (int i = 0; i < jobList.length; i++) {
-        //print(jobList[i]['location']);
-        if (!companies.contains(jobList[i]['organisation'])) {
-          companies.add(jobList[i]['organisation']);
-        } else if (!locations.contains(jobList[i]['location'])) {
-          print(jobList[i]['location']);
-          locations.add(jobList[i]['location']);
-        } else {}
+        if (!companies
+            .containsKey(jobList[i]['organisation'])) {
+          companies[jobList[i]['organisation']] =
+              false;
+        } if (!locations
+            .containsKey(jobList[i]['location'])) {
+          locations[jobList[i]['location']] = false;
+        } if(!type
+            .containsKey(jobList[i]['job_type'])) {
+          type[jobList[i]['job_type']] = false;
+        }
       }
     }
   }
 
-  void filterStuff(List comp, List type, List loc) {
+  void filterStuff(Map comp, Map temptype, Map loc, Map book) {
     setState(() {
       didFilter = true;
       submittedFilter = [];
@@ -60,116 +65,197 @@ class _JobsState extends State<Jobs>
       incompleteFilter = [];
     });
 
-    if (comp == null && loc == null) {
-      for (int i = 0; i < type.length; i++) {
+    if (temptype != null) {
+      temptype.forEach((key, value) {
+        type[key] = value;
+      });
+      type.forEach((key, value) {
         for (var map in submittedJob) {
-          if (map['job_type'] == type[i]) {
-            submittedFilter.add(map);
+          if (map['job_type'] ==
+              key) {
+            if (type[map['job_type']] == true)
+              submittedFilter.add(map);
           }
         }
         for (var map in incompleteJob) {
-          if (map['job_type'] == type[i]) {
-            incompleteFilter.add(map);
-          }
+          if (map['job_type'] ==
+              key.toString()) if (type[
+                  map['job_type']] ==
+              true) incompleteFilter.add(map);
         }
         for (var map in allJob) {
-          if (map['job_type'] == type[i]) {
-            allFilter.add(map);
-          }
+          if (map['job_type'] ==
+              key.toString()) if (type[
+                  map['job_type']] ==
+              true) allFilter.add(map);
         }
-        setState(() {});
-      }
-    } else if (type == null && loc == null) {
-      for (int i = 0; i < comp.length; i++) {
-        for (var map in submittedJob) {
-          if (map['organisation'] == comp[i]) {
-            submittedFilter.add(map);
-          }
-        }
-        for (var map in incompleteJob) {
-          if (map['organisation'] == comp[i]) {
-            incompleteFilter.add(map);
-          }
-        }
-        for (var map in allJob) {
-          if (map['organisation'] == comp[i]) {
-            allFilter.add(map);
-          }
-        }
-        setState(() {});
-        // print(allFilter);
-        // // print(incompleteFilter);
-      }
+      });
       setState(() {});
-    } else if (type == null && comp == null) {
-      for (int i = 0; i < loc.length; i++) {
-        print(allFilter.toString() + "all");
-        print(submittedFilter.toString() + "submitted");
-        print(incompleteFilter.toString() + "inc");
+    } else if (comp != null) {
+      comp.forEach((key, value) {
+        companies[key] = value;
+      });
+      companies.forEach((key, value) {
         for (var map in submittedJob) {
-          if (map['location'] == loc[i]) {
-            submittedFilter.add(map);
+          if (map['organisation'] ==
+              key) {
+            if (companies[map['organisation']] == true)
+              submittedFilter.add(map);
           }
         }
         for (var map in incompleteJob) {
-          if (map['location'] == loc[i]) {
-            incompleteFilter.add(map);
-            print("hi");
-          }
+          if (map['organisation'] ==
+              key) if (companies[
+                  map['organisation']] ==
+              true) incompleteFilter.add(map);
         }
         for (var map in allJob) {
-          if (map['location'] == loc[i]) {
-            allFilter.add(map);
-            print("hi");
+          if (map['organisation'] ==
+              key) if (companies[
+                  map['organisation']] ==
+              true) allFilter.add(map);
+        }
+      });
+      setState(() {});
+    } else if (loc != null) {
+      loc.forEach((key, value) {
+        locations[key] = value;
+      });
+      locations.forEach((key, value) {
+        for (var map in submittedJob) {
+          if (map['location'] ==
+              key) {
+            if (locations[map['location']] == true)
+              submittedFilter.add(map);
           }
         }
-        print(allFilter.isEmpty);
-        print(submittedFilter.isEmpty);
-        print(incompleteFilter.isEmpty);
-        setState(() {});
+        for (var map in incompleteJob) {
+          if (map['location'] ==
+              key) if (locations[
+                  map['location']] ==
+              true) incompleteFilter.add(map);
+        }
+        for (var map in allJob) {
+          if (map['location'] ==
+              key) if (locations[
+                  map['location']] ==
+              true) allFilter.add(map);
+        }
+      });
+      setState(() {});
+    } else if(book != null) {
+      book.forEach((key, value) {
+        bookmarked[key] = value;
+      });
+      bookmarked.forEach((key, value) {
+        for(int i = 0; i < savedJobs[0].length; i++) {
+          if(savedJobs[0][i] == value) {
+            submittedFilter.add(submittedJob[i]);
+          }
+        }
+        for(int i = 0; i < savedJobs[1].length; i++) {
+          if(savedJobs[1][i] == value) {
+            allFilter.add(allJob[i]);
+          }
+        }
+        for(int i = 0; i < savedJobs[2].length; i++) {
+          if(savedJobs[2][i] == value) {
+            incompleteFilter.add(incompleteJob[i]);
+          }
+        }
+      });
+      setState(() {});
+    }else if (comp == null && loc == null && temptype == null && book == null) {
+      savedJobsShown = [[], [], []];
+      for(int i = 0; i < savedJobs[0].length; i++) {
+        savedJobsShown[0].add(true);
       }
-    } else if (comp == null && loc == null && type == null) {
-      print("f");
+      for(int i = 0; i < savedJobs[1].length; i++) {
+        savedJobsShown[1].add(true);
+      }
+      for(int i = 0; i < savedJobs[2].length; i++) {
+        savedJobsShown[2].add(true);
+      }
       setState(() {
         didFilter = false;
-        submittedFilter = submittedJob;
-        allFilter = allJob;
-        incompleteFilter = incompleteJob;
+        incompleteJob = [];
+        submittedJob = [];
+        allJob = [];
+        for(int i = 0; i < submittedJob.length; i++) {
+          submittedFilter.add(submittedJob[i]);
+        }
+        for(int i = 0; i < allJob.length; i++) {
+          allFilter.add(allJob[i]);
+        }
+        for(int i = 0; i < incompleteJob.length; i++) {
+          incompleteFilter.add(incompleteJob[i]);
+        }
       });
     }
-    // if (jobList != null) {
-    //   for (int i = 0; i < jobList.length; i++) {
-    //     if (!companies.contains(jobList[i]['organisation'])) {
-    //       companies.add(jobList[i]['organisation']);
-    //     } else if (!locations.contains(jobList[i]['location'])) {
-    //       locations.add(jobList[i]['location']);
-    //     } else {}
-    //   }
-    // }
+    for(int i = 0; i < submittedJob.length; i++) {
+      bool istrue = false;
+      for(int j = 0; j < submittedFilter.length; j++) {
+        if(submittedJob[i]['job_id'] == submittedFilter[j]['job_id']) {
+          istrue = true;
+          break;
+        }
+      } if(istrue == false)
+        savedJobsShown[0][i] = false;
+      else savedJobsShown[0][i] = true;
+    }
+    for(int i = 0; i < incompleteJob.length; i++) {
+      bool istrue = false;
+      for(int j = 0; j < incompleteFilter.length; j++) {
+        if(incompleteJob[i]['job_id'] == incompleteFilter[j]['job_id']) {
+          istrue = true;
+          break;
+        }
+      } if(istrue == false)
+        savedJobsShown[2][i] = false;
+      else savedJobsShown[2][i] = true;
+    }
+    for(int i = 0; i < allJob.length; i++) {
+      bool istrue = false;
+      for(int j = 0; j < allFilter.length; j++) {
+        if(allJob[i]['job_id'] == allFilter[j]['job_id']) {
+          istrue = true;
+          break;
+        }
+      } if(istrue == false)
+        savedJobsShown[1][i] = false;
+      else savedJobsShown[1][i] = true;
+    }
+    setState(() {});
   }
 
   getInfo() async {
     dynamic result = await apiService.getJobs();
-    //print(result['pending_jobs']);
+    print(result['all_jobs'][1]);
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
         submittedFilter = [];
-        companies = [];
-        locations = [];
+        companies = {};
+        locations = {};
+        type = {};
+        bookmarked = {'Saved': false};
         allFilter = [];
         incompleteFilter = [];
         jobs = result;
         if (jobs != null && jobs != 'frozen') {
           savedJobs = [[], [], []];
+          savedJobsShown = [[], [], []];
           for (int i = 0; i < (jobs['submitted_jobs'] ?? []).length; i++) {
             savedJobs[0].add(jobs['submitted_jobs'][i]['is_saved'] ?? false);
+            savedJobsShown[0].add(true);
           }
           for (int i = 0; i < (jobs['all_jobs'] ?? []).length; i++) {
             savedJobs[1].add(jobs['all_jobs'][i]['is_saved'] ?? false);
+            savedJobsShown[1].add(true);
           }
           for (int i = 0; i < (jobs['pending_jobs'] ?? []).length; i++) {
             savedJobs[2].add(jobs['pending_jobs'][i]['is_saved'] ?? false);
+            savedJobsShown[2].add(true);
           }
           submittedJob = jobs['submitted_jobs'] ?? [];
           allJob = jobs['all_jobs'] ?? [];
@@ -235,136 +321,180 @@ class _JobsState extends State<Jobs>
               backgroundColor: basicColor,
               automaticallyImplyLeading: false,
               actions: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: IconButton(
-                      icon: Icon(
-                        EvaIcons.funnelOutline,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        dynamic list = await showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (context) =>
-                                StatefulBuilder(builder: (context2, setState) {
-                                  return Scaffold(
-                                    backgroundColor: Colors.transparent,
-                                    body: AlertDialog(
-                                      title: new Text(
-                                        'Filter By',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      content: Container(
-                                        height: 300,
-                                        width: 300,
-                                        child: ListView.builder(
-                                          shrinkWrap: true,
-                                          itemBuilder: (context, index) {
-                                            return ListTile(
-                                              dense: true,
-                                              title: Text(
-                                                '${filterMenu[index]}',
-                                              ),
-                                              trailing: IconButton(
-                                                  icon: Icon(
-                                                      EvaIcons.arrowIosForward),
-                                                  onPressed: null),
-                                              onTap: () async {
-                                                //Navigator.pop(context);
-                                                dynamic x = await showDialog(
-                                                    barrierDismissible: true,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return MyDialogContent(
-                                                        typeFilter:
-                                                            '${filterMenu[index]}',
-                                                        companies: companies,
-                                                        locations: locations,
-                                                        type: type,
-                                                      );
-                                                    });
+                (jobs == null)
+                    ? SizedBox()
+                    : jobs['profile_status'] < 384
+                        ? SizedBox()
+                        : Visibility(
+                            visible: !loading,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: IconButton(
+                                  icon: Icon(
+                                    EvaIcons.funnelOutline,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () async {
+                                    dynamic list = await showDialog(
+                                        barrierDismissible: true,
+                                        context: context,
+                                        builder:
+                                            (context) => StatefulBuilder(
+                                                    builder:
+                                                        (context2, setState) {
+                                                  return Scaffold(
+                                                    backgroundColor:
+                                                        Colors.transparent,
+                                                    body: AlertDialog(
+                                                      title: new Text(
+                                                        'Filter By',
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                      content: Container(
+                                                        height: 300,
+                                                        width: 300,
+                                                        child: ListView.builder(
+                                                          shrinkWrap: true,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return ListTile(
+                                                              dense: true,
+                                                              title: Text(
+                                                                '${filterMenu[index]}',
+                                                              ),
+                                                              trailing: IconButton(
+                                                                  icon: Icon(
+                                                                      EvaIcons
+                                                                          .arrowIosForward),
+                                                                  onPressed:
+                                                                      null),
+                                                              onTap: () async {
+                                                                //Navigator.pop(context);
+                                                                dynamic x =
+                                                                    await showDialog(
+                                                                        barrierDismissible:
+                                                                            true,
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (context) {
+                                                                          return MyDialogContent(
+                                                                            typeFilter:
+                                                                                '${filterMenu[index]}',
+                                                                            companies:
+                                                                                companies,
+                                                                            locations:
+                                                                                locations,
+                                                                            type:
+                                                                                type,
+                                                                            bookmark: bookmarked,
+                                                                          );
+                                                                        });
 
-                                                if (x != null) {
-                                                  Navigator.of(context).pop([
-                                                    x,
-                                                    '${filterMenu[index]}'
-                                                  ]);
-                                                }
-                                              },
-                                              subtitle: Divider(thickness: 2),
-                                            );
-                                          },
-                                          itemCount: filterMenu.length,
-                                        ),
-                                      ),
-                                      actions: [
-                                        Align(
-                                            alignment: Alignment.center,
-                                            child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 20.0,
-                                                    right: 20.0,
-                                                    top: 30.0,
-                                                    bottom: 20.0),
-                                                child: RaisedButton(
-                                                    color: basicColor,
-                                                    elevation: 0,
-                                                    padding: EdgeInsets.only(
-                                                        left: 30, right: 30),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5.0),
-                                                      side: BorderSide(
-                                                          color: basicColor,
-                                                          width: 1.2),
+                                                                if (x != null) {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop([
+                                                                    x,
+                                                                    '${filterMenu[index]}'
+                                                                  ]);
+                                                                }
+                                                              },
+                                                              subtitle: Divider(
+                                                                  thickness: 2),
+                                                            );
+                                                          },
+                                                          itemCount:
+                                                              filterMenu.length,
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        Align(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    left: 20.0,
+                                                                    right: 20.0,
+                                                                    top: 30.0,
+                                                                    bottom:
+                                                                        20.0),
+                                                                child:
+                                                                    RaisedButton(
+                                                                        color:
+                                                                            basicColor,
+                                                                        elevation:
+                                                                            0,
+                                                                        padding: EdgeInsets.only(
+                                                                            left:
+                                                                                30,
+                                                                            right:
+                                                                                30),
+                                                                        shape:
+                                                                            RoundedRectangleBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.circular(5.0),
+                                                                          side: BorderSide(
+                                                                              color: basicColor,
+                                                                              width: 1.2),
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {
+                                                                          savedJobsShown = [[], [], []];
+                                                                          for(int i = 0; i < savedJobs[0].length; i++) {
+                                                                            savedJobsShown[0].add(true);
+                                                                          }
+                                                                          for(int i = 0; i < savedJobs[1].length; i++) {
+                                                                            savedJobsShown[1].add(true);
+                                                                          }
+                                                                          for(int i = 0; i < savedJobs[2].length; i++) {
+                                                                            savedJobsShown[2].add(true);
+                                                                          }
+                                                                          setState(
+                                                                              () {
+                                                                            didFilter =
+                                                                                false;
+                                                                            allFilter =
+                                                                                [];
+                                                                            submittedFilter =
+                                                                                [];
+                                                                            incompleteFilter =
+                                                                                [];
+                                                                          });
+                                                                          Navigator.of(context)
+                                                                              .pop(null);
+                                                                        },
+                                                                        child:
+                                                                            Text(
+                                                                          'Clear Filters',
+                                                                          style:
+                                                                              TextStyle(color: Colors.white),
+                                                                        )))),
+                                                      ],
                                                     ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        didFilter = false;
-                                                        allFilter = [];
-                                                        submittedFilter = [];
-                                                        incompleteFilter = [];
-                                                      });
-                                                      Navigator.of(context)
-                                                          .pop(null);
-                                                    },
-                                                    child: Text(
-                                                      'Clear Filters',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    )))),
-                                      ],
-                                    ),
-                                  );
-                                }));
-                        if (list != null) {
-                          print(list);
-                          if (list[1] == 'Company') {
-                            filterStuff(list[0], null, null);
-                          } else if (list[1] == 'Location') {
-                            filterStuff(null, null, list[0]);
-                          } else if (list[1] == 'Type') {
-                            filterStuff(null, list[0], null);
-                          }
-                        } else {
-                          setState(() {});
-                        }
-                      }),
-                ),
-//              Padding(
-//                padding: const EdgeInsets.only(bottom: 10.0),
-//                child: IconButton(
-//                    icon: Icon(
-//                      EvaIcons.searchOutline,
-//                      color: Colors.white,
-//                    ),
-//                    onPressed: null),
-//              ),
+                                                  );
+                                                }));
+                                    if (list != null) {
+                                      if (list[1] == 'Company') {
+                                        filterStuff(list[0], null, null, null);
+                                      } else if (list[1] == 'Location') {
+                                        filterStuff(null, null, list[0], null);
+                                      } else if (list[1] == 'Type') {
+                                        filterStuff(null, list[0], null, null);
+                                      } else if (list[1] == 'Bookmarked') {
+                                        filterStuff(null, null, null, list[0]);
+                                      }
+                                    } else {
+                                      setState(() {});
+                                    }
+                                  }),
+                            ),
+                          ),
               ],
               leading: Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -632,12 +762,13 @@ class _JobsState extends State<Jobs>
 
 class MyDialogContent extends StatefulWidget {
   final String typeFilter;
-  final List companies;
-  final List locations;
-  final List type;
+  final Map companies;
+  final Map locations;
+  final Map type;
+  final Map bookmark;
 
   MyDialogContent(
-      {Key key, this.typeFilter, this.companies, this.locations, this.type})
+      {Key key, this.typeFilter, this.companies, this.locations, this.type, this.bookmark})
       : super(key: key);
   @override
   _MyDialogContentState createState() => new _MyDialogContentState();
@@ -651,36 +782,39 @@ class _MyDialogContentState extends State<MyDialogContent> {
   Map compChecked = {};
   Map typeChecked = {};
   Map locationChecked = {};
+  Map bookmarkChecked = {};
   void init() {
-    for (var temp in widget.companies) {
-      compChecked[temp] = false;
+    for (var temp in widget.companies.keys.toList()) {
+      compChecked[temp] = widget.companies[temp];
     }
-    for (var temp in widget.type) {
-      typeChecked[temp] = false;
+    for (var temp in widget.bookmark.keys.toList()) {
+      bookmarkChecked[temp] = widget.bookmark[temp];
     }
-    for (var temp in widget.locations) {
-      locationChecked[temp] = false;
+    for (var temp in widget.type.keys.toList()) {
+      typeChecked[temp] = widget.type[temp];
+    }
+    for (var temp in widget.locations.keys.toList()) {
+      locationChecked[temp] = widget.locations[temp];
     }
   }
 
   Widget filterDialog(String filter, BuildContext buildContext) {
     switch (filter) {
       case 'Company':
-        print(compChecked);
         return ListView.builder(
           shrinkWrap: true,
           itemBuilder: (buildContext, index) {
             return CheckboxListTile(
               checkColor: basicColor,
               title: Text(
-                '${widget.companies[index]}',
+                '${widget.companies.keys.toList()[index].toString().toUpperCase()}',
               ),
-              value: compChecked['${widget.companies[index]}'],
+              value: compChecked['${widget.companies.keys.toList()[index]}'],
               onChanged: (bool value) {
                 setState(() {
-                  compChecked['${widget.companies[index]}'] = value;
+                  compChecked['${widget.companies.keys.toList()[index]}'] =
+                      value;
                 });
-                //print(compChecked);
               },
             );
           },
@@ -695,14 +829,13 @@ class _MyDialogContentState extends State<MyDialogContent> {
             return CheckboxListTile(
               checkColor: basicColor,
               title: Text(
-                '${widget.type[index]}',
+                '${widget.type.keys.toList()[index].toString().toUpperCase()}',
               ),
-              value: typeChecked['${widget.type[index]}'],
+              value: typeChecked['${widget.type.keys.toList()[index]}'],
               onChanged: (bool value) {
                 setState(() {
-                  typeChecked['${widget.type[index]}'] = value;
+                  typeChecked['${widget.type.keys.toList()[index]}'] = value;
                 });
-                //print(compChecked);
               },
             );
           },
@@ -716,14 +849,15 @@ class _MyDialogContentState extends State<MyDialogContent> {
             return CheckboxListTile(
               checkColor: basicColor,
               title: Text(
-                '${widget.locations[index]}',
+                '${(widget.locations.keys.toList()[index]).toString().toUpperCase()}',
               ),
-              value: locationChecked['${widget.locations[index]}'],
+              value:
+                  locationChecked['${widget.locations.keys.toList()[index]}'],
               onChanged: (bool value) {
                 setState(() {
-                  locationChecked['${widget.locations[index]}'] = value;
+                  locationChecked['${widget.locations.keys.toList()[index]}'] =
+                      value;
                 });
-                //print(compChecked);
               },
             );
           },
@@ -737,39 +871,21 @@ class _MyDialogContentState extends State<MyDialogContent> {
             return CheckboxListTile(
               checkColor: basicColor,
               title: Text(
-                '${widget.companies[index]}',
+                '${widget.bookmark.keys.toList()[index].toString().toUpperCase()}',
               ),
-              value: compChecked['${widget.companies[index]}'],
+              value: bookmarkChecked['${widget.bookmark.keys.toList()[index]}'],
               onChanged: (bool value) {
                 setState(() {
-                  compChecked['${widget.companies[index]}'] = value;
+                  bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] = value;
                 });
-                //print(compChecked);
               },
             );
           },
-          itemCount: widget.companies.length,
+          itemCount: widget.bookmark.length,
         );
         break;
       default:
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
-              title: Text(
-                '${widget.companies[index]}',
-              ),
-              trailing: IconButton(
-                  icon: Icon(EvaIcons.arrowIosForward), onPressed: null),
-              onTap: () {
-                Navigator.pop(context);
-              },
-              subtitle: Divider(thickness: 2),
-            );
-          },
-          itemCount: widget.companies.length,
-        );
+        return Container();
     }
   }
 
@@ -798,30 +914,13 @@ class _MyDialogContentState extends State<MyDialogContent> {
                     ),
                     onPressed: () {
                       if (widget.typeFilter == 'Company') {
-                        List filtered = [];
-                        compChecked.forEach((key, value) {
-                          if (value == true) {
-                            filtered.add(key);
-                          }
-                        });
-                        Navigator.pop(context, filtered);
+                        Navigator.pop(context, compChecked);
                       } else if (widget.typeFilter == 'Location') {
-                        List filtered = [];
-                        locationChecked.forEach((key, value) {
-                          if (value == true) {
-                            filtered.add(key);
-                          }
-                        });
-                        Navigator.pop(context, filtered);
+                        Navigator.pop(context, locationChecked);
                       } else if (widget.typeFilter == 'Type') {
-                        List filtered = [];
-                        typeChecked.forEach((key, value) {
-                          if (value == true) {
-                            filtered.add(key.toString().toLowerCase());
-                          }
-                          print(filtered);
-                        });
-                        Navigator.pop(context, filtered);
+                        Navigator.pop(context, typeChecked);
+                      } else if (widget.typeFilter == 'Bookmarked') {
+                        Navigator.pop(context, bookmarkChecked);
                       }
                     },
                     child: Text(
