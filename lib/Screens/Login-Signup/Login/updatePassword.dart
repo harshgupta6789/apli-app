@@ -94,8 +94,8 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                               setState(() => password = text);
                             },
                             validator: (value) {
-                              if (!validatePassword(value)) {
-                                return 'password must contain 8 characters with atleast \n one lowercase, one uppercase, one digit, \n and one special character';
+                              if (value.isEmpty) {
+                                return 'invalid password';
                               }
                               return null;
                             },
@@ -120,7 +120,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                     color: basicColor)),
                             validator: (value) {
                               if (value != password) {
-                                return 'Passowrd do not match';
+                                return 'passwords do not match';
                               }
                               return null;
                             },

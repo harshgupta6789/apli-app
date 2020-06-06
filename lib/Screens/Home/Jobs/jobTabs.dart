@@ -353,7 +353,7 @@ class _JobsTabssState extends State<JobsTabs>
                                                 trailing: widget.tabNo == 0
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
-                                                    : (loadingIcon[index]
+                                                    : (widget.tabNo == 2) ? SizedBox() :  (loadingIcon[index]
                                                         ? CircularProgressIndicator()
                                                         : IconButton(
                                                             icon: (savedJobs[widget

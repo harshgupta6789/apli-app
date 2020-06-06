@@ -175,7 +175,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
               ListTile(
                 dense: true,
                 title: AutoSizeText(
-                  "Congralutations Atmiya!!",
+                  "Congratulations!!",
                   maxLines: 2,
                   style: TextStyle(
                       fontSize: 15,
@@ -201,7 +201,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   overflow: TextOverflow.ellipsis,
                 ),
                   subtitle: AutoSizeText(
-                job['accept_deadline'] ?? "No Deadline Specified",
+                dateTimeToReadableDateTimeConverter(DateTime.parse(job['accept_deadline'] ?? '2020-01-01T00:00:00Z')),
                 maxLines: 2,
                 style: TextStyle(
                     color: Colors.red,

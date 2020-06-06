@@ -149,7 +149,7 @@ class _JobsState extends State<Jobs>
       });
       bookmarked.forEach((key, value) {
         for(int i = 0; i < savedJobs[0].length; i++) {
-          if(savedJobs[0][i] == value) {
+          if(true) {
             submittedFilter.add(submittedJob[i]);
           }
         }
@@ -159,7 +159,7 @@ class _JobsState extends State<Jobs>
           }
         }
         for(int i = 0; i < savedJobs[2].length; i++) {
-          if(savedJobs[2][i] == value) {
+          if(true) {
             incompleteFilter.add(incompleteJob[i]);
           }
         }
@@ -178,9 +178,16 @@ class _JobsState extends State<Jobs>
       }
       setState(() {
         didFilter = false;
-        incompleteJob = [];
-        submittedJob = [];
-        allJob = [];
+        submittedJob = jobs['submitted_jobs'] ?? [];
+        allJob = jobs['all_jobs'] ?? [];
+        incompleteJob = jobs['pending_jobs'] ?? [];
+        submittedFilter = [];
+        allFilter = [];
+        incompleteFilter = [];
+        locations.forEach((key, value) {locations[key] = false;});
+        companies.forEach((key, value) {companies[key] = false;});
+        bookmarked.forEach((key, value) {bookmarked[key] = false;});
+        type.forEach((key, value) {type[key] = false;});
         for(int i = 0; i < submittedJob.length; i++) {
           submittedFilter.add(submittedJob[i]);
         }
@@ -234,6 +241,7 @@ class _JobsState extends State<Jobs>
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
+        didFilter = false;
         submittedFilter = [];
         companies = {};
         locations = {};
@@ -455,17 +463,27 @@ class _JobsState extends State<Jobs>
                                                                           for(int i = 0; i < savedJobs[2].length; i++) {
                                                                             savedJobsShown[2].add(true);
                                                                           }
-                                                                          setState(
-                                                                              () {
-                                                                            didFilter =
-                                                                                false;
-                                                                            allFilter =
-                                                                                [];
-                                                                            submittedFilter =
-                                                                                [];
-                                                                            incompleteFilter =
-                                                                                [];
-                                                                          });
+                                                                          locations.forEach((key, value) {locations[key] = false;});
+                                                                          companies.forEach((key, value) {companies[key] = false;});
+                                                                          bookmarked.forEach((key, value) {bookmarked[key] = false;});
+                                                                          type.forEach((key, value) {type[key] = false;});
+                                                                          didFilter = false;
+                                                                          submittedJob = jobs['submitted_jobs'] ?? [];
+                                                                          allJob = jobs['all_jobs'] ?? [];
+                                                                          incompleteJob = jobs['pending_jobs'] ?? [];
+                                                                          submittedFilter = [];
+                                                                          allFilter = [];
+                                                                          incompleteFilter = [];
+                                                                          for(int i = 0; i < submittedJob.length; i++) {
+                                                                            submittedFilter.add(submittedJob[i]);
+                                                                          }
+                                                                          for(int i = 0; i < allJob.length; i++) {
+                                                                            allFilter.add(allJob[i]);
+                                                                          }
+                                                                          for(int i = 0; i < incompleteJob.length; i++) {
+                                                                            incompleteFilter.add(incompleteJob[i]);
+                                                                          }
+                                                                          setState(() {});
                                                                           Navigator.of(context)
                                                                               .pop(null);
                                                                         },
