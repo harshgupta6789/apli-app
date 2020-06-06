@@ -191,7 +191,16 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                 ),
               ),
               ListTile(
-                  title: AutoSizeText(
+                title:AutoSizeText(
+                  "Deadline To Accept : ",
+                  maxLines: 2,
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.green),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                  subtitle: AutoSizeText(
                 job['accept_deadline'] ?? "No Deadline Specified",
                 maxLines: 2,
                 style: TextStyle(

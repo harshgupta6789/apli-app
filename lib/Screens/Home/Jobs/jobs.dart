@@ -230,7 +230,7 @@ class _JobsState extends State<Jobs>
 
   getInfo() async {
     dynamic result = await apiService.getJobs();
-    print(result['all_jobs'][1]);
+    print(result['pending_jobs'][0]);
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
