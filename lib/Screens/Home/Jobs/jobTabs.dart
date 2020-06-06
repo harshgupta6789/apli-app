@@ -66,7 +66,15 @@ class _JobsTabssState extends State<JobsTabs>
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
     if (status == 'OFFERED' || status == 'LETTER SENT') {
-      return StreamBuilder(
+      return deadlineTimer==null?AutoSizeText(
+              "No Deadline Specified",
+              maxLines: 2,
+              style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 12 * scale,
+                  fontWeight: FontWeight.w500),
+              overflow: TextOverflow.ellipsis,
+            ):StreamBuilder(
           stream: Stream.periodic(Duration(seconds: 1), (i) => i),
           builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
             var dateString;

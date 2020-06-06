@@ -184,12 +184,22 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 subtitle: AutoSizeText(
-                  "You are offered this job from " + job['organisation']??"",
+                  "You are offered this job from " + job['organisation'] ?? "",
                   maxLines: 2,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
+              ListTile(
+                  title: AutoSizeText(
+                job['accept_deadline'] ?? "No Deadline Specified",
+                maxLines: 2,
+                style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500),
+                overflow: TextOverflow.ellipsis,
+              )),
               ListTile(
                   title: AutoSizeText(
                 "Download your offer letter!",
