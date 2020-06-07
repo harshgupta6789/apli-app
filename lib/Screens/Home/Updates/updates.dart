@@ -212,9 +212,9 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
                       String messageToShow(
                           String status, String name, String role) {
                         if (status == 'HIRED' || status == 'OFFERED') {
-                          return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
-                        } else if (status == 'INTERVIEW') {
                           return 'Congratulations! you have been hired by $name for the role of $role. Check your mail for more details';
+                        } else if (status == 'INTERVIEW') {
+                          return 'Congratulations! $name has called you for an offline interview for the role of $role. Check your mail for more details.';
                         } else if (status == 'REJECTED') {
                           return 'Sorry! but your application for $role has been discarded by $name. Better luck next time.';
                         } else {
@@ -276,7 +276,7 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
                                 title,
                                 message,
                                 tempTime == null ? null : difference(tempTime),
-                                notiType,
+                                ((f.data['status'] == 'OFFERED' || f.data['status'] == 'HIRED') ? 'offered' : (f.data['status'] == 'INTERVIEW' ? 'interview' : (f.data['type'] == 'message_from_tpo' ? 'college' : 'none'))),
                                 f.documentID,
                               ]);
                             }
@@ -448,16 +448,14 @@ class _AllNotificationsState extends State<AllNotifications> {
   double width, height, scale;
   List<List<String>> myNotifications;
   List<List<String>> items;
-  int count = 15;
+  int count = 25;
   int result;
 
   Map<String, bool> userFilters = {
-    'message_from_tpo': false,
-    'added_to_placement': false,
-    'cand_status_change': false,
-    'cand_status_change_from_campus': false,
-    'message_from_company': false,
-    'apli_job': false
+    'college': false,
+    'offered': false,
+    'interview': false,
+    'none': false
   };
 
   @override
@@ -545,7 +543,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                                           temp[0] = value;
                                         });
                                       },
-                                      title: Text('Message from TPO'),
+                                      title: Text('Message from College'),
                                     ),
                                     CheckboxListTile(
                                       activeColor: basicColor,
@@ -556,7 +554,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                                           temp[1] = value;
                                         });
                                       },
-                                      title: Text('Added to Placements'),
+                                      title: Text('Offered Jobs'),
                                     ),
                                     CheckboxListTile(
                                       activeColor: basicColor,
@@ -567,40 +565,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                                           temp[2] = value;
                                         });
                                       },
-                                      title: Text('Status Changed'),
-                                    ),
-                                    CheckboxListTile(
-                                      activeColor: basicColor,
-                                      dense: true,
-                                      value: temp[3],
-                                      onChanged: (value) {
-                                        setstate(() {
-                                          temp[3] = value;
-                                        });
-                                      },
-                                      title: Text('Status Changed From Campus'),
-                                    ),
-                                    CheckboxListTile(
-                                      activeColor: basicColor,
-                                      dense: true,
-                                      value: temp[4],
-                                      onChanged: (value) {
-                                        setstate(() {
-                                          temp[4] = value;
-                                        });
-                                      },
-                                      title: Text('Message from Campus'),
-                                    ),
-                                    CheckboxListTile(
-                                      activeColor: basicColor,
-                                      dense: true,
-                                      value: temp[5],
-                                      onChanged: (value) {
-                                        setstate(() {
-                                          temp[5] = value;
-                                        });
-                                      },
-                                      title: Text('Apli Job'),
+                                      title: Text('Job Interview'),
                                     ),
                                   ],
                                 ),
@@ -630,12 +595,9 @@ class _AllNotificationsState extends State<AllNotifications> {
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                       setState(() {
-                                        userFilters['message_from_tpo'] = temp[0];
-                                        userFilters['added_to_placement'] = temp[1];
-                                        userFilters['cand_status_change'] = temp[2];
-                                        userFilters['cand_status_change_from_campus'] = temp[3];
-                                        userFilters['message_from_company'] = temp[4];
-                                        userFilters['apli_job'] = temp[5];
+                                        userFilters['college'] = temp[0];
+                                        userFilters['offered'] = temp[1];
+                                        userFilters['interview'] = temp[2];
                                       });
                                     },
                                   ),
@@ -662,6 +624,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                 physics: ScrollPhysics(),
                 itemCount: length + 1,
                 itemBuilder: (BuildContext context, int index) {
+                  if(index != length){print(index);print(myNotifications[index][3]);}
                   return index != length
                       ? (!(userFilters.values.toList().contains(true)) ||
                               (userFilters[myNotifications[index][3]] ?? false))

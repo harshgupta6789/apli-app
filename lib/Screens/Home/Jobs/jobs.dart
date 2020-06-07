@@ -816,33 +816,39 @@ class _JobsState extends State<Jobs>
                   ? null
                   : jobs['profile_status'] < 384
                       ? null
-                      : ColoredTabBar(
-                          Theme.of(context).backgroundColor,
-                          TabBar(
-                            indicator: UnderlineTabIndicator(
-                              borderSide:
-                                  BorderSide(width: 3.0, color: basicColor),
-                            ),
-                            unselectedLabelColor: Colors.grey,
-                            labelColor: basicColor,
-                            tabs: [
-                              Tab(
-                                text: applied,
-                              ),
-                              Tab(
-                                text: allJobs,
-                              ),
-                              Tab(
-                                text: incomplete,
-                              )
-                            ],
-                            controller: _tabController,
-                          ))),
+                      : PreferredSize(
+                preferredSize: Size(double.infinity, 38),
+                        child: Container(
+                          height: 38,
+                          child: ColoredTabBar(
+                              Theme.of(context).backgroundColor,
+                              TabBar(
+                                indicator: UnderlineTabIndicator(
+                                  borderSide:
+                                      BorderSide(width: 3.0, color: basicColor),
+                                ),
+                                unselectedLabelColor: Colors.grey,
+                                labelColor: basicColor,
+                                tabs: [
+                                  Tab(
+                                    text: applied,
+                                  ),
+                                  Tab(
+                                    text: allJobs,
+                                  ),
+                                  Tab(
+                                    text: incomplete,
+                                  )
+                                ],
+                                controller: _tabController,
+                              )),
+                        ),
+                      )),
           preferredSize: (jobs == null)
               ? Size.fromHeight(55)
               : jobs['profile_status'] < 384
                   ? Size.fromHeight(55)
-                  : Size.fromHeight(100),
+                  : Size.fromHeight(93),
         ),
 //      body: TabBarView(
 //        children: [

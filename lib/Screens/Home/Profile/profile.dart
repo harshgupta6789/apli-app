@@ -4,6 +4,7 @@ import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/customTabBar.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+
 import 'Psychometry/psychometry.dart';
 import 'Resume/resume.dart';
 
@@ -52,27 +53,33 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            bottom: ColoredTabBar(
-                Theme.of(context).backgroundColor,
-                TabBar(
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: basicColor,
-                  indicator: UnderlineTabIndicator(
-                    borderSide: BorderSide(width: 3.0, color: basicColor),
-                  ),
-                  tabs: [
-                    Tab(
-                      text: videoIntro,
-                    ),
-                    Tab(
-                      text: resume,
-                    ),
-                    Tab(text: psychTest)
-                  ],
-                  controller: _tabController,
-                )),
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, 38),
+              child: Container(
+                height: 38,
+                child: ColoredTabBar(
+                    Theme.of(context).backgroundColor,
+                    TabBar(
+                      unselectedLabelColor: Colors.grey,
+                      labelColor: basicColor,
+                      indicator: UnderlineTabIndicator(
+                        borderSide: BorderSide(width: 3.0, color: basicColor),
+                      ),
+                      tabs: [
+                        Tab(
+                          text: videoIntro,
+                        ),
+                        Tab(
+                          text: resume,
+                        ),
+                        Tab(text: psychTest)
+                      ],
+                      controller: _tabController,
+                    )),
+              ),
+            ),
           ),
-          preferredSize: Size.fromHeight(100),
+          preferredSize: Size.fromHeight(93),
         ),
         body: TabBarView(children: [
 //          Center(

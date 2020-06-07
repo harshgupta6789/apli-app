@@ -502,8 +502,6 @@ class _CameraState extends State<Camera> {
   void dispose() {
     Wakelock.disable();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
     ]);
     controller.dispose();

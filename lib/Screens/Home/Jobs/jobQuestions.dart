@@ -473,8 +473,6 @@ class _JobQuestionsState extends State<JobQuestions> {
   void dispose() {
     Wakelock.disable();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
     ]);
     controller.dispose();

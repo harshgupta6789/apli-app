@@ -424,8 +424,6 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
   void dispose() {
     Wakelock.disable();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
     ]);
     controller.dispose();

@@ -109,8 +109,6 @@ class _CourseLiveState extends State<CourseLive>
     Wakelock.disable();
     _controller.dispose();
     SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
       DeviceOrientation.portraitUp,
     ]);
     super.dispose();
@@ -128,15 +126,16 @@ class _CourseLiveState extends State<CourseLive>
                     DeviceOrientation.portraitUp,
                   ]);
                 else {
-                  if (isEmoji)
+                  if (isEmoji) {
+                    SystemChrome.setPreferredOrientations([
+                      DeviceOrientation.portraitUp,
+                    ]);
                     setState(() {
                       isEmoji = false;
                       isFocus = false;
                     });
-                  else {
+                  } else {
                     SystemChrome.setPreferredOrientations([
-                      DeviceOrientation.landscapeRight,
-                      DeviceOrientation.landscapeLeft,
                       DeviceOrientation.portraitUp,
                     ]);
                     Navigator.pop(context);
