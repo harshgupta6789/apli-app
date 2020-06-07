@@ -37,20 +37,19 @@ class _JobsState extends State<Jobs>
   bool loading = true;
   dynamic jobs;
   bool didFilter = false;
-  List filterMenu = ['Company', 'Type', 'Location', 'Bookmarked'];
+  List filterMenu = ['Type', 'Bookmarked'];
+  List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
     if (jobList != null) {
       for (int i = 0; i < jobList.length; i++) {
-        if (!companies
-            .containsKey(jobList[i]['organisation'])) {
-          companies[jobList[i]['organisation']] =
-              false;
-        } if (!locations
-            .containsKey(jobList[i]['location'])) {
+        if (!companies.containsKey(jobList[i]['organisation'])) {
+          companies[jobList[i]['organisation']] = false;
+        }
+        if (!locations.containsKey(jobList[i]['location'])) {
           locations[jobList[i]['location']] = false;
-        } if(!type
-            .containsKey(jobList[i]['job_type'])) {
+        }
+        if (!type.containsKey(jobList[i]['job_type'])) {
           type[jobList[i]['job_type']] = false;
         }
       }
@@ -71,22 +70,16 @@ class _JobsState extends State<Jobs>
       });
       type.forEach((key, value) {
         for (var map in submittedJob) {
-          if (map['job_type'] ==
-              key) {
-            if (type[map['job_type']] == true)
-              submittedFilter.add(map);
+          if (map['job_type'] == key) {
+            if (type[map['job_type']] == true) submittedFilter.add(map);
           }
         }
         for (var map in incompleteJob) {
-          if (map['job_type'] ==
-              key.toString()) if (type[
-                  map['job_type']] ==
+          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
               true) incompleteFilter.add(map);
         }
         for (var map in allJob) {
-          if (map['job_type'] ==
-              key.toString()) if (type[
-                  map['job_type']] ==
+          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
               true) allFilter.add(map);
         }
       });
@@ -97,22 +90,17 @@ class _JobsState extends State<Jobs>
       });
       companies.forEach((key, value) {
         for (var map in submittedJob) {
-          if (map['organisation'] ==
-              key) {
+          if (map['organisation'] == key) {
             if (companies[map['organisation']] == true)
               submittedFilter.add(map);
           }
         }
         for (var map in incompleteJob) {
-          if (map['organisation'] ==
-              key) if (companies[
-                  map['organisation']] ==
+          if (map['organisation'] == key) if (companies[map['organisation']] ==
               true) incompleteFilter.add(map);
         }
         for (var map in allJob) {
-          if (map['organisation'] ==
-              key) if (companies[
-                  map['organisation']] ==
+          if (map['organisation'] == key) if (companies[map['organisation']] ==
               true) allFilter.add(map);
         }
       });
@@ -123,57 +111,54 @@ class _JobsState extends State<Jobs>
       });
       locations.forEach((key, value) {
         for (var map in submittedJob) {
-          if (map['location'] ==
-              key) {
-            if (locations[map['location']] == true)
-              submittedFilter.add(map);
+          if (map['location'] == key) {
+            if (locations[map['location']] == true) submittedFilter.add(map);
           }
         }
         for (var map in incompleteJob) {
-          if (map['location'] ==
-              key) if (locations[
-                  map['location']] ==
-              true) incompleteFilter.add(map);
+          if (map['location'] == key) if (locations[map['location']] == true)
+            incompleteFilter.add(map);
         }
         for (var map in allJob) {
-          if (map['location'] ==
-              key) if (locations[
-                  map['location']] ==
-              true) allFilter.add(map);
+          if (map['location'] == key) if (locations[map['location']] == true)
+            allFilter.add(map);
         }
       });
       setState(() {});
-    } else if(book != null) {
+    } else if (book != null) {
       book.forEach((key, value) {
         bookmarked[key] = value;
       });
       bookmarked.forEach((key, value) {
-        for(int i = 0; i < savedJobs[0].length; i++) {
-          if(true) {
+        for (int i = 0; i < savedJobs[0].length; i++) {
+          if (true) {
             submittedFilter.add(submittedJob[i]);
           }
         }
-        for(int i = 0; i < savedJobs[1].length; i++) {
-          if(savedJobs[1][i] == value) {
+        for (int i = 0; i < savedJobs[1].length; i++) {
+          if (savedJobs[1][i] == value) {
             allFilter.add(allJob[i]);
           }
         }
-        for(int i = 0; i < savedJobs[2].length; i++) {
-          if(true) {
+        for (int i = 0; i < savedJobs[2].length; i++) {
+          if (true) {
             incompleteFilter.add(incompleteJob[i]);
           }
         }
       });
       setState(() {});
-    }else if (comp == null && loc == null && temptype == null && book == null) {
+    } else if (comp == null &&
+        loc == null &&
+        temptype == null &&
+        book == null) {
       savedJobsShown = [[], [], []];
-      for(int i = 0; i < savedJobs[0].length; i++) {
+      for (int i = 0; i < savedJobs[0].length; i++) {
         savedJobsShown[0].add(true);
       }
-      for(int i = 0; i < savedJobs[1].length; i++) {
+      for (int i = 0; i < savedJobs[1].length; i++) {
         savedJobsShown[1].add(true);
       }
-      for(int i = 0; i < savedJobs[2].length; i++) {
+      for (int i = 0; i < savedJobs[2].length; i++) {
         savedJobsShown[2].add(true);
       }
       setState(() {
@@ -184,53 +169,67 @@ class _JobsState extends State<Jobs>
         submittedFilter = [];
         allFilter = [];
         incompleteFilter = [];
-        locations.forEach((key, value) {locations[key] = false;});
-        companies.forEach((key, value) {companies[key] = false;});
-        bookmarked.forEach((key, value) {bookmarked[key] = false;});
-        type.forEach((key, value) {type[key] = false;});
-        for(int i = 0; i < submittedJob.length; i++) {
+        locations.forEach((key, value) {
+          locations[key] = false;
+        });
+        companies.forEach((key, value) {
+          companies[key] = false;
+        });
+        bookmarked.forEach((key, value) {
+          bookmarked[key] = false;
+        });
+        type.forEach((key, value) {
+          type[key] = false;
+        });
+        for (int i = 0; i < submittedJob.length; i++) {
           submittedFilter.add(submittedJob[i]);
         }
-        for(int i = 0; i < allJob.length; i++) {
+        for (int i = 0; i < allJob.length; i++) {
           allFilter.add(allJob[i]);
         }
-        for(int i = 0; i < incompleteJob.length; i++) {
+        for (int i = 0; i < incompleteJob.length; i++) {
           incompleteFilter.add(incompleteJob[i]);
         }
       });
     }
-    for(int i = 0; i < submittedJob.length; i++) {
+    for (int i = 0; i < submittedJob.length; i++) {
       bool istrue = false;
-      for(int j = 0; j < submittedFilter.length; j++) {
-        if(submittedJob[i]['job_id'] == submittedFilter[j]['job_id']) {
+      for (int j = 0; j < submittedFilter.length; j++) {
+        if (submittedJob[i]['job_id'] == submittedFilter[j]['job_id']) {
           istrue = true;
           break;
         }
-      } if(istrue == false)
+      }
+      if (istrue == false)
         savedJobsShown[0][i] = false;
-      else savedJobsShown[0][i] = true;
+      else
+        savedJobsShown[0][i] = true;
     }
-    for(int i = 0; i < incompleteJob.length; i++) {
+    for (int i = 0; i < incompleteJob.length; i++) {
       bool istrue = false;
-      for(int j = 0; j < incompleteFilter.length; j++) {
-        if(incompleteJob[i]['job_id'] == incompleteFilter[j]['job_id']) {
+      for (int j = 0; j < incompleteFilter.length; j++) {
+        if (incompleteJob[i]['job_id'] == incompleteFilter[j]['job_id']) {
           istrue = true;
           break;
         }
-      } if(istrue == false)
+      }
+      if (istrue == false)
         savedJobsShown[2][i] = false;
-      else savedJobsShown[2][i] = true;
+      else
+        savedJobsShown[2][i] = true;
     }
-    for(int i = 0; i < allJob.length; i++) {
+    for (int i = 0; i < allJob.length; i++) {
       bool istrue = false;
-      for(int j = 0; j < allFilter.length; j++) {
-        if(allJob[i]['job_id'] == allFilter[j]['job_id']) {
+      for (int j = 0; j < allFilter.length; j++) {
+        if (allJob[i]['job_id'] == allFilter[j]['job_id']) {
           istrue = true;
           break;
         }
-      } if(istrue == false)
+      }
+      if (istrue == false)
         savedJobsShown[1][i] = false;
-      else savedJobsShown[1][i] = true;
+      else
+        savedJobsShown[1][i] = true;
     }
     setState(() {});
   }
@@ -399,7 +398,8 @@ class _JobsState extends State<Jobs>
                                                                                 locations,
                                                                             type:
                                                                                 type,
-                                                                            bookmark: bookmarked,
+                                                                            bookmark:
+                                                                                bookmarked,
                                                                           );
                                                                         });
 
@@ -453,37 +453,78 @@ class _JobsState extends State<Jobs>
                                                                         ),
                                                                         onPressed:
                                                                             () {
-                                                                          savedJobsShown = [[], [], []];
-                                                                          for(int i = 0; i < savedJobs[0].length; i++) {
+                                                                          savedJobsShown =
+                                                                              [
+                                                                            [],
+                                                                            [],
+                                                                            []
+                                                                          ];
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[0].length;
+                                                                              i++) {
                                                                             savedJobsShown[0].add(true);
                                                                           }
-                                                                          for(int i = 0; i < savedJobs[1].length; i++) {
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[1].length;
+                                                                              i++) {
                                                                             savedJobsShown[1].add(true);
                                                                           }
-                                                                          for(int i = 0; i < savedJobs[2].length; i++) {
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[2].length;
+                                                                              i++) {
                                                                             savedJobsShown[2].add(true);
                                                                           }
-                                                                          locations.forEach((key, value) {locations[key] = false;});
-                                                                          companies.forEach((key, value) {companies[key] = false;});
-                                                                          bookmarked.forEach((key, value) {bookmarked[key] = false;});
-                                                                          type.forEach((key, value) {type[key] = false;});
-                                                                          didFilter = false;
-                                                                          submittedJob = jobs['submitted_jobs'] ?? [];
-                                                                          allJob = jobs['all_jobs'] ?? [];
-                                                                          incompleteJob = jobs['pending_jobs'] ?? [];
-                                                                          submittedFilter = [];
-                                                                          allFilter = [];
-                                                                          incompleteFilter = [];
-                                                                          for(int i = 0; i < submittedJob.length; i++) {
+                                                                          locations.forEach((key,
+                                                                              value) {
+                                                                            locations[key] =
+                                                                                false;
+                                                                          });
+                                                                          companies.forEach((key,
+                                                                              value) {
+                                                                            companies[key] =
+                                                                                false;
+                                                                          });
+                                                                          bookmarked.forEach((key,
+                                                                              value) {
+                                                                            bookmarked[key] =
+                                                                                false;
+                                                                          });
+                                                                          type.forEach((key,
+                                                                              value) {
+                                                                            type[key] =
+                                                                                false;
+                                                                          });
+                                                                          didFilter =
+                                                                              false;
+                                                                          submittedJob =
+                                                                              jobs['submitted_jobs'] ?? [];
+                                                                          allJob =
+                                                                              jobs['all_jobs'] ?? [];
+                                                                          incompleteJob =
+                                                                              jobs['pending_jobs'] ?? [];
+                                                                          submittedFilter =
+                                                                              [];
+                                                                          allFilter =
+                                                                              [];
+                                                                          incompleteFilter =
+                                                                              [];
+                                                                          for (int i = 0;
+                                                                              i < submittedJob.length;
+                                                                              i++) {
                                                                             submittedFilter.add(submittedJob[i]);
                                                                           }
-                                                                          for(int i = 0; i < allJob.length; i++) {
+                                                                          for (int i = 0;
+                                                                              i < allJob.length;
+                                                                              i++) {
                                                                             allFilter.add(allJob[i]);
                                                                           }
-                                                                          for(int i = 0; i < incompleteJob.length; i++) {
+                                                                          for (int i = 0;
+                                                                              i < incompleteJob.length;
+                                                                              i++) {
                                                                             incompleteFilter.add(incompleteJob[i]);
                                                                           }
-                                                                          setState(() {});
+                                                                          setState(
+                                                                              () {});
                                                                           Navigator.of(context)
                                                                               .pop(null);
                                                                         },
@@ -513,20 +554,245 @@ class _JobsState extends State<Jobs>
                                   }),
                             ),
                           ),
-                          (jobs == null)
+                (jobs == null)
                     ? SizedBox()
                     : jobs['profile_status'] < 384
                         ? SizedBox()
                         : Visibility(
                             visible: !loading,
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: IconButton(
-                                  icon: Icon(
-                                    EvaIcons.funnelOutline,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () async {})))
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: IconButton(
+                                    icon: Icon(
+                                      Icons.sort,
+                                      color: Colors.white,
+                                    ),
+                                    onPressed: () async {
+                                      dynamic list = await showDialog(
+                                          barrierDismissible: true,
+                                          context: context,
+                                          builder:
+                                              (context) => StatefulBuilder(
+                                                      builder:
+                                                          (context2, setState) {
+                                                    return Scaffold(
+                                                      backgroundColor:
+                                                          Colors.transparent,
+                                                      body: AlertDialog(
+                                                        title: new Text(
+                                                          'Sort By',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                        content: Container(
+                                                          height: 300,
+                                                          width: 300,
+                                                          child:
+                                                              ListView.builder(
+                                                            shrinkWrap: true,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return ListTile(
+                                                                dense: true,
+                                                                title: Text(
+                                                                  '${sortMenu[index]}',
+                                                                ),
+                                                                trailing: IconButton(
+                                                                    icon: Icon(
+                                                                        EvaIcons
+                                                                            .arrowIosForward),
+                                                                    onPressed:
+                                                                        null),
+                                                                onTap:
+                                                                    () async {
+                                                                  //Navigator.pop(context);
+                                                                  dynamic x =
+                                                                      await showDialog(
+                                                                          barrierDismissible:
+                                                                              true,
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (context) {
+                                                                            return MyDialogContent(
+                                                                              typeFilter: '${sortMenu[index]}',
+                                                                              companies: companies,
+                                                                              locations: locations,
+                                                                              type: type,
+                                                                              bookmark: bookmarked,
+                                                                            );
+                                                                          });
+
+                                                                  if (x !=
+                                                                      null) {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop([
+                                                                      x,
+                                                                      '${sortMenu[index]}'
+                                                                    ]);
+                                                                  }
+                                                                },
+                                                                subtitle: Divider(
+                                                                    thickness:
+                                                                        2),
+                                                              );
+                                                            },
+                                                            itemCount:
+                                                                sortMenu.length,
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          20.0,
+                                                                      right:
+                                                                          20.0,
+                                                                      top: 30.0,
+                                                                      bottom:
+                                                                          20.0),
+                                                                  child: RaisedButton(
+                                                                      color: basicColor,
+                                                                      elevation: 0,
+                                                                      padding: EdgeInsets.only(left: 30, right: 30),
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5.0),
+                                                                        side: BorderSide(
+                                                                            color:
+                                                                                basicColor,
+                                                                            width:
+                                                                                1.2),
+                                                                      ),
+                                                                      onPressed: () {
+                                                                        savedJobsShown =
+                                                                            [
+                                                                          [],
+                                                                          [],
+                                                                          []
+                                                                        ];
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < savedJobs[0].length;
+                                                                            i++) {
+                                                                          savedJobsShown[0]
+                                                                              .add(true);
+                                                                        }
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < savedJobs[1].length;
+                                                                            i++) {
+                                                                          savedJobsShown[1]
+                                                                              .add(true);
+                                                                        }
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < savedJobs[2].length;
+                                                                            i++) {
+                                                                          savedJobsShown[2]
+                                                                              .add(true);
+                                                                        }
+                                                                        locations.forEach((key,
+                                                                            value) {
+                                                                          locations[key] =
+                                                                              false;
+                                                                        });
+                                                                        companies.forEach((key,
+                                                                            value) {
+                                                                          companies[key] =
+                                                                              false;
+                                                                        });
+                                                                        bookmarked.forEach((key,
+                                                                            value) {
+                                                                          bookmarked[key] =
+                                                                              false;
+                                                                        });
+                                                                        type.forEach((key,
+                                                                            value) {
+                                                                          type[key] =
+                                                                              false;
+                                                                        });
+                                                                        didFilter =
+                                                                            false;
+                                                                        submittedJob =
+                                                                            jobs['submitted_jobs'] ??
+                                                                                [];
+                                                                        allJob =
+                                                                            jobs['all_jobs'] ??
+                                                                                [];
+                                                                        incompleteJob =
+                                                                            jobs['pending_jobs'] ??
+                                                                                [];
+                                                                        submittedFilter =
+                                                                            [];
+                                                                        allFilter =
+                                                                            [];
+                                                                        incompleteFilter =
+                                                                            [];
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < submittedJob.length;
+                                                                            i++) {
+                                                                          submittedFilter
+                                                                              .add(submittedJob[i]);
+                                                                        }
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < allJob.length;
+                                                                            i++) {
+                                                                          allFilter
+                                                                              .add(allJob[i]);
+                                                                        }
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < incompleteJob.length;
+                                                                            i++) {
+                                                                          incompleteFilter
+                                                                              .add(incompleteJob[i]);
+                                                                        }
+                                                                        setState(
+                                                                            () {});
+                                                                        Navigator.of(context)
+                                                                            .pop(null);
+                                                                      },
+                                                                      child: Text(
+                                                                        'Clear Filters',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.white),
+                                                                      )))),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }));
+                                      if (list != null) {
+                                        if (list[1] == 'Company') {
+                                          filterStuff(
+                                              list[0], null, null, null);
+                                        } else if (list[1] == 'Location') {
+                                          filterStuff(
+                                              null, null, list[0], null);
+                                        } else if (list[1] == 'Type') {
+                                          filterStuff(
+                                              null, list[0], null, null);
+                                        } else if (list[1] == 'Bookmarked') {
+                                          filterStuff(
+                                              null, null, null, list[0]);
+                                        }
+                                      } else {
+                                        setState(() {});
+                                      }
+                                    })))
               ],
               leading: Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -800,7 +1066,12 @@ class MyDialogContent extends StatefulWidget {
   final Map bookmark;
 
   MyDialogContent(
-      {Key key, this.typeFilter, this.companies, this.locations, this.type, this.bookmark})
+      {Key key,
+      this.typeFilter,
+      this.companies,
+      this.locations,
+      this.type,
+      this.bookmark})
       : super(key: key);
   @override
   _MyDialogContentState createState() => new _MyDialogContentState();
@@ -908,7 +1179,8 @@ class _MyDialogContentState extends State<MyDialogContent> {
               value: bookmarkChecked['${widget.bookmark.keys.toList()[index]}'],
               onChanged: (bool value) {
                 setState(() {
-                  bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] = value;
+                  bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] =
+                      value;
                 });
               },
             );
