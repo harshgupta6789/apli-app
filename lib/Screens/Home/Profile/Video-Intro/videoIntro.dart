@@ -495,10 +495,6 @@ class _VideoIntroState extends State<VideoIntro>
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.done_outline,
-                  size: 40.0,
-                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 10.0, 10.0, 20.0),
                   child: Text(

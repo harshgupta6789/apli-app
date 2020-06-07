@@ -497,7 +497,7 @@ class _DiplomaState extends State<Diploma> {
                           ],
                         ),
                       ),
-                      SizedBox(height: height * 0.2),
+                      SizedBox(height:20),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20.0),
                         child: Row(

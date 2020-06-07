@@ -151,7 +151,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           child: Text(
                             "Course",
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                                fontWeight: FontWeight.w600, fontSize: 15),
                           )),
                       Container(
                         width: width * 0.5,
@@ -170,32 +170,6 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     ],
                   ),
                   SizedBox(height: 15.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Container(
-                          width: width * 0.4,
-                          child: Text(
-                            "Branch",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
-                          )),
-                      Container(
-                        width: width * 0.5,
-                        child: TextFormField(
-                          enabled: false,
-                          initialValue: branch,
-                          obscureText: false,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Color(0xff4285f4))),
-                              labelStyle: TextStyle(color: Colors.black)),
-                          keyboardType: TextInputType.number,
-                        ),
-                      ),
-                    ],
-                  ),
                   SizedBox(height: 15.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,7 +179,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           child: Text(
                             "Duration",
                             style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 18),
+                                fontWeight: FontWeight.w600, fontSize: 15),
                           )),
                       Container(
                           width: width * 0.5,

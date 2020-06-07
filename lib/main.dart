@@ -2,11 +2,12 @@ import 'package:apli/Screens/HomeLoginWrapper.dart';
 import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:splashscreen/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider<ThemeChanger>(
     create: (_) => ThemeChanger(),
     child: MyApp(),

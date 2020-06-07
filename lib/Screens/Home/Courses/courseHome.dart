@@ -114,9 +114,17 @@ class _CourseMainState extends State<CourseMain> {
               temp.forEach((element) {
                 if (element['tag'] != null) {
                   if (element['tag'] == 'Course') {
-                    coursesChecked[element['type']] = false;
+                    List types = element['type'];
+                    types.forEach((element) {
+                      coursesChecked[element] = false;
+                    });
+                    
+                   
                   } else if (element['tag'] == 'Webinar') {
-                    webinarChecked[element['type']] = false;
+                    List types = element['type'];
+                    types.forEach((element) {
+                      webinarChecked[element] = false;
+                    });
                   }
                 }
               });
