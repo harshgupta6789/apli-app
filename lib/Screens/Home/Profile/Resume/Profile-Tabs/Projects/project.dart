@@ -99,7 +99,7 @@ class Projects extends StatefulWidget {
 
 class _ProjectsState extends State<Projects> {
   double width, height;
-  bool loading = false;
+  bool loading = false, orderChanged = false;
 
   List projects;
 
@@ -155,6 +155,48 @@ class _ProjectsState extends State<Projects> {
                             color: basicColor,
                           ),
                         ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Visibility(
+                      visible: orderChanged,
+                      child: RaisedButton(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
+                        child: Text(
+                          'Save Order',
+                          style: TextStyle(color: basicColor),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          Map<String, dynamic> map = {};
+                          map['project'] = List.from(projects);
+                          map['index'] = -1;
+                          dynamic result = await apiService
+                              .sendProfileData(map);
+                          if (result == 1) {
+                            showToast(
+                                'Data Updated Successfully',
+                                context);
+                          } else {
+                            showToast(
+                                'Unexpected error occurred',
+                                context);
+                          }
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Project()));
+                        },
                       ),
                     ),
                     SizedBox(
@@ -282,10 +324,31 @@ class _ProjectsState extends State<Projects> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         Project()));
+                                          } else if(result == 2) {
+                                            int x = index;
+                                            int y = index - 1;
+                                            var l1 = projects[x];
+                                            var l2 = projects[y];
+                                            projects[x] = l2;
+                                            projects[y] = l1;
+                                            setState(() {
+                                              orderChanged = true;
+                                            });
+                                          } else if(result == 3) {
+                                            int x = index;
+                                            int y = index + 1;
+                                            var l1 = projects[x];
+                                            var l2 = projects[y];
+                                            projects[x] = l2;
+                                            projects[y] = l1;
+                                            setState(() {
+                                              orderChanged = true;
+                                            });
                                           }
                                         },
-                                        itemBuilder: (BuildContext context) =>
-                                            <PopupMenuEntry<int>>[
+                                        itemBuilder: (BuildContext context) {
+                                          if(index == 0)
+                                          return <PopupMenuEntry<int>>[
                                           const PopupMenuItem<int>(
                                             value: 0,
                                             child: Text(
@@ -304,7 +367,88 @@ class _ProjectsState extends State<Projects> {
                                                   fontSize: 13),
                                             ),
                                           ),
-                                        ],
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Visibility(
+                                                  visible: (index == projects.length - 1) ? false : true,
+                                                  child: Text(
+                                                    'Move Down',
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.w600,
+                                                        fontSize: 13),
+                                                  ),
+                                                ),
+                                              ),
+                                        ];
+                                          else if(index == projects.length - 1)
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Text(
+                                                  'Move Up',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                          else return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Text(
+                                                  'Move Up',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Text(
+                                                  'Move Down',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                        },
                                       ),
                                     ),
                                   )
