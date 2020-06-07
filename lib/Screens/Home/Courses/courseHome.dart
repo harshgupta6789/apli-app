@@ -28,12 +28,16 @@ class _CourseMainState extends State<CourseMain> {
   Map coursesChecked = {};
   Map webinarChecked = {};
 
-  void filterStuff(Map course , Map webinar){
-    for(var eachCourse in temp){
-      if(eachCourse['tag']=='Course'){
-        
-      }else{
-        
+  void filterStuff(Map course, Map webinar) {
+    print(course);
+    print(webinar);
+    for (var eachCourse in temp) {
+      if (eachCourse['tag'] == 'Course') {
+        List allTypes = eachCourse['type'];
+        print(allTypes);
+      } else {
+        List allTypes = eachCourse['type'];
+        print(allTypes);
       }
     }
   }
@@ -60,7 +64,7 @@ class _CourseMainState extends State<CourseMain> {
                     color: Colors.white,
                   ),
                   onPressed: () async {
-                    await showDialog(
+                    dynamic x = await showDialog(
                         barrierDismissible: true,
                         context: context,
                         builder: (context) {
@@ -70,6 +74,9 @@ class _CourseMainState extends State<CourseMain> {
                             allFilters: allFilter,
                           );
                         });
+                    if (x != null) {
+                      filterStuff(x[0], x[1]);
+                    }
                     // if (list != null) {
                     //   if (list[1] == 'Company') {
                     //     filterStuff(list[0], null, null, null);
@@ -118,8 +125,6 @@ class _CourseMainState extends State<CourseMain> {
                     types.forEach((element) {
                       coursesChecked[element] = false;
                     });
-                    
-                   
                   } else if (element['tag'] == 'Webinar') {
                     List types = element['type'];
                     types.forEach((element) {
@@ -353,7 +358,8 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return CheckboxListTile(
-                            title: Text('${widget.courses.keys.toList()[index]}'),
+                              title: Text(
+                                  '${widget.courses.keys.toList()[index]}'),
                               value: courseChecked[
                                   '${widget.courses.keys.toList()[index]}'],
                               onChanged: (bool value) {
@@ -370,7 +376,8 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return CheckboxListTile(
-                           title: Text('${widget.webinars.keys.toList()[index]}'),
+                              title: Text(
+                                  '${widget.webinars.keys.toList()[index]}'),
                               value: webinarChecked[
                                   '${widget.webinars.keys.toList()[index]}'],
                               onChanged: (bool value) {
@@ -411,7 +418,8 @@ class _MyDialogContentState extends State<MyDialogContent> {
                     ),
                     onPressed: () {
                       print(webinarChecked);
-                      Navigator.of(context).pop([courseChecked , webinarChecked]);
+                      Navigator.of(context)
+                          .pop([courseChecked, webinarChecked]);
                     },
                     child: Text(
                       'Filter',
