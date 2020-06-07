@@ -102,7 +102,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 //                      )),
 //                      (Route<dynamic> route) => false);
 //              setState(() {});
-            });
+        });
         if (_currentTab == 2) {
           Flushbar(
             isDismissible: true,

@@ -66,7 +66,8 @@ class _JobsTabssState extends State<JobsTabs>
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
     if (status == 'OFFERED' || status == 'LETTER SENT') {
-      return deadlineTimer==null?AutoSizeText(
+      return deadlineTimer == null
+          ? AutoSizeText(
               "No Deadline Specified",
               maxLines: 2,
               style: TextStyle(
@@ -74,49 +75,51 @@ class _JobsTabssState extends State<JobsTabs>
                   fontSize: 12 * scale,
                   fontWeight: FontWeight.w500),
               overflow: TextOverflow.ellipsis,
-            ):StreamBuilder(
-          stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-          builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
-            var dateString;
+            )
+          : StreamBuilder(
+              stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+              builder: (BuildContext context, AsyncSnapshot<int> snapshot2) {
+                var dateString;
 
-            int now = DateTime.now().millisecondsSinceEpoch;
+                int now = DateTime.now().millisecondsSinceEpoch;
 
-            int estimateTs =
-                DateTime.parse(deadlineTimer ?? '2020-05-28 14:26:00+0000')
-                    .millisecondsSinceEpoch;
-            Duration remaining = Duration(milliseconds: estimateTs - now);
-            if (remaining.isNegative)
-              dateString = 'Deadline is over';
-            else if (remaining.inDays > 0) {
-              if (remaining.inDays == 1) {
-                dateString = remaining.inDays.toString() + ' day';
-              } else
-                dateString = remaining.inDays.toString() + ' days';
-            } else {
-              if (remaining.inHours > 0) {
-                if (remaining.inHours == 1)
-                  dateString = remaining.inHours.toString() + ' hour';
-                else
-                  dateString = remaining.inHours.toString() + ' hours';
-              } else if (remaining.inMinutes > 0) if (remaining.inMinutes == 1)
-                dateString = remaining.inMinutes.toString() + ' min';
-              else
-                dateString = remaining.inMinutes.toString() + ' mins';
-              else if (remaining.inSeconds == 1)
-                dateString = remaining.inSeconds.toString() + ' sec';
-              else
-                dateString = remaining.inSeconds.toString() + ' sec';
-            }
-            return AutoSizeText(
-              "Deadline to accept : " + dateString,
-              maxLines: 2,
-              style: TextStyle(
-                  color: Colors.red,
-                  fontSize: 12 * scale,
-                  fontWeight: FontWeight.w500),
-              overflow: TextOverflow.ellipsis,
-            );
-          });
+                int estimateTs =
+                    DateTime.parse(deadlineTimer ?? '2020-05-28 14:26:00+0000')
+                        .millisecondsSinceEpoch;
+                Duration remaining = Duration(milliseconds: estimateTs - now);
+                if (remaining.isNegative)
+                  dateString = 'Deadline is over';
+                else if (remaining.inDays > 0) {
+                  if (remaining.inDays == 1) {
+                    dateString = remaining.inDays.toString() + ' day';
+                  } else
+                    dateString = remaining.inDays.toString() + ' days';
+                } else {
+                  if (remaining.inHours > 0) {
+                    if (remaining.inHours == 1)
+                      dateString = remaining.inHours.toString() + ' hour';
+                    else
+                      dateString = remaining.inHours.toString() + ' hours';
+                  } else if (remaining.inMinutes > 0) if (remaining.inMinutes ==
+                      1)
+                    dateString = remaining.inMinutes.toString() + ' min';
+                  else
+                    dateString = remaining.inMinutes.toString() + ' mins';
+                  else if (remaining.inSeconds == 1)
+                    dateString = remaining.inSeconds.toString() + ' sec';
+                  else
+                    dateString = remaining.inSeconds.toString() + ' sec';
+                }
+                return AutoSizeText(
+                  "Deadline to accept : " + dateString,
+                  maxLines: 2,
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12 * scale,
+                      fontWeight: FontWeight.w500),
+                  overflow: TextOverflow.ellipsis,
+                );
+              });
     } else
       return AutoSizeText(
         'Deadline: ' +
@@ -353,73 +356,76 @@ class _JobsTabssState extends State<JobsTabs>
                                                 trailing: widget.tabNo == 0
                                                     ? differentBackground(widget
                                                         .jobs[index]['status'])
-                                                    : (widget.tabNo == 2) ? SizedBox() :  (loadingIcon[index]
-                                                        ? CircularProgressIndicator()
-                                                        : IconButton(
-                                                            icon: (savedJobs[widget
-                                                                            .tabNo]
-                                                                        [i - 1] ==
-                                                                    true)
-                                                                ? Icon(
-                                                                    Icons
-                                                                        .bookmark,
-                                                                    color: Colors
-                                                                            .yellow[
-                                                                        700],
-                                                                  )
-                                                                : Icon(
-                                                                    Icons
-                                                                        .bookmark_border,
-                                                                  ),
-                                                            onPressed:
-                                                                () async {
-                                                              setState(() {
-                                                                loadingIcon[
-                                                                        index] =
-                                                                    true;
-                                                              });
-                                                              print(widget.jobs[index]['role']);
-                                                              dynamic result =
-                                                                  await apiService
-                                                                      .saveJob(widget
-                                                                              .jobs[index]
-                                                                          [
-                                                                          'job_id']);
-                                                              setState(() {
-                                                                loadingIcon[
-                                                                        index] =
-                                                                    false;
-                                                              });
-                                                              if (result[
-                                                                      'error'] !=
-                                                                  null) {
-                                                                Flushbar(
-                                                                  isDismissible:
-                                                                      true,
-                                                                  messageText: Text(
-                                                                      'Error occurred, try again later',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.white)),
-                                                                  duration:
-                                                                      Duration(
+                                                    : (widget.tabNo == 2)
+                                                        ? SizedBox()
+                                                        : (loadingIcon[index]
+                                                            ? CircularProgressIndicator()
+                                                            : IconButton(
+                                                                icon: (savedJobs[
+                                                                            widget
+                                                                                .tabNo][i -
+                                                                            1] ==
+                                                                        true)
+                                                                    ? Icon(
+                                                                        Icons
+                                                                            .bookmark,
+                                                                        color: Colors
+                                                                            .yellow[700],
+                                                                      )
+                                                                    : Icon(
+                                                                        Icons
+                                                                            .bookmark_border,
+                                                                      ),
+                                                                onPressed:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    loadingIcon[
+                                                                            index] =
+                                                                        true;
+                                                                  });
+                                                                  print(widget.jobs[
+                                                                          index]
+                                                                      ['role']);
+                                                                  dynamic
+                                                                      result =
+                                                                      await apiService
+                                                                          .saveJob(widget.jobs[index]
+                                                                              [
+                                                                              'job_id']);
+                                                                  setState(() {
+                                                                    loadingIcon[
+                                                                            index] =
+                                                                        false;
+                                                                  });
+                                                                  if (result[
+                                                                          'error'] !=
+                                                                      null) {
+                                                                    Flushbar(
+                                                                      isDismissible:
+                                                                          true,
+                                                                      messageText: Text(
+                                                                          'Error occurred, try again later',
+                                                                          style:
+                                                                              TextStyle(color: Colors.white)),
+                                                                      duration: Duration(
                                                                           seconds:
                                                                               2),
-                                                                )..show(
-                                                                    context);
-                                                              } else {
-                                                                setState(() {
-                                                                  savedJobs[widget
-                                                                          .tabNo]
-                                                                      [
-                                                                      i - 1] = !savedJobs[
+                                                                    )..show(
+                                                                        context);
+                                                                  } else {
+                                                                    setState(
+                                                                        () {
+                                                                      savedJobs[
                                                                           widget
-                                                                              .tabNo]
-                                                                      [i - 1];
-                                                                });
-                                                              }
-                                                            },
-                                                          ))),
+                                                                              .tabNo][i -
+                                                                          1] = !savedJobs[
+                                                                              widget.tabNo]
+                                                                          [
+                                                                          i - 1];
+                                                                    });
+                                                                  }
+                                                                },
+                                                              ))),
                                           ),
                                         ])),
                               ),

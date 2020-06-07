@@ -225,7 +225,10 @@ class _CourseLiveState extends State<CourseLive>
                                                     commentContentDivided
                                                         .map((e) {
                                                   if (e.toLowerCase() ==
-                                                      ((widget.hashtag == null) ? '#askaquestion' : widget.hashtag.toLowerCase()))
+                                                      ((widget.hashtag == null)
+                                                          ? '#askaquestion'
+                                                          : widget.hashtag
+                                                              .toLowerCase()))
                                                     return Linkify(
                                                       text: e + ' ',
                                                       onOpen: (link) async {
@@ -310,7 +313,8 @@ class _CourseLiveState extends State<CourseLive>
                                                                     .deepPurpleAccent;
                                                 return Container(
                                                   padding: EdgeInsets.all(0),
-                                                  margin: EdgeInsets.fromLTRB(8, 3, 8, 3),
+                                                  margin: EdgeInsets.fromLTRB(
+                                                      8, 3, 8, 3),
                                                   decoration: myBoxDecoration(),
                                                   child: ListTile(
                                                     isThreeLine: true,
@@ -408,22 +412,19 @@ class _CourseLiveState extends State<CourseLive>
                                                   loading = true;
                                                 });
                                                 await Firestore.instance
-                                                    .collection(
-                                                    'edu_courses')
-                                                    .document(
-                                                    widget.documentID)
+                                                    .collection('edu_courses')
+                                                    .document(widget.documentID)
                                                     .collection("comments")
                                                     .document()
                                                     .setData({
-                                                  'timestamp':
-                                                  Timestamp.now(),
+                                                  'timestamp': Timestamp.now(),
                                                   'name': name,
                                                   'email': email,
                                                   'comment':
-                                                  _textEditingController
-                                                      .text,
+                                                      _textEditingController
+                                                          .text,
                                                   'profile_picture':
-                                                  profilePicture
+                                                      profilePicture
                                                 }).then((value) {
                                                   _focusNode.unfocus();
                                                   setState(() {
@@ -438,8 +439,7 @@ class _CourseLiveState extends State<CourseLive>
                                                             .minScrollExtent,
                                                         duration: Duration(
                                                             seconds: 1),
-                                                        curve:
-                                                        Curves.easeOut);
+                                                        curve: Curves.easeOut);
                                                   });
                                                 });
                                               }
@@ -450,7 +450,9 @@ class _CourseLiveState extends State<CourseLive>
                                                 TextInputAction.send,
                                             decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: 'Use ' + (widget.hashtag ?? '#AskAQuestion'))),
+                                                hintText: 'Use ' +
+                                                    (widget.hashtag ??
+                                                        '#AskAQuestion'))),
                                         trailing: loading
                                             ? CircularProgressIndicator()
                                             : IconButton(

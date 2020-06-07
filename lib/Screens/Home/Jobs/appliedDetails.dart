@@ -191,24 +191,25 @@ class _AppliedDetailsState extends State<AppliedDetails> {
                 ),
               ),
               ListTile(
-                title:AutoSizeText(
-                  "Deadline To Accept : ",
-                  maxLines: 2,
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.green),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                  title: AutoSizeText(
+                    "Deadline To Accept : ",
+                    maxLines: 2,
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.green),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   subtitle: AutoSizeText(
-                dateTimeToReadableDateTimeConverter(DateTime.parse(job['accept_deadline'] ?? '2020-01-01T00:00:00Z')),
-                maxLines: 2,
-                style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w500),
-                overflow: TextOverflow.ellipsis,
-              )),
+                    dateTimeToReadableDateTimeConverter(DateTime.parse(
+                        job['accept_deadline'] ?? '2020-01-01T00:00:00Z')),
+                    maxLines: 2,
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500),
+                    overflow: TextOverflow.ellipsis,
+                  )),
               ListTile(
                   title: AutoSizeText(
                 "Download your offer letter!",

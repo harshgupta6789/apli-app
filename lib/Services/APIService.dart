@@ -524,8 +524,7 @@ class APIService {
     }
   }
 
-  Future saveJob(
-      String id) async {
+  Future saveJob(String id) async {
     try {
       print(id);
       dynamic result;

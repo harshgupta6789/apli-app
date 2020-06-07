@@ -161,7 +161,7 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           initialValue: course,
                           obscureText: false,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(8.0),
+                              contentPadding: EdgeInsets.all(8.0),
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
@@ -185,13 +185,12 @@ class _CurrentEducationState extends State<CurrentEducation> {
                           )),
                       Container(
                           width: width * 0.55,
-                          
                           child: TextFormField(
                             enabled: false,
                             initialValue: duration,
                             obscureText: false,
                             decoration: InputDecoration(
-                              contentPadding: EdgeInsets.all(8.0),
+                                contentPadding: EdgeInsets.all(8.0),
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xff4285f4))),

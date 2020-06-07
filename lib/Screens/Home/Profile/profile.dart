@@ -26,7 +26,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         key: _scaffoldKey,
         backgroundColor: Theme.of(context).backgroundColor,
@@ -36,13 +35,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
             backgroundColor: basicColor,
             automaticallyImplyLeading: false,
             leading: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(
-                    EvaIcons.menuOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      EvaIcons.menuOutline,
+                      color: Colors.white,
+                    ),
+                    onPressed: () => _scaffoldKey.currentState.openDrawer())),
             title: Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Text(

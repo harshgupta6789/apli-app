@@ -67,8 +67,7 @@ Widget customDrawer(BuildContext context, GlobalKey x) {
 
   Widget sideNav() {
     return Padding(
-      padding:
-          EdgeInsets.fromLTRB(0, height * 0.03, width * 0.3, 0),
+      padding: EdgeInsets.fromLTRB(0, height * 0.03, width * 0.3, 0),
       child: ClipRRect(
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(7), bottomRight: Radius.circular(7)),

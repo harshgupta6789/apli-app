@@ -276,7 +276,14 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
                                 title,
                                 message,
                                 tempTime == null ? null : difference(tempTime),
-                                ((f.data['status'] == 'OFFERED' || f.data['status'] == 'HIRED') ? 'offered' : (f.data['status'] == 'INTERVIEW' ? 'interview' : (f.data['type'] == 'message_from_tpo' ? 'college' : 'none'))),
+                                ((f.data['status'] == 'OFFERED' ||
+                                        f.data['status'] == 'HIRED')
+                                    ? 'offered'
+                                    : (f.data['status'] == 'INTERVIEW'
+                                        ? 'interview'
+                                        : (f.data['type'] == 'message_from_tpo'
+                                            ? 'college'
+                                            : 'none'))),
                                 f.documentID,
                               ]);
                             }
@@ -471,10 +478,9 @@ class _AllNotificationsState extends State<AllNotifications> {
     int length =
         (myNotifications.length < count) ? myNotifications.length : count;
     final _scaffoldKey = GlobalKey<ScaffoldState>();
-    for(int i = 0; i < myNotifications.length; i++) {
-      if((!(userFilters.values.toList().contains(true)) ||
-          (userFilters[myNotifications[i][3]] ?? false)))
-        result = result + 1;
+    for (int i = 0; i < myNotifications.length; i++) {
+      if ((!(userFilters.values.toList().contains(true)) ||
+          (userFilters[myNotifications[i][3]] ?? false))) result = result + 1;
     }
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -624,7 +630,10 @@ class _AllNotificationsState extends State<AllNotifications> {
                 physics: ScrollPhysics(),
                 itemCount: length + 1,
                 itemBuilder: (BuildContext context, int index) {
-                  if(index != length){print(index);print(myNotifications[index][3]);}
+                  if (index != length) {
+                    print(index);
+                    print(myNotifications[index][3]);
+                  }
                   return index != length
                       ? (!(userFilters.values.toList().contains(true)) ||
                               (userFilters[myNotifications[index][3]] ?? false))
@@ -640,13 +649,15 @@ class _AllNotificationsState extends State<AllNotifications> {
                                   child: Padding(
                                     padding: EdgeInsets.only(bottom: 15.0),
                                     child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           Padding(
                                             padding: EdgeInsets.only(
                                                 left: width * 0.01, top: 5.0),
                                             child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: <Widget>[
                                                 ListTile(
                                                   dense: true,
@@ -657,7 +668,8 @@ class _AllNotificationsState extends State<AllNotifications> {
                                                     //maxLines: 2,
                                                     style: TextStyle(
                                                         fontSize: 18,
-                                                        fontWeight: FontWeight.w500),
+                                                        fontWeight:
+                                                            FontWeight.w500),
                                                     //overflow: TextOverflow.ellipsis,
                                                   ),
                                                   subtitle: Text(
@@ -666,35 +678,52 @@ class _AllNotificationsState extends State<AllNotifications> {
                                                     //maxLines: 2,
                                                     //overflow: TextOverflow.ellipsis,
                                                   ),
-                                                  trailing: Text(myNotifications[index]
-                                                          [2] ??
-                                                      'No Time Exception'),
+                                                  trailing: Text(
+                                                      myNotifications[index]
+                                                              [2] ??
+                                                          'No Time Exception'),
                                                 ),
 //                                                (myNotifications[index][3] == 'cand_status_change_from_campus' || myNotifications[index][3] == 'cand_status_change' || myNotifications[index][3] == 'message_from_company') ?
-                                                false ?
-                                                Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: 15.0, left: 12.0),
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        border:
-                                                        Border.all(color: basicColor),
-                                                        borderRadius:
-                                                        BorderRadius.circular(8),
-                                                      ),
-                                                      child: MaterialButton(
-                                                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                                                          child: Text(
-                                                            "View Application",
-                                                            style: TextStyle(
-                                                                fontSize: 13.0,
-                                                                color: basicColor,
-                                                                fontWeight:
-                                                                FontWeight.w600),
+                                                false
+                                                    ? Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                top: 15.0,
+                                                                left: 12.0),
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color:
+                                                                    basicColor),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
                                                           ),
-                                                          onPressed: () => null),
-                                                    )) : SizedBox()
-
+                                                          child: MaterialButton(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .fromLTRB(
+                                                                          10,
+                                                                          0,
+                                                                          10,
+                                                                          0),
+                                                              child: Text(
+                                                                "View Application",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        13.0,
+                                                                    color:
+                                                                        basicColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                              ),
+                                                              onPressed: () =>
+                                                                  null),
+                                                        ))
+                                                    : SizedBox()
                                               ],
                                             ),
                                           ),
@@ -729,7 +758,13 @@ class _AllNotificationsState extends State<AllNotifications> {
                 },
               ),
             ),
-            result == 0 ? Container(width: width, height: height * 0.75, child: Center(child: Text('No Results')),) : SizedBox()
+            result == 0
+                ? Container(
+                    width: width,
+                    height: height * 0.75,
+                    child: Center(child: Text('No Results')),
+                  )
+                : SizedBox()
           ],
         ),
       ),

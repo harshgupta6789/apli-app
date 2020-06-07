@@ -332,7 +332,7 @@ class _TenthState extends State<Tenth> {
                                         enabled: false,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500),
-                                        decoration:InputDecoration(
+                                        decoration: InputDecoration(
                                             prefixIcon: Padding(
                                               padding:
                                                   EdgeInsets.only(left: 10),

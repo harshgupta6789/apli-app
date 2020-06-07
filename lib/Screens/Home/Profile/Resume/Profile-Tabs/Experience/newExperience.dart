@@ -185,31 +185,27 @@ class _NewExperienceState extends State<NewExperience> {
                                 enabled: false,
                                 initialValue: '',
                                 style: TextStyle(fontWeight: FontWeight.w500),
-                                decoration:InputDecoration(
-                                            prefixIcon: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    height: 13,
-                                                  ),
-                                                  Text("Experience Type" + " : "),
-                                                ],
-                                              ),
-                                            ),
-                                            //hintText: t,
-                                            disabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[600])),
-                                            contentPadding:
-                                                new EdgeInsets.symmetric(
-                                                    vertical: 2.0,
-                                                    horizontal: 10.0),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.w400),
-                                            labelStyle:
-                                                TextStyle(color: Colors.black)),
+                                decoration: InputDecoration(
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Column(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 13,
+                                          ),
+                                          Text("Experience Type" + " : "),
+                                        ],
+                                      ),
+                                    ),
+                                    //hintText: t,
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey[600])),
+                                    contentPadding: new EdgeInsets.symmetric(
+                                        vertical: 2.0, horizontal: 10.0),
+                                    hintStyle:
+                                        TextStyle(fontWeight: FontWeight.w400),
+                                    labelStyle: TextStyle(color: Colors.black)),
                               ),
                             ),
                             Align(
@@ -386,30 +382,26 @@ class _NewExperienceState extends State<NewExperience> {
                                 initialValue: '',
                                 style: TextStyle(fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
-                                            prefixIcon: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    height: 13,
-                                                  ),
-                                                  Text("Industry Type" + " : "),
-                                                ],
-                                              ),
-                                            ),
-                                            //hintText: t,
-                                            disabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[600])),
-                                            contentPadding:
-                                                new EdgeInsets.symmetric(
-                                                    vertical: 2.0,
-                                                    horizontal: 10.0),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.w400),
-                                            labelStyle:
-                                                TextStyle(color: Colors.black)),
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Column(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 13,
+                                          ),
+                                          Text("Industry Type" + " : "),
+                                        ],
+                                      ),
+                                    ),
+                                    //hintText: t,
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey[600])),
+                                    contentPadding: new EdgeInsets.symmetric(
+                                        vertical: 2.0, horizontal: 10.0),
+                                    hintStyle:
+                                        TextStyle(fontWeight: FontWeight.w400),
+                                    labelStyle: TextStyle(color: Colors.black)),
                               ),
                             ),
                             Align(
@@ -472,30 +464,26 @@ class _NewExperienceState extends State<NewExperience> {
                                 initialValue: '',
                                 style: TextStyle(fontWeight: FontWeight.w500),
                                 decoration: InputDecoration(
-                                            prefixIcon: Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
-                                              child: Column(
-                                                children: <Widget>[
-                                                  SizedBox(
-                                                    height: 13,
-                                                  ),
-                                                  Text("Domain" + " : "),
-                                                ],
-                                              ),
-                                            ),
-                                            //hintText: t,
-                                            disabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.grey[600])),
-                                            contentPadding:
-                                                new EdgeInsets.symmetric(
-                                                    vertical: 2.0,
-                                                    horizontal: 10.0),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.w400),
-                                            labelStyle:
-                                                TextStyle(color: Colors.black)),
+                                    prefixIcon: Padding(
+                                      padding: EdgeInsets.only(left: 10),
+                                      child: Column(
+                                        children: <Widget>[
+                                          SizedBox(
+                                            height: 13,
+                                          ),
+                                          Text("Domain" + " : "),
+                                        ],
+                                      ),
+                                    ),
+                                    //hintText: t,
+                                    disabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.grey[600])),
+                                    contentPadding: new EdgeInsets.symmetric(
+                                        vertical: 2.0, horizontal: 10.0),
+                                    hintStyle:
+                                        TextStyle(fontWeight: FontWeight.w400),
+                                    labelStyle: TextStyle(color: Colors.black)),
                               ),
                             ),
                             Align(

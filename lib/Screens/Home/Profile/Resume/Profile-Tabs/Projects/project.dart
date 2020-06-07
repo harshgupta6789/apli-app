@@ -180,22 +180,17 @@ class _ProjectsState extends State<Projects> {
                           Map<String, dynamic> map = {};
                           map['project'] = List.from(projects);
                           map['index'] = -1;
-                          dynamic result = await apiService
-                              .sendProfileData(map);
+                          dynamic result =
+                              await apiService.sendProfileData(map);
                           if (result == 1) {
-                            showToast(
-                                'Data Updated Successfully',
-                                context);
+                            showToast('Data Updated Successfully', context);
                           } else {
-                            showToast(
-                                'Unexpected error occurred',
-                                context);
+                            showToast('Unexpected error occurred', context);
                           }
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      Project()));
+                                  builder: (context) => Project()));
                         },
                       ),
                     ),
@@ -252,8 +247,8 @@ class _ProjectsState extends State<Projects> {
                               Stack(
                                 children: <Widget>[
                                   Container(
-                                    decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.grey)),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey)),
                                     padding: EdgeInsets.all(8),
                                     child: ListTile(
                                       title: Text(
@@ -324,7 +319,7 @@ class _ProjectsState extends State<Projects> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         Project()));
-                                          } else if(result == 2) {
+                                          } else if (result == 2) {
                                             int x = index;
                                             int y = index - 1;
                                             var l1 = projects[x];
@@ -334,7 +329,7 @@ class _ProjectsState extends State<Projects> {
                                             setState(() {
                                               orderChanged = true;
                                             });
-                                          } else if(result == 3) {
+                                          } else if (result == 3) {
                                             int x = index;
                                             int y = index + 1;
                                             var l1 = projects[x];
@@ -347,47 +342,15 @@ class _ProjectsState extends State<Projects> {
                                           }
                                         },
                                         itemBuilder: (BuildContext context) {
-                                          if(index == 0)
-                                          return <PopupMenuEntry<int>>[
-                                          const PopupMenuItem<int>(
-                                            value: 0,
-                                            child: Text(
-                                              'Edit',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 13),
-                                            ),
-                                          ),
-                                          const PopupMenuItem<int>(
-                                            value: 1,
-                                            child: Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 13),
-                                            ),
-                                          ),
-                                              PopupMenuItem<int>(
-                                                value: 3,
-                                                child: Visibility(
-                                                  visible: (index == projects.length - 1) ? false : true,
-                                                  child: Text(
-                                                    'Move Down',
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.w600,
-                                                        fontSize: 13),
-                                                  ),
-                                                ),
-                                              ),
-                                        ];
-                                          else if(index == projects.length - 1)
+                                          if (projects.length == 1)
                                             return <PopupMenuEntry<int>>[
                                               const PopupMenuItem<int>(
                                                 value: 0,
                                                 child: Text(
                                                   'Edit',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),
@@ -396,27 +359,21 @@ class _ProjectsState extends State<Projects> {
                                                 child: Text(
                                                   'Delete',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 13),
-                                                ),
-                                              ),
-                                              PopupMenuItem<int>(
-                                                value: 2,
-                                                child: Text(
-                                                  'Move Up',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),
                                             ];
-                                          else return <PopupMenuEntry<int>>[
+                                          else if (index == 0)
+                                            return <PopupMenuEntry<int>>[
                                               const PopupMenuItem<int>(
                                                 value: 0,
                                                 child: Text(
                                                   'Edit',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),
@@ -425,7 +382,47 @@ class _ProjectsState extends State<Projects> {
                                                 child: Text(
                                                   'Delete',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Visibility(
+                                                  visible: (index ==
+                                                          projects.length - 1)
+                                                      ? false
+                                                      : true,
+                                                  child: Text(
+                                                    'Move Down',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13),
+                                                  ),
+                                                ),
+                                              ),
+                                            ];
+                                          else if (index == projects.length - 1)
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),
@@ -434,7 +431,41 @@ class _ProjectsState extends State<Projects> {
                                                 child: Text(
                                                   'Move Up',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                          else
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Text(
+                                                  'Move Up',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),
@@ -443,7 +474,8 @@ class _ProjectsState extends State<Projects> {
                                                 child: Text(
                                                   'Move Down',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                       fontSize: 13),
                                                 ),
                                               ),

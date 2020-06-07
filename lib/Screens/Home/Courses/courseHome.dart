@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CourseMain extends StatefulWidget {
   @override
@@ -16,13 +17,52 @@ class CourseMain extends StatefulWidget {
 }
 
 double height, width;
+bool didfilter = false;
 Orientation orientation;
+Map globalCoursesChecked;
+Map globalWebinarChecked;
 
 class _CourseMainState extends State<CourseMain> {
+  String college;
+  bool loading = false;
+
+  getInfo() async {
+    await SharedPreferences.getInstance().then((value) async {
+      if (!value.containsKey('college')) {
+        await Firestore.instance
+            .collection('candidates')
+            .document(value.getString('email'))
+            .get()
+            .then((candidates) async {
+          await Firestore.instance
+              .collection('batches')
+              .where('batch_id', isEqualTo: candidates.data['batch_id'])
+              .getDocuments()
+              .then((batches) {
+            setState(() {
+              college = batches.documents.first.data['college'];
+            });
+            value.setString('college', batches.documents.first.data['college']);
+          });
+        });
+      } else
+        setState(() {
+          college = value.getString('college');
+        });
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getInfo();
+    super.initState();
+  }
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  bool didfilter = false;
   List temp = [];
   List filtered = [];
+
   // Map allFilter = {'Course': [], 'Webinar': []};
   List allFilter = ['Courses', 'Webinar'];
   Map coursesChecked = {};
@@ -30,10 +70,13 @@ class _CourseMainState extends State<CourseMain> {
 
   void filterStuff(Map course, Map webinar) {
     filtered = [];
+    globalCoursesChecked = {};
+    globalWebinarChecked = {};
     for (var eachCourse in temp) {
       if (eachCourse['tag'] == 'Course') {
         List allTypes = eachCourse['type'];
         course.forEach((key, value) {
+          globalCoursesChecked[key] = value;
           if (value == true) {
             if (allTypes.contains(key)) {
               if (!filtered.contains(eachCourse)) {
@@ -45,6 +88,7 @@ class _CourseMainState extends State<CourseMain> {
       } else {
         List allTypes = eachCourse['type'];
         webinar.forEach((key, value) {
+          globalWebinarChecked[key] = value;
           if (value == true) {
             if (allTypes.contains(key)) {
               if (!filtered.contains(eachCourse)) {
@@ -62,114 +106,137 @@ class _CourseMainState extends State<CourseMain> {
 
   @override
   Widget build(BuildContext context) {
+    print(college);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     orientation = MediaQuery.of(context).orientation;
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      key: _scaffoldKey,
-      drawer: customDrawer(context, _scaffoldKey),
-      appBar: PreferredSize(
-        child: AppBar(
-          backgroundColor: basicColor,
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(
-                    EvaIcons.funnelOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () async {
-                    dynamic x = await showDialog(
-                        barrierDismissible: true,
-                        context: context,
-                        builder: (context) {
-                          return MyDialogContent(
-                            courses: coursesChecked,
-                            webinars: webinarChecked,
-                            allFilters: allFilter,
-                          );
-                        });
-                    if (x != null) {
-                      filterStuff(x[0], x[1]);
-                    }
+    return college == null
+        ? Loading()
+        : Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            key: _scaffoldKey,
+            drawer: customDrawer(context, _scaffoldKey),
+            appBar: PreferredSize(
+              child: AppBar(
+                backgroundColor: basicColor,
+                automaticallyImplyLeading: false,
+                actions: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: IconButton(
+                        icon: Icon(
+                          EvaIcons.funnelOutline,
+                          color: Colors.white,
+                        ),
+                        onPressed: () async {
+                          dynamic x = await showDialog(
+                              barrierDismissible: true,
+                              context: context,
+                              builder: (context) {
+                                return MyDialogContent(
+                                  courses: coursesChecked,
+                                  webinars: webinarChecked,
+                                  allFilters: allFilter,
+                                );
+                              });
+                          if (x != null) {
+                            if (x == -1) {
+                              setState(() {
+                                didfilter = false;
+                                globalWebinarChecked = null;
+                                globalCoursesChecked = null;
+                              });
+                            } else
+                              filterStuff(x[0], x[1]);
+                          }
 
-                    // if (list != null) {
-                    //   if (list[1] == 'Company') {
-                    //     filterStuff(list[0], null, null, null);
-                    //   } else if (list[1] == 'Location') {
-                    //     filterStuff(null, null, list[0], null);
-                    //   } else if (list[1] == 'Type') {
-                    //     filterStuff(null, list[0], null, null);
-                    //   } else if (list[1] == 'Bookmarked') {
-                    //     filterStuff(null, null, null, list[0]);
-                    //   }
-                    // } else {
-                    //   setState(() {});
-                    // }
-                  }),
+                          // if (list != null) {
+                          //   if (list[1] == 'Company') {
+                          //     filterStuff(list[0], null, null, null);
+                          //   } else if (list[1] == 'Location') {
+                          //     filterStuff(null, null, list[0], null);
+                          //   } else if (list[1] == 'Type') {
+                          //     filterStuff(null, list[0], null, null);
+                          //   } else if (list[1] == 'Bookmarked') {
+                          //     filterStuff(null, null, null, list[0]);
+                          //   }
+                          // } else {
+                          //   setState(() {});
+                          // }
+                        }),
+                  ),
+                ],
+                leading: Padding(
+                    padding: const EdgeInsets.only(bottom: 10.0),
+                    child: IconButton(
+                        icon: Icon(
+                          EvaIcons.menuOutline,
+                          color: Colors.white,
+                        ),
+                        onPressed: () =>
+                            _scaffoldKey.currentState.openDrawer())),
+                title: Padding(
+                  padding: EdgeInsets.only(bottom: 10.0),
+                  child: Text(courses,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold)),
+                ),
+              ),
+              preferredSize: Size.fromHeight(50),
             ),
-          ],
-          leading: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(
-                    EvaIcons.menuOutline,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => _scaffoldKey.currentState.openDrawer())),
-          title: Padding(
-            padding: EdgeInsets.only(bottom: 10.0),
-            child: Text(courses,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold)),
-          ),
-        ),
-        preferredSize: Size.fromHeight(50),
-      ),
-      body: StreamBuilder(
-          stream: Firestore.instance.collection('edu_courses').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              temp = snapshot.data.documents;
-              coursesChecked = {};
-              webinarChecked = {};
+            body: StreamBuilder(
+                stream:
+                    Firestore.instance.collection('edu_courses').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List x = snapshot.data.documents;
+                    temp = [];
+                    x.forEach((element) {
+                      if (element['colleges'] == null)
+                        temp.add(element);
+                      else {
+                        if (element['colleges'].contains(college))
+                          temp.add(element);
+                      }
+                    });
+                    coursesChecked = {};
+                    webinarChecked = {};
 
-              temp.forEach((element) {
-                if (element['tag'] != null) {
-                  if (element['tag'] == 'Course') {
-                    List types = element['type'];
-                    types.forEach((element) {
-                      coursesChecked[element] = false;
+                    temp.forEach((element) {
+                      if (element['tag'] != null) {
+                        if (element['tag'] == 'Course') {
+                          List types = element['type'];
+                          types.forEach((element) {
+                            coursesChecked[element] = false;
+                          });
+                        } else if (element['tag'] == 'Webinar') {
+                          List types = element['type'];
+                          types.forEach((element) {
+                            webinarChecked[element] = false;
+                          });
+                        }
+                      }
                     });
-                  } else if (element['tag'] == 'Webinar') {
-                    List types = element['type'];
-                    types.forEach((element) {
-                      webinarChecked[element] = false;
-                    });
+                    print(webinarChecked); // allFilter['Course'] = course;
+                    // allFilter['Webinar'] = webinar;
+                    //coursesChecked = allFilter['Course'];
+                    //webinarChecked = allFilter['Webinar'];
+                    print(allFilter);
+                    return CoursesAbc(
+                      courses: didfilter ? filtered : temp,
+                    );
+                  } else if (snapshot.data == null) {
+                    return Loading();
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('No Courses Available Right Now!'),
+                    );
                   }
-                }
-              });
-              print(webinarChecked); // allFilter['Course'] = course;
-              // allFilter['Webinar'] = webinar;
-              //coursesChecked = allFilter['Course'];
-              //webinarChecked = allFilter['Webinar'];
-              print(allFilter);
-              return CoursesAbc(courses: didfilter ? filtered : temp,);
-            } else if (snapshot.data == null) {
-              return Loading();
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('No Courses Available Right Now!'),
-              );
-            }
-            return Loading();
-          }),
-    );
+                  return Loading();
+                }),
+          );
   }
 }
 
@@ -184,6 +251,7 @@ class MyDialogContent extends StatefulWidget {
     this.webinars,
     this.allFilters,
   }) : super(key: key);
+
   @override
   _MyDialogContentState createState() => new _MyDialogContentState();
 }
@@ -195,13 +263,24 @@ class _MyDialogContentState extends State<MyDialogContent> {
 
   Map courseChecked = {};
   Map webinarChecked = {};
+
   void init() {
-    for (var temp in widget.courses.keys.toList()) {
-      courseChecked[temp] = widget.courses[temp];
-    }
-    for (var temp in widget.webinars.keys.toList()) {
-      webinarChecked[temp] = widget.webinars[temp];
-    }
+    if (globalCoursesChecked == null)
+      for (var temp in widget.courses.keys.toList()) {
+        courseChecked[temp] = widget.courses[temp];
+      }
+    else
+      for (var temp in globalCoursesChecked.keys.toList()) {
+        courseChecked[temp] = globalCoursesChecked[temp];
+      }
+    if (globalWebinarChecked == null)
+      for (var temp in widget.webinars.keys.toList()) {
+        webinarChecked[temp] = widget.webinars[temp];
+      }
+    else
+      for (var temp in globalWebinarChecked.keys.toList()) {
+        webinarChecked[temp] = globalWebinarChecked[temp];
+      }
   }
 
   @override
@@ -212,6 +291,7 @@ class _MyDialogContentState extends State<MyDialogContent> {
 
   @override
   Widget build(BuildContext context) {
+    print(courseChecked);
     return AlertDialog(
       title: new Text(
         'Filter By',
@@ -276,37 +356,39 @@ class _MyDialogContentState extends State<MyDialogContent> {
         ),
       ),
       actions: [
-        Align(
-            alignment: Alignment.center,
-            child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, top: 30.0, bottom: 20.0),
-                child: RaisedButton(
-                    color: basicColor,
-                    elevation: 0,
-                    padding: EdgeInsets.only(left: 30, right: 30),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                      side: BorderSide(color: basicColor, width: 1.2),
-                    ),
-                    onPressed: () {
-                      print(webinarChecked);
-                      Navigator.of(context)
-                          .pop([courseChecked, webinarChecked]);
-                    },
-                    child: Text(
-                      'Filter',
-                      style: TextStyle(color: Colors.white),
-                    )))),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            FlatButton(
+              child: Text(
+                'CLEAR',
+                style: TextStyle(),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(-1);
+              },
+            ),
+            FlatButton(
+              child: Text(
+                'APPLY',
+                style: TextStyle(color: basicColor),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop([courseChecked, webinarChecked]);
+              },
+            ),
+          ],
+        ),
       ],
     );
   }
 }
 
-
 class CoursesAbc extends StatefulWidget {
   List courses;
+
   CoursesAbc({this.courses});
+
   @override
   _CoursesAbcState createState() => _CoursesAbcState();
 }
@@ -329,67 +411,56 @@ class _CoursesAbcState extends State<CoursesAbc> {
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        if (widget.courses[index]['live'] ==
-                            null)
+                        if (widget.courses[index]['live'] == null)
                           return Container();
                         else
                           return Padding(
-                            padding: const EdgeInsets.only(
-                                bottom: 20, top: 20),
+                            padding: const EdgeInsets.only(bottom: 20, top: 20),
                             child: InkWell(
                               onTap: () {
-                                if (widget.courses[index]
-                                ['live'] !=
-                                    null &&
-                                    widget.courses[index]
-                                    ['live'] !=
-                                        true &&
-                                    widget.courses[index]
-                                    ['multiSpeakers'] !=
+                                if (widget.courses[index]['live'] != null &&
+                                    widget.courses[index]['live'] != true &&
+                                    widget.courses[index]['multiSpeakers'] !=
                                         true) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => Courses(
-                                              documentId: widget.courses[index]
-                                                  .documentID,
+                                              documentId: widget
+                                                  .courses[index].documentID,
                                               email: 'user',
-                                              imageUrl: widget.courses[
-                                              index]['image'] ??
+                                              imageUrl: widget.courses[index]
+                                                      ['image'] ??
                                                   null)));
                                 } else if (widget.courses[index]
-                                ['multiSpeakers'] ==
+                                        ['multiSpeakers'] ==
                                     true) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              MultiLive(
-                                                documentID: widget.courses[index]
-                                                    .documentID,
+                                          builder: (context) => MultiLive(
+                                                documentID: widget
+                                                    .courses[index].documentID,
                                               )));
-                                } else if (widget.courses[index]
-                                ['live'] ==
-                                    true &&
-                                    widget.courses[index]
-                                    ['multiSpeakers'] !=
+                                } else if (widget.courses[index]['live'] ==
+                                        true &&
+                                    widget.courses[index]['multiSpeakers'] !=
                                         true) {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              CoursesLive(
-                                                documentId: widget.courses[index]
-                                                    .documentID,
+                                          builder: (context) => CoursesLive(
+                                                documentId: widget
+                                                    .courses[index].documentID,
                                                 email: 'user',
-                                                didEnd: widget.courses[
-                                                index]['ended'] ??
+                                                didEnd: widget.courses[index]
+                                                        ['ended'] ??
                                                     false,
-                                                imageUrl: widget.courses[
-                                                index]['image'] ??
+                                                imageUrl: widget.courses[index]
+                                                        ['image'] ??
                                                     null,
-                                                title: widget.courses[
-                                                index]['title'] ??
+                                                title: widget.courses[index]
+                                                        ['title'] ??
                                                     'No Title',
                                               )));
                                 }
@@ -402,22 +473,20 @@ class _CoursesAbcState extends State<CoursesAbc> {
                                       width: double.infinity,
                                       child: ClipRRect(
                                         borderRadius:
-                                        BorderRadius.circular(
-                                            8.0),
-                                        child: widget.courses[
-                                        index]['image'] ==
-                                            null
+                                            BorderRadius.circular(8.0),
+                                        child: widget.courses[index]['image'] ==
+                                                null
                                             ? Image.asset(
-                                          "Assets/Images/course.png",
-                                          fit: BoxFit.cover,
-                                        )
+                                                "Assets/Images/course.png",
+                                                fit: BoxFit.cover,
+                                              )
                                             : CachedNetworkImage(
-                                          imageUrl: widget.courses[
-                                          index]['image'],
-                                          errorWidget: (context,
-                                              url, error) =>
-                                              Icon(Icons.error),
-                                        ),
+                                                imageUrl: widget.courses[index]
+                                                    ['image'],
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                              ),
 
                                         // : CachedNetworkImage(
                                         //     imageUrl:
@@ -449,4 +518,3 @@ class _CoursesAbcState extends State<CoursesAbc> {
     );
   }
 }
-

@@ -99,7 +99,7 @@ class ExtraCurriculars extends StatefulWidget {
 
 class _ExtraCurricularsState extends State<ExtraCurriculars> {
   double width, height;
-  bool loading = false;
+  bool loading = false, orderChanged = false;
 
   List extraCurriculars;
 
@@ -160,6 +160,43 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                     SizedBox(
                       height: 30,
                     ),
+                    Visibility(
+                      visible: orderChanged,
+                      child: RaisedButton(
+                        color: Colors.transparent,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(6.0),
+                          side: BorderSide(color: basicColor, width: 1.5),
+                        ),
+                        child: Text(
+                          'Save Order',
+                          style: TextStyle(color: basicColor),
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            loading = true;
+                          });
+                          Map<String, dynamic> map = {};
+                          map['extra_curricular'] = List.from(extraCurriculars);
+                          map['index'] = -1;
+                          dynamic result =
+                              await apiService.sendProfileData(map);
+                          if (result == 1) {
+                            showToast('Data Updated Successfully', context);
+                          } else {
+                            showToast('Unexpected error occurred', context);
+                          }
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ExtraCurricular()));
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
                     ScrollConfiguration(
                       behavior: MyBehavior(),
                       child: ListView.builder(
@@ -211,8 +248,8 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                               Stack(
                                 children: <Widget>[
                                   Container(
-                                    decoration:
-                                        BoxDecoration(border: Border.all(color: Colors.grey)),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey)),
                                     padding: EdgeInsets.all(8),
                                     child: ListTile(
                                       title: Text(
@@ -284,29 +321,169 @@ class _ExtraCurricularsState extends State<ExtraCurriculars> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         ExtraCurricular()));
+                                          } else if (result == 2) {
+                                            int x = index;
+                                            int y = index - 1;
+                                            var l1 = extraCurriculars[x];
+                                            var l2 = extraCurriculars[y];
+                                            extraCurriculars[x] = l2;
+                                            extraCurriculars[y] = l1;
+                                            setState(() {
+                                              orderChanged = true;
+                                            });
+                                          } else if (result == 3) {
+                                            int x = index;
+                                            int y = index + 1;
+                                            var l1 = extraCurriculars[x];
+                                            var l2 = extraCurriculars[y];
+                                            extraCurriculars[x] = l2;
+                                            extraCurriculars[y] = l1;
+                                            setState(() {
+                                              orderChanged = true;
+                                            });
                                           }
                                         },
-                                        itemBuilder: (BuildContext context) =>
-                                            <PopupMenuEntry<int>>[
-                                          const PopupMenuItem<int>(
-                                            value: 0,
-                                            child: Text(
-                                              'Edit',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 13),
-                                            ),
-                                          ),
-                                          const PopupMenuItem<int>(
-                                            value: 1,
-                                            child: Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 13),
-                                            ),
-                                          ),
-                                        ],
+                                        itemBuilder: (BuildContext context) {
+                                          if (extraCurriculars.length == 1)
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                          else if (index == 0)
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Visibility(
+                                                  visible: (index ==
+                                                          projects.length - 1)
+                                                      ? false
+                                                      : true,
+                                                  child: Text(
+                                                    'Move Down',
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13),
+                                                  ),
+                                                ),
+                                              ),
+                                            ];
+                                          else if (index ==
+                                              extraCurriculars.length - 1)
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Text(
+                                                  'Move Up',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                          else
+                                            return <PopupMenuEntry<int>>[
+                                              const PopupMenuItem<int>(
+                                                value: 0,
+                                                child: Text(
+                                                  'Edit',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              const PopupMenuItem<int>(
+                                                value: 1,
+                                                child: Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 2,
+                                                child: Text(
+                                                  'Move Up',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                              PopupMenuItem<int>(
+                                                value: 3,
+                                                child: Text(
+                                                  'Move Down',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13),
+                                                ),
+                                              ),
+                                            ];
+                                        },
                                       ),
                                     ),
                                   )
