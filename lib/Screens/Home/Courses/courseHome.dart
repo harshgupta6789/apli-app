@@ -23,23 +23,39 @@ Orientation orientation;
 class _CourseMainState extends State<CourseMain> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List temp = [];
+  List filtered = [];
   // Map allFilter = {'Course': [], 'Webinar': []};
   List allFilter = ['Courses', 'Webinar'];
   Map coursesChecked = {};
   Map webinarChecked = {};
 
   void filterStuff(Map course, Map webinar) {
-    print(course);
-    print(webinar);
     for (var eachCourse in temp) {
       if (eachCourse['tag'] == 'Course') {
         List allTypes = eachCourse['type'];
-        print(allTypes);
+        course.forEach((key, value) {
+          if (value == true) {
+            if (allTypes.contains(key)) {
+              if (!filtered.contains(eachCourse)) {
+                filtered.add(eachCourse);
+              }
+            }
+          }
+        });
       } else {
         List allTypes = eachCourse['type'];
-        print(allTypes);
+        webinar.forEach((key, value) {
+          if (value == true) {
+            if (allTypes.contains(key)) {
+              if (!filtered.contains(eachCourse)) {
+                filtered.add(eachCourse);
+              }
+            }
+          }
+        });
       }
     }
+    print(filtered);
   }
 
   @override
