@@ -1,7 +1,6 @@
 import 'package:apli/Screens/Home/Courses/courses.dart';
 import 'package:apli/Screens/Home/Courses/coursesLive.dart';
 import 'package:apli/Screens/Home/Courses/multiLive.dart';
-import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/customDrawer.dart';
 import 'package:apli/Shared/loading.dart';
@@ -10,7 +9,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CourseMain extends StatefulWidget {
   @override
@@ -22,6 +20,7 @@ Orientation orientation;
 
 class _CourseMainState extends State<CourseMain> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool didfilter = false;
   List temp = [];
   List filtered = [];
   // Map allFilter = {'Course': [], 'Webinar': []};
@@ -56,7 +55,9 @@ class _CourseMainState extends State<CourseMain> {
         });
       }
     }
-    print(filtered);
+    setState(() {
+      didfilter = true;
+    });
   }
 
   @override
@@ -135,6 +136,8 @@ class _CourseMainState extends State<CourseMain> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               temp = snapshot.data.documents;
+              coursesChecked = {};
+              webinarChecked = {};
 
               temp.forEach((element) {
                 if (element['tag'] != null) {
@@ -156,155 +159,7 @@ class _CourseMainState extends State<CourseMain> {
               //coursesChecked = allFilter['Course'];
               //webinarChecked = allFilter['Webinar'];
               print(allFilter);
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
-                child: ScrollConfiguration(
-                  behavior: MyBehavior(),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        ScrollConfiguration(
-                          behavior: MyBehavior(),
-                          child: SingleChildScrollView(
-                            child: ListView.builder(
-                                itemCount: snapshot.data.documents.length,
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  if (snapshot.data.documents[index]['live'] ==
-                                      null)
-                                    return Container();
-                                  else
-                                    return Padding(
-                                      padding: const EdgeInsets.only(
-                                          bottom: 20, top: 20),
-                                      child: InkWell(
-                                        onTap: () {
-                                          if (snapshot.data.documents[index]
-                                                      ['live'] !=
-                                                  null &&
-                                              snapshot.data.documents[index]
-                                                      ['live'] !=
-                                                  true &&
-                                              snapshot.data.documents[index]
-                                                      ['multiSpeakers'] !=
-                                                  true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) => Courses(
-                                                        documentId: snapshot
-                                                            .data
-                                                            .documents[index]
-                                                            .documentID,
-                                                        email: 'user',
-                                                        imageUrl: snapshot.data
-                                                                    .documents[
-                                                                index]['image'] ??
-                                                            null)));
-                                          } else if (snapshot
-                                                      .data.documents[index]
-                                                  ['multiSpeakers'] ==
-                                              true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        MultiLive(
-                                                          documentID: snapshot
-                                                              .data
-                                                              .documents[index]
-                                                              .documentID,
-                                                        )));
-                                          } else if (snapshot
-                                                          .data.documents[index]
-                                                      ['live'] ==
-                                                  true &&
-                                              snapshot.data.documents[index]
-                                                      ['multiSpeakers'] !=
-                                                  true) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        CoursesLive(
-                                                          documentId: snapshot
-                                                              .data
-                                                              .documents[index]
-                                                              .documentID,
-                                                          email: 'user',
-                                                          didEnd: snapshot.data
-                                                                      .documents[
-                                                                  index]['ended'] ??
-                                                              false,
-                                                          imageUrl: snapshot
-                                                                      .data
-                                                                      .documents[
-                                                                  index]['image'] ??
-                                                              null,
-                                                          title: snapshot.data
-                                                                      .documents[
-                                                                  index]['title'] ??
-                                                              'No Title',
-                                                        )));
-                                          }
-                                        },
-                                        child: Center(
-                                          child: Stack(
-                                            alignment: Alignment.centerLeft,
-                                            children: <Widget>[
-                                              SizedBox(
-                                                width: double.infinity,
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
-                                                  child: snapshot.data
-                                                                  .documents[
-                                                              index]['image'] ==
-                                                          null
-                                                      ? Image.asset(
-                                                          "Assets/Images/course.png",
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : CachedNetworkImage(
-                                                          imageUrl: snapshot
-                                                                  .data
-                                                                  .documents[
-                                                              index]['image'],
-                                                          errorWidget: (context,
-                                                                  url, error) =>
-                                                              Icon(Icons.error),
-                                                        ),
-
-                                                  // : CachedNetworkImage(
-                                                  //     imageUrl:
-                                                  //         "http://via.placeholder.com/350x150",
-                                                  //     placeholder: (context,
-                                                  //             url) =>
-                                                  //         CircularProgressIndicator(),
-                                                  //     errorWidget: (context,
-                                                  //             url, error) =>
-                                                  //         Icon(Icons.error),
-                                                  //   ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                }),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
+              return CoursesAbc(courses: didfilter ? filtered : temp,);
             } else if (snapshot.data == null) {
               return Loading();
             } else if (snapshot.hasError) {
@@ -447,3 +302,151 @@ class _MyDialogContentState extends State<MyDialogContent> {
     );
   }
 }
+
+
+class CoursesAbc extends StatefulWidget {
+  List courses;
+  CoursesAbc({this.courses});
+  @override
+  _CoursesAbcState createState() => _CoursesAbcState();
+}
+
+class _CoursesAbcState extends State<CoursesAbc> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
+      child: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              ScrollConfiguration(
+                behavior: MyBehavior(),
+                child: SingleChildScrollView(
+                  child: ListView.builder(
+                      itemCount: widget.courses.length,
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        if (widget.courses[index]['live'] ==
+                            null)
+                          return Container();
+                        else
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                bottom: 20, top: 20),
+                            child: InkWell(
+                              onTap: () {
+                                if (widget.courses[index]
+                                ['live'] !=
+                                    null &&
+                                    widget.courses[index]
+                                    ['live'] !=
+                                        true &&
+                                    widget.courses[index]
+                                    ['multiSpeakers'] !=
+                                        true) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Courses(
+                                              documentId: widget.courses[index]
+                                                  .documentID,
+                                              email: 'user',
+                                              imageUrl: widget.courses[
+                                              index]['image'] ??
+                                                  null)));
+                                } else if (widget.courses[index]
+                                ['multiSpeakers'] ==
+                                    true) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MultiLive(
+                                                documentID: widget.courses[index]
+                                                    .documentID,
+                                              )));
+                                } else if (widget.courses[index]
+                                ['live'] ==
+                                    true &&
+                                    widget.courses[index]
+                                    ['multiSpeakers'] !=
+                                        true) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              CoursesLive(
+                                                documentId: widget.courses[index]
+                                                    .documentID,
+                                                email: 'user',
+                                                didEnd: widget.courses[
+                                                index]['ended'] ??
+                                                    false,
+                                                imageUrl: widget.courses[
+                                                index]['image'] ??
+                                                    null,
+                                                title: widget.courses[
+                                                index]['title'] ??
+                                                    'No Title',
+                                              )));
+                                }
+                              },
+                              child: Center(
+                                child: Stack(
+                                  alignment: Alignment.centerLeft,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            8.0),
+                                        child: widget.courses[
+                                        index]['image'] ==
+                                            null
+                                            ? Image.asset(
+                                          "Assets/Images/course.png",
+                                          fit: BoxFit.cover,
+                                        )
+                                            : CachedNetworkImage(
+                                          imageUrl: widget.courses[
+                                          index]['image'],
+                                          errorWidget: (context,
+                                              url, error) =>
+                                              Icon(Icons.error),
+                                        ),
+
+                                        // : CachedNetworkImage(
+                                        //     imageUrl:
+                                        //         "http://via.placeholder.com/350x150",
+                                        //     placeholder: (context,
+                                        //             url) =>
+                                        //         CircularProgressIndicator(),
+                                        //     errorWidget: (context,
+                                        //             url, error) =>
+                                        //         Icon(Icons.error),
+                                        //   ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                      }),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

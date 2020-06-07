@@ -3,10 +3,11 @@ import 'package:apli/Services/themeProvider.dart';
 import 'package:apli/Shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:splashscreen/splashscreen.dart';
 import 'package:provider/provider.dart';
+import 'package:splashscreen/splashscreen.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider<ThemeChanger>(
     create: (_) => ThemeChanger(),
