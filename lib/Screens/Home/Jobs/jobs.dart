@@ -513,6 +513,20 @@ class _JobsState extends State<Jobs>
                                   }),
                             ),
                           ),
+                          (jobs == null)
+                    ? SizedBox()
+                    : jobs['profile_status'] < 384
+                        ? SizedBox()
+                        : Visibility(
+                            visible: !loading,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 10.0),
+                              child: IconButton(
+                                  icon: Icon(
+                                    EvaIcons.funnelOutline,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () async {})))
               ],
               leading: Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),

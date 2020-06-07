@@ -147,19 +147,21 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                          width: width * 0.4,
+                          width: width * 0.35,
                           child: Text(
                             "Course",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 15),
                           )),
                       Container(
-                        width: width * 0.5,
+                        width: width * 0.55,
+                        //height: height*0.08,
                         child: TextFormField(
                           enabled: false,
                           initialValue: course,
                           obscureText: false,
                           decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(8.0),
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xff4285f4))),
@@ -175,19 +177,21 @@ class _CurrentEducationState extends State<CurrentEducation> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Container(
-                          width: width * 0.4,
+                          width: width * 0.35,
                           child: Text(
                             "Duration",
                             style: TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 15),
                           )),
                       Container(
-                          width: width * 0.5,
+                          width: width * 0.55,
+                          
                           child: TextFormField(
                             enabled: false,
                             initialValue: duration,
                             obscureText: false,
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.all(8.0),
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xff4285f4))),
