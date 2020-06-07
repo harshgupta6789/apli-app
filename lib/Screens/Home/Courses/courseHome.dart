@@ -30,6 +30,7 @@ class _CourseMainState extends State<CourseMain> {
   Map webinarChecked = {};
 
   void filterStuff(Map course, Map webinar) {
+    filtered = [];
     for (var eachCourse in temp) {
       if (eachCourse['tag'] == 'Course') {
         List allTypes = eachCourse['type'];
@@ -93,6 +94,7 @@ class _CourseMainState extends State<CourseMain> {
                     if (x != null) {
                       filterStuff(x[0], x[1]);
                     }
+
                     // if (list != null) {
                     //   if (list[1] == 'Company') {
                     //     filterStuff(list[0], null, null, null);
