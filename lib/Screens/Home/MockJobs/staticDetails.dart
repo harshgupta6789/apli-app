@@ -19,6 +19,9 @@ class RandomDetails extends StatefulWidget {
 }
 
 class _RandomDetailsState extends State<RandomDetails> {
+
+  // SIMILAR TO COMPANY DETAILS , REFER THERE //
+
   @override
   void initState() {
     print(widget.package);

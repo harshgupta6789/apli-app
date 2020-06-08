@@ -34,11 +34,17 @@ class AppliedDetails extends StatefulWidget {
 }
 
 class _AppliedDetailsState extends State<AppliedDetails> {
+
+  // THIS CLASS IS ALMOST AS SAME AS THE COMPAY DETAILS CLASS , EXCEPT THIS IS USED WHEN USER CLICKS ON A JOB THAT HE APPLIED TO EARLIER //
+  // DEPENDING UPON THE JOB STATUS , AGAIN WE DIFFERENTIATE THE UI //
+  // IN THE ARGUMENTS , THE ENTIRE MAP FOR ONE JOB IS PASSED ALONG WITH STATUS OF THR JOB WHICH IS USED AS PARAM //
+
   String tempURL;
   StorageUploadTask uploadTask;
   File fileToUpload;
   bool interOffer = false;
   final apiService = APIService();
+
 
   Widget companyLogo(String link) {
     if (link == null) {
@@ -52,6 +58,9 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Future<void> downloadFile(StorageReference ref) async {
+
+  // THIS METHOD HELPS CANDIDATE TO DOWNLOAD THE OFFER LETTER SENT //
+
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
     final Directory systemTempDir = Directory.systemTemp;
@@ -104,6 +113,9 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Future<void> _uploadFile(File file, String filename) async {
+
+   // THIS METHOD AND THE FILEPICKER TOGETHER HELPS THE USER TO UPLOAD THE FILE TO FIREBASE STORAGE //
+
     SharedPreferences.getInstance().then((value) async {
       String name = Timestamp.now().toString();
       StorageReference storageReference;
@@ -145,6 +157,9 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Widget button(String status, Map job) {
+
+   // THIS WIDGET SERVES THE SAME FUNCTION AS  TO DIFFERENTIATE THE UI //
+
     bool candAccepted = widget.isApplied ?? false;
     print(job);
     switch (status) {

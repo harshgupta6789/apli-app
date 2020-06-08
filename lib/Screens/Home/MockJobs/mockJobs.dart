@@ -19,6 +19,9 @@ class _MockJobsState extends State<MockJobs>
   @override
   bool get wantKeepAlive => true;
 
+  // AGAIN SIMILAR TO JOBS , WE FETCH LIST OF PACKAGES USING MOCK JOBS API //
+  // ONCE WE CLICK ON ONE OF THE PACKAGE , WE PASS PACKAGE NAME TO STAITC DETAILS //
+
   final apiService = APIService();
   bool loading = true;
   dynamic mockJobs;
@@ -272,6 +275,10 @@ class _MockJobsState extends State<MockJobs>
                                                                   0, 5, 0, 6),
                                                           child: ListTile(
                                                             onTap: () {
+
+                                        // DEPENDING UPON THE MOCKJOBS I.E. INCOMPLETE , COMPLETED , NEW , WE SEGREGATE IT INTO LISTS //
+                                        // SO WE DECIDE WHERE TO PUSH THE USER TO WHICH SCREEN INSIDE STATIC DETAILS //
+
                                                               List mockTaken =
                                                                   mockJobs[
                                                                           'mockTaken'] ??

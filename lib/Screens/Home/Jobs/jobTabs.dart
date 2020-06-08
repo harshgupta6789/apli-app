@@ -34,6 +34,11 @@ class _JobsTabssState extends State<JobsTabs>
   @override
   bool get wantKeepAlive => true;
 
+  // THIS IS THE CLASS THAT HAS ALL THREE TABS //
+  // FOR SUBMITTED JOBS , WE SHOW DIFFERENT STATUSES DEPENDING UPON THE STATUS RETURNED I.E. OFFERED , INTERVIEW , UNREVIEWED ETC //
+  // FOR INCOMPLETE JOBS , WE REDIRECT THE USER TO WHERE HE LEFT //
+  // TO BOOKMARK OR TO UNBOOKMARK SOMETHING , AN API NEEDS TO BE CALLED AGAIN ! , INIT STATE HANDLES MOST STUFF HERE //
+
   double height, width, scale;
   final apiService = APIService();
   List<bool> saved = [];
@@ -65,6 +70,11 @@ class _JobsTabssState extends State<JobsTabs>
   }
 
   Widget deadlineToShow(String status, String deadlineTimer, String deadline) {
+
+
+   // SUPPOSE THE RECRUITER SETS A DEADLINE TO ACCEPT THE JOB OR TO SIGN THE LETTER , WE USE THE DEADLINE TO DISPLAY THE TIMER , THEREBY PASSING status AND deadlineTimer //
+   //  IN OTHER CASES WE SIMPLY DISPLAY THE DEADLINE //
+
     if (status == 'OFFERED' || status == 'LETTER SENT') {
       return deadlineTimer == null
           ? AutoSizeText(
@@ -132,6 +142,9 @@ class _JobsTabssState extends State<JobsTabs>
   }
 
   Widget differentBackground(String status) {
+
+   // DEPENDING ON THE STATUS , WE USE DIFFERENT COLOURS TO DISPLAY  THE STATUS TO USER //
+
     Color temp;
     switch (status) {
       case "OFFERED":

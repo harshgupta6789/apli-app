@@ -33,6 +33,10 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfileState extends State<CompanyProfile> {
+
+  // THIS PAGE IS USED WHEN USER CLICKS ON A JOB PRESENT IN ALL JOBS TAB //
+  // THE ENTIRE MAP OF JOB IS PASSED TO THIS SCREEN  , SO THAT DETAILS OF JOB CAN BE DISPLAYED // 
+
   Widget companyLogo(String link) {
     if (link == null) {
       return SizedBox();
@@ -438,6 +442,11 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     color: Colors.white),
                                               ),
                                               onPressed: () async {
+
+                                                // DEPENDING UPON THE REQUIREMENTS FOR THE JOB , AND THE PROFILE STATUS OF THE CANDIDATE , WE DECIDE WHERE TO PUSH THE USER TO //
+                                                // IF VIDEO INTERVIEW IS NOT A REQ THEN THE JOB CAN BE SUBMITTED DIRECTLY (IF CANDIDATE HAS FILLED HIS PROFILE) //
+                                                // IF VIDEO INTERVIEW IS AN REQ THEN THE USER IS REDIRECTED TO COMPNAY INFO SCREEN //
+
                                                 if (widget.isTempApplied !=
                                                     true) if (widget
                                                         .isApplied !=
@@ -672,6 +681,10 @@ class CompanyVideo extends StatefulWidget {
 }
 
 class _CompanyVideoState extends State<CompanyVideo> {
+
+  // AGAIN THE MAP OF THE ENTIRE JOB IS PASSED TO ALL THE SCREENS //
+  // INFORMATION ABOUT COMPANY IS SHOWN ONCE IT FETCHES THE INFO FROM ANOTHER API //
+
   double width, height, scale;
   YoutubePlayerController _controller;
   bool loading = false, isPressed = false;
@@ -679,6 +692,7 @@ class _CompanyVideoState extends State<CompanyVideo> {
   Future _fetch;
 
   Future<dynamic> getInfo() async {
+    // API CALL MADE HERE //
     dynamic result = await apiService.getCompanyIntro(widget.job['job_id']);
     print(result);
     return result;
@@ -877,6 +891,10 @@ class CompanyInstructions extends StatefulWidget {
 }
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
+
+ // COMPANY INSTRUCTIONS IS THE SCREEN WHERE WE FETCH THE INTERVIEW QUESTIONS FOR THE VIDEO INTERVIEW //
+ // TO FETCH THE QUESTIONS WE CALL ANOTHER API AGAIN //
+
   double fontSize = 14, height, width;
   bool loading = false;
   List<CameraDescription> cameras;

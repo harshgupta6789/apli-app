@@ -24,6 +24,11 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+
+  // THIS IS THE MAIN SCREEN WHERE THE NAVBAR AND TABS EXIST //
+  // BELOW METHODS ARE USED TO FIREBASE NOTIFICATIONS CONFIG //
+  // DEPENDING UPON THE NOTIFICATION DATA WE PUSH THE USER TO DESIRED TAB //
+
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   static int _currentTab;
   static TabController _tabController;

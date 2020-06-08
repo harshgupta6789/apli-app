@@ -17,6 +17,9 @@ class _UpdatesState extends State<Updates> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
+  // THIS IS THE UPDATES SECTION WHERE WE USE STREAMBUILDER , AGAIN TO FETCH PREVIOUS UPDATES FROM NOTIFICATIONS COLLECTION //
+  // SIMILAR TO FILTERING IN OTHER TABS , WE FILTER NOTIFICATIONS //
+
   List filters = [], chosenTypes = [];
   Map<String, bool> userFilters = {
     'message_from_tpo': false,

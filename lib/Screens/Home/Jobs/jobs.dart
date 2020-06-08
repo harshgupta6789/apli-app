@@ -25,6 +25,12 @@ Map bookmarked = {'Saved': false};
 
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+
+// THIS IS THE JOB'S SCREEN WHICH HAS THREE TABS => APPLIED , ALL , INCOMPLETE //
+// SIMILAR TO COURSES TAB , WE ALSO FILTER JOBS IN VARIOUS TYPES //
+// WE FETCH ALL JOBS USING THE API AGAIN... //
+
+
   @override
   bool get wantKeepAlive => true;
 
@@ -41,6 +47,10 @@ class _JobsState extends State<Jobs>
   List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
+
+   // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
+   // WE MAKE A LIST OF FILTERS FROM ALL THREE TYPES OF JOBS LIKE INCOMPLETE APPLIED & ALL  , THEREFORE THE JOBLIST PARAM //
+
     if (jobList != null) {
       for (int i = 0; i < jobList.length; i++) {
         if (!companies.containsKey(jobList[i]['organisation'])) {
@@ -57,6 +67,11 @@ class _JobsState extends State<Jobs>
   }
 
   void filterStuff(Map comp, Map temptype, Map loc, Map book) {
+
+    // THIS IS WHERE THE FILTERING LOGIC TAKES PLACE //
+    // SINCE FILTERING HAS TO BE SEGREGATED AGAIN INTO THREE TABS , WE FILTER EACH LIST ( INCOMPLETE , ALL JOBS & SUBMITTED) SEPARATELY HERE //
+    // THE FILTERING LOGIC IS SIMILAR TO THE COURSES //
+
     setState(() {
       didFilter = true;
       submittedFilter = [];
@@ -235,6 +250,9 @@ class _JobsState extends State<Jobs>
   }
 
   getInfo() async {
+ 
+   // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
+
     dynamic result = await apiService.getJobs();
     print(result['pending_jobs'][0]);
     tempGlobalJobs = result;

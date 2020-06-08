@@ -33,6 +33,9 @@ class MockJobQuestions extends StatefulWidget {
 }
 
 class _MockJobQuestionsState extends State<MockJobQuestions> {
+
+ // SIMILAR TO JOB QUESTIONS , REFER THERE //
+
   double height, width;
   CameraController controller;
   bool isRecordingStopped = true;

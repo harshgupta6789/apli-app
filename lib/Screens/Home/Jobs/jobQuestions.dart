@@ -37,6 +37,13 @@ class JobQuestions extends StatefulWidget {
 }
 
 class _JobQuestionsState extends State<JobQuestions> {
+
+  // THIS IS WHERE LIVE INTERVIEW TAKES PLACE //
+  // AS YOU WOULD EXPECT WE PASS JOB ID , QUESTIONS PACKAGE TO THIS SCREEN //
+  // IF A JOB IS LEFT INCOMPLETE THEN WE MAKE USE OF THE STARTFROM VARIABLE TO CONTINUE FROM THAT QUESTION //
+  // BELOW METHODS ARE USED TO INIT THE CAMERA //
+  // FIRST THE CANDIDATE IS GIVEN 30 SECONDS TO READ THE QUESTION => RECORDING INTERVIEW => UPLOADING THE INTERVIEW USING FIREBASE STORAGE => CALLING THE API TO UPDATE VIDEO LINKS IN FIREBASE DATABSE //
+
   double height, width;
   CameraController controller;
   bool isRecordingStopped = true;
@@ -130,6 +137,7 @@ class _JobQuestionsState extends State<JobQuestions> {
   }
 
   double _bytesProgress(StorageTaskSnapshot snapshot) {
+    // RETURNS UPLOADING PROGRESS //
     double res = (snapshot.bytesTransferred / 1024.0) / 1000;
     double res2 = (snapshot.totalByteCount / 1024.0) / 1000;
     double x = double.parse(res.toStringAsFixed(2)) /
@@ -179,6 +187,9 @@ class _JobQuestionsState extends State<JobQuestions> {
   }
 
   Future<void> _uploadFile(File file, String filename) async {
+
+   // SAME FUNCTION AFTER FILE PICKER => UPLOAD FILES TO FIREBASE STORAGE // 
+
     SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
       storageReference = FirebaseStorage.instance.ref().child(
@@ -196,6 +207,11 @@ class _JobQuestionsState extends State<JobQuestions> {
         setState(() {
           loading = true;
         });
+
+     // NOW SINCE THE URL IS NOT NULL , THAT MEANS VIDEO IS UPLOADED //
+     // WE USE THIS URL TO CALL THE API SO THAT IT SAVES , AND AGAIN WE MOVE TO NEXT QUESTION //
+     //IF THE QUESTION IS LAST , WE SUBMIT THE INTERVIEW AND NAVIGATE BACK TO MAIN JOB SCREEN //
+
         if (indexOfQuestions + 1 < qs.length) {
           dynamic result = await apiService.submitInterViewQ(
               widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
