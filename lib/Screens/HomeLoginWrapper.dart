@@ -16,6 +16,10 @@ class _WrapperState extends State<Wrapper> {
   String email;
 
   getPref() async {
+
+   // IF EMAIL IS SAVED THEN => GO TO HOMESCREEN //
+   // ELSE ASK HIM TO LOGIN //
+
     preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('email')) {
       if (preferences.containsKey('rememberMe')) {

@@ -20,6 +20,10 @@ class CourseLive extends StatefulWidget {
 
 class _CourseLiveState extends State<CourseLive>
     with SingleTickerProviderStateMixin {
+
+   // THIS SCREEN USES YOUTUBE VIDEO PLAYER PACKAGE TO PLAY LIVE VIDEOS //
+   // THIS SCREEN ALSO HAS LIVE CHAT IMPLEMENTED WITH THE HELP OF FIREBASE COLLECTION AND STREAMBUILDERS //
+
   YoutubePlayerController _controller;
   bool isEmoji = false, isFocus = false;
   AnimationController _animationController;

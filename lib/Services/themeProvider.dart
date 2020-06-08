@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeChanger with ChangeNotifier {
+  // THIS CLASS DEALS WITH THE ENTIRE THEMES OF THE APLICATION... U CAN EXPERIMENT WITH VARIOUS THEMES HERE... FOR NOW THEMES ARE STORED IN SHARED PREF//
   ThemeData _themeData;
   SharedPreferences prefs;
   Color accentColor;

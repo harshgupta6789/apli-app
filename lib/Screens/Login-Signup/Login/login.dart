@@ -24,6 +24,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+    // THIS IS THE FIRST SCREEN YOU WILL SEE AFTER YOU OPEN THE APP FOR FIRST TIME //
+      // WE ARE USING FIREBASE COLLECTIONS TO STORE ENCRYPTED PASSWORD (USING API) AND NOT FIREBASE AUTH ! //
+
   String email = '', password = '', error = '';
 
   final AuthService _auth = AuthService();
@@ -231,6 +235,8 @@ class _LoginState extends State<Login> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   onPressed: () async {
+                                      // THIS IS THE METHOD WHERE FORM VALIDATION TAKES PLACE FOR PASSWORD AND EMAIL//
+                                        // SINCE WE ARE USING API FOR LOGIN , REFER TO FILE NAMED auth.dart FOR FUTHER INFO //
                                     if (forgotPassword) if (validateEmail(
                                             (email)) &&
                                         email != '' &&

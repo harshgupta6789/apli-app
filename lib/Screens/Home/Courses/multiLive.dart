@@ -24,6 +24,9 @@ Orientation orientation;
 class _MultiLiveState extends State<MultiLive> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+//  THIS IS THE MENU FOR LIVE WEBINAR WITH MULTIPLE SPEAKERS IN SHORT A BANNER FOR EACH SPEAKER WHICH WILL TAKE YOU TO DETAILS PAGE //
+  // THE VIDEOS ARE AGAIN TAKEN FROM FIREBASE AND ARRANGED BY TIMESTAMP THEN //
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;

@@ -21,6 +21,11 @@ double height, width;
 Orientation orientation;
 
 class _CourseMainState extends State<CourseMain> {
+  // COURSE SCREEN AGAIN USES STREAMBUILDER TO FETCH COURSES FROM FIREBASE COLLECTION NAMED edu_courses //
+  // THE TEMP AND OTHER VARIABLES ARE USED FOR FILTERING THE COURSES //
+  // COURSES ARE FILTERED BY TAGS ( COURSE AND WEBINAR ) AND BY TYPES LIKE MARKETING , TECH ETC //
+
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List temp = [];
   List filtered = [];
@@ -30,6 +35,11 @@ class _CourseMainState extends State<CourseMain> {
   Map webinarChecked = {};
 
   void filterStuff(Map course, Map webinar) {
+
+  // IN THIS WE PASS TWO ARGS CALLED COURSE AND WBINAR , WHICH HAVE KEYS AS THE TYPE NAME AND VALUE EITHER TRUE OR FALSE //
+  // DEPENDING UPON THE TRUE FALSE VALUE AND THE TYPE AND TAG OF EACH COURSE THE FILTERING LOGIC BELOW IS CONSTRUCTED //
+  // THIS METHOD IS CALLED ONCE USER DISMISSES THE FILTER DIALOG AS YOU CAN SEE BELOW //
+
     filtered = [];
     for (var eachCourse in temp) {
       if (eachCourse['tag'] == 'Course') {
@@ -180,6 +190,12 @@ class _CourseMainState extends State<CourseMain> {
                                           bottom: 20, top: 20),
                                       child: InkWell(
                                         onTap: () {
+
+
+                                          // COURSES CAN BE OF THREE TYPES MAJORLY : PRE-RECORDED , LIVE WITH MULTI SPEAKERS , LIVE WITH SINGLE SPEAKER //
+                                          // USING FIREBASE FIELDS WE DECIDE WHICH THE COURSE IS AND WHERE TO NAVIGATE THE USER TO //
+
+
                                           if (snapshot.data.documents[index]
                                                       ['live'] !=
                                                   null &&

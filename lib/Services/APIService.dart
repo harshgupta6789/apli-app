@@ -8,6 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class APIService {
   final int profileType, jobType;
 
+  // THE ENTIRE DOCUMENTATION FOR THIS CLASS CAN BE FOUND IN APLI'S WIKI HUB//
+  // THIS CLASS DEALS WITH ALL THE APIS USED FOR JOB AND PROFILE SECTION//
+  // FOR NEWER APIS USING HTTP POST METHOD IS RECOMENDDED //
+
   APIService({this.profileType, this.jobType});
 
   Future sendProfileData(Map<dynamic, dynamic> map) async {

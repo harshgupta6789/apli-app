@@ -443,7 +443,7 @@ class _JobQuestionsState extends State<JobQuestions> {
         if (mounted)
           setState(() {
             readSeconds = readSeconds + 1;
-            if (readSeconds >= 15) {
+            if (readSeconds >= 30) {
               setState(() {
                 isReading = false;
 
@@ -612,7 +612,7 @@ class _JobQuestionsState extends State<JobQuestions> {
                           borderRadius: BorderRadius.circular(10),
                           child: Center(
                             child: Text(
-                                "Your Video Will Appear Here.\nYou Have 15 Seconds To Read!"),
+                                "Your Video Will Appear Here.\nYou Have 30 Seconds To Read!"),
                           ))),
                   SizedBox(
                     height: 5,

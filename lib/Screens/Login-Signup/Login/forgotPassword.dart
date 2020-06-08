@@ -20,6 +20,9 @@ class ForgotPassword extends StatefulWidget {
 double height, width;
 
 class _ForgotPasswordState extends State<ForgotPassword> {
+
+    // FOROGT PASSWORD ASKS FOR OTP CONFIRMATION FIRST , WHICH IS DONE USING FIREBASE AUTH//
+
   bool loading = false;
 
   String smsOTP = '';
@@ -28,6 +31,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> verifyPhone(String phoneNo) async {
+  
+     // THIS IS USED TO GET OTP AND ALSO TO VERIFY IT//
+
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {
         loading = false;
@@ -221,6 +227,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   }
 
   Future<String> userDetails() async {
+      // USED TO FETCH DETAILS OF USER //
     String ph_no;
     DocumentReference doc =
         Firestore.instance.collection('candidates').document(widget.email);

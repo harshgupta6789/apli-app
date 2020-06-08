@@ -10,6 +10,11 @@ class AuthService {
   FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   Future signInWithoutAuth(String email, String password) async {
+     //THIS IS THE METHOD WHERE ME MAKE A CALL TO THE LOGIN API BY A POST METHOD AS U CAN SEE BELOW //
+      // WE ALSO FETCH THE USERS'S COURSE WHICH IS USED AS A TOPIC NAME FOR FIREBASE PUSH NOTIFICATIONS //
+      // WE SEPARATE CASES LIKE NETWORK LOST , PASSWORD INCORRECT ETC BY RETURNING RESULT BACK AS -1 , -2 , 0  IF UNSUCCESSFULL//
+       // THE LOGIN API ALSO RETURNS A BOOLEAN CALLED gen_fcm AS U CAN SEE BELOW...THE FCM TOKEN IF NOT PRESENT IS THEN  STORED IN USERS COLLECTION //
+
     try {
       //email = email.toLowerCase();
       String url = checkLogin;
@@ -107,6 +112,9 @@ class AuthService {
   }
 
   Future registerWithoutAuth(
+
+   //THIS IS THE METHOD WHERE WE USE SIMPLE FIREBASSE READ AND WRITE TO CREATE A NEW USER.... AS U CAN SEE BELOW //
+
       String fname,
       String lname,
       String email,
@@ -192,6 +200,8 @@ class AuthService {
   }
 
   Future updatePassword(String email, String password) async {
+     //THIS IS THE METHOD WHERE WE AGAIN USE FIREBASE FIRESTORE TO UPDATE THE CURRENT PASSWORD
+     // (TRIGGERED WHEN USER FORGETS HIS PASSWORD AND HE HAS VERIFIED HIS OTP IN FORGOT PASSWORD SCREEN) //
     int result;
     //email = email.toLowerCase();
     try {

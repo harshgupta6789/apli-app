@@ -20,3 +20,6 @@ class UserInfo {
     this.user_type,
   });
 }
+
+
+// USER MODEL IS NOT USED RN YOU CAN REMOVE IT //

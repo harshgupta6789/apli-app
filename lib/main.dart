@@ -7,6 +7,9 @@ import 'package:splashscreen/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+
+  // USED PROVIDER FOR DYNAMIC THEME CHANGING USING THE THEMECHANGER CLASS//
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider<ThemeChanger>(
     create: (_) => ThemeChanger(),
@@ -48,7 +51,7 @@ class MySplashState extends State<MySplash> {
     return SplashScreen(
       backgroundColor: Theme.of(context).backgroundColor,
       seconds: 1,
-      navigateAfterSeconds: Wrapper(),
+      navigateAfterSeconds: Wrapper(),   // USED A WRAPPER CLASS TO ROUTE EASILY BETWEEN LOGIN AND HOMESCREEN PAGE//
       image: Image.asset('Assets/Images/logo.png'),
       photoSize: 100.0,
       loaderColor: basicColor,

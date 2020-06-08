@@ -20,6 +20,10 @@ class CollegeNotFound extends StatefulWidget {
 double height, width;
 
 class _CollegeNotFoundState extends State<CollegeNotFound> {
+
+ // THIS SCREEN IS TO BE SHOWED WHEN USER'S COLLEGE IS NOT PRESENT IN THE DROPDOWN LIST THAT WE PROVIDE DURING SIGNUP //
+ // THIS SCREEN HAS ALMOST SIMILAR FIELDS TO THAT OF REGISTER PAGE , ONCE USER FILLS HIS DETAILS HE IS REDIRECTED TO REVIEW.DART //
+
   final _formKey = GlobalKey<FormState>();
   String name = '',
       fieldOfStudy = '',
