@@ -252,8 +252,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                           FlatButton(
                                             child: Text(
                                               'ADD',
-                                              style:
-                                                  TextStyle(),
+                                              style: TextStyle(),
                                             ),
                                             onPressed: () {
                                               Navigator.of(context).pop();

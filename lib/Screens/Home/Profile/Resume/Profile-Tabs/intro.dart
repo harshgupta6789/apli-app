@@ -65,7 +65,9 @@ class _BasicIntroState extends State<BasicIntro> {
             setState(() {
               profile = snapshot.data['profile_picture'];
               fname = snapshot.data['First_name'];
-              mname = (snapshot.data['Middle_name'] == 'null') ? null : (snapshot.data['Middle_name']);
+              mname = (snapshot.data['Middle_name'] == 'null')
+                  ? null
+                  : (snapshot.data['Middle_name']);
               lname = snapshot.data['Last_name'];
               email = snapshot.data['email'];
               mno = snapshot.data['ph_no'] == null
@@ -171,10 +173,13 @@ class _BasicIntroState extends State<BasicIntro> {
                                     backgroundImage: _image != null
                                         ? FileImage(_image)
                                         : profile != null
-                                            ? profile == 'null' ? AssetImage("Assets/Images/pic.png") : profile == defaultPic
+                                            ? profile == 'null'
                                                 ? AssetImage(
-                                                    "Assets/Images/defaultProfilePicture.jpeg")
-                                                : NetworkImage(profile)
+                                                    "Assets/Images/pic.png")
+                                                : profile == defaultPic
+                                                    ? AssetImage(
+                                                        "Assets/Images/defaultProfilePicture.jpeg")
+                                                    : NetworkImage(profile)
                                             : null),
                                 MaterialButton(
                                   onPressed: getImage,

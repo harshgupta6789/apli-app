@@ -114,8 +114,7 @@ const String addMockVideoURL =
     "https://dev.apli.ai/candidate/api/add_mock_interview_video";
 const String submitMockInterviewURL =
     "https://dev.apli.ai/candidate/api/submit_final_mock_interview";
-const String saveJobURL =
-    "https://dev.apli.ai/candidate/api/save_job";
+const String saveJobURL = "https://dev.apli.ai/candidate/api/save_job";
 
 final apiDateFormat = DateFormat("yyyy-MM-dd");
 const defaultPic =
