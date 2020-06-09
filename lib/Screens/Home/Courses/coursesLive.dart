@@ -243,27 +243,6 @@ class _CoursesLiveState extends State<CoursesLive>
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 20.0),
-                                        child: RaisedButton(
-                                          onPressed: null,
-                                          disabledColor: Colors.grey,
-                                          color: Colors.transparent,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            side: BorderSide(
-                                                color: Colors.grey, width: 1.2),
-                                          ),
-                                          child: Text(
-                                            'Collect Certificate',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      )
                                     ],
                                   )
                                 : StreamBuilder(

@@ -458,7 +458,7 @@ class _AllNotificationsState extends State<AllNotifications> {
   double width, height, scale;
   List<List<String>> myNotifications;
   List<List<String>> items;
-  int count = 25;
+  int count = 5;
   int result;
 
   Map<String, bool> userFilters = {
@@ -467,6 +467,7 @@ class _AllNotificationsState extends State<AllNotifications> {
     'interview': false,
     'none': false
   };
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -480,7 +481,6 @@ class _AllNotificationsState extends State<AllNotifications> {
     myNotifications = widget.myNotifications;
     int length =
         (myNotifications.length < count) ? myNotifications.length : count;
-    final _scaffoldKey = GlobalKey<ScaffoldState>();
     for (int i = 0; i < myNotifications.length; i++) {
       if ((!(userFilters.values.toList().contains(true)) ||
           (userFilters[myNotifications[i][3]] ?? false))) result = result + 1;
@@ -631,7 +631,7 @@ class _AllNotificationsState extends State<AllNotifications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                itemCount: length + 1,
+                itemCount: userFilters.values.toList().contains(true) ? myNotifications.length : length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   if (index != length) {
                     print(index);
@@ -686,47 +686,6 @@ class _AllNotificationsState extends State<AllNotifications> {
                                                               [2] ??
                                                           'No Time Exception'),
                                                 ),
-//                                                (myNotifications[index][3] == 'cand_status_change_from_campus' || myNotifications[index][3] == 'cand_status_change' || myNotifications[index][3] == 'message_from_company') ?
-                                                false
-                                                    ? Padding(
-                                                        padding:
-                                                            EdgeInsets.only(
-                                                                top: 15.0,
-                                                                left: 12.0),
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border.all(
-                                                                color:
-                                                                    basicColor),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8),
-                                                          ),
-                                                          child: MaterialButton(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .fromLTRB(
-                                                                          10,
-                                                                          0,
-                                                                          10,
-                                                                          0),
-                                                              child: Text(
-                                                                "View Application",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        13.0,
-                                                                    color:
-                                                                        basicColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w600),
-                                                              ),
-                                                              onPressed: () =>
-                                                                  null),
-                                                        ))
-                                                    : SizedBox()
                                               ],
                                             ),
                                           ),
@@ -736,7 +695,7 @@ class _AllNotificationsState extends State<AllNotifications> {
                               ),
                             )
                           : Container()
-                      : length == myNotifications.length
+                      : length == myNotifications.length || userFilters.values.toList().contains(true)
                           ? Container()
                           : FlatButton(
                               child: Row(
