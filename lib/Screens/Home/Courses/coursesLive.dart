@@ -35,8 +35,6 @@ Orientation orientation;
 
 class _CoursesLiveState extends State<CoursesLive>
     with SingleTickerProviderStateMixin {
-
-
   //  THIS IS THE MENU FOR LIVE COURSES , HERE WE USE STREAMBUILDER TO SHOW THE CONTENT LIKE DESCRIPTION , IMAGE BANNER ETC TO THE USER //
   // SINCE A LIVE VIDEO CAN BE IN THE FUTURE AS WELL , A TIMER IS USED TO INDICATE THE USER THE TIME LEFT FOR IT , AGAIN THE TIME CAN BE DYNAMICALLY SET IN FIREBASE //
 
@@ -243,27 +241,6 @@ class _CoursesLiveState extends State<CoursesLive>
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 20.0),
-                                        child: RaisedButton(
-                                          onPressed: null,
-                                          disabledColor: Colors.grey,
-                                          color: Colors.transparent,
-                                          elevation: 0,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(5.0),
-                                            side: BorderSide(
-                                                color: Colors.grey, width: 1.2),
-                                          ),
-                                          child: Text(
-                                            'Collect Certificate',
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                        ),
-                                      )
                                     ],
                                   )
                                 : StreamBuilder(
