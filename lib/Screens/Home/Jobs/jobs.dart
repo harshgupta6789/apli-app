@@ -254,7 +254,6 @@ class _JobsState extends State<Jobs>
    // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
 
     dynamic result = await apiService.getJobs();
-    print(result['pending_jobs'][0]);
     tempGlobalJobs = result;
     if (mounted)
       setState(() {

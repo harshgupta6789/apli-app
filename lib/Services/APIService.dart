@@ -434,6 +434,7 @@ class APIService {
         var decodedData = jsonDecode(response.body);
 
         if (response.statusCode == 200) {
+          print(decodedData);
           result = decodedData;
         } else
           result = {

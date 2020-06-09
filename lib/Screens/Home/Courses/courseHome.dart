@@ -298,7 +298,6 @@ class _MyDialogContentState extends State<MyDialogContent> {
 
   @override
   Widget build(BuildContext context) {
-    print(courseChecked);
     return AlertDialog(
       title: new Text(
         'Filter By',
@@ -369,7 +368,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
             FlatButton(
               child: Text(
                 'CLEAR',
-                style: TextStyle(),
+                style: TextStyle(color: Theme.of(context)
+                    .textTheme
+                    .headline4
+                    .color,),
               ),
               onPressed: () {
                 Navigator.of(context).pop(-1);
@@ -403,7 +405,31 @@ class CoursesAbc extends StatefulWidget {
 class _CoursesAbcState extends State<CoursesAbc> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return (widget.courses ?? []).length == 0 ? Center(
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset("Assets/Images/job.png"),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                        text:
+                        "New Courses and Live Webinars will be coming soon",
+                        style: TextStyle(color: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            .color, fontSize: 18),),
+                  ),
+                )
+              ],
+            ),
+          ),
+        )) : Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0.0),
       child: ScrollConfiguration(
         behavior: MyBehavior(),
