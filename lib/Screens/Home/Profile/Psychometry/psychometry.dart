@@ -21,6 +21,8 @@ class _PsychometryState extends State<Psychometry>
   @override
   bool get wantKeepAlive => true;
 
+  // PSYCHOMETRY TEST HAS 30 QUESTIONS , WHICH ARE AGAIN READ FROM FIREBASE DATABSE //
+
   States _currentState;
   Map<String, dynamic> questions, answeredQuestions;
   String email;
@@ -29,6 +31,10 @@ class _PsychometryState extends State<Psychometry>
   double fontSize = 15;
 
   userInit() async {
+
+  // WE GET THE QUESTIONS TO BE DISPLAYED USING THIS METHOD //
+  // IF A CANDIDATE HAS ALREADY STARTED THE TEST , THEN HE CAN RESUME LATER //
+
     await SharedPreferences.getInstance().then((prefs) async {
       if (!mounted)
         email = prefs.getString('email');

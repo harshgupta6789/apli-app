@@ -20,6 +20,11 @@ class BasicIntro extends StatefulWidget {
 }
 
 class _BasicIntroState extends State<BasicIntro> {
+
+   // THIS SCREEN LETS THE USER ADD , DELETE & DISPLAY THE BASIC INFO OF THE USER //
+ // USES API TO UPDATE THE DATA , FOR API DOCUMENTATION REFER TO PROFILE WIKI ON GITHUB APIS CAN BE FOUND IN APISERVICE FILE//
+// THIS CLASS IS NOTHING BUT A TYPE OF FORM .. //
+
   double width, height, scale;
   File _image;
   bool loading = false, error = false;
@@ -54,6 +59,9 @@ class _BasicIntroState extends State<BasicIntro> {
   final cityFocus = FocusNode();
 
   getPrefs() async {
+
+  // FETCHES ALL THE INFORMATION AND DISPLAYS IT //
+
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
         try {
@@ -908,6 +916,10 @@ class _BasicIntroState extends State<BasicIntro> {
                                     style: TextStyle(color: basicColor),
                                   ),
                                   onPressed: () async {
+
+                                // THIS METHOD FIRST VALIDATES THE USER'S INPUT //
+                                // ONCE VALIDATED AN API CALL IS MADE TO UPDATE THE DATA  //
+
                                     if (_formKey.currentState.validate()) {
                                       setState(() {
                                         loading = true;

@@ -18,6 +18,9 @@ class PsychometryTest extends StatefulWidget {
 class _PsychometryTestState extends State<PsychometryTest> {
   double width, height;
 
+  // ONCE CANDIDATE HAS CHOSEN TO START THE TEST HE IS REDIRECTED HERE //
+  // THE LIST OF OPTION IS STAIC //
+
   Map<String, dynamic> questions, answeredQuestions;
   List<List<String>> remainingQuestions = [];
   List<String> options = [
@@ -117,6 +120,10 @@ class _PsychometryTestState extends State<PsychometryTest> {
                 child: FloatingActionButton.extended(
                   elevation: 5,
                   onPressed: () async {
+
+                 // THIS IS THE METHOD WHICH UPDATES THE CANDIDATE'S QUESTIONS ETC , AFTER HE HAS CLICKED NEXT //
+                 // AGAIN IT USES FIREBASE DATABASE TO WRITE AND CAN BE REFERRED FOR FUTURE USE //
+
                     setState(() {
                       loading = true;
                     });

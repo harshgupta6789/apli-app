@@ -25,11 +25,9 @@ Map bookmarked = {'Saved': false};
 
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
 // THIS IS THE JOB'S SCREEN WHICH HAS THREE TABS => APPLIED , ALL , INCOMPLETE //
 // SIMILAR TO COURSES TAB , WE ALSO FILTER JOBS IN VARIOUS TYPES //
 // WE FETCH ALL JOBS USING THE API AGAIN... //
-
 
   @override
   bool get wantKeepAlive => true;
@@ -43,13 +41,11 @@ class _JobsState extends State<Jobs>
   bool loading = true;
   dynamic jobs;
   bool didFilter = false;
-  List filterMenu = ['Type', 'Bookmarked'];
   List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
-
-   // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
-   // WE MAKE A LIST OF FILTERS FROM ALL THREE TYPES OF JOBS LIKE INCOMPLETE APPLIED & ALL  , THEREFORE THE JOBLIST PARAM //
+    // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
+    // WE MAKE A LIST OF FILTERS FROM ALL THREE TYPES OF JOBS LIKE INCOMPLETE APPLIED & ALL  , THEREFORE THE JOBLIST PARAM //
 
     if (jobList != null) {
       for (int i = 0; i < jobList.length; i++) {
@@ -67,7 +63,6 @@ class _JobsState extends State<Jobs>
   }
 
   void filterStuff(Map comp, Map temptype, Map loc, Map book) {
-
     // THIS IS WHERE THE FILTERING LOGIC TAKES PLACE //
     // SINCE FILTERING HAS TO BE SEGREGATED AGAIN INTO THREE TABS , WE FILTER EACH LIST ( INCOMPLETE , ALL JOBS & SUBMITTED) SEPARATELY HERE //
     // THE FILTERING LOGIC IS SIMILAR TO THE COURSES //
@@ -79,7 +74,7 @@ class _JobsState extends State<Jobs>
       incompleteFilter = [];
     });
 
-    if (temptype != null) {
+    if (temptype != null && book != null) {
       temptype.forEach((key, value) {
         type[key] = value;
       });
@@ -98,6 +93,27 @@ class _JobsState extends State<Jobs>
               true) allFilter.add(map);
         }
       });
+      book.forEach((key, value) {
+        bookmarked[key] = value;
+      });
+      bookmarked.forEach((key, value) {
+        for (int i = 0; i < savedJobs[0].length; i++) {
+          if (true) {
+            submittedFilter.add(submittedJob[i]);
+          }
+        }
+        for (int i = 0; i < savedJobs[1].length; i++) {
+          if (savedJobs[1][i] == value) {
+            allFilter.add(allJob[i]);
+          }
+        }
+        for (int i = 0; i < savedJobs[2].length; i++) {
+          if (true) {
+            incompleteFilter.add(incompleteJob[i]);
+          }
+        }
+      });
+      //setState(() {});
       setState(() {});
     } else if (comp != null) {
       comp.forEach((key, value) {
@@ -137,28 +153,6 @@ class _JobsState extends State<Jobs>
         for (var map in allJob) {
           if (map['location'] == key) if (locations[map['location']] == true)
             allFilter.add(map);
-        }
-      });
-      setState(() {});
-    } else if (book != null) {
-      book.forEach((key, value) {
-        bookmarked[key] = value;
-      });
-      bookmarked.forEach((key, value) {
-        for (int i = 0; i < savedJobs[0].length; i++) {
-          if (true) {
-            submittedFilter.add(submittedJob[i]);
-          }
-        }
-        for (int i = 0; i < savedJobs[1].length; i++) {
-          if (savedJobs[1][i] == value) {
-            allFilter.add(allJob[i]);
-          }
-        }
-        for (int i = 0; i < savedJobs[2].length; i++) {
-          if (true) {
-            incompleteFilter.add(incompleteJob[i]);
-          }
         }
       });
       setState(() {});
@@ -250,8 +244,7 @@ class _JobsState extends State<Jobs>
   }
 
   getInfo() async {
- 
-   // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
+    // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
 
     dynamic result = await apiService.getJobs();
     print(result['pending_jobs'][0]);
@@ -363,208 +356,25 @@ class _JobsState extends State<Jobs>
                                     dynamic list = await showDialog(
                                         barrierDismissible: true,
                                         context: context,
-                                        builder:
-                                            (context) => StatefulBuilder(
-                                                    builder:
-                                                        (context2, setState) {
-                                                  return Scaffold(
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    body: AlertDialog(
-                                                      title: new Text(
-                                                        'Filter By',
-                                                        style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                      content: Container(
-                                                        height: 300,
-                                                        width: 300,
-                                                        child: ListView.builder(
-                                                          shrinkWrap: true,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return ListTile(
-                                                              dense: true,
-                                                              title: Text(
-                                                                '${filterMenu[index]}',
-                                                              ),
-                                                              trailing: IconButton(
-                                                                  icon: Icon(
-                                                                      EvaIcons
-                                                                          .arrowIosForward),
-                                                                  onPressed:
-                                                                      null),
-                                                              onTap: () async {
-                                                                //Navigator.pop(context);
-                                                                dynamic x =
-                                                                    await showDialog(
-                                                                        barrierDismissible:
-                                                                            true,
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (context) {
-                                                                          return MyDialogContent(
-                                                                            typeFilter:
-                                                                                '${filterMenu[index]}',
-                                                                            companies:
-                                                                                companies,
-                                                                            locations:
-                                                                                locations,
-                                                                            type:
-                                                                                type,
-                                                                            bookmark:
-                                                                                bookmarked,
-                                                                          );
-                                                                        });
+                                        builder: (context) {
+                                          return MyDialogContent(
+                                            typeFilter: 'BookType',
+                                            companies: companies,
+                                            locations: locations,
+                                            type: type,
+                                            bookmark: bookmarked,
+                                          );
+                                        });
 
-                                                                if (x != null) {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop([
-                                                                    x,
-                                                                    '${filterMenu[index]}'
-                                                                  ]);
-                                                                }
-                                                              },
-                                                              subtitle: Divider(
-                                                                  thickness: 2),
-                                                            );
-                                                          },
-                                                          itemCount:
-                                                              filterMenu.length,
-                                                        ),
-                                                      ),
-                                                      actions: [
-                                                        Align(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            child: Padding(
-                                                                padding: const EdgeInsets
-                                                                        .only(
-                                                                    left: 20.0,
-                                                                    right: 20.0,
-                                                                    top: 30.0,
-                                                                    bottom:
-                                                                        20.0),
-                                                                child:
-                                                                    RaisedButton(
-                                                                        color:
-                                                                            basicColor,
-                                                                        elevation:
-                                                                            0,
-                                                                        padding: EdgeInsets.only(
-                                                                            left:
-                                                                                30,
-                                                                            right:
-                                                                                30),
-                                                                        shape:
-                                                                            RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(5.0),
-                                                                          side: BorderSide(
-                                                                              color: basicColor,
-                                                                              width: 1.2),
-                                                                        ),
-                                                                        onPressed:
-                                                                            () {
-                                                                          savedJobsShown =
-                                                                              [
-                                                                            [],
-                                                                            [],
-                                                                            []
-                                                                          ];
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[0].length;
-                                                                              i++) {
-                                                                            savedJobsShown[0].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[1].length;
-                                                                              i++) {
-                                                                            savedJobsShown[1].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[2].length;
-                                                                              i++) {
-                                                                            savedJobsShown[2].add(true);
-                                                                          }
-                                                                          locations.forEach((key,
-                                                                              value) {
-                                                                            locations[key] =
-                                                                                false;
-                                                                          });
-                                                                          companies.forEach((key,
-                                                                              value) {
-                                                                            companies[key] =
-                                                                                false;
-                                                                          });
-                                                                          bookmarked.forEach((key,
-                                                                              value) {
-                                                                            bookmarked[key] =
-                                                                                false;
-                                                                          });
-                                                                          type.forEach((key,
-                                                                              value) {
-                                                                            type[key] =
-                                                                                false;
-                                                                          });
-                                                                          didFilter =
-                                                                              false;
-                                                                          submittedJob =
-                                                                              jobs['submitted_jobs'] ?? [];
-                                                                          allJob =
-                                                                              jobs['all_jobs'] ?? [];
-                                                                          incompleteJob =
-                                                                              jobs['pending_jobs'] ?? [];
-                                                                          submittedFilter =
-                                                                              [];
-                                                                          allFilter =
-                                                                              [];
-                                                                          incompleteFilter =
-                                                                              [];
-                                                                          for (int i = 0;
-                                                                              i < submittedJob.length;
-                                                                              i++) {
-                                                                            submittedFilter.add(submittedJob[i]);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < allJob.length;
-                                                                              i++) {
-                                                                            allFilter.add(allJob[i]);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < incompleteJob.length;
-                                                                              i++) {
-                                                                            incompleteFilter.add(incompleteJob[i]);
-                                                                          }
-                                                                          setState(
-                                                                              () {});
-                                                                          Navigator.of(context)
-                                                                              .pop(null);
-                                                                        },
-                                                                        child:
-                                                                            Text(
-                                                                          'Clear Filters',
-                                                                          style:
-                                                                              TextStyle(color: Colors.white),
-                                                                        )))),
-                                                      ],
-                                                    ),
-                                                  );
-                                                }));
                                     if (list != null) {
+                                      print(list);
                                       if (list[1] == 'Company') {
                                         filterStuff(list[0], null, null, null);
                                       } else if (list[1] == 'Location') {
                                         filterStuff(null, null, list[0], null);
-                                      } else if (list[1] == 'Type') {
-                                        filterStuff(null, list[0], null, null);
-                                      } else if (list[1] == 'Bookmarked') {
-                                        filterStuff(null, null, null, list[0]);
+                                      } else if (list[0] == 'BookType') {
+                                        filterStuff(
+                                            null, list[1], null, list[2]);
                                       }
                                     } else {
                                       setState(() {});
@@ -1148,27 +958,6 @@ class _MyDialogContentState extends State<MyDialogContent> {
           itemCount: widget.companies.length,
         );
         break;
-
-      case 'Type':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (buildContext, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${widget.type.keys.toList()[index].toString().toUpperCase()}',
-              ),
-              value: typeChecked['${widget.type.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  typeChecked['${widget.type.keys.toList()[index]}'] = value;
-                });
-              },
-            );
-          },
-          itemCount: widget.type.length,
-        );
-        break;
       case 'Location':
         return ListView.builder(
           shrinkWrap: true,
@@ -1191,25 +980,49 @@ class _MyDialogContentState extends State<MyDialogContent> {
           itemCount: widget.locations.length,
         );
         break;
-      case 'Bookmarked':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${widget.bookmark.keys.toList()[index].toString().toUpperCase()}',
-              ),
-              value: bookmarkChecked['${widget.bookmark.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] =
-                      value;
-                });
+      case 'BookType':
+        return Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (buildContext, index) {
+                return CheckboxListTile(
+                  checkColor: basicColor,
+                  title: Text(
+                    '${widget.type.keys.toList()[index].toString().toUpperCase()}',
+                  ),
+                  value: typeChecked['${widget.type.keys.toList()[index]}'],
+                  onChanged: (bool value) {
+                    setState(() {
+                      typeChecked['${widget.type.keys.toList()[index]}'] =
+                          value;
+                    });
+                  },
+                );
               },
-            );
-          },
-          itemCount: widget.bookmark.length,
+              itemCount: widget.type.length,
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  checkColor: basicColor,
+                  title: Text(
+                    '${widget.bookmark.keys.toList()[index].toString().toUpperCase()}',
+                  ),
+                  value: bookmarkChecked[
+                      '${widget.bookmark.keys.toList()[index]}'],
+                  onChanged: (bool value) {
+                    setState(() {
+                      bookmarkChecked[
+                          '${widget.bookmark.keys.toList()[index]}'] = value;
+                    });
+                  },
+                );
+              },
+              itemCount: widget.bookmark.length,
+            ),
+          ],
         );
         break;
       default:
@@ -1245,10 +1058,9 @@ class _MyDialogContentState extends State<MyDialogContent> {
                         Navigator.pop(context, compChecked);
                       } else if (widget.typeFilter == 'Location') {
                         Navigator.pop(context, locationChecked);
-                      } else if (widget.typeFilter == 'Type') {
-                        Navigator.pop(context, typeChecked);
-                      } else if (widget.typeFilter == 'Bookmarked') {
-                        Navigator.pop(context, bookmarkChecked);
+                      } else if (widget.typeFilter == 'BookType') {
+                        Navigator.pop(context,
+                            [widget.typeFilter, typeChecked, bookmarkChecked]);
                       }
                     },
                     child: Text(

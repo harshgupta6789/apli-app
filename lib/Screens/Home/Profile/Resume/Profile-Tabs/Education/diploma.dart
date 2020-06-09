@@ -35,6 +35,10 @@ class Diploma extends StatefulWidget {
 }
 
 class _DiplomaState extends State<Diploma> {
+  // AGAIN THE PARAMETERS PASSED ARE SIMILAR TO CURRENT EDUCATION FILE , SO REFER THERE //
+  // NOW , SINCE ONE CAN DO DIPLOMA OR CLASS XII , WE SHOW A DROPDOWN AT THE TOP //
+  // USER CAN ONLY SELECT ONE , ( YOU CAN ONLY HAVE ONE KEY WHILE PASSING ENTIRE EDUCATION MAP TO API I.E. EITHER DIPLOMA OR XII) //
+
   double height, width, scale;
   File file;
   List allFiles;
@@ -534,6 +538,10 @@ class _DiplomaState extends State<Diploma> {
                                   style: TextStyle(color: basicColor),
                                 ),
                                 onPressed: () {
+                                  // AGAIN WE VALIDATE ALL THE DATA , IF CORRECT HE IS REDIRECTED TO THE TENTH FILE //
+                                  // NOW , WE AGAIN PASS THE SAME PARAMETERS , WITH UPDATED MAP OF EDUCATION //
+                                  // AGAIN ,  API CALL IS NOT MADE HERE //
+
                                   if (_formKey.currentState.validate()) {
                                     String formattedTo, formattedFrom;
                                     setState(() {

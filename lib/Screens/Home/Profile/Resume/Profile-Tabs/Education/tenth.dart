@@ -39,6 +39,10 @@ class Tenth extends StatefulWidget {
 }
 
 class _TenthState extends State<Tenth> {
+
+  // ALMOST THE SAME UI AND PARAMETERS AS OF DIPLOMA FILE //
+  // THE ONLY DIFFERENCE IS USER CAN CALL THE API IN THIS CLASS IF HE DOESNT HAVE ANY OTHER EXTRA COURSES //
+
   double height, width, scale;
   File file;
   List allFiles;
@@ -55,6 +59,12 @@ class _TenthState extends State<Tenth> {
   final apiService = APIService(profileType: 7);
 
   Future<List> upload() async {
+
+  // THIS FUNCTION HANDLES THE ENTIRE UPLOADING OF THE FILES //
+  // ONLY IF THE USER DOES NOT HAVE ANY PG COURSES , HE CAN CALL THIS FUNCTION HERE //
+  // ONCE UPLOADED , WE COLLECT ALL THE LINKS AND CALL THE API //
+  // THE API TAKES THE ENTIRE EDUCATION MAP AGAIN , SO THAT IT IS UPDATED IN THE FIREBASE DATABSE //
+
     List temp = [[]];
     for (int i = 0; i < allFiles.length; i++) {
       if (i == 0) {
@@ -587,6 +597,10 @@ class _TenthState extends State<Tenth> {
                                       style: TextStyle(color: basicColor),
                                     ),
                                     onPressed: () async {
+
+                           // DEPENDING UPON THE isug PARAMETER PASSED , WE DECIDE WHETHER THE USER HAS OTHER COURSE , IF YES SIMPLY HE IS REDIRECTED //
+                           // NOW AFTER VALIDATION , WE UPLOAD ALL FILES => CALL THE API => SUBMIT //
+
                                       if (_formKey.currentState.validate()) {
                                         String formattedTo, formattedFrom;
 

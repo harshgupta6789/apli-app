@@ -15,6 +15,10 @@ class EducationOverview extends StatefulWidget {
 double height, width;
 
 class _EducationOverviewState extends State<EducationOverview> {
+
+  // THIS FILE IS IMPORTANT , BECAUSE IT HANDLES THE ENTIRE FLOW OF EDUCATION //
+  // THE FLOW IS : CURRENT EDUCATION => DIPLOMA / XII => TENTH => OTHER COURSES (IF ANY) => API CALL //
+
   double fontSize = 16;
   bool loading = false, error = false;
   String email;
@@ -54,6 +58,10 @@ class _EducationOverviewState extends State<EducationOverview> {
   };
 
   void getInfo() async {
+
+  // THIS METHOD FETCHES THE ENTIRE EDUCATION MAP FROM FIREBASE DATABASE //
+  // DEPENDING UPON THE RETURNED DATA , THE MAP EITHER HAS DATA OR IT HAS ONLY KEYS //
+
     try {
       await SharedPreferences.getInstance().then((prefs) async {
         await Firestore.instance
@@ -137,6 +145,9 @@ class _EducationOverviewState extends State<EducationOverview> {
 
   @override
   Widget build(BuildContext context) {
+
+  // WE USE PAGE VIEW TO HANDLE THE FLOW FROM THIS SCREEN AND AHEAD //
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return error
