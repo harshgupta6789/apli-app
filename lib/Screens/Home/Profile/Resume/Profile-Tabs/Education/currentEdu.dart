@@ -51,6 +51,16 @@ class _CurrentEducationState extends State<CurrentEducation> {
   StorageUploadTask uploadTask;
   int temp = 0;
 
+  // THIS IS WHERE USER'S CURRENT EDUCATION INFO IS DISPLAYED //
+  // CURRENT EDUCATION CONTAINS DYNAMIC SEMESTERS , TOTAL SCORE , BACKLOGS ETC //
+  // THE ENTIRE EDUCATION MAP WHICH IS FETCHED IN EDUHOME FILE , IS PASSED ALONG WITH FEW OTHER PARAMETERS LIKE SEMESTER , COURSE ETC //
+  // SEM PARAMETER IS USED TO GET INFO ABOUT THE NO OF SEMS , SO THAT UI CAN BE DISPLAYED PROPERLY //
+  // THIS FILE WILL ALSO HAVE FILEPICKER METHOD //
+  // IT IS IMPORTANT TO NOTE THAT , WE DO NOT UPLOAD THE FILES IN THIS SCREEN //
+  // DEPENDING UPON WHETHER THE USER IS DOING PG OR NOT , WE UPLOAD THE FILES ONLY IN THE LAST SCREEN WHICH CAN BE TENTH OR OTHERCOURSE //
+  // isug VARIABLE HELPS TO DECIDE THE ABOVE STATEMENT //
+  // WE KEEP ON PASSING THE EDUCATION MAP IN DIPLOMA , TENTH  //
+
   void init() {
     setState(() {
       course = widget.course;
@@ -460,6 +470,10 @@ class _CurrentEducationState extends State<CurrentEducation> {
                               style: TextStyle(color: basicColor),
                             ),
                             onPressed: () async {
+
+                        // ONCE USER CLICKS NEXT , WE MAKE SURE ALL THE INFO IS VALIDATED AND THEN WE PASS THE FOLLOWING ARGS AHEAD //
+                        // WE ALSO PASS THE FILES (CERTIFICATES PICKED) SO THAT THEY CAN BE UPLOADED TO PROPER LOCATION //
+
                               if (_formKey.currentState.validate()) {
                                 List sems = [];
                                 for (int i = 0; i < widget.sem; i++) {

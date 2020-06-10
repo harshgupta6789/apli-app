@@ -47,6 +47,8 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
       return true;
   }
 
+  // THE SMALL METHODS YOU SEE BELOW ARE TO DISDPLAY THE USER'S CV WHICH IS IN THE PDF FORMAT , STORED IN FIREBASE STORAGE //
+
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
 
@@ -117,6 +119,10 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
   }
 
   void getInfo() async {
+
+  // AGAIN WE USE A FIREBASE READ , FOR FETCHING PROFILE STATUS //
+  // DEPENDING ON THE PROFILE STATUS WE SHOW HIM THE PDF IF ITS PROFILE IS COMPLETE , ELSE WE REDIRECT HIM TO PROFILE SECTION //
+
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
         try {

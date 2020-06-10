@@ -13,6 +13,10 @@ class Skills extends StatefulWidget {
 }
 
 class _SkillsState extends State<Skills> {
+
+ // THIS SCREEN LETS THE USER ADD , DELETE & DISPLAY THE SKILLS //
+ // USES API TO UPDATE THE DATA , FOR API DOCUMENTATION REFER TO PROFILE WIKI ON GITHUB APIS CAN BE FOUND IN APISERVICE FILE//
+
   double width, height, scale;
   String email, newSkillGroup, newMiniSkill;
   bool loading = false, error = false;
@@ -22,6 +26,9 @@ class _SkillsState extends State<Skills> {
   final _formKey = GlobalKey<FormState>();
 
   userInit() async {
+
+  // USES FIREBASE READ TO FETCH ALL THE LIST OF SKILLS , IF ANY //
+
     await SharedPreferences.getInstance().then((prefs) async {
       if (mounted)
         setState(() {
@@ -710,6 +717,9 @@ class _SkillsState extends State<Skills> {
                                       style: TextStyle(color: basicColor),
                                     ),
                                     onPressed: () async {
+
+                                      // API CALLS OCCUR HERE //
+
                                       if (_formKey.currentState.validate()) {
                                         setState(() {
                                           loading = true;

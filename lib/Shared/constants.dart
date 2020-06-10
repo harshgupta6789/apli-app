@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// THIS FILE CONTAINS ALL THE LINKS , TEXTS USED IN THE ENTIRE APP //
+// BEFORE RELEASING YOU WILL NEED TO CHANGE ALL THE URLS , SECRETS ETC //
+
+
 // ---------------Colors---------------------
 
 Color basicColor = Color(0xff1643CD);

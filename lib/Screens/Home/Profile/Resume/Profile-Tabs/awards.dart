@@ -19,6 +19,10 @@ class Awards extends StatefulWidget {
 class _AwardsState extends State<Awards> {
   String userEmail;
 
+ // THIS SCREEN LETS THE USER ADD , DELETE & DISPLAY THE AWARDS //
+ // METHODS USED HERE ARE SIMILAR TO METHODS USED IN SKILLS //
+ // USES API TO UPDATE THE DATA , FOR API DOCUMENTATION REFER TO PROFILE WIKI ON GITHUB APIS CAN BE FOUND IN APISERVICE FILE//
+
   void fetchInfo() async {
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {

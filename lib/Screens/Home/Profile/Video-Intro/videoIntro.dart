@@ -30,6 +30,8 @@ bool tempProfileStatus;
 
 class _VideoIntroState extends State<VideoIntro>
     with SingleTickerProviderStateMixin {
+  //   THIS WILL HELP USER TO UPLOAD THE RECORDED VIDEO USING FILEPICKER AND FIRWEBASE STORAGE //
+
   String email;
   int Status;
   List<CameraDescription> cameras;
@@ -51,6 +53,8 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   userAddVideoUrl(String url) async {
+    // ONCE VIDEO IS UPLOADED  , WE APPEND THE LINK INTO DATABSE FOR FUTURE REFERENCE //
+
     String temp = decimalToBinary(Status).toString();
     while (temp.length != 9) {
       temp = '0' + temp;
@@ -110,6 +114,8 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   usergetVideoUrl() async {
+    // FETCHES VIDEO URL LINK , TO SHOW THE UPLOADED VIDEO TO THE USER //
+
     await SharedPreferences.getInstance().then((prefs) async {
       if (prefs.getString('email') != null) {
         try {
@@ -203,6 +209,8 @@ class _VideoIntroState extends State<VideoIntro>
   }
 
   Widget uploadVideo() {
+    // DEPENDING UPON THE STATUS I.E VIDEO UPLOADED , VIDEO UPLOADING , NONE , WE SHOW DIFFERENT UI TO THE USER USING THIS WIDGET //
+
     switch (x) {
       case currentState.none:
         return Padding(
