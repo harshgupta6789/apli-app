@@ -66,18 +66,13 @@ class MailerService {
                   '"name": "$name",'
                   '"email": "$email",'
                   '"workplace": "$workplace",'
-                  '"work_email": "$email",'
                   '"contact": "$contact",'
                   '"user_type": "Candidate"'
                   '}'))
           .then((response) {
+            print(response.statusCode);
         if (response.statusCode == 200) {
-          var decodedData = jsonDecode(response.body);
-          print(response.body);
-          if (decodedData["success"] == true)
-            result = 1;
-          else
-            result = 0;
+          result = 1;
         } else {
           result = -2;
         }
