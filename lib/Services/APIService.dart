@@ -428,7 +428,7 @@ class APIService {
           "secret": "$passHashSecret",
           "email": "${value.getString('email')}",
         };
-        final uri = Uri.http('dev.apli.ai',
+        final uri = Uri.http('apli.ai',
             '/candidate/api/get_mock_interview_packages', queryParameters);
         http.Response response = await http.get(uri);
         var decodedData = jsonDecode(response.body);
