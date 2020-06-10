@@ -9,6 +9,8 @@ import 'Psychometry/psychometry.dart';
 import 'Resume/resume.dart';
 
 class Profile extends StatefulWidget {
+  final int profileTab;
+  Profile({this.profileTab});
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -18,7 +20,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _tabController = new TabController(length: 3, vsync: this, initialIndex: 1);
+    _tabController = new TabController(
+        length: 3, vsync: this, initialIndex: widget.profileTab ?? 1);
     super.initState();
   }
 

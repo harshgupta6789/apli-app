@@ -726,7 +726,7 @@ class _SkillsState extends State<Skills> {
                                           showToast('Unexpected error occured',
                                               context);
                                         }
-                                        Navigator.pop(context);
+                                        Navigator.pop(context, true);
                                       }
                                     },
                                   ),

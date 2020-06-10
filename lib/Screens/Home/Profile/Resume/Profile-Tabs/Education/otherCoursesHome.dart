@@ -507,7 +507,7 @@ class _OtherCoursesHomeState extends State<OtherCoursesHome> {
                                   showToast(
                                       'Unexpected error occured', context);
                                 }
-                                Navigator.pop(context);
+                                Navigator.pop(context, true);
                               }),
                           SizedBox(
                             height: 30,

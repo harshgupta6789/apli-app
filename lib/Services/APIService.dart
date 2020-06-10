@@ -339,6 +339,7 @@ class APIService {
 
   Future acceptInterView(String id) async {
     try {
+      print(id);
       dynamic result;
       await SharedPreferences.getInstance().then((value) async {
         http.Response response = await http.post(
@@ -354,7 +355,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
 
@@ -381,7 +382,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
 
@@ -409,7 +410,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
 
@@ -427,18 +428,19 @@ class APIService {
           "secret": "$passHashSecret",
           "email": "${value.getString('email')}",
         };
-
         final uri = Uri.http('dev.apli.ai',
             '/candidate/api/get_mock_interview_packages', queryParameters);
         http.Response response = await http.get(uri);
         var decodedData = jsonDecode(response.body);
-
+        print(response.statusCode);
+        print(decodedData);
         if (response.statusCode == 200) {
-          print(decodedData);
           result = decodedData;
+        } else if (response.statusCode == 406) {
+          result = 'incomplete-profile';
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
       return result;
@@ -464,7 +466,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
       return result;
@@ -490,7 +492,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
       return result;
@@ -520,7 +522,7 @@ class APIService {
           result = decodedData;
         } else
           result = {
-            'error': decodedData["error"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
       return result;
@@ -545,11 +547,10 @@ class APIService {
         var decodedData = jsonDecode(response.body);
         print(response.statusCode);
         if (response.statusCode == 200) {
-          print(decodedData);
           result = decodedData;
         } else
           result = {
-            'error': decodedData["reason"] ?? 'Unexpected error occurred'
+            'error': response.reasonPhrase ?? 'Unexpected error occurred'
           };
       });
       return result;

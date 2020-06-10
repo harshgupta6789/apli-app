@@ -5,6 +5,8 @@ import 'package:apli/Shared/scroll.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../../HomeLoginWrapper.dart';
+
 class PsychometryTest extends StatefulWidget {
   String email;
   int status;
@@ -141,7 +143,13 @@ class _PsychometryTestState extends State<PsychometryTest> {
                       setState(() {
                         loading = false;
                       });
-                      Navigator.pop(context);
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (context) => Wrapper(
+                                    currentTab: 4,
+                                    profileTab: 2,
+                                  )),
+                          (Route<dynamic> route) => false);
                     });
                   },
                   backgroundColor: basicColor,

@@ -37,55 +37,60 @@ class ExtraCurricular extends StatelessWidget {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: PreferredSize(
-          child: AppBar(
-            backgroundColor: basicColor,
-            automaticallyImplyLeading: false,
-            title: Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Text(
-                extra,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context, true);
+      },
+      child: Scaffold(
+          backgroundColor: Theme.of(context).backgroundColor,
+          appBar: PreferredSize(
+            child: AppBar(
+              backgroundColor: basicColor,
+              automaticallyImplyLeading: false,
+              title: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Text(
+                  extra,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              leading: Padding(
+                padding: EdgeInsets.only(bottom: 10.0),
+                child: IconButton(
+                    icon: Icon(Icons.arrow_back),
+                    onPressed: () => Navigator.pop(context, true)),
               ),
             ),
-            leading: Padding(
-              padding: EdgeInsets.only(bottom: 10.0),
-              child: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () => Navigator.pop(context)),
-            ),
+            preferredSize: Size.fromHeight(55),
           ),
-          preferredSize: Size.fromHeight(55),
-        ),
-        body: FutureBuilder(
-          future: getInfo(),
-          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.data.length > 0 &&
-                  snapshot.data[0].containsKey('error'))
-                return Center(
-                  child: Text('Error occured, try again later'),
-                );
-              else
-                return ExtraCurriculars(
-                  extraCurriculars: snapshot.data ?? [],
-                );
-            } else {
-              if (snapshot.hasError)
-                return Center(
-                  child: Text('Error occured, try again later'),
-                );
-              else
-                return Loading();
-            }
-          },
-        ));
+          body: FutureBuilder(
+            future: getInfo(),
+            builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+              if (snapshot.hasData &&
+                  snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data.length > 0 &&
+                    snapshot.data[0].containsKey('error'))
+                  return Center(
+                    child: Text('Error occured, try again later'),
+                  );
+                else
+                  return ExtraCurriculars(
+                    extraCurriculars: snapshot.data ?? [],
+                  );
+              } else {
+                if (snapshot.hasError)
+                  return Center(
+                    child: Text('Error occured, try again later'),
+                  );
+                else
+                  return Loading();
+              }
+            },
+          )),
+    );
   }
 }
 

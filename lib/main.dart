@@ -49,7 +49,8 @@ class MySplashState extends State<MySplash> {
     return SplashScreen(
       backgroundColor: Theme.of(context).backgroundColor,
       seconds: 1,
-      navigateAfterSeconds: Wrapper(),   // USED A WRAPPER CLASS TO ROUTE EASILY BETWEEN LOGIN AND HOMESCREEN PAGE//
+      navigateAfterSeconds:
+          Wrapper(), // USED A WRAPPER CLASS TO ROUTE EASILY BETWEEN LOGIN AND HOMESCREEN PAGE//
       image: Image.asset('Assets/Images/logo.png'),
       photoSize: 100.0,
       loaderColor: basicColor,

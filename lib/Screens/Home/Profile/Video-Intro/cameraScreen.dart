@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wakelock/wakelock.dart';
+
+import '../../../HomeLoginWrapper.dart';
 
 enum currentState { none, uploading, success, failure }
 
@@ -57,7 +60,14 @@ class _CameraState extends State<Camera> {
       setState(() {
         fetchUrl = url;
         deleteDirectory();
-        Navigator.pop(context);
+        tempProfileStatus = true;
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => Wrapper(
+                      currentTab: 4,
+                      profileTab: 0,
+                    )),
+            (Route<dynamic> route) => false);
 //        Navigator.of(context).pushAndRemoveUntil(
 //            MaterialPageRoute(
 //                builder: (context) => Wrapper(

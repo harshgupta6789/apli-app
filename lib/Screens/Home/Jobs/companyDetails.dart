@@ -33,9 +33,8 @@ class CompanyProfile extends StatefulWidget {
 }
 
 class _CompanyProfileState extends State<CompanyProfile> {
-
   // THIS PAGE IS USED WHEN USER CLICKS ON A JOB PRESENT IN ALL JOBS TAB //
-  // THE ENTIRE MAP OF JOB IS PASSED TO THIS SCREEN  , SO THAT DETAILS OF JOB CAN BE DISPLAYED // 
+  // THE ENTIRE MAP OF JOB IS PASSED TO THIS SCREEN  , SO THAT DETAILS OF JOB CAN BE DISPLAYED //
 
   Widget companyLogo(String link) {
     if (link == null) {
@@ -114,8 +113,12 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                       ListTile(
                                         onTap: () {},
                                         title: AutoSizeText(
-                                          widget.job['role'] ??
-                                              "Role not declared",
+                                          (widget.job['role'] ?? "Floater") +
+                                              ', ' +
+                                              (widget.job['organisation'] ??
+                                                  'No Company'),
+//                                          widget.job['role'] ??
+//                                              "Role not declared",
                                           maxLines: 2,
                                           style: TextStyle(
                                               color: basicColor,
@@ -407,6 +410,68 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               ),
                                             )
                                           : SizedBox(),
+                                      widget.job['requirements']
+                                              .contains('Video Interview')
+                                          ? Container()
+                                          : Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 20.0,
+                                                    right: 20.0,
+                                                    top: 10.0),
+                                                child: FlatButton(
+//                                              color: (widget.isApplied ==
+//                                                  true ||
+//                                                  widget.isTempApplied ==
+//                                                      true)
+//                                                  ? Colors.grey
+//                                                  : basicColor,
+                                                    padding: EdgeInsets.only(
+                                                        right: 30),
+//                                              shape:
+//                                              RoundedRectangleBorder(
+//                                                borderRadius:
+//                                                BorderRadius.circular(
+//                                                    5.0),
+//                                                side: BorderSide(
+//                                                    color: (widget.isApplied ==
+//                                                        true ||
+//                                                        widget.isTempApplied ==
+//                                                            true)
+//                                                        ? Colors.grey
+//                                                        : basicColor,
+//                                                    width: 1.2),
+//                                              ),
+                                                    child: Text(
+                                                      'Company Info',
+                                                      style: TextStyle(
+                                                          color: basicColor,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline),
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (widget
+                                                              .isTempApplied !=
+                                                          true) if (widget
+                                                              .isApplied !=
+                                                          true) {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        CompanyVideo(
+                                                                          isOnlyInfo:
+                                                                              true,
+                                                                          job: widget
+                                                                              .job,
+                                                                        )));
+                                                      }
+                                                    }),
+                                              ),
+                                            ),
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: Padding(
@@ -442,7 +507,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     color: Colors.white),
                                               ),
                                               onPressed: () async {
-
                                                 // DEPENDING UPON THE REQUIREMENTS FOR THE JOB , AND THE PROFILE STATUS OF THE CANDIDATE , WE DECIDE WHERE TO PUSH THE USER TO //
                                                 // IF VIDEO INTERVIEW IS NOT A REQ THEN THE JOB CAN BE SUBMITTED DIRECTLY (IF CANDIDATE HAS FILLED HIS PROFILE) //
                                                 // IF VIDEO INTERVIEW IS AN REQ THEN THE USER IS REDIRECTED TO COMPNAY INFO SCREEN //
@@ -595,66 +659,6 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                               }),
                                         ),
                                       ),
-                                      widget.job['requirements']
-                                              .contains('Video Interview')
-                                          ? Container()
-                                          : Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 20.0,
-                                                    right: 20.0,
-                                                    top: 10.0),
-                                                child: RaisedButton(
-                                                    color: (widget.isApplied ==
-                                                                true ||
-                                                            widget.isTempApplied ==
-                                                                true)
-                                                        ? Colors.grey
-                                                        : basicColor,
-                                                    elevation: 0,
-                                                    padding: EdgeInsets.only(
-                                                        left: 30, right: 30),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5.0),
-                                                      side: BorderSide(
-                                                          color: (widget.isApplied ==
-                                                                      true ||
-                                                                  widget.isTempApplied ==
-                                                                      true)
-                                                              ? Colors.grey
-                                                              : basicColor,
-                                                          width: 1.2),
-                                                    ),
-                                                    child: Text(
-                                                      'Company Info',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
-                                                    ),
-                                                    onPressed: () async {
-                                                      if (widget
-                                                              .isTempApplied !=
-                                                          true) if (widget
-                                                              .isApplied !=
-                                                          true) {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        CompanyVideo(
-                                                                          isOnlyInfo:
-                                                                              true,
-                                                                          job: widget
-                                                                              .job,
-                                                                        )));
-                                                      }
-                                                    }),
-                                              ),
-                                            )
                                     ]),
                               ),
                             ),
@@ -681,7 +685,6 @@ class CompanyVideo extends StatefulWidget {
 }
 
 class _CompanyVideoState extends State<CompanyVideo> {
-
   // AGAIN THE MAP OF THE ENTIRE JOB IS PASSED TO ALL THE SCREENS //
   // INFORMATION ABOUT COMPANY IS SHOWN ONCE IT FETCHES THE INFO FROM ANOTHER API //
 
@@ -696,6 +699,17 @@ class _CompanyVideoState extends State<CompanyVideo> {
     dynamic result = await apiService.getCompanyIntro(widget.job['job_id']);
     print(result);
     return result;
+  }
+
+  Widget companyLogo(String link) {
+    if (link == null) {
+      return SizedBox();
+    } else {
+      return CachedNetworkImage(
+        imageUrl: link,
+        errorWidget: (context, url, error) => Icon(Icons.error),
+      );
+    }
   }
 
   Widget videoPlayer(String link) {
@@ -747,7 +761,9 @@ class _CompanyVideoState extends State<CompanyVideo> {
         ? Loading()
         : WillPopScope(
             onWillPop: () {
-              if (widget.isIncomplete == true)
+              if (widget.isOnlyInfo == true) {
+                Navigator.pop(context);
+              } else if (widget.isIncomplete == true)
                 Navigator.pop(context);
               else
                 Navigator.pushReplacement(
@@ -773,7 +789,9 @@ class _CompanyVideoState extends State<CompanyVideo> {
                             color: Colors.white,
                           ),
                           onPressed: () {
-                            if (widget.isIncomplete == true)
+                            if (widget.isOnlyInfo == true) {
+                              Navigator.pop(context);
+                            } else if (widget.isIncomplete == true)
                               Navigator.pop(context);
                             else
                               Navigator.pushReplacement(
@@ -811,6 +829,24 @@ class _CompanyVideoState extends State<CompanyVideo> {
                                 left: width * 0.1, right: width * 0.1, top: 15),
                             child: Column(
                               children: [
+                                ListTile(
+                                  onTap: () {},
+                                  title: AutoSizeText(
+                                    widget.job['organisation'] ??
+                                        "Role not declared",
+                                    maxLines: 2,
+                                    style: TextStyle(
+                                        color: basicColor,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  trailing:
+                                      companyLogo(widget.job['company_logo']),
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(20),
                                   child: snapshot.data['video'] != null
@@ -891,9 +927,8 @@ class CompanyInstructions extends StatefulWidget {
 }
 
 class _CompanyInstructionsState extends State<CompanyInstructions> {
-
- // COMPANY INSTRUCTIONS IS THE SCREEN WHERE WE FETCH THE INTERVIEW QUESTIONS FOR THE VIDEO INTERVIEW //
- // TO FETCH THE QUESTIONS WE CALL ANOTHER API AGAIN //
+  // COMPANY INSTRUCTIONS IS THE SCREEN WHERE WE FETCH THE INTERVIEW QUESTIONS FOR THE VIDEO INTERVIEW //
+  // TO FETCH THE QUESTIONS WE CALL ANOTHER API AGAIN //
 
   double fontSize = 14, height, width;
   bool loading = false;

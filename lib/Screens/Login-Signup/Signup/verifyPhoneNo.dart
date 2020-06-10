@@ -23,7 +23,6 @@ bool register = false;
 String phoneNo;
 
 class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
-
   // ONCE THE USER CLICKS ON SIGN UP IN THE LOGIN SCREEN , THIS SCREEN POPS UP //
 
   String countryCode = '+91';
@@ -44,9 +43,8 @@ class _VerifyPhoneNoState extends State<VerifyPhoneNo> {
   }
 
   Future<void> verifyPhone() async {
-
-  // THIS METHOD IS SIMILAR TO THE ONE U WILL SEE IN FORGOT PASSWORD WHERE WE USE OTP VERIFICATION BY FIREBASE //
-  // ONCE OTP HAS BEEN VERIFIED THE USER IS REDIRECTED TO THE SIGN UP PAGE //
+    // THIS METHOD IS SIMILAR TO THE ONE U WILL SEE IN FORGOT PASSWORD WHERE WE USE OTP VERIFICATION BY FIREBASE //
+    // ONCE OTP HAS BEEN VERIFIED THE USER IS REDIRECTED TO THE SIGN UP PAGE //
 
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
       setState(() {

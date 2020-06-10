@@ -678,7 +678,7 @@ class _TenthState extends State<Tenth> {
                                                 'Unexpected error occured',
                                                 context);
                                           }
-                                          Navigator.pop(context);
+                                          Navigator.pop(context, true);
                                         }
                                       }
                                     }),

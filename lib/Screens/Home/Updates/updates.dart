@@ -631,7 +631,9 @@ class _AllNotificationsState extends State<AllNotifications> {
               child: ListView.builder(
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                itemCount: userFilters.values.toList().contains(true) ? myNotifications.length : length + 1,
+                itemCount: userFilters.values.toList().contains(true)
+                    ? myNotifications.length
+                    : length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   if (index != length) {
                     print(index);
@@ -695,7 +697,8 @@ class _AllNotificationsState extends State<AllNotifications> {
                               ),
                             )
                           : Container()
-                      : length == myNotifications.length || userFilters.values.toList().contains(true)
+                      : length == myNotifications.length ||
+                              userFilters.values.toList().contains(true)
                           ? Container()
                           : FlatButton(
                               child: Row(

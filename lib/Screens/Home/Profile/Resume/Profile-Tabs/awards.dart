@@ -202,7 +202,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                               height: 10,
                                             ),
                                             SizedBox(
-                                              width: width * 0.4 * scale,
+                                              width: width * 0.6 * scale,
                                               child: DateTimeField(
                                                   textAlign: TextAlign.left,
                                                   format: DateFormat("MM-yyyy"),
@@ -514,7 +514,7 @@ class _AwardsFormState extends State<AwardsForm> {
                                   showToast(
                                       'Unexpected error occured', context);
                                 }
-                                Navigator.pop(context);
+                                Navigator.pop(context, true);
                               }
                             },
                           ),

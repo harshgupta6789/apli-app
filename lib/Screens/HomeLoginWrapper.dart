@@ -6,7 +6,8 @@ import 'Login-Signup/Login/login.dart';
 
 class Wrapper extends StatefulWidget {
   final int currentTab;
-  Wrapper({this.currentTab});
+  final int profileTab;
+  Wrapper({this.currentTab, this.profileTab});
   @override
   _WrapperState createState() => _WrapperState();
 }
@@ -16,9 +17,8 @@ class _WrapperState extends State<Wrapper> {
   String email;
 
   getPref() async {
-
-   // IF EMAIL IS SAVED THEN => GO TO HOMESCREEN //
-   // ELSE ASK HIM TO LOGIN //
+    // IF EMAIL IS SAVED THEN => GO TO HOMESCREEN //
+    // ELSE ASK HIM TO LOGIN //
 
     preferences = await SharedPreferences.getInstance();
     if (preferences.containsKey('email')) {
@@ -47,7 +47,10 @@ class _WrapperState extends State<Wrapper> {
     if (email == null) {
       return Login();
     } else {
-      return MainScreen(currentTab: widget.currentTab);
+      return MainScreen(
+        currentTab: widget.currentTab,
+        profileTab: widget.profileTab,
+      );
     }
   }
 }

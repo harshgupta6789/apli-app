@@ -25,11 +25,9 @@ Map bookmarked = {'Saved': false};
 
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-
 // THIS IS THE JOB'S SCREEN WHICH HAS THREE TABS => APPLIED , ALL , INCOMPLETE //
 // SIMILAR TO COURSES TAB , WE ALSO FILTER JOBS IN VARIOUS TYPES //
 // WE FETCH ALL JOBS USING THE API AGAIN... //
-
 
   @override
   bool get wantKeepAlive => true;
@@ -43,13 +41,13 @@ class _JobsState extends State<Jobs>
   bool loading = true;
   dynamic jobs;
   bool didFilter = false;
+  bool l = false; bool t = false; bool c = false; bool b = false;
   List filterMenu = ['Type', 'Bookmarked'];
   List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
-
-   // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
-   // WE MAKE A LIST OF FILTERS FROM ALL THREE TYPES OF JOBS LIKE INCOMPLETE APPLIED & ALL  , THEREFORE THE JOBLIST PARAM //
+    // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
+    // WE MAKE A LIST OF FILTERS FROM ALL THREE TYPES OF JOBS LIKE INCOMPLETE APPLIED & ALL  , THEREFORE THE JOBLIST PARAM //
 
     if (jobList != null) {
       for (int i = 0; i < jobList.length; i++) {
@@ -67,7 +65,6 @@ class _JobsState extends State<Jobs>
   }
 
   void filterStuff(Map comp, Map temptype, Map loc, Map book) {
-
     // THIS IS WHERE THE FILTERING LOGIC TAKES PLACE //
     // SINCE FILTERING HAS TO BE SEGREGATED AGAIN INTO THREE TABS , WE FILTER EACH LIST ( INCOMPLETE , ALL JOBS & SUBMITTED) SEPARATELY HERE //
     // THE FILTERING LOGIC IS SIMILAR TO THE COURSES //
@@ -83,85 +80,85 @@ class _JobsState extends State<Jobs>
       temptype.forEach((key, value) {
         type[key] = value;
       });
-      type.forEach((key, value) {
-        for (var map in submittedJob) {
-          if (map['job_type'] == key) {
-            if (type[map['job_type']] == true) submittedFilter.add(map);
-          }
-        }
-        for (var map in incompleteJob) {
-          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
-              true) incompleteFilter.add(map);
-        }
-        for (var map in allJob) {
-          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
-              true) allFilter.add(map);
-        }
-      });
-      setState(() {});
+//      type.forEach((key, value) {
+//        for (var map in submittedJob) {
+//          if (map['job_type'] == key) {
+//            if (type[map['job_type']] == true) submittedFilter.add(map);
+//          }
+//        }
+//        for (var map in incompleteJob) {
+//          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
+//              true) incompleteFilter.add(map);
+//        }
+//        for (var map in allJob) {
+//          if (map['job_type'] == key.toString()) if (type[map['job_type']] ==
+//              true) allFilter.add(map);
+//        }
+//      });
+//      setState(() {});
     } else if (comp != null) {
       comp.forEach((key, value) {
         companies[key] = value;
       });
-      companies.forEach((key, value) {
-        for (var map in submittedJob) {
-          if (map['organisation'] == key) {
-            if (companies[map['organisation']] == true)
-              submittedFilter.add(map);
-          }
-        }
-        for (var map in incompleteJob) {
-          if (map['organisation'] == key) if (companies[map['organisation']] ==
-              true) incompleteFilter.add(map);
-        }
-        for (var map in allJob) {
-          if (map['organisation'] == key) if (companies[map['organisation']] ==
-              true) allFilter.add(map);
-        }
-      });
-      setState(() {});
+//      companies.forEach((key, value) {
+//        for (var map in submittedJob) {
+//          if (map['organisation'] == key) {
+//            if (companies[map['organisation']] == true)
+//              submittedFilter.add(map);
+//          }
+//        }
+//        for (var map in incompleteJob) {
+//          if (map['organisation'] == key) if (companies[map['organisation']] ==
+//              true) incompleteFilter.add(map);
+//        }
+//        for (var map in allJob) {
+//          if (map['organisation'] == key) if (companies[map['organisation']] ==
+//              true) allFilter.add(map);
+//        }
+//      });
+//      setState(() {});
     } else if (loc != null) {
       loc.forEach((key, value) {
         locations[key] = value;
       });
-      locations.forEach((key, value) {
-        for (var map in submittedJob) {
-          if (map['location'] == key) {
-            if (locations[map['location']] == true) submittedFilter.add(map);
-          }
-        }
-        for (var map in incompleteJob) {
-          if (map['location'] == key) if (locations[map['location']] == true)
-            incompleteFilter.add(map);
-        }
-        for (var map in allJob) {
-          if (map['location'] == key) if (locations[map['location']] == true)
-            allFilter.add(map);
-        }
-      });
-      setState(() {});
+//      locations.forEach((key, value) {
+//        for (var map in submittedJob) {
+//          if (map['location'] == key) {
+//            if (locations[map['location']] == true) submittedFilter.add(map);
+//          }
+//        }
+//        for (var map in incompleteJob) {
+//          if (map['location'] == key) if (locations[map['location']] == true)
+//            incompleteFilter.add(map);
+//        }
+//        for (var map in allJob) {
+//          if (map['location'] == key) if (locations[map['location']] == true)
+//            allFilter.add(map);
+//        }
+//      });
+//      setState(() {});
     } else if (book != null) {
       book.forEach((key, value) {
         bookmarked[key] = value;
       });
-      bookmarked.forEach((key, value) {
-        for (int i = 0; i < savedJobs[0].length; i++) {
-          if (true) {
-            submittedFilter.add(submittedJob[i]);
-          }
-        }
-        for (int i = 0; i < savedJobs[1].length; i++) {
-          if (savedJobs[1][i] == value) {
-            allFilter.add(allJob[i]);
-          }
-        }
-        for (int i = 0; i < savedJobs[2].length; i++) {
-          if (true) {
-            incompleteFilter.add(incompleteJob[i]);
-          }
-        }
-      });
-      setState(() {});
+//      bookmarked.forEach((key, value) {
+//        for (int i = 0; i < savedJobs[0].length; i++) {
+//          if (true) {
+//            submittedFilter.add(submittedJob[i]);
+//          }
+//        }
+//        for (int i = 0; i < savedJobs[1].length; i++) {
+//          if (savedJobs[1][i] == value) {
+//            allFilter.add(allJob[i]);
+//          }
+//        }
+//        for (int i = 0; i < savedJobs[2].length; i++) {
+//          if (true) {
+//            incompleteFilter.add(incompleteJob[i]);
+//          }
+//        }
+//      });
+//      setState(() {});
     } else if (comp == null &&
         loc == null &&
         temptype == null &&
@@ -207,6 +204,24 @@ class _JobsState extends State<Jobs>
         }
       });
     }
+
+//    for(int i = 0; i < submittedJob.length; i++) {
+//      if((t ? type[submittedJob[i]['job_type']] : true) || (l ? locations[submittedJob[i]['location']] : true) || (c ? companies[submittedJob[i]['organisation']] : true) || (b ? submittedJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
+//        submittedFilter.add(submittedJob[i]);
+//      }
+//    }
+//    for(int i = 0; i < allJob.length; i++) {
+//      if((t ? type[allJob[i]['job_type']] : true) || (l ? locations[allJob[i]['location']] : true) || (c ? companies[allJob[i]['organisation']] : true) || (b ? allJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
+//        allFilter.add(allJob[i]);
+//      }
+//    }
+//    for(int i = 0; i < incompleteJob.length; i++) {
+//      if((t ? type[incompleteJob[i]['job_type']] : true) || (l ? locations[incompleteJob[i]['location']] : true) || (c ? companies[incompleteJob[i]['organisation']] : true) || (b ? incompleteJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
+//        incompleteFilter.add(incompleteJob[i]);
+//      }
+//    }
+
+
     for (int i = 0; i < submittedJob.length; i++) {
       bool istrue = false;
       for (int j = 0; j < submittedFilter.length; j++) {
@@ -250,14 +265,17 @@ class _JobsState extends State<Jobs>
   }
 
   getInfo() async {
- 
-   // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
+    // THIS IS THE METHOD WHICH IS CALLED AT THE START , TO FETCH ALL THE JOBS //
 
     dynamic result = await apiService.getJobs();
     tempGlobalJobs = result;
     if (mounted)
       setState(() {
         didFilter = false;
+        t = false;
+        b = false;
+        l = false;
+        c = false;
         submittedFilter = [];
         companies = {};
         locations = {};
@@ -513,6 +531,8 @@ class _JobsState extends State<Jobs>
                                                                           });
                                                                           didFilter =
                                                                               false;
+                                                                          t = false;
+                                                                          b = false;
                                                                           submittedJob =
                                                                               jobs['submitted_jobs'] ?? [];
                                                                           allJob =
@@ -557,12 +577,16 @@ class _JobsState extends State<Jobs>
                                                 }));
                                     if (list != null) {
                                       if (list[1] == 'Company') {
+                                        c = true;
                                         filterStuff(list[0], null, null, null);
                                       } else if (list[1] == 'Location') {
+                                        l = true;
                                         filterStuff(null, null, list[0], null);
                                       } else if (list[1] == 'Type') {
+                                        t = true;
                                         filterStuff(null, list[0], null, null);
                                       } else if (list[1] == 'Bookmarked') {
+                                        b = true;
                                         filterStuff(null, null, null, list[0]);
                                       }
                                     } else {
@@ -741,6 +765,8 @@ class _JobsState extends State<Jobs>
                                                                         });
                                                                         didFilter =
                                                                             false;
+                                                                        c = false;
+                                                                        l = false;
                                                                         submittedJob =
                                                                             jobs['submitted_jobs'] ??
                                                                                 [];
@@ -794,17 +820,17 @@ class _JobsState extends State<Jobs>
                                                   }));
                                       if (list != null) {
                                         if (list[1] == 'Company') {
-                                          filterStuff(
-                                              list[0], null, null, null);
+                                          c = true;
+                                          filterStuff(list[0], null, null, null);
                                         } else if (list[1] == 'Location') {
-                                          filterStuff(
-                                              null, null, list[0], null);
+                                          l = true;
+                                          filterStuff(null, null, list[0], null);
                                         } else if (list[1] == 'Type') {
-                                          filterStuff(
-                                              null, list[0], null, null);
+                                          t = true;
+                                          filterStuff(null, list[0], null, null);
                                         } else if (list[1] == 'Bookmarked') {
-                                          filterStuff(
-                                              null, null, null, list[0]);
+                                          b= true;
+                                          filterStuff(null, null, null, list[0]);
                                         }
                                       } else {
                                         setState(() {});
@@ -1014,7 +1040,13 @@ class _JobsState extends State<Jobs>
                                           text: TextSpan(
                                               text:
                                                   "We know you are interested in jobs,\nbut first build your ",
-                                              style: TextStyle(fontSize: 18),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Theme.of(context)
+                                                    .textTheme
+                                                    .headline4
+                                                    .color,
+                                              ),
                                               children: [
                                                 TextSpan(
                                                   text: "Profile",

@@ -18,13 +18,13 @@ import 'Profile/profile.dart';
 
 class MainScreen extends StatefulWidget {
   final int currentTab;
-  MainScreen({this.currentTab});
+  final int profileTab;
+  MainScreen({this.currentTab, this.profileTab});
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-
   // THIS IS THE MAIN SCREEN WHERE THE NAVBAR AND TABS EXIST //
   // BELOW METHODS ARE USED TO FIREBASE NOTIFICATIONS CONFIG //
   // DEPENDING UPON THE NOTIFICATION DATA WE PUSH THE USER TO DESIRED TAB //
@@ -196,7 +196,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     checkIfLoggedIn();
     _currentTab = widget.currentTab ?? 0;
-    _tabController = TabController(vsync: this, length: _listTabs.length);
+    _tabController = TabController(vsync: this, length: 5);
     _tabController.animateTo(_currentTab);
     _animationController = AnimationController(
       vsync: this,
@@ -209,13 +209,13 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     super.initState();
   }
 
-  final List<Widget> _listTabs = [
-    CourseMain(),
-    MockJobs(),
-    Jobs(),
-    Updates(),
-    Profile()
-  ];
+//  final List<Widget> _listTabs = [
+//    CourseMain(),
+//    MockJobs(),
+//    Jobs(),
+//    Updates(),
+//    Profile(profileTab: widget.profileTab,)
+//  ];
 
   Widget _bottomNavigationBar() {
     double fontSize = 13;
@@ -331,7 +331,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 //        ),
         body: DoubleBackToCloseApp(
           child: TabBarView(
-            children: _listTabs,
+            children: [
+              CourseMain(),
+              MockJobs(),
+              Jobs(),
+              Updates(),
+              Profile(
+                profileTab: widget.profileTab,
+              )
+            ],
             controller: _tabController,
             physics: NeverScrollableScrollPhysics(),
           ),

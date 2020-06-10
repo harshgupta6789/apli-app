@@ -13,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,7 +35,6 @@ class AppliedDetails extends StatefulWidget {
 }
 
 class _AppliedDetailsState extends State<AppliedDetails> {
-
   // THIS CLASS IS ALMOST AS SAME AS THE COMPAY DETAILS CLASS , EXCEPT THIS IS USED WHEN USER CLICKS ON A JOB THAT HE APPLIED TO EARLIER //
   // DEPENDING UPON THE JOB STATUS , AGAIN WE DIFFERENTIATE THE UI //
   // IN THE ARGUMENTS , THE ENTIRE MAP FOR ONE JOB IS PASSED ALONG WITH STATUS OF THR JOB WHICH IS USED AS PARAM //
@@ -44,7 +44,6 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   File fileToUpload;
   bool interOffer = false;
   final apiService = APIService();
-
 
   Widget companyLogo(String link) {
     if (link == null) {
@@ -58,8 +57,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Future<void> downloadFile(StorageReference ref) async {
-
-  // THIS METHOD HELPS CANDIDATE TO DOWNLOAD THE OFFER LETTER SENT //
+    // THIS METHOD HELPS CANDIDATE TO DOWNLOAD THE OFFER LETTER SENT //
 
     final String url = await ref.getDownloadURL();
     final http.Response downloadData = await http.get(url);
@@ -79,6 +77,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     print(bodyBytes);
     task.future.whenComplete(() {
       showToast("Downloaded", context);
+      OpenFile.open(tempPath);
     });
     final String name = await ref.getName();
     final String path = await ref.getPath();
@@ -113,8 +112,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Future<void> _uploadFile(File file, String filename) async {
-
-   // THIS METHOD AND THE FILEPICKER TOGETHER HELPS THE USER TO UPLOAD THE FILE TO FIREBASE STORAGE //
+    // THIS METHOD AND THE FILEPICKER TOGETHER HELPS THE USER TO UPLOAD THE FILE TO FIREBASE STORAGE //
 
     SharedPreferences.getInstance().then((value) async {
       String name = Timestamp.now().toString();
@@ -157,15 +155,13 @@ class _AppliedDetailsState extends State<AppliedDetails> {
   }
 
   Widget button(String status, Map job) {
-
-   // THIS WIDGET SERVES THE SAME FUNCTION AS  TO DIFFERENTIATE THE UI //
+    // THIS WIDGET SERVES THE SAME FUNCTION AS  TO DIFFERENTIATE THE UI //
 
     bool candAccepted = widget.isApplied ?? false;
     print(job);
     switch (status) {
       case "OFFERED":
         bool deadlineOver = job['accept_deadline_passed'] ?? true;
-        print(job['cand_accepted_job']);
         if (deadlineOver || candAccepted) {
           return Padding(
               padding:
@@ -844,7 +840,7 @@ class _AppliedDetailsState extends State<AppliedDetails> {
     if (widget.job['status'] == 'INTERVIEW' ||
         widget.job['status'] == 'OFFERED') {
       setState(() {
-        interOffer = true;
+        //interOffer = true;
       });
     }
     super.initState();

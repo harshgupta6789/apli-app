@@ -15,6 +15,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
 import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -105,6 +106,7 @@ class _ResumeState extends State<Resume> with AutomaticKeepAliveClientMixin {
     print(bodyBytes);
     task.future.whenComplete(() {
       showToast("Downloaded", context);
+      OpenFile.open(tempPath);
     });
     final String name = await ref.getName();
     final String path = await ref.getPath();

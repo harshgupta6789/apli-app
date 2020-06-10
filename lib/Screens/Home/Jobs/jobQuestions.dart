@@ -37,7 +37,6 @@ class JobQuestions extends StatefulWidget {
 }
 
 class _JobQuestionsState extends State<JobQuestions> {
-
   // THIS IS WHERE LIVE INTERVIEW TAKES PLACE //
   // AS YOU WOULD EXPECT WE PASS JOB ID , QUESTIONS PACKAGE TO THIS SCREEN //
   // IF A JOB IS LEFT INCOMPLETE THEN WE MAKE USE OF THE STARTFROM VARIABLE TO CONTINUE FROM THAT QUESTION //
@@ -114,6 +113,8 @@ class _JobQuestionsState extends State<JobQuestions> {
       return Image.asset("Assets/Images/logo.png");
     } else {
       return CachedNetworkImage(
+        width: 70,
+        height: 70,
         imageUrl: link,
         errorWidget: (context, url, error) => Icon(Icons.error),
       );
@@ -187,8 +188,7 @@ class _JobQuestionsState extends State<JobQuestions> {
   }
 
   Future<void> _uploadFile(File file, String filename) async {
-
-   // SAME FUNCTION AFTER FILE PICKER => UPLOAD FILES TO FIREBASE STORAGE // 
+    // SAME FUNCTION AFTER FILE PICKER => UPLOAD FILES TO FIREBASE STORAGE //
 
     SharedPreferences.getInstance().then((value) async {
       StorageReference storageReference;
@@ -208,13 +208,13 @@ class _JobQuestionsState extends State<JobQuestions> {
           loading = true;
         });
 
-     // NOW SINCE THE URL IS NOT NULL , THAT MEANS VIDEO IS UPLOADED //
-     // WE USE THIS URL TO CALL THE API SO THAT IT SAVES , AND AGAIN WE MOVE TO NEXT QUESTION //
-     //IF THE QUESTION IS LAST , WE SUBMIT THE INTERVIEW AND NAVIGATE BACK TO MAIN JOB SCREEN //
+        // NOW SINCE THE URL IS NOT NULL , THAT MEANS VIDEO IS UPLOADED //
+        // WE USE THIS URL TO CALL THE API SO THAT IT SAVES , AND AGAIN WE MOVE TO NEXT QUESTION //
+        //IF THE QUESTION IS LAST , WE SUBMIT THE INTERVIEW AND NAVIGATE BACK TO MAIN JOB SCREEN //
 
         if (indexOfQuestions + 1 < qs.length) {
           dynamic result = await apiService.submitInterViewQ(
-              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], url);
           if (result != -1 || result != -2 || result != 0) {
             print('abcd');
             print(result);

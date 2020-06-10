@@ -781,7 +781,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                   onFieldSubmitted: (_) =>
                                       FocusScope.of(context).nextFocus(),
                                   obscureText: false,
-                                  decoration: x("Street"),
+                                  decoration: x("Address"),
                                   onChanged: (text) {
                                     setState(() => address['address'] = text);
                                   },
@@ -985,7 +985,6 @@ class _BasicIntroState extends State<BasicIntro> {
                                           dynamic result =
                                               await _APIService.sendProfileData(
                                                   map);
-                                          print(map);
                                           if (result == -1) {
                                             showToast('Failed', context);
                                           } else if (result == 0) {
@@ -998,7 +997,7 @@ class _BasicIntroState extends State<BasicIntro> {
                                             showToast(
                                                 'Data Updated Successfully',
                                                 context);
-                                            Navigator.pop(context);
+                                            Navigator.of(context).pop(true);
                                           } else {
                                             showToast(
                                                 'Unexpected error occured',

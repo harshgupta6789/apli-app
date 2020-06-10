@@ -24,9 +24,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-
-    // THIS IS THE FIRST SCREEN YOU WILL SEE AFTER YOU OPEN THE APP FOR FIRST TIME //
-      // WE ARE USING FIREBASE COLLECTIONS TO STORE ENCRYPTED PASSWORD (USING API) AND NOT FIREBASE AUTH ! //
+  // THIS IS THE FIRST SCREEN YOU WILL SEE AFTER YOU OPEN THE APP FOR FIRST TIME //
+  // WE ARE USING FIREBASE COLLECTIONS TO STORE ENCRYPTED PASSWORD (USING API) AND NOT FIREBASE AUTH ! //
 
   String email = '', password = '', error = '';
 
@@ -36,6 +35,7 @@ class _LoginState extends State<Login> {
   bool loading = false;
   bool rememberMe = true;
   bool forgotPassword = false;
+  FocusNode f = new FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +99,17 @@ class _LoginState extends State<Login> {
                                 left: width * 0.1,
                                 right: width * 0.1),
                             child: TextFormField(
+                              //focusNode: f,
                               keyboardType: TextInputType.emailAddress,
                               textInputAction: forgotPassword
                                   ? TextInputAction.done
                                   : TextInputAction.next,
-                              onFieldSubmitted: (_) =>
-                                  FocusScope.of(context).nextFocus(),
+                              onFieldSubmitted: (_) {
+                                if (forgotPassword)
+                                  FocusScope.of(context).unfocus();
+                                else
+                                  FocusScope.of(context).nextFocus();
+                              },
                               obscureText: false,
                               decoration: loginFormField.copyWith(
                                   hintText: 'Email Address',
@@ -235,8 +240,8 @@ class _LoginState extends State<Login> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   onPressed: () async {
-                                      // THIS IS THE METHOD WHERE FORM VALIDATION TAKES PLACE FOR PASSWORD AND EMAIL//
-                                        // SINCE WE ARE USING API FOR LOGIN , REFER TO FILE NAMED auth.dart FOR FUTHER INFO //
+                                    // THIS IS THE METHOD WHERE FORM VALIDATION TAKES PLACE FOR PASSWORD AND EMAIL//
+                                    // SINCE WE ARE USING API FOR LOGIN , REFER TO FILE NAMED auth.dart FOR FUTHER INFO //
                                     if (forgotPassword) if (validateEmail(
                                             (email)) &&
                                         email != '' &&
@@ -303,6 +308,13 @@ class _LoginState extends State<Login> {
                                       } else if (result == -2) {
                                         showToast(
                                             'Cannot connect server', context,
+                                            color: Colors.red);
+                                        setState(() {
+                                          loading = false;
+                                        });
+                                      } else if (result == -100) {
+                                        showToast(
+                                            'Account is not a Candidate', context,
                                             color: Colors.red);
                                         setState(() {
                                           loading = false;
