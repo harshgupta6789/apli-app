@@ -41,6 +41,8 @@ class _JobsState extends State<Jobs>
   bool loading = true;
   dynamic jobs;
   bool didFilter = false;
+  bool didFilter1 = false;
+  bool didFilter2 = false;
   bool l = false; bool t = false; bool c = false; bool b = false;
   List filterMenu = ['Type', 'Bookmarked'];
   List sortMenu = ['Company', 'Location'];
@@ -64,7 +66,7 @@ class _JobsState extends State<Jobs>
     }
   }
 
-  void filterStuff(Map comp, Map temptype, Map loc, Map book) {
+  void filterStuff(Map comp, Map temptype, Map loc, Map book, {bool x}) {
     // THIS IS WHERE THE FILTERING LOGIC TAKES PLACE //
     // SINCE FILTERING HAS TO BE SEGREGATED AGAIN INTO THREE TABS , WE FILTER EACH LIST ( INCOMPLETE , ALL JOBS & SUBMITTED) SEPARATELY HERE //
     // THE FILTERING LOGIC IS SIMILAR TO THE COURSES //
@@ -140,7 +142,6 @@ class _JobsState extends State<Jobs>
     } else if (book != null) {
       book.forEach((key, value) {
         bookmarked[key] = value;
-
       });
 //      bookmarked.forEach((key, value) {
 //        for (int i = 0; i < savedJobs[0].length; i++) {
@@ -160,6 +161,8 @@ class _JobsState extends State<Jobs>
 //        }
 //      });
 //      setState(() {});
+    } else if(x == true) {
+
     } else if (comp == null &&
         loc == null &&
         temptype == null &&
@@ -176,6 +179,8 @@ class _JobsState extends State<Jobs>
       }
       setState(() {
         didFilter = false;
+        didFilter1 = false;
+        didFilter2 = false;
         submittedJob = jobs['submitted_jobs'] ?? [];
         allJob = jobs['all_jobs'] ?? [];
         incompleteJob = jobs['pending_jobs'] ?? [];
@@ -206,21 +211,21 @@ class _JobsState extends State<Jobs>
       });
     }
 
-//    for(int i = 0; i < submittedJob.length; i++) {
-//      if((t ? type[submittedJob[i]['job_type']] : true) || (l ? locations[submittedJob[i]['location']] : true) || (c ? companies[submittedJob[i]['organisation']] : true) || (b ? submittedJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
-//        submittedFilter.add(submittedJob[i]);
-//      }
-//    }
-//    for(int i = 0; i < allJob.length; i++) {
-//      if((t ? type[allJob[i]['job_type']] : true) || (l ? locations[allJob[i]['location']] : true) || (c ? companies[allJob[i]['organisation']] : true) || (b ? allJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
-//        allFilter.add(allJob[i]);
-//      }
-//    }
-//    for(int i = 0; i < incompleteJob.length; i++) {
-//      if((t ? type[incompleteJob[i]['job_type']] : true) || (l ? locations[incompleteJob[i]['location']] : true) || (c ? companies[incompleteJob[i]['organisation']] : true) || (b ? incompleteJob[i]['is_saved'] == bookmarked['Saved'] : true)) {
-//        incompleteFilter.add(incompleteJob[i]);
-//      }
-//    }
+    for(int i = 0; i < submittedJob.length; i++) {
+      if((t ? type[submittedJob[i]['job_type']] : true) && (l ? locations[submittedJob[i]['location']] : true) && (c ? companies[submittedJob[i]['organisation']] : true) && (b ? savedJobs[0][i] == bookmarked['Saved'] : true)) {
+        submittedFilter.add(submittedJob[i]);
+      }
+    }
+    for(int i = 0; i < allJob.length; i++) {
+      if((t ? type[allJob[i]['job_type']] : true) && (l ? locations[allJob[i]['location']] : true) && (c ? companies[allJob[i]['organisation']] : true) && (b ? savedJobs[1][i] == bookmarked['Saved'] : true)) {
+        allFilter.add(allJob[i]);
+      }
+    }
+    for(int i = 0; i < incompleteJob.length; i++) {
+      if((t ? type[incompleteJob[i]['job_type']] : true) && (l ? locations[incompleteJob[i]['location']] : true) && (c ? companies[incompleteJob[i]['organisation']] : true) && (b ? savedJobs[2][i] == bookmarked['Saved'] : true)) {
+        incompleteFilter.add(incompleteJob[i]);
+      }
+    }
 
 
     for (int i = 0; i < submittedJob.length; i++) {
@@ -489,80 +494,109 @@ class _JobsState extends State<Jobs>
                                                                         ),
                                                                         onPressed:
                                                                             () {
-                                                                          savedJobsShown =
-                                                                              [
-                                                                            [],
-                                                                            [],
-                                                                            []
-                                                                          ];
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[0].length;
-                                                                              i++) {
-                                                                            savedJobsShown[0].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[1].length;
-                                                                              i++) {
-                                                                            savedJobsShown[1].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < savedJobs[2].length;
-                                                                              i++) {
-                                                                            savedJobsShown[2].add(true);
-                                                                          }
-                                                                          locations.forEach((key,
-                                                                              value) {
-                                                                            locations[key] =
+                                                                              bookmarked.forEach((key,
+                                                                                  value) {
+                                                                                bookmarked[key] =
                                                                                 false;
-                                                                          });
-                                                                          companies.forEach((key,
-                                                                              value) {
-                                                                            companies[key] =
+                                                                              });
+                                                                              type.forEach((key,
+                                                                                  value) {
+                                                                                type[key] =
                                                                                 false;
-                                                                          });
-                                                                          bookmarked.forEach((key,
-                                                                              value) {
-                                                                            bookmarked[key] =
+                                                                              });
+//                                                                          savedJobsShown =
+//                                                                              [
+//                                                                            [],
+//                                                                            [],
+//                                                                            []
+//                                                                          ];
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[0].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[0].add(true);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[1].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[1].add(true);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[2].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[2].add(true);
+//                                                                          }
+//                                                                          locations.forEach((key,
+//                                                                              value) {
+//                                                                            locations[key] =
+//                                                                                false;
+//                                                                          });
+//                                                                          companies.forEach((key,
+//                                                                              value) {
+//                                                                            companies[key] =
+//                                                                                false;
+//                                                                          });
+                                                                          if(c == false && l == false)
+                                                                            didFilter =
                                                                                 false;
-                                                                          });
-                                                                          type.forEach((key,
-                                                                              value) {
-                                                                            type[key] =
-                                                                                false;
-                                                                          });
-                                                                          didFilter =
-                                                                              false;
                                                                           t = false;
                                                                           b = false;
-                                                                          submittedJob =
-                                                                              jobs['submitted_jobs'] ?? [];
-                                                                          allJob =
-                                                                              jobs['all_jobs'] ?? [];
-                                                                          incompleteJob =
-                                                                              jobs['pending_jobs'] ?? [];
-                                                                          submittedFilter =
-                                                                              [];
-                                                                          allFilter =
-                                                                              [];
-                                                                          incompleteFilter =
-                                                                              [];
-                                                                          for (int i = 0;
-                                                                              i < submittedJob.length;
-                                                                              i++) {
-                                                                            submittedFilter.add(submittedJob[i]);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < allJob.length;
-                                                                              i++) {
-                                                                            allFilter.add(allJob[i]);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                              i < incompleteJob.length;
-                                                                              i++) {
-                                                                            incompleteFilter.add(incompleteJob[i]);
-                                                                          }
+//                                                                          submittedJob =
+//                                                                              jobs['submitted_jobs'] ?? [];
+//                                                                          allJob =
+//                                                                              jobs['all_jobs'] ?? [];
+//                                                                          incompleteJob =
+//                                                                              jobs['pending_jobs'] ?? [];
+//                                                                          submittedFilter =
+//                                                                              [];
+//                                                                          allFilter =
+//                                                                              [];
+//                                                                          incompleteFilter =
+//                                                                              [];
+//                                                                          for (int i = 0;
+//                                                                              i < submittedJob.length;
+//                                                                              i++) {
+//                                                                            submittedFilter.add(submittedJob[i]);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < allJob.length;
+//                                                                              i++) {
+//                                                                            allFilter.add(allJob[i]);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < incompleteJob.length;
+//                                                                              i++) {
+//                                                                            incompleteFilter.add(incompleteJob[i]);
+//                                                                          }
                                                                           setState(
                                                                               () {});
+                                                                          if(c == false && l == false) {
+                                                                            savedJobsShown =
+                                                                            [
+                                                                              [],
+                                                                              [],
+                                                                              []
+                                                                            ];
+                                                                            for (int i = 0;
+                                                                            i < savedJobs[0].length;
+                                                                            i++) {
+                                                                              savedJobsShown[0].add(true);
+                                                                            }
+                                                                            for (int i = 0;
+                                                                            i < savedJobs[1].length;
+                                                                            i++) {
+                                                                              savedJobsShown[1].add(true);
+                                                                            }
+                                                                            for (int i = 0;
+                                                                            i < savedJobs[2].length;
+                                                                            i++) {
+                                                                              savedJobsShown[2].add(true);
+                                                                            }
+                                                                            setState(() {
+
+                                                                            });
+                                                                          } else {
+                                                                            filterStuff(null, null, null, null, x: true);
+                                                                          }
                                                                           Navigator.of(context)
                                                                               .pop(null);
                                                                         },
@@ -716,96 +750,111 @@ class _JobsState extends State<Jobs>
                                                                             width:
                                                                                 1.2),
                                                                       ),
-                                                                      onPressed: () {
-                                                                        savedJobsShown =
-                                                                            [
-                                                                          [],
-                                                                          [],
-                                                                          []
-                                                                        ];
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < savedJobs[0].length;
-                                                                            i++) {
-                                                                          savedJobsShown[0]
-                                                                              .add(true);
-                                                                        }
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < savedJobs[1].length;
-                                                                            i++) {
-                                                                          savedJobsShown[1]
-                                                                              .add(true);
-                                                                        }
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < savedJobs[2].length;
-                                                                            i++) {
-                                                                          savedJobsShown[2]
-                                                                              .add(true);
-                                                                        }
-                                                                        locations.forEach((key,
-                                                                            value) {
-                                                                          locations[key] =
-                                                                              false;
-                                                                        });
+                                                                      onPressed:
+                                                                          () {
                                                                         companies.forEach((key,
                                                                             value) {
                                                                           companies[key] =
-                                                                              false;
+                                                                          false;
                                                                         });
-                                                                        bookmarked.forEach((key,
+                                                                        locations.forEach((key,
                                                                             value) {
-                                                                          bookmarked[key] =
-                                                                              false;
+                                                                          locations[key] =
+                                                                          false;
                                                                         });
-                                                                        type.forEach((key,
-                                                                            value) {
-                                                                          type[key] =
-                                                                              false;
-                                                                        });
-                                                                        didFilter =
-                                                                            false;
-                                                                        c = false;
+//                                                                          savedJobsShown =
+//                                                                              [
+//                                                                            [],
+//                                                                            [],
+//                                                                            []
+//                                                                          ];
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[0].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[0].add(true);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[1].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[1].add(true);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < savedJobs[2].length;
+//                                                                              i++) {
+//                                                                            savedJobsShown[2].add(true);
+//                                                                          }
+//                                                                          locations.forEach((key,
+//                                                                              value) {
+//                                                                            locations[key] =
+//                                                                                false;
+//                                                                          });
+//                                                                          companies.forEach((key,
+//                                                                              value) {
+//                                                                            companies[key] =
+//                                                                                false;
+//                                                                          });
+                                                                        if(t == false && b == false)
+                                                                          didFilter =
+                                                                          false;
                                                                         l = false;
-                                                                        submittedJob =
-                                                                            jobs['submitted_jobs'] ??
-                                                                                [];
-                                                                        allJob =
-                                                                            jobs['all_jobs'] ??
-                                                                                [];
-                                                                        incompleteJob =
-                                                                            jobs['pending_jobs'] ??
-                                                                                [];
-                                                                        submittedFilter =
-                                                                            [];
-                                                                        allFilter =
-                                                                            [];
-                                                                        incompleteFilter =
-                                                                            [];
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < submittedJob.length;
-                                                                            i++) {
-                                                                          submittedFilter
-                                                                              .add(submittedJob[i]);
-                                                                        }
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < allJob.length;
-                                                                            i++) {
-                                                                          allFilter
-                                                                              .add(allJob[i]);
-                                                                        }
-                                                                        for (int i =
-                                                                                0;
-                                                                            i < incompleteJob.length;
-                                                                            i++) {
-                                                                          incompleteFilter
-                                                                              .add(incompleteJob[i]);
-                                                                        }
+                                                                        c = false;
+//                                                                          submittedJob =
+//                                                                              jobs['submitted_jobs'] ?? [];
+//                                                                          allJob =
+//                                                                              jobs['all_jobs'] ?? [];
+//                                                                          incompleteJob =
+//                                                                              jobs['pending_jobs'] ?? [];
+//                                                                          submittedFilter =
+//                                                                              [];
+//                                                                          allFilter =
+//                                                                              [];
+//                                                                          incompleteFilter =
+//                                                                              [];
+//                                                                          for (int i = 0;
+//                                                                              i < submittedJob.length;
+//                                                                              i++) {
+//                                                                            submittedFilter.add(submittedJob[i]);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < allJob.length;
+//                                                                              i++) {
+//                                                                            allFilter.add(allJob[i]);
+//                                                                          }
+//                                                                          for (int i = 0;
+//                                                                              i < incompleteJob.length;
+//                                                                              i++) {
+//                                                                            incompleteFilter.add(incompleteJob[i]);
+//                                                                          }
                                                                         setState(
-                                                                            () {});
+                                                                                () {});
+                                                                        if(t == false && b == false) {
+                                                                          savedJobsShown =
+                                                                          [
+                                                                            [],
+                                                                            [],
+                                                                            []
+                                                                          ];
+                                                                          for (int i = 0;
+                                                                          i < savedJobs[0].length;
+                                                                          i++) {
+                                                                            savedJobsShown[0].add(true);
+                                                                          }
+                                                                          for (int i = 0;
+                                                                          i < savedJobs[1].length;
+                                                                          i++) {
+                                                                            savedJobsShown[1].add(true);
+                                                                          }
+                                                                          for (int i = 0;
+                                                                          i < savedJobs[2].length;
+                                                                          i++) {
+                                                                            savedJobsShown[2].add(true);
+                                                                          }
+                                                                          setState(() {
+
+                                                                          });
+                                                                        } else {
+                                                                          filterStuff(null, null, null, null, x: true);
+                                                                        }
                                                                         Navigator.of(context)
                                                                             .pop(null);
                                                                       },
@@ -1082,9 +1131,7 @@ class _JobsState extends State<Jobs>
                                     alreadyAccepted: jobs['cand_accepted_job'],
                                     jobs: didFilter
                                         ? submittedFilter
-                                        : submittedFilter.isEmpty
-                                            ? submittedJob
-                                            : submittedFilter,
+                                        : submittedJob,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 0,
                                   ),
@@ -1092,9 +1139,7 @@ class _JobsState extends State<Jobs>
                                     alreadyAccepted: jobs['cand_accepted_job'],
                                     jobs: didFilter
                                         ? allFilter
-                                        : allFilter.isEmpty
-                                            ? allJob
-                                            : allFilter,
+                                        : allJob,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 1,
                                   ),
@@ -1102,9 +1147,7 @@ class _JobsState extends State<Jobs>
                                     alreadyAccepted: jobs['cand_accepted_job'],
                                     jobs: didFilter
                                         ? incompleteFilter
-                                        : incompleteFilter.isEmpty
-                                            ? incompleteJob
-                                            : incompleteFilter,
+                                        : incompleteJob,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 2,
                                   )
