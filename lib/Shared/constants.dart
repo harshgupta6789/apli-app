@@ -15,35 +15,35 @@ const FontWeight appBarFontWeight = FontWeight.bold;
 const double preferredSize = 50;
 
 // ---------------Important------------------
-//const String passHash = "https://dev.apli.ai/accounts/api/passHash";
+//const String passHash = "https://apli.ai/accounts/api/passHash";
 //const String passHashSecret = "kQ2HzKUnHeanYkejRQjog8UZfkpScERz";
-//const String checkLogin = "https://dev.apli.ai/accounts/api/login";
+//const String checkLogin = "https://apli.ai/accounts/api/login";
 //const String checkLoginSecret = "AnTokvMivXC4utZRV8smIRDJdj2jveaz";
-//const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
+//const String send_mail = "https://apli.ai/accounts/api/send_mail";
 //const String send_mailSecret = "IIZyENHyHjRcHRYdUxPxsigJfopeu8Az";
 
-const String passHash = "https://dev.apli.ai/accounts/api/passHash";
-const String passHashSecret = "YjVd13QEMZe0JsWlkqDyEjE9jpNTZyvQ";
-const String checkLogin = "https://dev.apli.ai/accounts/api/login";
-const String checkLoginSecret = "j&R\$estgIKur657%3st4";
-const String send_mail = "https://dev.apli.ai/accounts/api/send_mail";
-const String send_mailSecret = "SbXAvLHyHhuBM1bHTqjZUDEcI8QP0EPM";
+const String passHash = "https://apli.ai/accounts/api/passHash";
+const String passHashSecret = "kQ2HzKUnHeanYkejRQjog8UZfkpScERz";
+const String checkLogin = "https://apli.ai/accounts/api/login";
+const String checkLoginSecret = "AnTokvMivXC4utZRV8smIRDJdj2jveaz";
+const String send_mail = "https://apli.ai/accounts/api/send_mail";
+const String send_mailSecret = "IIZyENHyHjRcHRYdUxPxsigJfopeu8Az";
 
-const String reachUs = "https://dev.apli.ai/accounts/api/reachus";
+const String reachUs = "https://apli.ai/accounts/api/reachus";
 const String reachUsSecret = "78J9MV7ai75KNh5zxtAVFefFEWUgOQAb";
 const String pdfUrltoBeReplaced =
-    "https://storage.googleapis.com/aplidotai.appspot.com/";
-const String pdfUrltoreplacedWith = "gs://aplidotai.appspot.com/";
+    "https://storage.googleapis.com/aplidotai-be4e6.appspot.com/";
+const String pdfUrltoreplacedWith = "gs://aplidotai-be4e6.appspot.com/";
 
-const String basic_infoURL = "https://dev.apli.ai/candidate/api/basic_info";
-const String projectsURL = "https://dev.apli.ai/candidate/api/projects";
-const String expURL = "https://dev.apli.ai/candidate/api/experience";
-const String awardsURL = "https://dev.apli.ai/candidate/api/awards";
-const String skillsURL = "https://dev.apli.ai/candidate/api/skills";
-const String educationURL = "https://dev.apli.ai/candidate/api/education";
-const String extraCURL = "https://dev.apli.ai/candidate/api/extra_curricular";
+const String basic_infoURL = "https://apli.ai/candidate/api/basic_info";
+const String projectsURL = "https://apli.ai/candidate/api/projects";
+const String expURL = "https://apli.ai/candidate/api/experience";
+const String awardsURL = "https://apli.ai/candidate/api/awards";
+const String skillsURL = "https://apli.ai/candidate/api/skills";
+const String educationURL = "https://apli.ai/candidate/api/education";
+const String extraCURL = "https://apli.ai/candidate/api/extra_curricular";
 
-const String apliEmailID = 'info@dev.apli.ai';
+const String apliEmailID = 'info@apli.ai';
 const String apliPassword = 'Priyam112@';
 
 // ---------------Strings--------------------
@@ -96,36 +96,36 @@ const String ten = 'Class X';
 
 // JOB SECTION APIS  //
 
-const String allJobsURL = "https://dev.apli.ai/candidate/api/get_jobs";
+const String allJobsURL = "https://apli.ai/candidate/api/get_jobs";
 const String appliedJobsURL =
-    "https://dev.apli.ai/candidate/api/get_submitted_jobs";
+    "https://apli.ai/candidate/api/get_submitted_jobs";
 const String incompleteJobsURL =
-    "https://dev.apli.ai/candidate/api/get_pending_jobs";
+    "https://apli.ai/candidate/api/get_pending_jobs";
 const String companyIntroURL =
-    "https://dev.apli.ai/candidate/api/get_company_info";
+    "https://apli.ai/candidate/api/get_company_info";
 const String jobApplyURL =
-    "https://dev.apli.ai/candidate/api/new_job_application";
+    "https://apli.ai/candidate/api/new_job_application";
 const String interViewQuestionsURL =
-    "https://dev.apli.ai/candidate/api/get_job_interview_questions";
+    "https://apli.ai/candidate/api/get_job_interview_questions";
 const String submitVideoInterviewURL =
-    "https://dev.apli.ai/candidate/api/submit_question_video_interview";
+    "https://apli.ai/candidate/api/submit_question_video_interview";
 const String acceptInterviewURL =
-    "https://dev.apli.ai/candidate/api/accept_interview";
+    "https://apli.ai/candidate/api/accept_interview";
 const String acceptJobOfferURL =
-    "https://dev.apli.ai/candidate/api/accept_offer";
+    "https://apli.ai/candidate/api/accept_offer";
 const String uploadLetterURL =
-    "https://dev.apli.ai/candidate/api/update_signed_letter";
+    "https://apli.ai/candidate/api/update_signed_letter";
 
 // MOCKJOBS SECTION APIS  //
 const String mockJobsURL =
-    "https://dev.apli.ai/candidate/api/get_mock_interview_packages";
+    "https://apli.ai/candidate/api/get_mock_interview_packages";
 const String mockinterViewQuestionsURL =
-    "https://dev.apli.ai/candidate/api/get_mock_interview_questions";
+    "https://apli.ai/candidate/api/get_mock_interview_questions";
 const String addMockVideoURL =
-    "https://dev.apli.ai/candidate/api/add_mock_interview_video";
+    "https://apli.ai/candidate/api/add_mock_interview_video";
 const String submitMockInterviewURL =
-    "https://dev.apli.ai/candidate/api/submit_final_mock_interview";
-const String saveJobURL = "https://dev.apli.ai/candidate/api/save_job";
+    "https://apli.ai/candidate/api/submit_final_mock_interview";
+const String saveJobURL = "https://apli.ai/candidate/api/save_job";
 
 final apiDateFormat = DateFormat("yyyy-MM-dd");
 const defaultPic =
