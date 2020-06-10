@@ -140,6 +140,7 @@ class _JobsState extends State<Jobs>
     } else if (book != null) {
       book.forEach((key, value) {
         bookmarked[key] = value;
+
       });
 //      bookmarked.forEach((key, value) {
 //        for (int i = 0; i < savedJobs[0].length; i++) {
