@@ -43,9 +43,12 @@ class _JobsState extends State<Jobs>
   bool didFilter = false;
   bool didFilter1 = false;
   bool didFilter2 = false;
-  bool l = false; bool t = false; bool c = false; bool b = false;
-  List filterMenu = ['Type', 'Bookmarked'];
-  List sortMenu = ['Company', 'Location'];
+  bool l = false;
+  bool t = false;
+  bool c = false;
+  bool b = false;
+  List filterMenu = ['Type', 'Bookmarked' , 'Company', 'Location'];
+  //List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
     // DEPENDING UPON THE RETURNED JOBS WE CREATE A LIST OF FILTERS WHICH HAVE COMPANY NAMES , LOCATIONS & JOB TYPES LIKE INTERNSHIP , JOBS ETC //
@@ -161,8 +164,7 @@ class _JobsState extends State<Jobs>
 //        }
 //      });
 //      setState(() {});
-    } else if(x == true) {
-
+    } else if (x == true) {
     } else if (comp == null &&
         loc == null &&
         temptype == null &&
@@ -211,22 +213,30 @@ class _JobsState extends State<Jobs>
       });
     }
 
-    for(int i = 0; i < submittedJob.length; i++) {
-      if((t ? type[submittedJob[i]['job_type']] : true) && (l ? locations[submittedJob[i]['location']] : true) && (c ? companies[submittedJob[i]['organisation']] : true) && (b ? savedJobs[0][i] == bookmarked['Saved'] : true)) {
+    for (int i = 0; i < submittedJob.length; i++) {
+      if ((t ? type[submittedJob[i]['job_type']] : true) &&
+          (l ? locations[submittedJob[i]['location']] : true) &&
+          (c ? companies[submittedJob[i]['organisation']] : true) &&
+          (b ? savedJobs[0][i] == bookmarked['Saved'] : true)) {
         submittedFilter.add(submittedJob[i]);
       }
     }
-    for(int i = 0; i < allJob.length; i++) {
-      if((t ? type[allJob[i]['job_type']] : true) && (l ? locations[allJob[i]['location']] : true) && (c ? companies[allJob[i]['organisation']] : true) && (b ? savedJobs[1][i] == bookmarked['Saved'] : true)) {
+    for (int i = 0; i < allJob.length; i++) {
+      if ((t ? type[allJob[i]['job_type']] : true) &&
+          (l ? locations[allJob[i]['location']] : true) &&
+          (c ? companies[allJob[i]['organisation']] : true) &&
+          (b ? savedJobs[1][i] == bookmarked['Saved'] : true)) {
         allFilter.add(allJob[i]);
       }
     }
-    for(int i = 0; i < incompleteJob.length; i++) {
-      if((t ? type[incompleteJob[i]['job_type']] : true) && (l ? locations[incompleteJob[i]['location']] : true) && (c ? companies[incompleteJob[i]['organisation']] : true) && (b ? savedJobs[2][i] == bookmarked['Saved'] : true)) {
+    for (int i = 0; i < incompleteJob.length; i++) {
+      if ((t ? type[incompleteJob[i]['job_type']] : true) &&
+          (l ? locations[incompleteJob[i]['location']] : true) &&
+          (c ? companies[incompleteJob[i]['organisation']] : true) &&
+          (b ? savedJobs[2][i] == bookmarked['Saved'] : true)) {
         incompleteFilter.add(incompleteJob[i]);
       }
     }
-
 
     for (int i = 0; i < submittedJob.length; i++) {
       bool istrue = false;
@@ -494,16 +504,26 @@ class _JobsState extends State<Jobs>
                                                                         ),
                                                                         onPressed:
                                                                             () {
-                                                                              bookmarked.forEach((key,
-                                                                                  value) {
-                                                                                bookmarked[key] =
+                                                                          bookmarked.forEach((key,
+                                                                              value) {
+                                                                            bookmarked[key] =
                                                                                 false;
-                                                                              });
-                                                                              type.forEach((key,
-                                                                                  value) {
-                                                                                type[key] =
+                                                                          });
+                                                                           companies.forEach((key,
+                                                                              value) {
+                                                                            companies[key] =
                                                                                 false;
-                                                                              });
+                                                                          });
+                                                                           locations.forEach((key,
+                                                                              value) {
+                                                                            locations[key] =
+                                                                                false;
+                                                                          });
+                                                                          type.forEach((key,
+                                                                              value) {
+                                                                            type[key] =
+                                                                                false;
+                                                                          });
 //                                                                          savedJobsShown =
 //                                                                              [
 //                                                                            [],
@@ -535,11 +555,13 @@ class _JobsState extends State<Jobs>
 //                                                                            companies[key] =
 //                                                                                false;
 //                                                                          });
-                                                                          if(c == false && l == false)
-                                                                            didFilter =
-                                                                                false;
+
+                                                                          didFilter =
+                                                                              false;
                                                                           t = false;
                                                                           b = false;
+                                                                          c = false;
+                                                                          l = false;
 //                                                                          submittedJob =
 //                                                                              jobs['submitted_jobs'] ?? [];
 //                                                                          allJob =
@@ -567,38 +589,31 @@ class _JobsState extends State<Jobs>
 //                                                                              i++) {
 //                                                                            incompleteFilter.add(incompleteJob[i]);
 //                                                                          }
+                                                                          savedJobsShown =
+                                                                              [
+                                                                            [],
+                                                                            [],
+                                                                            []
+                                                                          ];
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[0].length;
+                                                                              i++) {
+                                                                            savedJobsShown[0].add(true);
+                                                                          }
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[1].length;
+                                                                              i++) {
+                                                                            savedJobsShown[1].add(true);
+                                                                          }
+                                                                          for (int i = 0;
+                                                                              i < savedJobs[2].length;
+                                                                              i++) {
+                                                                            savedJobsShown[2].add(true);
+                                                                          }
                                                                           setState(
                                                                               () {});
-                                                                          if(c == false && l == false) {
-                                                                            savedJobsShown =
-                                                                            [
-                                                                              [],
-                                                                              [],
-                                                                              []
-                                                                            ];
-                                                                            for (int i = 0;
-                                                                            i < savedJobs[0].length;
-                                                                            i++) {
-                                                                              savedJobsShown[0].add(true);
-                                                                            }
-                                                                            for (int i = 0;
-                                                                            i < savedJobs[1].length;
-                                                                            i++) {
-                                                                              savedJobsShown[1].add(true);
-                                                                            }
-                                                                            for (int i = 0;
-                                                                            i < savedJobs[2].length;
-                                                                            i++) {
-                                                                              savedJobsShown[2].add(true);
-                                                                            }
-                                                                            setState(() {
-
-                                                                            });
-                                                                          } else {
-                                                                            filterStuff(null, null, null, null, x: true);
-                                                                          }
-                                                                          Navigator.of(context)
-                                                                              .pop(null);
+                                                                              Navigator.of(context).pop();
+                                                                         
                                                                         },
                                                                         child:
                                                                             Text(
@@ -630,262 +645,7 @@ class _JobsState extends State<Jobs>
                                   }),
                             ),
                           ),
-                (jobs == null)
-                    ? SizedBox()
-                    : jobs['profile_status'] < 384
-                        ? SizedBox()
-                        : Visibility(
-                            visible: !loading,
-                            child: Padding(
-                                padding: const EdgeInsets.only(bottom: 10.0),
-                                child: IconButton(
-                                    icon: Icon(
-                                      Icons.sort,
-                                      color: Colors.white,
-                                    ),
-                                    onPressed: () async {
-                                      dynamic list = await showDialog(
-                                          barrierDismissible: true,
-                                          context: context,
-                                          builder:
-                                              (context) => StatefulBuilder(
-                                                      builder:
-                                                          (context2, setState) {
-                                                    return Scaffold(
-                                                      backgroundColor:
-                                                          Colors.transparent,
-                                                      body: AlertDialog(
-                                                        title: new Text(
-                                                          'Sort By',
-                                                          style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                        content: Container(
-                                                          height: 300,
-                                                          width: 300,
-                                                          child:
-                                                              ListView.builder(
-                                                            shrinkWrap: true,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return ListTile(
-                                                                dense: true,
-                                                                title: Text(
-                                                                  '${sortMenu[index]}',
-                                                                ),
-                                                                trailing: IconButton(
-                                                                    icon: Icon(
-                                                                        EvaIcons
-                                                                            .arrowIosForward),
-                                                                    onPressed:
-                                                                        null),
-                                                                onTap:
-                                                                    () async {
-                                                                  //Navigator.pop(context);
-                                                                  dynamic x =
-                                                                      await showDialog(
-                                                                          barrierDismissible:
-                                                                              true,
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (context) {
-                                                                            return MyDialogContent(
-                                                                              typeFilter: '${sortMenu[index]}',
-                                                                              companies: companies,
-                                                                              locations: locations,
-                                                                              type: type,
-                                                                              bookmark: bookmarked,
-                                                                            );
-                                                                          });
-
-                                                                  if (x !=
-                                                                      null) {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop([
-                                                                      x,
-                                                                      '${sortMenu[index]}'
-                                                                    ]);
-                                                                  }
-                                                                },
-                                                                subtitle: Divider(
-                                                                    thickness:
-                                                                        2),
-                                                              );
-                                                            },
-                                                            itemCount:
-                                                                sortMenu.length,
-                                                          ),
-                                                        ),
-                                                        actions: [
-                                                          Align(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              child: Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          20.0,
-                                                                      right:
-                                                                          20.0,
-                                                                      top: 30.0,
-                                                                      bottom:
-                                                                          20.0),
-                                                                  child: RaisedButton(
-                                                                      color: basicColor,
-                                                                      elevation: 0,
-                                                                      padding: EdgeInsets.only(left: 30, right: 30),
-                                                                      shape: RoundedRectangleBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(5.0),
-                                                                        side: BorderSide(
-                                                                            color:
-                                                                                basicColor,
-                                                                            width:
-                                                                                1.2),
-                                                                      ),
-                                                                      onPressed:
-                                                                          () {
-                                                                        companies.forEach((key,
-                                                                            value) {
-                                                                          companies[key] =
-                                                                          false;
-                                                                        });
-                                                                        locations.forEach((key,
-                                                                            value) {
-                                                                          locations[key] =
-                                                                          false;
-                                                                        });
-//                                                                          savedJobsShown =
-//                                                                              [
-//                                                                            [],
-//                                                                            [],
-//                                                                            []
-//                                                                          ];
-//                                                                          for (int i = 0;
-//                                                                              i < savedJobs[0].length;
-//                                                                              i++) {
-//                                                                            savedJobsShown[0].add(true);
-//                                                                          }
-//                                                                          for (int i = 0;
-//                                                                              i < savedJobs[1].length;
-//                                                                              i++) {
-//                                                                            savedJobsShown[1].add(true);
-//                                                                          }
-//                                                                          for (int i = 0;
-//                                                                              i < savedJobs[2].length;
-//                                                                              i++) {
-//                                                                            savedJobsShown[2].add(true);
-//                                                                          }
-//                                                                          locations.forEach((key,
-//                                                                              value) {
-//                                                                            locations[key] =
-//                                                                                false;
-//                                                                          });
-//                                                                          companies.forEach((key,
-//                                                                              value) {
-//                                                                            companies[key] =
-//                                                                                false;
-//                                                                          });
-                                                                        if(t == false && b == false)
-                                                                          didFilter =
-                                                                          false;
-                                                                        l = false;
-                                                                        c = false;
-//                                                                          submittedJob =
-//                                                                              jobs['submitted_jobs'] ?? [];
-//                                                                          allJob =
-//                                                                              jobs['all_jobs'] ?? [];
-//                                                                          incompleteJob =
-//                                                                              jobs['pending_jobs'] ?? [];
-//                                                                          submittedFilter =
-//                                                                              [];
-//                                                                          allFilter =
-//                                                                              [];
-//                                                                          incompleteFilter =
-//                                                                              [];
-//                                                                          for (int i = 0;
-//                                                                              i < submittedJob.length;
-//                                                                              i++) {
-//                                                                            submittedFilter.add(submittedJob[i]);
-//                                                                          }
-//                                                                          for (int i = 0;
-//                                                                              i < allJob.length;
-//                                                                              i++) {
-//                                                                            allFilter.add(allJob[i]);
-//                                                                          }
-//                                                                          for (int i = 0;
-//                                                                              i < incompleteJob.length;
-//                                                                              i++) {
-//                                                                            incompleteFilter.add(incompleteJob[i]);
-//                                                                          }
-                                                                        setState(
-                                                                                () {});
-                                                                        if(t == false && b == false) {
-                                                                          savedJobsShown =
-                                                                          [
-                                                                            [],
-                                                                            [],
-                                                                            []
-                                                                          ];
-                                                                          for (int i = 0;
-                                                                          i < savedJobs[0].length;
-                                                                          i++) {
-                                                                            savedJobsShown[0].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                          i < savedJobs[1].length;
-                                                                          i++) {
-                                                                            savedJobsShown[1].add(true);
-                                                                          }
-                                                                          for (int i = 0;
-                                                                          i < savedJobs[2].length;
-                                                                          i++) {
-                                                                            savedJobsShown[2].add(true);
-                                                                          }
-                                                                          setState(() {
-
-                                                                          });
-                                                                        } else {
-                                                                          filterStuff(null, null, null, null, x: true);
-                                                                        }
-                                                                        Navigator.of(context)
-                                                                            .pop(null);
-                                                                      },
-                                                                      child: Text(
-                                                                        'Clear Filters',
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                Colors.white),
-                                                                      )))),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }));
-                                      if (list != null) {
-                                        if (list[1] == 'Company') {
-                                          c = true;
-                                          filterStuff(list[0], null, null, null);
-                                        } else if (list[1] == 'Location') {
-                                          l = true;
-                                          filterStuff(null, null, list[0], null);
-                                        } else if (list[1] == 'Type') {
-                                          t = true;
-                                          filterStuff(null, list[0], null, null);
-                                        } else if (list[1] == 'Bookmarked') {
-                                          b= true;
-                                          filterStuff(null, null, null, list[0]);
-                                        }
-                                      } else {
-                                        setState(() {});
-                                      }
-                                    })))
+                
               ],
               leading: Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -1137,9 +897,7 @@ class _JobsState extends State<Jobs>
                                   ),
                                   JobsTabs(
                                     alreadyAccepted: jobs['cand_accepted_job'],
-                                    jobs: didFilter
-                                        ? allFilter
-                                        : allJob,
+                                    jobs: didFilter ? allFilter : allJob,
                                     profileStatus: jobs['profile_status'],
                                     tabNo: 1,
                                   ),

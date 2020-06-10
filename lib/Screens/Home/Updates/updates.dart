@@ -458,7 +458,7 @@ class _AllNotificationsState extends State<AllNotifications> {
   double width, height, scale;
   List<List<String>> myNotifications;
   List<List<String>> items;
-  int count = 5;
+  int count = 15;
   int result;
 
   Map<String, bool> userFilters = {
