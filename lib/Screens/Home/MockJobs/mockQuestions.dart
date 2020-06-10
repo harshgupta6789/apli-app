@@ -166,7 +166,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
         });
         if (indexOfQuestions + 1 < qs.length) {
           dynamic result = await apiService.addMockVideo(
-              tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+              url, widget.packName, widget.docID, indexOfQuestions + 1);
           if (result != -1 || result != -2 || result != 0) {
             print('abcd');
             print(result);
@@ -198,7 +198,7 @@ class _MockJobQuestionsState extends State<MockJobQuestions> {
             loading = true;
           });
           dynamic result = await apiService.addMockVideo(
-              tempURL, widget.packName, widget.docID, indexOfQuestions + 1);
+              url, widget.packName, widget.docID, indexOfQuestions + 1);
           if (result != -1 || result != -2 || result != 0) {
             showToast("Submitting your answers", context);
             print(result);

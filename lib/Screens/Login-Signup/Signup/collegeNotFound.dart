@@ -8,7 +8,9 @@ import 'package:apli/Shared/loading.dart';
 import 'package:apli/Shared/scroll.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CollegeNotFound extends StatefulWidget {
   final String phoneNo;
@@ -227,56 +229,61 @@ class _CollegeNotFoundState extends State<CollegeNotFound> {
                                 ),
                                 child: MaterialButton(
                                   onPressed: () async {
-                                    if (_formKey.currentState.validate()) {
-                                      setState(() {
-                                        loading = true;
-                                      });
-                                      var net = await Connectivity()
-                                          .checkConnectivity();
-                                      if (net == ConnectivityResult.none) {
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        showToast('No Internet', context);
-                                      } else {
-                                        //add to excel sheet
-//                                        String body =
-//                                            'Email: $email, College: $college, Field of Study: $fieldOfStudy, State: $state, City: $city, Contact: ${widget.phoneNo}';
-                                        final MailerService _mail =
-                                            MailerService(
-                                                name: name,
-                                                email: email,
-                                                workplace: college,
-                                                work_email: email,
-                                                contact: widget.phoneNo,
-                                                user_type: 'Candidate');
-                                        dynamic result = await _mail.reachUs();
-                                        setState(() {
-                                          loading = false;
-                                        });
-                                        if (result == -2) {
-                                          showToast(
-                                              'Could not connect to server',
-                                              context);
-                                        } else if (result == 0) {
-                                          //failed
-                                          showToast('Failed, try again later',
-                                              context);
-//                                        Navigator.pop(context);
-                                        } else if (result == 1) {
-                                          //success
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Review(false)));
-                                        } else {
-                                          showToast('Failed, try again later',
-                                              context);
-//                                        Navigator.pop(context);
-                                        }
-                                      }
-                                    }
+//                                     if (_formKey.currentState.validate()) {
+//                                       setState(() {
+//                                         loading = true;
+//                                       });
+//                                       var net = await Connectivity()
+//                                           .checkConnectivity();
+//                                       if (net == ConnectivityResult.none) {
+//                                         setState(() {
+//                                           loading = false;
+//                                         });
+//                                         showToast('No Internet', context);
+//                                       } else {
+//                                         //add to excel sheet
+// //                                        String body =
+// //                                            'Email: $email, College: $college, Field of Study: $fieldOfStudy, State: $state, City: $city, Contact: ${widget.phoneNo}';
+//                                         final MailerService _mail =
+//                                             MailerService(
+//                                                 name: name,
+//                                                 email: email,
+//                                                 workplace: college,
+//                                                 work_email: email,
+//                                                 contact: widget.phoneNo,
+//                                                 user_type: 'Candidate');
+//                                         dynamic result = await _mail.reachUs();
+//                                         setState(() {
+//                                           loading = false;
+//                                         });
+//                                         if (result == -2) {
+//                                           showToast(
+//                                               'Could not connect to server',
+//                                               context);
+//                                         } else if (result == 0) {
+//                                           //failed
+//                                           showToast('Failed, try again later',
+//                                               context);
+// //                                        Navigator.pop(context);
+//                                         } else if (result == 1) {
+//                                           //success
+//                                           Navigator.pushReplacement(
+//                                               context,
+//                                               MaterialPageRoute(
+//                                                   builder: (context) =>
+//                                                       Review(false)));
+//                                         } else {
+//                                           showToast('Failed, try again later',
+//                                               context);
+// //                                        Navigator.pop(context);
+//                                         }
+//                                       }
+//                                     }
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Review(false)));
                                   },
                                   child: Text(
                                     'Register',
