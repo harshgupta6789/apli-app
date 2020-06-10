@@ -446,7 +446,12 @@ class _CompanyProfileState extends State<CompanyProfile> {
                                                     child: Text(
                                                       'Company Info',
                                                       style: TextStyle(
-                                                          color: basicColor,
+                                                          color: (widget.isApplied ==
+                                                                      true ||
+                                                                  widget.isTempApplied ==
+                                                                      true)
+                                                              ? Colors.grey
+                                                              : basicColor,
                                                           decoration:
                                                               TextDecoration
                                                                   .underline),

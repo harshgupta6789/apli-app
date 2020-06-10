@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:apli/Screens/Home/Profile/Video-Intro/videoIntro.dart';
+import 'package:apli/Shared/constants.dart';
 import 'package:apli/Shared/functions.dart';
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,10 +29,9 @@ class Camera extends StatefulWidget {
 }
 
 class _CameraState extends State<Camera> {
-
- // THE CODE FROM HERE WILL BE MORE OR LESS SIMILAR TO THE CODE USED TO INITIALIZE AND RECORD USER'S VIDEO IN JOBQUESTIONS FILE //
- // USES CAMERA PLUGIN TO RECORD USER'S INPUT AND THEN UPLOAD USING FIREBASE ( SAME PROCEDURE AS OF VIDEO INTRO FILE ) //
- // THE FUNCTIONS USED HERE ARE MORE OR LESS SIMILAR TO VIDEO INTRO , YOU CAN REFER THERE //
+  // THE CODE FROM HERE WILL BE MORE OR LESS SIMILAR TO THE CODE USED TO INITIALIZE AND RECORD USER'S VIDEO IN JOBQUESTIONS FILE //
+  // USES CAMERA PLUGIN TO RECORD USER'S INPUT AND THEN UPLOAD USING FIREBASE ( SAME PROCEDURE AS OF VIDEO INTRO FILE ) //
+  // THE FUNCTIONS USED HERE ARE MORE OR LESS SIMILAR TO VIDEO INTRO , YOU CAN REFER THERE //
 
   CameraController controller;
   double height, width;
@@ -211,60 +211,85 @@ class _CameraState extends State<Camera> {
               return null;
             },
             child: Container(
-              color: Colors.black,
+             color: Theme.of(context).backgroundColor,
               height: height,
               width: width,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: MaterialButton(
-                                color: Colors.white,
-                                child: Text(
-                                  "Upload",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () {
-                                  if (path != null) {
-                                    videoPicker(path);
-                                  }
-                                }),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: MaterialButton(
-                                color: Colors.white,
-                                child: Text(
-                                  "Re-Take",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                onPressed: () {
-                                  final dir =
-                                      Directory('storage/emulated/0/apli/');
-                                  try {
-                                    dir.deleteSync(recursive: true);
-                                    setState(() {
-                                      isRecordingStopped = false;
-                                    });
-                                  } on Exception catch (e) {
-                                    print(e);
-                                    setState(() {
-                                      isRecordingStopped = false;
-                                    });
-                                  }
-                                }),
-                          ),
-                        ])
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Image.asset("Assets/Images/logo.png"),
+                    ),
+                     Padding(
+                       padding: const EdgeInsets.all(15.0),
+                       child: Text(
+                                "What do you want us to \n do with your recorded video?",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: basicColor,
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                     ),
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: <
+                        Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              "Upload",
+                              style: TextStyle(
+                                  color: basicColor,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            onPressed: () async {
+                              if (path != null) {
+                                videoPicker(path);
+                              }
+                            }),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RaisedButton(
+                            color: Colors.transparent,
+                            elevation: 0,
+                            padding: EdgeInsets.only(left: 22, right: 22),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                              side: BorderSide(color: basicColor, width: 1.2),
+                            ),
+                            child: Text(
+                              "Re-Take",
+                              style: TextStyle(
+                                  color: basicColor,
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            onPressed: () {
+                              final dir = Directory('storage/emulated/0/apli/');
+                              try {
+                                dir.deleteSync(recursive: true);
+                                setState(() {
+                                  isRecordingStopped = false;
+                                });
+                              } on Exception catch (e) {
+                                print(e);
+                                setState(() {
+                                  isRecordingStopped = false;
+                                });
+                              }
+                            }),
+                      ),
+                    ])
                   ]),
             ),
           );
