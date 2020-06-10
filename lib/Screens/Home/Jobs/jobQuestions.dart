@@ -246,7 +246,7 @@ class _JobQuestionsState extends State<JobQuestions> {
             loading = true;
           });
           dynamic result = await apiService.submitInterViewQ(
-              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], tempURL);
+              widget.jobID, "addVideo", qs[indexOfQuestions]['id'], url);
           if (result != -1 || result != -2 || result != 0) {
             showToast("Submitting your answers", context);
             print(result);

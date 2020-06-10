@@ -21,7 +21,7 @@ List<List<bool>> savedJobsShown = [[], [], []];
 var tempGlobalJobs;
 Map companies = {}, locations = {};
 Map type = {};
-Map bookmarked = {'Saved': false};
+Map bookmarked = {'Saved': false, 'UnSaved': false};
 
 class _JobsState extends State<Jobs>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
@@ -47,7 +47,7 @@ class _JobsState extends State<Jobs>
   bool t = false;
   bool c = false;
   bool b = false;
-  List filterMenu = ['Type', 'Bookmarked' , 'Company', 'Location'];
+  List filterMenu = ['Type', 'Bookmarked', 'Company', 'Location'];
   //List sortMenu = ['Company', 'Location'];
 
   void addFilters(List jobList) {
@@ -213,11 +213,26 @@ class _JobsState extends State<Jobs>
       });
     }
 
+    if (!type.values.toList().contains(true)) t = false;
+    if (!companies.values.toList().contains(true)) c = false;
+    if (!locations.values.toList().contains(true)) l = false;
+    if (!bookmarked.values.toList().contains(true)) b = false;
+    setState(() {});
+
     for (int i = 0; i < submittedJob.length; i++) {
       if ((t ? type[submittedJob[i]['job_type']] : true) &&
           (l ? locations[submittedJob[i]['location']] : true) &&
           (c ? companies[submittedJob[i]['organisation']] : true) &&
-          (b ? savedJobs[0][i] == bookmarked['Saved'] : true)) {
+          (b
+              ? (bookmarked.values.toList().contains(false)
+              ? savedJobs[0][i] == bookmarked['Saved']
+              : true)
+              : true) &&
+          (b
+              ? (bookmarked.values.toList().contains(false)
+              ? !savedJobs[0][i] == bookmarked['UnSaved']
+              : true)
+              : true)) {
         submittedFilter.add(submittedJob[i]);
       }
     }
@@ -225,7 +240,16 @@ class _JobsState extends State<Jobs>
       if ((t ? type[allJob[i]['job_type']] : true) &&
           (l ? locations[allJob[i]['location']] : true) &&
           (c ? companies[allJob[i]['organisation']] : true) &&
-          (b ? savedJobs[1][i] == bookmarked['Saved'] : true)) {
+          (b
+              ? (bookmarked.values.toList().contains(false)
+                  ? savedJobs[1][i] == bookmarked['Saved']
+                  : true)
+              : true) &&
+          (b
+              ? (bookmarked.values.toList().contains(false)
+                  ? !savedJobs[1][i] == bookmarked['UnSaved']
+                  : true)
+              : true)) {
         allFilter.add(allJob[i]);
       }
     }
@@ -233,7 +257,16 @@ class _JobsState extends State<Jobs>
       if ((t ? type[incompleteJob[i]['job_type']] : true) &&
           (l ? locations[incompleteJob[i]['location']] : true) &&
           (c ? companies[incompleteJob[i]['organisation']] : true) &&
-          (b ? savedJobs[2][i] == bookmarked['Saved'] : true)) {
+          (b
+              ? (bookmarked.values.toList().contains(false)
+              ? savedJobs[2][i] == bookmarked['Saved']
+              : true)
+              : true) &&
+          (b
+              ? (bookmarked.values.toList().contains(false)
+              ? !savedJobs[2][i] == bookmarked['UnSaved']
+              : true)
+              : true)) {
         incompleteFilter.add(incompleteJob[i]);
       }
     }
@@ -296,7 +329,7 @@ class _JobsState extends State<Jobs>
         companies = {};
         locations = {};
         type = {};
-        bookmarked = {'Saved': false};
+        bookmarked = {'Saved': false, 'UnSaved': false};
         allFilter = [];
         incompleteFilter = [];
         jobs = result;
@@ -509,12 +542,12 @@ class _JobsState extends State<Jobs>
                                                                             bookmarked[key] =
                                                                                 false;
                                                                           });
-                                                                           companies.forEach((key,
+                                                                          companies.forEach((key,
                                                                               value) {
                                                                             companies[key] =
                                                                                 false;
                                                                           });
-                                                                           locations.forEach((key,
+                                                                          locations.forEach((key,
                                                                               value) {
                                                                             locations[key] =
                                                                                 false;
@@ -612,8 +645,8 @@ class _JobsState extends State<Jobs>
                                                                           }
                                                                           setState(
                                                                               () {});
-                                                                              Navigator.of(context).pop();
-                                                                         
+                                                                          Navigator.of(context)
+                                                                              .pop();
                                                                         },
                                                                         child:
                                                                             Text(
@@ -645,7 +678,6 @@ class _JobsState extends State<Jobs>
                                   }),
                             ),
                           ),
-                
               ],
               leading: Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
@@ -938,6 +970,10 @@ class _MyDialogContentState extends State<MyDialogContent> {
   TextEditingController editingController = TextEditingController();
   String val;
   var items = List<dynamic>();
+  ScrollController x = ScrollController(initialScrollOffset: 0);
+  ScrollController y = ScrollController(initialScrollOffset: 0);
+  ScrollController z = ScrollController(initialScrollOffset: 0);
+  ScrollController a = ScrollController(initialScrollOffset: 0);
 
   Map compChecked = {};
   Map typeChecked = {};
@@ -961,88 +997,109 @@ class _MyDialogContentState extends State<MyDialogContent> {
   Widget filterDialog(String filter, BuildContext buildContext) {
     switch (filter) {
       case 'Company':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (buildContext, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${widget.companies.keys.toList()[index].toString().toUpperCase()}',
-              ),
-              value: compChecked['${widget.companies.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  compChecked['${widget.companies.keys.toList()[index]}'] =
-                      value;
-                });
-              },
-            );
-          },
-          itemCount: widget.companies.length,
+        return Scrollbar(
+          isAlwaysShown: true,
+          controller: x,
+          child: ListView.builder(
+            controller: x,
+            shrinkWrap: true,
+            itemBuilder: (buildContext, index) {
+              return CheckboxListTile(
+                checkColor: basicColor,
+                title: Text(
+                  '${widget.companies.keys.toList()[index].toString().toUpperCase()}',
+                ),
+                value: compChecked['${widget.companies.keys.toList()[index]}'],
+                onChanged: (bool value) {
+                  setState(() {
+                    compChecked['${widget.companies.keys.toList()[index]}'] =
+                        value;
+                  });
+                },
+              );
+            },
+            itemCount: widget.companies.length,
+          ),
         );
         break;
 
       case 'Type':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (buildContext, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${widget.type.keys.toList()[index].toString().toUpperCase()}',
-              ),
-              value: typeChecked['${widget.type.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  typeChecked['${widget.type.keys.toList()[index]}'] = value;
-                });
-              },
-            );
-          },
-          itemCount: widget.type.length,
+        return Scrollbar(
+          isAlwaysShown: true,
+          controller: y,
+          child: ListView.builder(
+            controller: y,
+            shrinkWrap: true,
+            itemBuilder: (buildContext, index) {
+              return CheckboxListTile(
+                checkColor: basicColor,
+                title: Text(
+                  '${widget.type.keys.toList()[index].toString().toUpperCase()}',
+                ),
+                value: typeChecked['${widget.type.keys.toList()[index]}'],
+                onChanged: (bool value) {
+                  setState(() {
+                    typeChecked['${widget.type.keys.toList()[index]}'] = value;
+                  });
+                },
+              );
+            },
+            itemCount: widget.type.length,
+          ),
         );
         break;
       case 'Location':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (buildContext, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${(widget.locations.keys.toList()[index]).toString().toUpperCase()}',
-              ),
-              value:
-                  locationChecked['${widget.locations.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  locationChecked['${widget.locations.keys.toList()[index]}'] =
-                      value;
-                });
-              },
-            );
-          },
-          itemCount: widget.locations.length,
+        return Scrollbar(
+          isAlwaysShown: true,
+          controller: z,
+          child: ListView.builder(
+            controller: z,
+            shrinkWrap: true,
+            itemBuilder: (buildContext, index) {
+              return CheckboxListTile(
+                checkColor: basicColor,
+                title: Text(
+                  '${(widget.locations.keys.toList()[index]).toString().toUpperCase()}',
+                ),
+                value:
+                    locationChecked['${widget.locations.keys.toList()[index]}'],
+                onChanged: (bool value) {
+                  setState(() {
+                    locationChecked[
+                        '${widget.locations.keys.toList()[index]}'] = value;
+                  });
+                },
+              );
+            },
+            itemCount: widget.locations.length,
+          ),
         );
         break;
       case 'Bookmarked':
-        return ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (context, index) {
-            return CheckboxListTile(
-              checkColor: basicColor,
-              title: Text(
-                '${widget.bookmark.keys.toList()[index].toString().toUpperCase()}',
-              ),
-              value: bookmarkChecked['${widget.bookmark.keys.toList()[index]}'],
-              onChanged: (bool value) {
-                setState(() {
-                  bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] =
-                      value;
-                });
-              },
-            );
-          },
-          itemCount: widget.bookmark.length,
+        return Scrollbar(
+          isAlwaysShown: true,
+          controller: a,
+          child: ListView.builder(
+            shrinkWrap: true,
+            controller: a,
+            itemBuilder: (context, index) {
+              return CheckboxListTile(
+                checkColor: basicColor,
+                title: Text(
+                  '${widget.bookmark.keys.toList()[index].toString().toUpperCase()}',
+                ),
+                value:
+                    bookmarkChecked['${widget.bookmark.keys.toList()[index]}'],
+                onChanged: (bool value) {
+                  setState(() {
+                    bookmarkChecked['${widget.bookmark.keys.toList()[index]}'] =
+                        value;
+                  });
+                },
+              );
+            },
+            itemCount: widget.bookmark.length,
+          ),
         );
         break;
       default:

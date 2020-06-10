@@ -213,7 +213,7 @@ class _MockJobsState extends State<MockJobs>
                                       textAlign: TextAlign.center,
                                       text: TextSpan(
                                           text:
-                                              "We know you are interested in jobs,\nbut first build your ",
+                                              "We know you are interested in Practising Mock Jobs,\nbut first build your ",
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Theme.of(context)

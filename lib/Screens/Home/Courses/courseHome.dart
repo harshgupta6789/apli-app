@@ -42,7 +42,7 @@ class _CourseMainState extends State<CourseMain> {
               .where('batch_id', isEqualTo: candidates.data['batch_id'])
               .getDocuments()
               .then((batches) {
-            setState(() {
+            if(mounted)setState(() {
               college = batches.documents.first.data['college'];
             });
             value.setString('college', batches.documents.first.data['college']);
